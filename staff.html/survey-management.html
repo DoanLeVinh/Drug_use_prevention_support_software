@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Khảo Sát</title>
+    <link rel="stylesheet" href="staff-dashboard.css">
+</head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ 
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <button class="closebtn" onclick="closeNav()">×</button>
+        <a href="staff-dashboard.html"><i class="fas fa-home"></i> Home</a>
+        <a href="program-management.html"><i class="fas fa-tasks"></i> Quản lý chương trình</a>
+        <a href="survey-management.html"><i class="fa-regular fa-calendar"></i> Quản lý dịch vụ</a>
+        <a href="#"><i class="fas fa-cogs"></i> Cài đặt</a>
+    </div>
+
+     <!-- JavaScript -->
+    <script src="script.js"></script>
+
+    <!-- Page content -->
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰ </button>  
+        <h1></h1>
+    
+
+    <!-- Header -->
+    <header>
+        <h1>Quản Lý Khảo Sát</h1>
+    </header>
+
+    <!-- Danh sách mẫu khảo sát -->
+    <section class="survey-list">
+        <h2>Danh Sách Mẫu Khảo Sát</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tên khảo sát</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Khảo sát A</td>
+                    <td>01/01/2025</td>
+                    <td>31/12/2025</td>
+                    <td>
+                        <button onclick="editSurvey()">Chỉnh sửa</button>
+                        <button onclick="deleteSurvey()">Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Khảo sát B</td>
+                    <td>01/03/2025</td>
+                    <td>30/11/2025</td>
+                    <td>
+                        <button onclick="editSurvey()">Chỉnh sửa</button>
+                        <button onclick="deleteSurvey()">Xóa</button>
+                    </td>
+                </tr>
+                <!-- Thêm các khảo sát khác nếu cần -->
+            </tbody>
+        </table>
+        <button onclick="window.location.href='add-survey.html'">Thêm Khảo Sát Mới</button>
+    </section>
+
+    <!-- Form tạo khảo sát mới -->
+    <section class="add-survey-form">
+        <h2>Thêm Khảo Sát Mới</h2>
+        <form action="submit-survey.php" method="POST">
+            <label for="survey-name">Tên khảo sát:</label>
+            <input type="text" id="survey-name" name="survey-name" required>
+
+            <label for="start-date">Ngày bắt đầu:</label>
+            <input type="date" id="start-date" name="start-date" required>
+
+            <label for="end-date">Ngày kết thúc:</label>
+            <input type="date" id="end-date" name="end-date" required>
+
+            <h3>Câu Hỏi Khảo Sát</h3>
+            <div class="survey-questions">
+                <label for="question1">Câu hỏi 1:</label>
+                <input type="text" id="question1" name="question1" required>
+
+                <label for="question2">Câu hỏi 2:</label>
+                <input type="text" id="question2" name="question2">
+
+                <label for="question3">Câu hỏi 3:</label>
+                <input type="text" id="question3" name="question3">
+            </div>
+
+            <button type="submit">Tạo Khảo Sát</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p></p>
+    </footer>
+     </div>
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+
+</body>
+</html>

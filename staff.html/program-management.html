@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Chương Trình</title>
+    <link rel="stylesheet" href="staff-dashboard.css">
+</head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <button class="closebtn" onclick="closeNav()">×</button>
+         <a href="staff-dashboard.html"><i class="fas fa-home"></i> Home</a>
+        <a href="program-management.html"><i class="fas fa-tasks"></i> Quản lý chương trình</a>
+        <a href="survey-management.html"><i class="fa-regular fa-calendar"></i> Quản lý dịch vụ</a>
+        <a href="#"><i class="fas fa-cogs"></i> Cài đặt</a>
+    </div>
+
+     <!-- JavaScript -->
+    <script src="script.js"></script>
+
+    <!-- Page content -->
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰ </button>  
+        <h1></h1>
+        <p></p>
+   
+
+    <!-- Header -->
+    <header>
+        <h1>Quản Lý Chương Trình</h1>
+    </header>
+
+    <!-- Danh sách chương trình -->
+    <section class="program-list">
+        <h2>Danh Sách Chương Trình</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tên chương trình</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chương trình A</td>
+                    <td>01/01/2025</td>
+                    <td>31/12/2025</td>
+                    <td>
+                        <button onclick="editProgram()">Chỉnh sửa</button>
+                        <button onclick="deleteProgram()">Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Chương trình B</td>
+                    <td>01/03/2025</td>
+                    <td>30/11/2025</td>
+                    <td>
+                        <button onclick="editProgram()">Chỉnh sửa</button>
+                        <button onclick="deleteProgram()">Xóa</button>
+                    </td>
+                </tr>
+                <!-- Thêm các chương trình khác nếu cần -->
+            </tbody>
+        </table>
+        <button onclick="window.location.href='add-program.html'">Thêm Chương Trình Mới</button>
+    </section>
+
+    <!-- Form thêm chương trình mới -->
+    <section class="add-program-form">
+        <h2>Thêm Chương Trình Mới</h2>
+        <form action="submit-program.php" method="POST">
+            <label for="program-name">Tên chương trình:</label>
+            <input type="text" id="program-name" name="program-name" required>
+
+            <label for="start-date">Ngày bắt đầu:</label>
+            <input type="date" id="start-date" name="start-date" required>
+
+            <label for="end-date">Ngày kết thúc:</label>
+            <input type="date" id="end-date" name="end-date" required>
+
+            <button type="submit">Thêm Chương Trình</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Hệ thống Quản lý</p>
+    </footer>
+     </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>
