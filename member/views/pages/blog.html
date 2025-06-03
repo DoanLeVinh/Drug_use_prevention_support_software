@@ -3,66 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Thành Viên - Hệ Thống Phòng Ngừa Ma Túy</title>
+    <title>Dashboard Thành Viên - Hệ thống Phòng ngừa Ma túy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #4e73df;
-            --secondary-color: #1cc88a;
-            --danger-color: #e74a3b;
-            --warning-color: #f6c23e;
-            --light-bg: #f8f9fc;
-        }
-        
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f8f9fc;
-        }
-        
-        
-        .badge-primary {
-            background-color: var(--primary-color);
-        }
-        
-        .badge-success {
-            background-color: var(--secondary-color);
-        }
-        
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-        
-        .blog-card {
-            transition: transform 0.3s ease;
-        }
-        
-        .blog-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0.5rem 1.5rem 0 rgba(58, 59, 69, 0.2);
-        }
-        
-        .featured-post {
-            border-left: 5px solid var(--primary-color);
-        }
-        
-        .post-category {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0,0,0,0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 0.8rem;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="/Drug_use_prevention_support_software/member/css/styles.css">
 </head>
 <body>
-
-     <!-- Header with Top Navigation -->
+    <!-- Header with Top Navigation -->
     <header class="main-header">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
@@ -117,172 +65,420 @@
         </nav>
     </header>
 
-    <div class="container-fluid">
-        <div class="row">
-
-                <!-- Blog Section -->
-                <div class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Blog Chia Sẻ Kiến Thức</h5>
-                        <a href="#" class="btn btn-sm btn-primary">Xem tất cả</a>
-                    </div>
-                    <div class="card-body">
-                        <!-- Featured Post -->
-                        <div class="row mb-4 featured-post">
-                            <div class="col-md-5">
-                                <img src="https://via.placeholder.com/400x250" alt="Featured Post" class="img-fluid rounded">
-                            </div>
-                            <div class="col-md-7">
-                                <div class="post-category">Kiến thức cơ bản</div>
-                                <h3 class="mt-2">10 Dấu Hiệu Nhận Biết Người Nghiện Ma Túy</h3>
-                                <p class="text-muted">Đăng bởi: Chuyên gia Nguyễn Thị B | 15/06/2023</p>
-                                <p>Nhận biết sớm các dấu hiệu nghiện ma túy có thể giúp can thiệp kịp thời, ngăn chặn hậu quả nghiêm trọng. Bài viết này cung cấp 10 dấu hiệu cảnh báo quan trọng mà bạn cần biết...</p>
-                                <a href="#" class="btn btn-outline-primary">Đọc tiếp <i class="fas fa-arrow-right ms-1"></i></a>
-                                <div class="mt-2">
-                                    <span class="badge bg-light text-dark me-2"><i class="fas fa-eye me-1"></i> 1.2K</span>
-                                    <span class="badge bg-light text-dark me-2"><i class="fas fa-comment me-1"></i> 45</span>
-                                    <span class="badge bg-light text-dark"><i class="fas fa-share me-1"></i> 32</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Blog Posts Grid -->
-                        <div class="row">
-                            <!-- Post 1 -->
-                            <div class="col-md-4 mb-4">
-                                <div class="card blog-card h-100">
-                                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Blog Post">
-                                    <div class="card-body">
-                                        <span class="badge bg-primary mb-2">Kỹ năng</span>
-                                        <h5 class="card-title">Cách Từ Chối Ma Túy Khéo Léo</h5>
-                                        <p class="card-text text-muted small">Đăng bởi: Tư vấn viên Trần Văn C | 10/06/2023</p>
-                                        <p class="card-text">Những tình huống thực tế và cách ứng xử thông minh khi bị rủ rê sử dụng chất kích thích...</p>
-                                    </div>
-                                    <div class="card-footer bg-transparent">
-                                        <a href="#" class="btn btn-sm btn-outline-primary">Đọc tiếp</a>
-                                        <small class="text-muted float-end"><i class="fas fa-eye"></i> 856</small>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Post 2 -->
-                            <div class="col-md-4 mb-4">
-                                <div class="card blog-card h-100">
-                                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Blog Post">
-                                    <div class="card-body">
-                                        <span class="badge bg-success mb-2">Câu chuyện</span>
-                                        <h5 class="card-title">Hành Trình Vượt Qua Nghiện Ma Túy Của Tôi</h5>
-                                        <p class="card-text text-muted small">Đăng bởi: Thành viên ẩn danh | 05/06/2023</p>
-                                        <p class="card-text">Chia sẻ chân thực về quá trình vật lộn với ma túy và cách tôi tìm lại cuộc sống bình thường...</p>
-                                    </div>
-                                    <div class="card-footer bg-transparent">
-                                        <a href="#" class="btn btn-sm btn-outline-primary">Đọc tiếp</a>
-                                        <small class="text-muted float-end"><i class="fas fa-eye"></i> 1.5K</small>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Post 3 -->
-                            <div class="col-md-4 mb-4">
-                                <div class="card blog-card h-100">
-                                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Blog Post">
-                                    <div class="card-body">
-                                        <span class="badge bg-warning text-dark mb-2">Dành cho phụ huynh</span>
-                                        <h5 class="card-title">Làm Sao Để Nói Chuyện Với Con Về Ma Túy?</h5>
-                                        <p class="card-text text-muted small">Đăng bởi: Chuyên gia tâm lý Lê Thị D | 01/06/2023</p>
-                                        <p class="card-text">Hướng dẫn phụ huynh cách tiếp cận vấn đề nhạy cảm này với con cái ở các độ tuổi khác nhau...</p>
-                                    </div>
-                                    <div class="card-footer bg-transparent">
-                                        <a href="#" class="btn btn-sm btn-outline-primary">Đọc tiếp</a>
-                                        <small class="text-muted float-end"><i class="fas fa-eye"></i> 923</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Các khóa học đang tham gia -->
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5 class="mb-0">Các khóa học đang tham gia</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex mb-3">
-                                    <div class="flex-shrink-0">
-                                        <img src="https://via.placeholder.com/60" alt="Course" class="rounded">
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1">Kỹ năng từ chối ma túy</h6>
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <small class="text-muted">65% hoàn thành</small>
-                                    </div>
-                                </div>
-                                <div class="d-flex mb-3">
-                                    <div class="flex-shrink-0">
-                                        <img src="https://via.placeholder.com/60" alt="Course" class="rounded">
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1">Nhận biết các loại ma túy phổ biến</h6>
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <small class="text-muted">30% hoàn thành</small>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <a href="#" class="btn btn-sm btn-outline-primary">Xem tất cả khóa học</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lịch hẹn sắp tới -->
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Lịch hẹn sắp tới</h5>
-                                <a href="#" class="btn btn-sm btn-primary">Đặt lịch mới</a>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex mb-3 pb-3 border-bottom">
-                                    <div class="flex-shrink-0 text-center">
-                                        <div class="bg-light rounded p-2">
-                                            <div class="text-primary fw-bold">20</div>
-                                            <div class="text-muted small">TH6</div>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1">Tư vấn với chuyên gia Nguyễn Thị B</h6>
-                                        <p class="mb-1 text-muted small"><i class="far fa-clock me-1"></i> 14:00 - 14:45</p>
-                                        <span class="badge bg-success bg-opacity-10 text-success small">Đã xác nhận</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0 text-center">
-                                        <div class="bg-light rounded p-2">
-                                            <div class="text-primary fw-bold">25</div>
-                                            <div class="text-muted small">TH6</div>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1">Tư vấn nhóm với chuyên gia tâm lý</h6>
-                                        <p class="mb-1 text-muted small"><i class="far fa-clock me-1"></i> 09:30 - 11:00</p>
-                                        <span class="badge bg-warning bg-opacity-10 text-warning small">Chờ xác nhận</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+    <main class="blog-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="index.html">Trang chủ</a> &gt; <span>Blog</span>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main Content -->
+    <div class="container main-content">
+        <div class="blog-content">
+            <!-- Featured Post -->
+            <section class="featured-post">
+                <div class="featured-image">
+                    <img src="https://via.placeholder.com/800x400" alt="Bài viết nổi bật">
+                    <div class="badge">Nổi bật</div>
+                </div>
+                <div class="featured-text">
+                    <span class="category">Kiến thức cơ bản</span>
+                    <h2>10 Dấu hiệu nhận biết người nghiện ma túy và cách giúp đỡ</h2>
+                    <p class="excerpt">Bài viết này cung cấp những dấu hiệu cảnh báo quan trọng giúp nhận biết người thân có thể đang sử dụng ma túy, cùng với các biện pháp hỗ trợ và can thiệp kịp thời...</p>
+                    <div class="meta">
+                        <span><i class="far fa-calendar-alt"></i> 15/06/2023</span>
+                        <span><i class="far fa-eye"></i> 2.4K lượt xem</span>
+                        <span><i class="far fa-comments"></i> 45 bình luận</span>
+                    </div>
+                    <a href="post-detail.html" class="read-more">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- Filter/Sort Options -->
+            <div class="filter-options">
+                <div class="filter-group">
+                    <label for="category-filter"><i class="fas fa-filter"></i> Lọc theo:</label>
+                    <select id="category-filter">
+                        <option value="all">Tất cả chủ đề</option>
+                        <option value="knowledge">Kiến thức cơ bản</option>
+                        <option value="prevention">Phòng ngừa</option>
+                        <option value="treatment">Điều trị</option>
+                        <option value="law">Pháp luật</option>
+                        <option value="stories">Câu chuyện thực tế</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sort-filter"><i class="fas fa-sort"></i> Sắp xếp:</label>
+                    <select id="sort-filter">
+                        <option value="newest">Mới nhất</option>
+                        <option value="oldest">Cũ nhất</option>
+                        <option value="popular">Xem nhiều nhất</option>
+                        <option value="comments">Bình luận nhiều</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Blog Posts Grid -->
+            <div class="blog-grid">
+                <!-- Post 1 -->
+                <article class="blog-card">
+                    <div class="card-image">
+                        <img src="https://via.placeholder.com/400x250" alt="Ma túy đá và tác hại">
+                        <span class="category-tag prevention">Phòng ngừa</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Ma túy đá và những tác hại khôn lường đến sức khỏe</h3>
+                        <p class="excerpt">Bài viết phân tích chi tiết các tác hại của ma túy đá đến hệ thần kinh, sức khỏe thể chất và tinh thần, cùng các biện pháp phòng tránh hiệu quả.</p>
+                        <div class="meta">
+                            <span><i class="far fa-user"></i> Dr. Nguyễn Văn A</span>
+                            <span><i class="far fa-clock"></i> 5 phút đọc</span>
+                        </div>
+                        <a href="post-detail.html" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+
+                <!-- Post 2 -->
+                <article class="blog-card">
+                    <div class="card-image">
+                        <img src="https://via.placeholder.com/400x250" alt="Các loại ma túy mới">
+                        <span class="category-tag knowledge">Kiến thức</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Cảnh giác với các loại ma túy mới ngụy trang dưới dạng kẹo, thuốc lá điện tử</h3>
+                        <p class="excerpt">Nhận diện các loại ma túy thế hệ mới được ngụy trang tinh vi, cách thức hoạt động và những rủi ro đối với giới trẻ hiện nay.</p>
+                        <div class="meta">
+                            <span><i class="far fa-user"></i> Chuyên gia Bùi Thị B</span>
+                            <span><i class="far fa-clock"></i> 7 phút đọc</span>
+                        </div>
+                        <a href="post-detail.html" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+
+                <!-- Post 3 -->
+                <article class="blog-card">
+                    <div class="card-image">
+                        <img src="https://via.placeholder.com/400x250" alt="Phòng ngừa ma túy học đường">
+                        <span class="category-tag prevention">Phòng ngừa</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Giải pháp phòng ngừa ma túy trong học đường hiệu quả</h3>
+                        <p class="excerpt">Các biện pháp giáo dục, tuyên truyền và can thiệp giúp bảo vệ học sinh, sinh viên trước hiểm họa ma túy trong môi trường học đường.</p>
+                        <div class="meta">
+                            <span><i class="far fa-user"></i> TS. Trần Văn C</span>
+                            <span><i class="far fa-clock"></i> 8 phút đọc</span>
+                        </div>
+                        <a href="post-detail.html" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+
+                <!-- Post 4 -->
+                <article class="blog-card">
+                    <div class="card-image">
+                        <img src="https://via.placeholder.com/400x250" alt="Hồi phục sau nghiện">
+                        <span class="category-tag treatment">Điều trị</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Hành trình hồi phục sau nghiện ma túy: Khó khăn và hy vọng</h3>
+                        <p class="excerpt">Chia sẻ từ những người đã vượt qua nghiện ma túy, các phương pháp điều trị hiệu quả và cách hỗ trợ người thân trong quá trình cai nghiện.</p>
+                        <div class="meta">
+                            <span><i class="far fa-user"></i> Câu chuyện thật</span>
+                            <span><i class="far fa-clock"></i> 10 phút đọc</span>
+                        </div>
+                        <a href="post-detail.html" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+
+                <!-- Post 5 -->
+                <article class="blog-card">
+                    <div class="card-image">
+                        <img src="https://via.placeholder.com/400x250" alt="Pháp luật về ma túy">
+                        <span class="category-tag law">Pháp luật</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Các quy định pháp luật về tàng trữ, sử dụng ma túy mới nhất</h3>
+                        <p class="excerpt">Tổng hợp các điều luật, mức xử phạt liên quan đến ma túy theo quy định mới nhất của Bộ luật Hình sự Việt Nam.</p>
+                        <div class="meta">
+                            <span><i class="far fa-user"></i> Luật sư Lê Thị D</span>
+                            <span><i class="far fa-clock"></i> 6 phút đọc</span>
+                        </div>
+                        <a href="post-detail.html" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+
+                <!-- Post 6 -->
+                <article class="blog-card">
+                    <div class="card-image">
+                        <img src="https://via.placeholder.com/400x250" alt="Kỹ năng từ chối ma túy">
+                        <span class="category-tag prevention">Phòng ngừa</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>5 Kỹ năng từ chối ma túy hiệu quả mà giới trẻ cần biết</h3>
+                        <p class="excerpt">Hướng dẫn các phương pháp từ chối khéo léo khi bị rủ rê sử dụng ma túy, cách xử lý tình huống và bảo vệ bản thân.</p>
+                        <div class="meta">
+                            <span><i class="far fa-user"></i> Chuyên gia tâm lý</span>
+                            <span><i class="far fa-clock"></i> 4 phút đọc</span>
+                        </div>
+                        <a href="post-detail.html" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <a href="#" class="prev"><i class="fas fa-chevron-left"></i> Trước</a>
+                <a href="#" class="page active">1</a>
+                <a href="#" class="page">2</a>
+                <a href="#" class="page">3</a>
+                <a href="#" class="page">4</a>
+                <a href="#" class="page">5</a>
+                <a href="#" class="next">Sau <i class="fas fa-chevron-right"></i></a>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- About Widget -->
+            <div class="sidebar-widget about-widget">
+                <h3 class="widget-title">Về chúng tôi</h3>
+                <img src="https://via.placeholder.com/300x150" alt="Về dự án">
+                <p>Trang web cung cấp kiến thức, thông tin chính xác về phòng ngừa ma túy, hỗ trợ cộng đồng trong cuộc chiến chống lại hiểm họa ma túy.</p>
+                <a href="about.html" class="read-more">Xem thêm</a>
+            </div>
+
+            <!-- Popular Posts -->
+            <div class="sidebar-widget popular-posts">
+                <h3 class="widget-title">Bài viết phổ biến</h3>
+                <ul>
+                    <li>
+                        <a href="#">
+                            <img src="https://via.placeholder.com/80x60" alt="Bài phổ biến 1">
+                            <div class="post-info">
+                                <h4>Các loại ma túy phổ biến ở Việt Nam hiện nay</h4>
+                                <span><i class="far fa-eye"></i> 5.2K lượt xem</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://via.placeholder.com/80x60" alt="Bài phổ biến 2">
+                            <div class="post-info">
+                                <h4>Làm thế nào để nói chuyện với con về ma túy?</h4>
+                                <span><i class="far fa-eye"></i> 4.7K lượt xem</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://via.placeholder.com/80x60" alt="Bài phổ biến 3">
+                            <div class="post-info">
+                                <h4>Dấu hiệu nhận biết trẻ em sử dụng ma túy</h4>
+                                <span><i class="far fa-eye"></i> 4.3K lượt xem</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="https://via.placeholder.com/80x60" alt="Bài phổ biến 4">
+                            <div class="post-info">
+                                <h4>Các trung tâm cai nghiện uy tín tại Việt Nam</h4>
+                                <span><i class="far fa-eye"></i> 3.9K lượt xem</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="sidebar-widget newsletter">
+                <h3 class="widget-title">Đăng ký nhận tin</h3>
+                <p>Nhận thông tin mới nhất về phòng chống ma túy qua email</p>
+                <form>
+                    <input type="email" placeholder="Email của bạn">
+                    <button type="submit">Đăng ký <i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+
+            <!-- Resources -->
+            <div class="sidebar-widget resources">
+                <h3 class="widget-title">Tài nguyên hữu ích</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-file-pdf"></i> Cẩm nang phòng ngừa ma túy</a></li>
+                    <li><a href="#"><i class="fas fa-phone-alt"></i> Đường dây nóng hỗ trợ</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Địa điểm tư vấn gần bạn</a></li>
+                    <li><a href="#"><i class="fas fa-video"></i> Video giáo dục</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</main>
+
+    <!-- Footer -->
+<footer class="bg-light py-5 mt-5 border-top">
+    <div class="container">
+        <div class="row">
+            <!-- Logo & Mô tả -->
+            <div class="col-md-4 mb-4">
+                <img src="assets/logo.png" alt="Logo" height="50" class="mb-3">
+                <p class="text-muted small">
+                    Hệ thống hỗ trợ phòng ngừa sử dụng ma túy trong cộng đồng.<br>
+                    Cung cấp kiến thức, khóa học, và dịch vụ tư vấn chuyên nghiệp nhằm góp phần xây dựng xã hội lành mạnh.
+                </p>
+            </div>
+
+            <!-- Liên kết nhanh -->
+            <div class="col-md-2 mb-4">
+                <h6 class="fw-bold mb-3">Liên kết nhanh</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Về chúng tôi</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Khóa học</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Tư vấn viên</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Tin tức & Blog</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <!-- Tổ chức đồng hành -->
+            <div class="col-md-3 mb-4">
+                <h6 class="fw-bold mb-3">Tổ chức đồng hành</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2">Bộ Lao động - Thương binh & Xã hội</li>
+                    <li class="mb-2">UNODC (United Nations Office on Drugs and Crime)</li>
+                    <li class="mb-2">Trung tâm Hỗ trợ Thanh niên Việt Nam</li>
+                    <li class="mb-2">Cục Phòng chống tệ nạn xã hội</li>
+                </ul>
+            </div>
+
+            <!-- Chứng nhận & Liên hệ -->
+            <div class="col-md-3 mb-4">
+                <h6 class="fw-bold mb-3">Chứng nhận & Liên hệ</h6>
+                <p class="text-muted small mb-2"><i class="bi bi-shield-check me-2"></i>Đã đăng ký Bộ Công Thương</p>
+                <p class="text-muted small mb-2"><i class="bi bi-patch-check me-2"></i>ISO 9001:2015 – Dịch vụ tư vấn</p>
+                <ul class="list-unstyled small text-muted mt-3">
+                    <li class="mb-2"><i class="bi bi-envelope me-2"></i><a href="mailto:contact@phongnguyematuy.vn" class="text-muted">contact@phongnguyematuy.vn</a></li>
+                    <li class="mb-2"><i class="bi bi-telephone me-2"></i>1800 1234 (Miễn phí)</li>
+                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Hà Nội, Việt Nam</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bản quyền -->
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-12 text-center text-muted small">
+                &copy; 2023 Hệ thống Phòng ngừa Ma túy. Bảo lưu mọi quyền. | Thiết kế bởi PhongNguaMaTuy.vn
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Filter and Sort Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Category filter
+        const categoryFilter = document.getElementById('category-filter');
+        const blogCards = document.querySelectorAll('.blog-card');
+        
+        categoryFilter.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            
+            blogCards.forEach(card => {
+                if (selectedCategory === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    const cardCategory = card.querySelector('.category-tag').classList.contains(selectedCategory);
+                    card.style.display = cardCategory ? 'block' : 'none';
+                }
+            });
+        });
+        
+        // Sort functionality
+        const sortFilter = document.getElementById('sort-filter');
+        const blogGrid = document.querySelector('.blog-grid');
+        
+        sortFilter.addEventListener('change', function() {
+            const cards = Array.from(blogCards);
+            
+            switch(this.value) {
+                case 'newest':
+                    // Default order (newest first)
+                    cards.sort((a, b) => 0);
+                    break;
+                case 'oldest':
+                    // Reverse order (oldest first)
+                    cards.sort((a, b) => 0).reverse();
+                    break;
+                case 'popular':
+                    // Sort by views (would need actual data)
+                    cards.sort((a, b) => {
+                        const aViews = parseInt(a.querySelector('.fa-eye').parentNode.textContent.replace(/\D/g,''));
+                        const bViews = parseInt(b.querySelector('.fa-eye').parentNode.textContent.replace(/\D/g,''));
+                        return bViews - aViews;
+                    });
+                    break;
+                case 'comments':
+                    // Sort by comments (would need actual data)
+                    cards.sort((a, b) => {
+                        const aComments = parseInt(a.querySelector('.fa-comments').parentNode.textContent.replace(/\D/g,''));
+                        const bComments = parseInt(b.querySelector('.fa-comments').parentNode.textContent.replace(/\D/g,''));
+                        return bComments - aComments;
+                    });
+                    break;
+            }
+            
+            // Re-append cards in new order
+            cards.forEach(card => {
+                blogGrid.appendChild(card);
+            });
+        });
+        
+        // Smooth scroll for pagination
+        document.querySelectorAll('.pagination a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: document.querySelector('.blog-grid').offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Newsletter form submission
+        const newsletterForm = document.querySelector('.newsletter form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input').value;
+                
+                if (email && email.includes('@')) {
+                    alert('Cảm ơn bạn đã đăng ký nhận tin! Chúng tôi sẽ gửi thông tin mới nhất đến email của bạn.');
+                    this.querySelector('input').value = '';
+                } else {
+                    alert('Vui lòng nhập địa chỉ email hợp lệ.');
+                }
+            });
+        }
+        
+        // Lazy loading for images
+        if ('IntersectionObserver' in window) {
+            const lazyImages = document.querySelectorAll('.card-image img, .featured-image img');
+            
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src || img.src;
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            lazyImages.forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    });
+</script>
+    
 </body>
 </html>

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Thành Viên - Hệ thống Phòng ngừa Ma túy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="/Drug_use_prevention_support_software/member/css/styles.css">
+</head>
+<body>
+
+
+
+    <!-- Header with Top Navigation -->
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="/Drug_use_prevention_support_software/member/images/logo.png" alt="Logo" height="40" class="me-2">
+                    <span class="font-weight-bold">Phòng Ngừa Ma Túy</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="member-dashboard.html">
+                                <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="courses.html">
+                                <i class="bi bi-book me-1"></i>Khóa học
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="survey.html">
+                                <i class="bi bi-clipboard-check me-1"></i>Khảo sát
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="appointment.html">
+                                <i class="bi bi-calendar-check me-1"></i>Đặt lịch
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="blog.html">
+                                <i class="bi bi-newspaper me-1"></i>Blog
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>Tài khoản
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Hồ sơ</a></li>
+                                <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i>Cài đặt</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="courses-main">
+    <!-- Hero Section -->
+    <section class="courses-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Khóa học Phòng chống Ma túy</h1>
+                <p>Cung cấp kiến thức toàn diện về phòng ngừa, nhận biết và xử lý các tình huống liên quan đến ma túy</p>
+                <div class="search-courses">
+                    <input type="text" placeholder="Tìm kiếm khóa học..." id="course-search-input">
+                    <button id="course-search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="courses-count">50+</div>
+                    <div class="stat-label">Khóa học</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="students-count">10K+</div>
+                    <div class="stat-label">Học viên</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="experts-count">30+</div>
+                    <div class="stat-label">Chuyên gia</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Categories -->
+    <section class="course-categories">
+        <div class="container">
+            <h2 class="section-title">Danh mục khóa học</h2>
+            <div class="categories-grid" id="categories-container">
+                <!-- Categories will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Courses -->
+    <section class="featured-courses">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Khóa học nổi bật</h2>
+                <div class="view-all">
+                    <a href="#" id="view-all-courses">Xem tất cả <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="courses-grid" id="featured-courses-container">
+                <!-- Featured courses will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- All Courses -->
+    <section class="all-courses">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tất cả khóa học</h2>
+                <div class="filter-controls">
+                    <select id="course-filter">
+                        <option value="all">Tất cả danh mục</option>
+                        <option value="prevention">Phòng ngừa</option>
+                        <option value="recognition">Nhận biết</option>
+                        <option value="treatment">Điều trị</option>
+                        <option value="legal">Pháp lý</option>
+                        <option value="education">Giáo dục</option>
+                    </select>
+                    <select id="course-sort">
+                        <option value="newest">Mới nhất</option>
+                        <option value="popular">Phổ biến</option>
+                        <option value="rating">Đánh giá cao</option>
+                    </select>
+                </div>
+            </div>
+            <div class="courses-grid" id="all-courses-container">
+                <!-- All courses will be loaded by JavaScript -->
+            </div>
+            <div class="pagination">
+                <button id="prev-page" disabled><i class="fas fa-chevron-left"></i></button>
+                <div class="page-numbers" id="page-numbers"></div>
+                <button id="next-page"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="course-testimonials">
+        <div class="container">
+            <h2 class="section-title">Học viên nói gì về chúng tôi</h2>
+            <div class="testimonials-slider" id="testimonials-slider">
+                <!-- Testimonials will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="course-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Sẵn sàng bắt đầu hành trình phòng chống ma túy?</h2>
+                <p>Đăng ký ngay để tiếp cận các khóa học chất lượng từ chuyên gia hàng đầu</p>
+                <a href="#" class="cta-button" id="register-cta">Đăng ký ngay</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+    <!-- Footer -->
+<footer class="bg-light py-5 mt-5 border-top">
+    <div class="container">
+        <div class="row">
+            <!-- Logo & Mô tả -->
+            <div class="col-md-4 mb-4">
+                <img src="assets/logo.png" alt="Logo" height="50" class="mb-3">
+                <p class="text-muted small">
+                    Hệ thống hỗ trợ phòng ngừa sử dụng ma túy trong cộng đồng.<br>
+                    Cung cấp kiến thức, khóa học, và dịch vụ tư vấn chuyên nghiệp nhằm góp phần xây dựng xã hội lành mạnh.
+                </p>
+            </div>
+
+            <!-- Liên kết nhanh -->
+            <div class="col-md-2 mb-4">
+                <h6 class="fw-bold mb-3">Liên kết nhanh</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Về chúng tôi</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Khóa học</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Tư vấn viên</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Tin tức & Blog</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <!-- Tổ chức đồng hành -->
+            <div class="col-md-3 mb-4">
+                <h6 class="fw-bold mb-3">Tổ chức đồng hành</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2">Bộ Lao động - Thương binh & Xã hội</li>
+                    <li class="mb-2">UNODC (United Nations Office on Drugs and Crime)</li>
+                    <li class="mb-2">Trung tâm Hỗ trợ Thanh niên Việt Nam</li>
+                    <li class="mb-2">Cục Phòng chống tệ nạn xã hội</li>
+                </ul>
+            </div>
+
+            <!-- Chứng nhận & Liên hệ -->
+            <div class="col-md-3 mb-4">
+                <h6 class="fw-bold mb-3">Chứng nhận & Liên hệ</h6>
+                <p class="text-muted small mb-2"><i class="bi bi-shield-check me-2"></i>Đã đăng ký Bộ Công Thương</p>
+                <p class="text-muted small mb-2"><i class="bi bi-patch-check me-2"></i>ISO 9001:2015 – Dịch vụ tư vấn</p>
+                <ul class="list-unstyled small text-muted mt-3">
+                    <li class="mb-2"><i class="bi bi-envelope me-2"></i><a href="mailto:contact@phongnguyematuy.vn" class="text-muted">contact@phongnguyematuy.vn</a></li>
+                    <li class="mb-2"><i class="bi bi-telephone me-2"></i>1800 1234 (Miễn phí)</li>
+                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Hà Nội, Việt Nam</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bản quyền -->
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-12 text-center text-muted small">
+                &copy; 2023 Hệ thống Phòng ngừa Ma túy. Bảo lưu mọi quyền. | Thiết kế bởi PhongNguaMaTuy.vn
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Constants and configuration
+    const CONFIG = {
+        coursesPerPage: 6,
+        testimonialInterval: 5000,
+        animationDuration: 2000
+    };
+
+    // Sample data
+    const DATA = {
+        categories: [
+            { id: 'prevention', name: 'Phòng ngừa', icon: 'shield-alt', description: 'Các biện pháp phòng tránh ma túy hiệu quả', count: 15 },
+            { id: 'recognition', name: 'Nhận biết', icon: 'search', description: 'Dấu hiệu nhận biết người sử dụng ma túy', count: 8 },
+            { id: 'treatment', name: 'Điều trị', icon: 'heartbeat', description: 'Phương pháp cai nghiện và hỗ trợ', count: 12 },
+            { id: 'legal', name: 'Pháp lý', icon: 'gavel', description: 'Quy định pháp luật về ma túy', count: 7 },
+            { id: 'education', name: 'Giáo dục', icon: 'chalkboard-teacher', description: 'Chương trình giảng dạy trong học đường', count: 10 }
+        ],
+        courses: [
+            {
+                id: 1,
+                title: 'Phòng ngừa ma túy trong môi trường học đường',
+                description: 'Khóa học cung cấp kiến thức và kỹ năng giúp giáo viên, phụ huynh nhận biết và phòng ngừa ma túy trong trường học.',
+                category: 'prevention',
+                level: 'Cơ bản',
+                duration: '8 giờ',
+                students: 1200,
+                instructor: 'TS. Nguyễn Văn A',
+                featured: true,
+                image: 'https://via.placeholder.com/400x225'
+            },
+            // ... (other course data remains the same)
+        ],
+        testimonials: [
+            {
+                id: 1,
+                text: 'Khóa học đã giúp tôi nhận biết được các dấu hiệu con mình có thể đang sử dụng ma túy và cách tiếp cận vấn đề một cách hiệu quả.',
+                author: 'Nguyễn Thị Lan',
+                role: 'Phụ huynh',
+                avatar: 'https://via.placeholder.com/100x100'
+            },
+            // ... (other testimonial data remains the same)
+        ]
+    };
+
+    // App state
+    const state = {
+        currentPage: 1,
+        filteredCourses: [...DATA.courses],
+        currentTestimonial: 0,
+        testimonialInterval: null
+    };
+
+    // DOM Elements
+    const DOM = {
+        categoriesContainer: document.getElementById('categories-container'),
+        featuredCoursesContainer: document.getElementById('featured-courses-container'),
+        allCoursesContainer: document.getElementById('all-courses-container'),
+        testimonialsSlider: document.getElementById('testimonials-slider'),
+        courseSearchInput: document.getElementById('course-search-input'),
+        courseSearchBtn: document.getElementById('course-search-btn'),
+        courseFilter: document.getElementById('course-filter'),
+        courseSort: document.getElementById('course-sort'),
+        viewAllCoursesBtn: document.getElementById('view-all-courses'),
+        registerCtaBtn: document.getElementById('register-cta'),
+        prevPageBtn: document.getElementById('prev-page'),
+        nextPageBtn: document.getElementById('next-page'),
+        pageNumbersContainer: document.getElementById('page-numbers'),
+        heroStats: document.querySelector('.hero-stats'),
+        mobileMenuToggle: document.querySelector('.navbar-toggler'),
+        mobileMenu: document.querySelector('#navbarNav')
+    };
+
+    // Utility functions
+    const utils = {
+        debounce: function(func, wait) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        },
+
+        throttle: function(func, limit) {
+            let lastFunc;
+            let lastRan;
+            return function() {
+                const context = this;
+                const args = arguments;
+                if (!lastRan) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                } else {
+                    clearTimeout(lastFunc);
+                    lastFunc = setTimeout(function() {
+                        if ((Date.now() - lastRan) >= limit) {
+                            func.apply(context, args);
+                            lastRan = Date.now();
+                        }
+                    }, limit - (Date.now() - lastRan));
+                }
+            };
+        },
+
+        animateValue: function(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value.toLocaleString() + 
+                    (element.id === 'courses-count' || element.id === 'experts-count' ? '+' : '+');
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+    };
+
+    // Render functions
+    const render = {
+        categories: function() {
+            DOM.categoriesContainer.innerHTML = DATA.categories.map(category => `
+                <div class="category-card" data-category="${category.id}">
+                    <div class="category-icon">
+                        <i class="fas fa-${category.icon}"></i>
+                    </div>
+                    <h3>${category.name}</h3>
+                    <p>${category.description}</p>
+                    <span class="course-count">${category.count} khóa học</span>
+                </div>
+            `).join('');
+
+            // Add click event to category cards
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    DOM.courseFilter.value = category;
+                    controller.filterAndSortCourses();
+                });
+            });
+        },
+
+        featuredCourses: function() {
+            const featuredCourses = DATA.courses.filter(course => course.featured);
+            DOM.featuredCoursesContainer.innerHTML = featuredCourses.map(course => 
+                this.createCourseCard(course, true)
+            ).join('');
+            controller.addCourseCardEvents();
+        },
+
+        allCourses: function() {
+            const start = (state.currentPage - 1) * CONFIG.coursesPerPage;
+            const end = start + CONFIG.coursesPerPage;
+            const paginatedCourses = state.filteredCourses.slice(start, end);
+            
+            DOM.allCoursesContainer.innerHTML = paginatedCourses.map(course => 
+                this.createCourseCard(course)
+            ).join('');
+            
+            controller.addCourseCardEvents();
+            controller.updatePagination();
+        },
+
+        testimonials: function() {
+            DOM.testimonialsSlider.innerHTML = DATA.testimonials.map(testimonial => `
+                <div class="testimonial-card">
+                    <p class="testimonial-text">${testimonial.text}</p>
+                    <div class="testimonial-author">
+                        <img src="${testimonial.avatar}" alt="${testimonial.author}">
+                        <div class="author-info">
+                            <h4>${testimonial.author}</h4>
+                            <p>${testimonial.role}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        },
+
+        createCourseCard: function(course, isFeatured = false) {
+            return `
+                <div class="course-card ${isFeatured ? 'featured' : ''}" data-id="${course.id}" data-category="${course.category}">
+                    ${isFeatured ? '<div class="course-badge">Nổi bật</div>' : ''}
+                    <div class="course-image">
+                        <img src="${course.image}" alt="${course.title}" loading="lazy">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">
+                            <span class="level">${course.level}</span>
+                            <span class="duration"><i class="far fa-clock"></i> ${course.duration}</span>
+                            <span class="students"><i class="far fa-user"></i> ${course.students.toLocaleString()}</span>
+                        </div>
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-description">${course.description}</p>
+                        <div class="course-footer">
+                            <div class="instructor">
+                                <img src="https://via.placeholder.com/40x40" alt="${course.instructor}" loading="lazy">
+                                <span>${course.instructor.split(' ')[0]}</span>
+                            </div>
+                            <div class="course-price">Miễn phí</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    };
+
+    // Controller functions
+    const controller = {
+        init: function() {
+            render.categories();
+            render.featuredCourses();
+            render.allCourses();
+            render.testimonials();
+            this.showTestimonial(0);
+            this.setupEventListeners();
+            this.createUtilityElements();
+            this.handleResponsive();
+        },
+
+        setupEventListeners: function() {
+            // Search
+            DOM.courseSearchBtn.addEventListener('click', () => this.searchCourses());
+            DOM.courseSearchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') this.searchCourses();
+            });
+            
+            // Filter and sort
+            DOM.courseFilter.addEventListener('change', () => this.filterAndSortCourses());
+            DOM.courseSort.addEventListener('change', () => this.filterAndSortCourses());
+            
+            // Navigation
+            DOM.viewAllCoursesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('.all-courses').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            DOM.registerCtaBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showNotification('Chức năng đăng ký sẽ được kích hoạt. Trong ứng dụng thực tế, đây sẽ là form đăng ký.', 'info');
+            });
+            
+            // Pagination
+            DOM.prevPageBtn.addEventListener('click', () => this.prevPage());
+            DOM.nextPageBtn.addEventListener('click', () => this.nextPage());
+            
+            // Mobile menu
+            DOM.mobileMenuToggle.addEventListener('click', () => {
+                DOM.mobileMenu.classList.toggle('show');
+            });
+            
+            // Close mobile menu when clicking on a nav link
+            document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (DOM.mobileMenu.classList.contains('show')) {
+                        DOM.mobileMenu.classList.remove('show');
+                    }
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            // Window events
+            window.addEventListener('resize', utils.debounce(() => this.handleResponsive(), 100));
+            
+            // Intersection Observer for stats animation
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.animateStats();
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            if (DOM.heroStats) {
+                statsObserver.observe(DOM.heroStats);
+            }
+        },
+
+        createUtilityElements: function() {
+            // Back to top button
+            const backToTopButton = document.createElement('button');
+            backToTopButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+            backToTopButton.classList.add('back-to-top');
+            document.body.appendChild(backToTopButton);
+
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            window.addEventListener('scroll', utils.throttle(() => {
+                backToTopButton.style.display = window.pageYOffset > 300 ? 'block' : 'none';
+            }, 100));
+
+            // Dark mode toggle
+            const darkModeToggle = document.createElement('div');
+            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            darkModeToggle.classList.add('dark-mode-toggle');
+            document.body.appendChild(darkModeToggle);
+
+            darkModeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                darkModeToggle.innerHTML = document.body.classList.contains('dark-mode') 
+                    ? '<i class="fas fa-sun"></i>' 
+                    : '<i class="fas fa-moon"></i>';
+            });
+        },
+
+        addCourseCardEvents: function() {
+            document.querySelectorAll('.course-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const courseId = this.getAttribute('data-id');
+                    controller.showNotification(`Bạn đã chọn khóa học ID: ${courseId}. Trong ứng dụng thực tế, bạn sẽ được chuyển đến trang chi tiết khóa học.`, 'info');
+                });
+            });
+        },
+
+        updatePagination: function() {
+            const totalPages = Math.ceil(state.filteredCourses.length / CONFIG.coursesPerPage);
+            
+            // Clear previous page numbers
+            DOM.pageNumbersContainer.innerHTML = '';
+            
+            // Add page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                if (i === state.currentPage) {
+                    pageBtn.classList.add('active');
+                }
+                pageBtn.addEventListener('click', () => {
+                    state.currentPage = i;
+                    render.allCourses();
+                });
+                DOM.pageNumbersContainer.appendChild(pageBtn);
+            }
+            
+            // Update prev/next buttons
+            DOM.prevPageBtn.disabled = state.currentPage === 1;
+            DOM.nextPageBtn.disabled = state.currentPage === totalPages;
+        },
+
+        filterAndSortCourses: function() {
+            const filterValue = DOM.courseFilter.value;
+            const sortValue = DOM.courseSort.value;
+            
+            // Filter courses
+            state.filteredCourses = filterValue === 'all' 
+                ? [...DATA.courses] 
+                : DATA.courses.filter(course => course.category === filterValue);
+            
+            // Sort courses
+            switch(sortValue) {
+                case 'newest':
+                    state.filteredCourses.sort((a, b) => b.id - a.id);
+                    break;
+                case 'popular':
+                    state.filteredCourses.sort((a, b) => b.students - a.students);
+                    break;
+                case 'rating':
+                    // In a real app, this would sort by rating
+                    state.filteredCourses.sort(() => Math.random() - 0.5); // Random for demo
+                    break;
+            }
+            
+            // Reset to first page
+            state.currentPage = 1;
+            render.allCourses();
+        },
+
+        searchCourses: function() {
+            const searchTerm = DOM.courseSearchInput.value.toLowerCase();
+            
+            state.filteredCourses = searchTerm.trim() === '' 
+                ? [...DATA.courses] 
+                : DATA.courses.filter(course => 
+                    course.title.toLowerCase().includes(searchTerm) || 
+                    course.description.toLowerCase().includes(searchTerm) ||
+                    course.instructor.toLowerCase().includes(searchTerm)
+                );
+            
+            state.currentPage = 1;
+            render.allCourses();
+        },
+
+        prevPage: function() {
+            if (state.currentPage > 1) {
+                state.currentPage--;
+                render.allCourses();
+            }
+        },
+
+        nextPage: function() {
+            const totalPages = Math.ceil(state.filteredCourses.length / CONFIG.coursesPerPage);
+            if (state.currentPage < totalPages) {
+                state.currentPage++;
+                render.allCourses();
+            }
+        },
+
+        animateStats: function() {
+            utils.animateValue(document.getElementById('courses-count'), 0, 58, CONFIG.animationDuration);
+            utils.animateValue(document.getElementById('students-count'), 0, 12450, CONFIG.animationDuration);
+            utils.animateValue(document.getElementById('experts-count'), 0, 36, CONFIG.animationDuration);
+        },
+
+        showTestimonial: function(index) {
+            const testimonialCards = document.querySelectorAll('.testimonial-card');
+            testimonialCards.forEach((card, i) => {
+                card.style.display = i === index ? 'block' : 'none';
+            });
+        },
+
+        nextTestimonial: function() {
+            state.currentTestimonial = (state.currentTestimonial + 1) % DATA.testimonials.length;
+            this.showTestimonial(state.currentTestimonial);
+        },
+
+        startTestimonialSlider: function() {
+            state.testimonialInterval = setInterval(() => this.nextTestimonial(), CONFIG.testimonialInterval);
+            
+            DOM.testimonialsSlider.addEventListener('mouseenter', () => {
+                clearInterval(state.testimonialInterval);
+            });
+            
+            DOM.testimonialsSlider.addEventListener('mouseleave', () => {
+                state.testimonialInterval = setInterval(() => this.nextTestimonial(), CONFIG.testimonialInterval);
+            });
+        },
+
+        handleResponsive: function() {
+            const courseCards = document.querySelectorAll('.course-card');
+            const isMobile = window.innerWidth < 768;
+            
+            courseCards.forEach(card => {
+                card.classList.toggle('mobile-view', isMobile);
+            });
+        },
+
+        showNotification: function(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button class="close-notification"><i class="fas fa-times"></i></button>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // Auto-remove after 5 seconds
+            const autoRemove = setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+            
+            // Close button
+            notification.querySelector('.close-notification').addEventListener('click', () => {
+                clearTimeout(autoRemove);
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            });
+        }
+    };
+
+    // Initialize the app
+    controller.init();
+    controller.startTestimonialSlider();
+
+    // Example welcome notification
+    setTimeout(() => {
+        controller.showNotification('Chào mừng bạn đến với hệ thống khóa học Phòng chống Ma túy!', 'success');
+    }, 1000);
+});
+</script>
+    
+</body>
+</html>
