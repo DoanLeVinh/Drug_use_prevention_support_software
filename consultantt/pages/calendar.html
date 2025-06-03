@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch làm việc - Hệ thống phòng ngừa ma túy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --primary-light: #e2e6f9;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --white: #fff;
+            --gray: #dddfeb;
+            --gray-dark: #7a7f9a;
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --dark-color: #5a5c69;
+        }
+        
+        /* Base Styles */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+            color: #333;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem 1.5rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .sidebar-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+        
+        .sidebar-nav {
+            padding: 0 1rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+        
+        .menu-item a:hover {
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+        
+        .menu-item a i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-item.active a {
+            color: var(--white);
+            background-color: var(--primary);
+        }
+        
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--gray);
+        }
+        
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            color: var(--danger);
+            background-color: rgba(231, 74, 59, 0.1);
+        }
+        
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .top-navbar {
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .page-header {
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-toggle {
+            display: none;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: var(--dark);
+        }
+        
+        .welcome-message {
+            font-size: 0.875rem;
+            color: var(--secondary);
+            margin-left: 1rem;
+            margin-bottom: 0;
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification-bell {
+            position: relative;
+            margin-right: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+        
+        .notification-bell .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 0.6rem;
+            background-color: var(--danger);
+            color: var(--white);
+            border-radius: 50%;
+            padding: 0.25rem 0.4rem;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+        }
+        
+        .profile-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            color: var(--dark);
+        }
+        
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            margin-bottom: 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+       
+        .calendar-container {
+            background-color: white;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            padding: 20px;
+        }
+        
+        .fc-event {
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        
+        .fc-daygrid-event-dot {
+            display: none;
+        }
+        
+        .event-consultation {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .event-training {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .event-campaign {
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
+            color: #000;
+        }
+        
+        .event-urgent {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .badge-role {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            
+            .user-actions {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .welcome-message {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="images/logo.png" alt="Logo" class="sidebar-logo">
+                <h3 class="sidebar-title">Phòng Ngừa Ma Túy</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="sidebar-menu">
+                    <li class="menu-item">
+                        <a href="/consultantt/pages/index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="schedule-management.html"><i class="fas fa-calendar-alt"></i> <span>Lịch Làm Việc</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="consultation.html"><i class="fas fa-comments"></i> <span>Phiên Tư Vấn</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="clients.html"><i class="fas fa-users"></i> <span>Khách Hàng</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="reports.html"><i class="fas fa-chart-line"></i> <span>Báo Cáo</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="resources.html"><i class="fas fa-book"></i> <span>Tài Liệu</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Lịch làm việc</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Hôm nay</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">In lịch</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                            <i class="fas fa-plus me-1"></i> Thêm sự kiện
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i> Admin
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="profile.html">Hồ sơ</a></li>
+                            <li><a class="dropdown-item" href="settings.html">Cài đặt</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="login.html">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filter section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="consultantFilter" class="form-label">Chuyên viên</label>
+                            <select id="consultantFilter" class="form-select">
+                                <option value="">Tất cả chuyên viên</option>
+                                <option value="1">Nguyễn Văn A</option>
+                                <option value="2">Trần Thị B</option>
+                                <option value="3">Lê Văn C</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="eventTypeFilter" class="form-label">Loại sự kiện</label>
+                            <select id="eventTypeFilter" class="form-select">
+                                <option value="">Tất cả loại</option>
+                                <option value="consultation">Tư vấn</option>
+                                <option value="training">Đào tạo</option>
+                                <option value="campaign">Chiến dịch</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="statusFilter" class="form-label">Trạng thái</label>
+                            <select id="statusFilter" class="form-select">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="pending">Chờ xác nhận</option>
+                                <option value="confirmed">Đã xác nhận</option>
+                                <option value="completed">Hoàn thành</option>
+                                <option value="cancelled">Đã hủy</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" id="applyFilter">
+                                <i class="fas fa-filter me-1"></i> Áp dụng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Calendar -->
+            <div class="calendar-container">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Event Modal -->
+    <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="addEventModalLabel">Thêm sự kiện mới</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="eventForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="eventTitle" class="form-label">Tiêu đề sự kiện</label>
+                                <input type="text" class="form-control" id="eventTitle" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="eventType" class="form-label">Loại sự kiện</label>
+                                <select class="form-select" id="eventType" required>
+                                    <option value="">Chọn loại sự kiện</option>
+                                    <option value="consultation">Tư vấn</option>
+                                    <option value="training">Đào tạo</option>
+                                    <option value="campaign">Chiến dịch</option>
+                                    <option value="meeting">Cuộc họp</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="startDate" class="form-label">Ngày bắt đầu</label>
+                                <input type="datetime-local" class="form-control" id="startDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="endDate" class="form-label">Ngày kết thúc</label>
+                                <input type="datetime-local" class="form-control" id="endDate" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="consultantSelect" class="form-label">Chuyên viên</label>
+                                <select class="form-select" id="consultantSelect">
+                                    <option value="">Không chọn</option>
+                                    <option value="1">Nguyễn Văn A</option>
+                                    <option value="2">Trần Thị B</option>
+                                    <option value="3">Lê Văn C</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="eventStatus" class="form-label">Trạng thái</label>
+                                <select class="form-select" id="eventStatus" required>
+                                    <option value="pending">Chờ xác nhận</option>
+                                    <option value="confirmed">Đã xác nhận</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="eventDescription" class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="eventDescription" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="eventParticipants" class="form-label">Người tham gia (nếu có)</label>
+                            <select class="form-select" id="eventParticipants" multiple>
+                                <option value="1">Người dùng 1</option>
+                                <option value="2">Người dùng 2</option>
+                                <option value="3">Người dùng 3</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="sendNotification">
+                            <label class="form-check-label" for="sendNotification">Gửi thông báo cho người tham gia</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="saveEvent">Lưu sự kiện</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Event Details Modal -->
+    <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailsModalLabel">Chi tiết sự kiện</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="eventDetailsContent">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="editEvent">Chỉnh sửa</button>
+                    <button type="button" class="btn btn-danger" id="deleteEvent">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/vi.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize calendar
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'vi',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                initialView: 'timeGridWeek',
+                navLinks: true,
+                selectable: true,
+                selectMirror: true,
+                editable: true,
+                dayMaxEvents: true,
+                events: [
+                    {
+                        id: '1',
+                        title: 'Tư vấn cho Nguyễn Văn X',
+                        start: new Date().setHours(9, 0, 0, 0),
+                        end: new Date().setHours(10, 0, 0, 0),
+                        className: 'event-consultation',
+                        extendedProps: {
+                            consultant: 'Nguyễn Văn A',
+                            status: 'confirmed',
+                            description: 'Tư vấn về các dấu hiệu sử dụng ma túy ở thanh thiếu niên',
+                            participants: ['Nguyễn Văn X']
+                        }
+                    },
+                    {
+                        id: '2',
+                        title: 'Khóa đào tạo nhận biết ma túy',
+                        start: new Date().setHours(14, 0, 0, 0),
+                        end: new Date().setHours(16, 30, 0, 0),
+                        className: 'event-training',
+                        extendedProps: {
+                            consultant: 'Trần Thị B',
+                            status: 'confirmed',
+                            description: 'Đào tạo cho giáo viên về cách nhận biết học sinh có nguy cơ sử dụng ma túy',
+                            participants: ['Nguyễn Thị Y', 'Lê Văn Z']
+                        }
+                    },
+                    {
+                        id: '3',
+                        title: 'Chiến dịch truyền thông cộng đồng',
+                        start: new Date(Date.now() + 86400000).setHours(8, 0, 0, 0),
+                        end: new Date(Date.now() + 86400000).setHours(17, 0, 0, 0),
+                        className: 'event-campaign',
+                        extendedProps: {
+                            consultant: 'Lê Văn C',
+                            status: 'confirmed',
+                            description: 'Tổ chức ngày hội phòng chống ma túy tại trường THPT địa phương',
+                            participants: []
+                        }
+                    }
+                ],
+                select: function(arg) {
+                    // Open add event modal when selecting a time slot
+                    $('#startDate').val(arg.start.toISOString().slice(0, 16));
+                    $('#endDate').val(arg.end.toISOString().slice(0, 16));
+                    $('#addEventModal').modal('show');
+                },
+                eventClick: function(info) {
+                    // Show event details when clicking on an event
+                    showEventDetails(info.event);
+                },
+                eventDrop: function(info) {
+                    // Handle event rescheduling
+                    updateEvent(info.event);
+                },
+                eventResize: function(info) {
+                    // Handle event duration change
+                    updateEvent(info.event);
+                }
+            });
+            
+            calendar.render();
+            
+            // Show event details in modal
+            function showEventDetails(event) {
+                const eventDetails = `
+                    <h6 class="fw-bold">${event.title}</h6>
+                    <p><i class="far fa-calendar-alt me-2"></i> ${event.start.toLocaleString('vi-VN')} - ${event.end.toLocaleString('vi-VN')}</p>
+                    ${event.extendedProps.consultant ? `<p><i class="fas fa-user-md me-2"></i> Chuyên viên: ${event.extendedProps.consultant}</p>` : ''}
+                    <p><i class="fas fa-info-circle me-2"></i> Trạng thái: ${getStatusBadge(event.extendedProps.status)}</p>
+                    ${event.extendedProps.description ? `<p><i class="fas fa-align-left me-2"></i> Mô tả: ${event.extendedProps.description}</p>` : ''}
+                    ${event.extendedProps.participants && event.extendedProps.participants.length > 0 ? 
+                        `<p><i class="fas fa-users me-2"></i> Người tham gia: ${event.extendedProps.participants.join(', ')}</p>` : ''}
+                `;
+                
+                $('#eventDetailsContent').html(eventDetails);
+                $('#eventDetailsModal').modal('show');
+                
+                // Store event ID for edit/delete actions
+                $('#eventDetailsModal').data('eventId', event.id);
+            }
+            
+            // Get status badge HTML
+            function getStatusBadge(status) {
+                const statusMap = {
+                    'pending': { class: 'bg-warning text-dark', text: 'Chờ xác nhận' },
+                    'confirmed': { class: 'bg-success', text: 'Đã xác nhận' },
+                    'completed': { class: 'bg-info', text: 'Hoàn thành' },
+                    'cancelled': { class: 'bg-danger', text: 'Đã hủy' }
+                };
+                
+                return `<span class="badge ${statusMap[status].class}">${statusMap[status].text}</span>`;
+            }
+            
+            // Save new event
+            $('#saveEvent').click(function() {
+                const title = $('#eventTitle').val();
+                const type = $('#eventType').val();
+                const start = $('#startDate').val();
+                const end = $('#endDate').val();
+                const consultant = $('#consultantSelect').val();
+                const status = $('#eventStatus').val();
+                const description = $('#eventDescription').val();
+                const participants = $('#eventParticipants').val();
+                
+                if (!title || !type || !start || !end) {
+                    alert('Vui lòng điền đầy đủ thông tin bắt buộc');
+                    return;
+                }
+                
+                const newEvent = {
+                    id: Date.now().toString(),
+                    title: title,
+                    start: start,
+                    end: end,
+                    className: `event-${type}`,
+                    extendedProps: {
+                        consultant: consultant ? $('#consultantSelect option:selected').text() : null,
+                        status: status,
+                        description: description,
+                        participants: participants ? $('#eventParticipants option:selected').map((i, el) => $(el).text()).get() : []
+                    }
+                };
+                
+                calendar.addEvent(newEvent);
+                $('#addEventModal').modal('hide');
+                $('#eventForm')[0].reset();
+            });
+            
+            // Edit event
+            $('#editEvent').click(function() {
+                const eventId = $('#eventDetailsModal').data('eventId');
+                const event = calendar.getEventById(eventId);
+                
+                if (event) {
+                    // Fill the form with event data
+                    $('#eventTitle').val(event.title);
+                    $('#eventType').val(event.className.replace('event-', ''));
+                    $('#startDate').val(event.start.toISOString().slice(0, 16));
+                    $('#endDate').val(event.end.toISOString().slice(0, 16));
+                    $('#eventDescription').val(event.extendedProps.description);
+                    
+                    // Show the edit modal
+                    $('#eventDetailsModal').modal('hide');
+                    $('#addEventModal').modal('show');
+                    
+                    // Change save button to update
+                    $('#saveEvent').text('Cập nhật').off('click').click(function() {
+                        event.setProp('title', $('#eventTitle').val());
+                        event.setDates($('#startDate').val(), $('#endDate').val());
+                        event.setProp('className', `event-${$('#eventType').val()}`);
+                        
+                        event.setExtendedProp('consultant', $('#consultantSelect option:selected').text());
+                        event.setExtendedProp('status', $('#eventStatus').val());
+                        event.setExtendedProp('description', $('#eventDescription').val());
+                        event.setExtendedProp('participants', $('#eventParticipants option:selected').map((i, el) => $(el).text()).get());
+                        
+                        $('#addEventModal').modal('hide');
+                        $('#eventForm')[0].reset();
+                        $('#saveEvent').text('Lưu sự kiện').off('click').click(saveEventHandler);
+                    });
+                }
+            });
+            
+            // Delete event
+            $('#deleteEvent').click(function() {
+                if (confirm('Bạn có chắc chắn muốn xóa sự kiện này?')) {
+                    const eventId = $('#eventDetailsModal').data('eventId');
+                    const event = calendar.getEventById(eventId);
+                    
+                    if (event) {
+                        event.remove();
+                    }
+                    
+                    $('#eventDetailsModal').modal('hide');
+                }
+            });
+            
+            // Apply filters
+            $('#applyFilter').click(function() {
+                const consultantId = $('#consultantFilter').val();
+                const eventType = $('#eventTypeFilter').val();
+                const status = $('#statusFilter').val();
+                
+                calendar.getEvents().forEach(function(event) {
+                    let showEvent = true;
+                    
+                    if (consultantId && event.extendedProps.consultant !== consultantId) {
+                        showEvent = false;
+                    }
+                    
+                    if (eventType && !event.className.includes(eventType)) {
+                        showEvent = false;
+                    }
+                    
+                    if (status && event.extendedProps.status !== status) {
+                        showEvent = false;
+                    }
+                    
+                    event.setProp('display', showEvent ? 'auto' : 'none');
+                });
+            });
+            
+            // Update event on drag/resize
+            function updateEvent(event) {
+                // In a real app, you would send this to your backend
+                console.log('Event updated:', {
+                    id: event.id,
+                    title: event.title,
+                    start: event.start,
+                    end: event.end,
+                    extendedProps: event.extendedProps
+                });
+            }
+        });
+    </script>
+</body>
+</html>

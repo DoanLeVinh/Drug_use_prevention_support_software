@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Tư Vấn Viên | Hệ Thống Phòng Chống Ma Túy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/consultantt/css/styles.css">
+
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="images/logo.png" alt="Logo" class="sidebar-logo">
+                <h3 class="sidebar-title">Phòng Ngừa Ma Túy</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="sidebar-menu">
+                    <li class="menu-item active">
+                        <a href="consultant-dashboard.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/consultantt/pages/calendar.html"><i class="fas fa-calendar-alt"></i> <span>Lịch Làm Việc</span></a>
+
+                    </li>
+                    <li class="menu-item">
+                        <a href="consultation.html"><i class="fas fa-comments"></i> <span>Phiên Tư Vấn</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="clients.html"><i class="fas fa-users"></i> <span>Khách Hàng</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="reports.html"><i class="fas fa-chart-line"></i> <span>Báo Cáo</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="resources.html"><i class="fas fa-book"></i> <span>Tài Liệu</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navigation Bar -->
+            <header class="top-navbar">
+                <div class="page-header">
+                    <button class="sidebar-toggle d-lg-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Dashboard Tư Vấn Viên</h1>
+                    <p class="welcome-message">Chào mừng trở lại, <strong>Trần Khánh Huyền</strong></p>
+                </div>
+                <div class="user-actions">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="images/consultant-avatar.jpg" alt="User Profile" class="profile-img">
+                        <div class="profile-info">
+                            <h5 class="profile-name">Trần Khánh Huyền</h5>
+                            <p class="profile-role">Chuyên viên tư vấn</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Stats Overview -->
+                <section class="stats-overview row">
+                    <div class="col-md-4">
+                        <div class="stat-card appointments">
+                            <div class="stat-header">
+                                <h3 class="stat-title">Cuộc Hẹn Hôm Nay</h3>
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">5</div>
+                            <div class="stat-description">3 đã xác nhận, 2 chờ xác nhận</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="stat-card assessments">
+                            <div class="stat-header">
+                                <h3 class="stat-title">Đánh Giá Nguy Cơ</h3>
+                                <div class="stat-icon">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-description">Đã hoàn thành trong tháng</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="stat-card clients">
+                            <div class="stat-header">
+                                <h3 class="stat-title">Khách Hàng Mới</h3>
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">3</div>
+                            <div class="stat-description">Trong 7 ngày qua</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Two Column Layout -->
+                <div class="row mt-4">
+                    <!-- Left Column -->
+                    <div class="col-lg-8">
+                        <!-- Today's Appointments -->
+                        <section class="appointments-section card">
+                            <div class="card-header">
+                                <h2 class="section-title">Lịch Hẹn Hôm Nay</h2>
+                                <div class="section-actions">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Thêm lịch hẹn
+                                    </button>
+                                    <button class="btn btn-outline-secondary">
+                                        <i class="fas fa-calendar-alt"></i> Xem tất cả
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="appointment-list">
+                                    <div class="appointment-item">
+                                        <div class="appointment-details">
+                                            <div class="appointment-time">09:00 - 10:00</div>
+                                            <div class="appointment-client">
+                                                <strong>Trần Văn A</strong> - 25 tuổi
+                                                <span class="badge bg-success">Đã xác nhận</span>
+                                            </div>
+                                            <div class="appointment-info">
+                                                <span class="appointment-tag risk-low">Nguy cơ thấp</span>
+                                                <span class="appointment-note"><i class="fas fa-info-circle"></i> Tái khám</span>
+                                            </div>
+                                        </div>
+                                        <div class="appointment-actions">
+                                            <button class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" title="Bắt đầu tư vấn">
+                                                <i class="fas fa-play"></i> Bắt đầu
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="appointment-item">
+                                        <div class="appointment-details">
+                                            <div class="appointment-time">11:00 - 12:00</div>
+                                            <div class="appointment-client">
+                                                <strong>Nguyễn Thị B</strong> - 18 tuổi
+                                                <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                                            </div>
+                                            <div class="appointment-info">
+                                                <span class="appointment-tag risk-medium">Nguy cơ trung bình</span>
+                                            </div>
+                                        </div>
+                                        <div class="appointment-actions">
+                                            <button class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-success" title="Xác nhận">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="appointment-item">
+                                        <div class="appointment-details">
+                                            <div class="appointment-time">14:00 - 15:00</div>
+                                            <div class="appointment-client">
+                                                <strong>Lê Văn C</strong> - 30 tuổi
+                                                <span class="badge bg-success">Đã xác nhận</span>
+                                            </div>
+                                            <div class="appointment-info">
+                                                <span class="appointment-tag risk-high">Nguy cơ cao</span>
+                                            </div>
+                                        </div>
+                                        <div class="appointment-actions">
+                                            <button class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" title="Bắt đầu tư vấn">
+                                                <i class="fas fa-play"></i> Bắt đầu
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-lg-4">
+                        <!-- Notifications -->
+                        <section class="notifications-section card">
+                            <div class="card-header">
+                                <h2 class="section-title">Thông Báo Mới</h2>
+                                <button class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-bell-slash"></i> Đánh dấu đã đọc
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="notification-list">
+                                    <div class="notification-item unread">
+                                        <div class="notification-icon bg-primary-light">
+                                            <i class="fas fa-calendar-plus text-primary"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="notification-title">Cuộc hẹn mới</div>
+                                            <div class="notification-message">Khách hàng Trần Văn E đã đặt lịch hẹn vào ngày 15/06/2025 lúc 10:00</div>
+                                            <div class="notification-time">10 phút trước</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="notification-item unread">
+                                        <div class="notification-icon bg-danger-light">
+                                            <i class="fas fa-exclamation-triangle text-danger"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="notification-title">Cảnh báo nguy cơ cao</div>
+                                            <div class="notification-message">Kết quả khảo sát của khách hàng Nguyễn Văn F cho thấy nguy cơ sử dụng ma túy cao</div>
+                                            <div class="notification-time">2 giờ trước</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="notification-item">
+                                        <div class="notification-icon bg-info-light">
+                                            <i class="fas fa-chalkboard-teacher text-info"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="notification-title">Khóa đào tạo mới</div>
+                                            <div class="notification-message">Khóa đào tạo "Kỹ năng từ chối ma túy cho thanh thiếu niên" sẽ bắt đầu vào tuần tới</div>
+                                            <div class="notification-time">1 ngày trước</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Quick Actions -->
+                        <section class="quick-actions card mt-4">
+                            <div class="card-header">
+                                <h2 class="section-title">Hành Động Nhanh</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-primary w-100">
+                                            <i class="fas fa-user-plus"></i> Thêm khách hàng
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-success w-100">
+                                            <i class="fas fa-calendar-plus"></i> Tạo lịch hẹn
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-info w-100">
+                                            <i class="fas fa-file-alt"></i> Tạo báo cáo
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-warning w-100">
+                                            <i class="fas fa-clipboard-check"></i> Đánh giá nguy cơ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Thêm/Sửa lịch hẹn -->
+<div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentModalLabel">Thêm lịch hẹn mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="appointmentForm">
+                    <input type="hidden" id="appointmentId">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="clientSelect" class="form-label">Khách hàng</label>
+                            <select class="form-select" id="clientSelect" required>
+                                <option value="" selected disabled>Chọn khách hàng</option>
+                                <option value="1">Trần Văn A (25 tuổi)</option>
+                                <option value="2">Nguyễn Thị B (18 tuổi)</option>
+                                <option value="3">Lê Văn C (30 tuổi)</option>
+                                <option value="4">Phạm Thị D (22 tuổi)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="appointmentDate" class="form-label">Ngày hẹn</label>
+                            <input type="date" class="form-control" id="appointmentDate" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="startTime" class="form-label">Giờ bắt đầu</label>
+                            <input type="time" class="form-control" id="startTime" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="endTime" class="form-label">Giờ kết thúc</label>
+                            <input type="time" class="form-control" id="endTime" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="appointmentType" class="form-label">Loại tư vấn</label>
+                        <select class="form-select" id="appointmentType" required>
+                            <option value="" selected disabled>Chọn loại tư vấn</option>
+                            <option value="online">Trực tuyến</option>
+                            <option value="offline">Trực tiếp</option>
+                            <option value="phone">Điện thoại</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="riskLevel" class="form-label">Mức độ nguy cơ</label>
+                        <select class="form-select" id="riskLevel" required>
+                            <option value="" selected disabled>Chọn mức độ nguy cơ</option>
+                            <option value="low">Thấp</option>
+                            <option value="medium">Trung bình</option>
+                            <option value="high">Cao</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="appointmentNotes" class="form-label">Ghi chú</label>
+                        <textarea class="form-control" id="appointmentNotes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger me-auto" id="deleteBtn" style="display: none;">
+                    <i class="fas fa-trash-alt"></i> Xóa
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+                <button type="button" class="btn btn-primary" id="saveBtn">
+                    <i class="fas fa-save"></i> Lưu
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
