@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLife - Phòng ngừa ma túy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Drug_use_prevention_support_software/member/css/styles.css">
+</head>
+<body>
+
+   <!-- Header with Top Navigation -->
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="/Drug_use_prevention_support_software/member/images/logo.png" alt="Logo" height="40" class="me-2">
+                    <span class="font-weight-bold">Phòng Ngừa Ma Túy</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="member-dashboard.html">
+                                <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="courses.html">
+                                <i class="bi bi-book me-1"></i>Khóa học
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="survey.html">
+                                <i class="bi bi-clipboard-check me-1"></i>Khảo sát
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="appointment.html">
+                                <i class="bi bi-calendar-check me-1"></i>Đặt lịch
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="blog.html">
+                                <i class="bi bi-newspaper me-1"></i>Blog
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>Tài khoản
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i>Hồ sơ</a></li>
+                                <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i>Cài đặt</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Bạn có đang gặp rủi ro về ma túy? Hãy kiểm tra ngay!</h1>
+            <p>Bài kiểm tra này giúp đánh giá nguy cơ tiếp xúc với ma túy và sức khỏe của bạn dựa trên các yếu tố hành vi, môi trường...</p>
+            <button class="primary-button">Bắt đầu trắc nghiệm</button>
+        </div>
+        <div class="hero-image">
+            <img src="https://via.placeholder.com/500x300" alt="Phòng ngừa ma túy">
+        </div>
+    </section>
+
+    <!-- Quiz Cards -->
+    <section class="quiz-section">
+        <h2>Chọn bài đánh giá phù hợp</h2>
+        <div class="quiz-cards">
+            <div class="quiz-card">
+                <h3>Trắc nghiệm nguy cơ nghiện ma túy</h3>
+                <p>10 câu - 5 phút</p>
+                <button class="secondary-button" onclick="startQuiz(1)">Bắt đầu</button>
+            </div>
+            <div class="quiz-card">
+                <h3>Khảo sát môi trường tiếp xúc</h3>
+                <p>Form điền thông tin</p>
+                <button class="secondary-button" onclick="startQuiz(2)">Bắt đầu</button>
+            </div>
+            <div class="quiz-card">
+                <h3>Kiểm tra sức khỏe tâm lý</h3>
+                <p>5 câu - 3 phút</p>
+                <button class="secondary-button" onclick="startQuiz(3)">Bắt đầu</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="quiz-progress">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <div id="quizContainer"></div>
+        </div>
+    </div>
+
+    <!-- Results Section (Hidden Initially) -->
+    <section id="resultsSection" class="results-section" style="display: none;">
+        <h2>Kết quả đánh giá nguy cơ của bạn</h2>
+        <div class="risk-meter">
+            <div class="risk-level" id="riskLevel">50%</div>
+            <div class="meter">
+                <div id="meterFill" class="meter-fill"></div>
+            </div>
+            <div class="risk-labels">
+                <span>Thấp</span>
+                <span>Trung bình</span>
+                <span>Cao</span>
+            </div>
+        </div>
+        <div class="risk-details">
+            <div class="detail-card">
+                <h3>Hành vi cá nhân</h3>
+                <p class="risk-value medium">Trung bình</p>
+            </div>
+            <div class="detail-card">
+                <h3>Môi trường xã hội</h3>
+                <p class="risk-value high">Cao</p>
+            </div>
+            <div class="detail-card">
+                <h3>Sức khỏe tâm lý</h3>
+                <p class="risk-value low">Thấp</p>
+            </div>
+        </div>
+        <div class="recommendation">
+            <h3>Khuyến nghị</h3>
+            <p id="recommendationText">Bạn có thể gặp rủi ro về ma túy. Hãy liên hệ chuyên gia ngay!</p>
+            <button class="primary-button" id="bookConsultationBtn">Đặt lịch tư vấn miễn phí</button>
+        </div>
+    </section>
+
+    <!-- Consultation Form Modal -->
+    <div id="consultationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Đặt lịch tư vấn</h2>
+            <form id="consultationForm">
+                <div class="form-group">
+                    <label for="name">Họ và tên</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="date">Ngày hẹn</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Ghi chú</label>
+                    <textarea id="notes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="primary-button">Xác nhận đặt lịch</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js">
+
+            // Quiz Data
+const quizzes = {
+    1: {
+        title: "Trắc nghiệm nguy cơ nghiện ma túy",
+        questions: [
+            {
+                question: "Bạn đã từng sử dụng ma túy chưa?",
+                options: [
+                    "Chưa bao giờ",
+                    "Đã thử 1-2 lần",
+                    "Thỉnh thoảng sử dụng",
+                    "Thường xuyên sử dụng"
+                ],
+                scores: [0, 2, 4, 6]
+            },
+            {
+                question: "Bạn có bạn bè hoặc người thân sử dụng ma túy không?",
+                options: [
+                    "Không có",
+                    "Có 1-2 người",
+                    "Có nhiều người",
+                    "Hầu hết bạn bè tôi đều dùng"
+                ],
+                scores: [0, 2, 4, 6]
+            },
+            {
+                question: "Bạn có cảm thấy khó cưỡng lại khi được mời dùng ma túy không?",
+                options: [
+                    "Không bao giờ",
+                    "Đôi khi",
+                    "Thường xuyên",
+                    "Rất khó cưỡng lại"
+                ],
+                scores: [0, 2, 4, 6]
+            }
+        ]
+    },
+    2: {
+        title: "Khảo sát môi trường tiếp xúc",
+        questions: [
+            {
+                question: "Nơi bạn sống có nhiều người sử dụng ma túy không?",
+                options: [
+                    "Không có",
+                    "Có một ít",
+                    "Khá nhiều",
+                    "Rất nhiều"
+                ],
+                scores: [0, 2, 4, 6]
+            },
+            {
+                question: "Bạn có thường xuyên đến các địa điểm có nguy cơ cao về ma túy (quán bar, club, v.v.) không?",
+                options: [
+                    "Không bao giờ",
+                    "Hiếm khi",
+                    "Thỉnh thoảng",
+                    "Thường xuyên"
+                ],
+                scores: [0, 2, 4, 6]
+            }
+        ]
+    },
+    3: {
+        title: "Kiểm tra sức khỏe tâm lý",
+        questions: [
+            {
+                question: "Bạn có thường xuyên cảm thấy căng thẳng, lo âu không?",
+                options: [
+                    "Hầu như không",
+                    "Thỉnh thoảng",
+                    "Thường xuyên",
+                    "Luôn luôn"
+                ],
+                scores: [0, 2, 4, 6]
+            },
+            {
+                question: "Bạn có từng sử dụng chất kích thích để giải tỏa căng thẳng không?",
+                options: [
+                    "Không bao giờ",
+                    "Đã thử 1-2 lần",
+                    "Thỉnh thoảng",
+                    "Thường xuyên"
+                ],
+                scores: [0, 2, 4, 6]
+            }
+        ]
+    }
+};
+
+// Global Variables
+let currentQuiz = null;
+let currentQuestion = 0;
+let userAnswers = [];
+let totalScore = 0;
+
+// DOM Elements
+const quizModal = document.getElementById('quizModal');
+const quizContainer = document.getElementById('quizContainer');
+const progressBar = document.getElementById('progressBar');
+const resultsSection = document.getElementById('resultsSection');
+const riskLevel = document.getElementById('riskLevel');
+const meterFill = document.getElementById('meterFill');
+const recommendationText = document.getElementById('recommendationText');
+const bookConsultationBtn = document.getElementById('bookConsultationBtn');
+const consultationModal = document.getElementById('consultationModal');
+const consultationForm = document.getElementById('consultationForm');
+
+// Event Listeners
+document.querySelectorAll('.close').forEach(btn => {
+    btn.addEventListener('click', () => {
+        quizModal.style.display = 'none';
+        consultationModal.style.display = 'none';
+    });
+});
+
+bookConsultationBtn.addEventListener('click', () => {
+    quizModal.style.display = 'none';
+    consultationModal.style.display = 'block';
+});
+
+consultationForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Đã đặt lịch thành công! Chuyên gia sẽ liên hệ bạn trong 24h.');
+    consultationModal.style.display = 'none';
+});
+
+// Functions
+function startQuiz(quizId) {
+    currentQuiz = quizzes[quizId];
+    currentQuestion = 0;
+    userAnswers = [];
+    totalScore = 0;
+    quizModal.style.display = 'block';
+    renderQuestion();
+}
+
+function renderQuestion() {
+    if (!currentQuiz) return;
+
+    // Update progress bar
+    const progress = ((currentQuestion) / currentQuiz.questions.length) * 100;
+    document.querySelector('.progress-bar').style.width = `${progress}%`;
+
+    // Clear previous question
+    quizContainer.innerHTML = '';
+
+    // Render current question
+    const question = currentQuiz.questions[currentQuestion];
+    const questionElement = document.createElement('div');
+    questionElement.className = 'question';
+    questionElement.innerHTML = `
+        <h3>Câu ${currentQuestion + 1}: ${question.question}</h3>
+        <div class="options">
+            ${question.options.map((option, index) => `
+                <div class="option" onclick="selectOption(${index})">
+                    ${option}
+                </div>
+            `).join('')}
+        </div>
+        <div class="navigation-buttons">
+            ${currentQuestion > 0 ? `<button class="secondary-button" onclick="prevQuestion()">Quay lại</button>` : '<div></div>'}
+            <button class="primary-button" onclick="nextQuestion()" ${userAnswers[currentQuestion] === undefined ? 'disabled' : ''}>
+                ${currentQuestion === currentQuiz.questions.length - 1 ? 'Gửi kết quả' : 'Tiếp theo'}
+            </button>
+        </div>
+    `;
+
+    // Highlight selected option if exists
+    if (userAnswers[currentQuestion] !== undefined) {
+        const options = questionElement.querySelectorAll('.option');
+        options[userAnswers[currentQuestion]].classList.add('selected');
+    }
+
+    quizContainer.appendChild(questionElement);
+}
+
+function selectOption(index) {
+    const options = document.querySelectorAll('.option');
+    options.forEach(opt => opt.classList.remove('selected'));
+    options[index].classList.add('selected');
+    
+    userAnswers[currentQuestion] = index;
+    document.querySelector('.primary-button').disabled = false;
+}
+
+function prevQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+    }
+}
+
+function nextQuestion() {
+    if (userAnswers[currentQuestion] === undefined) return;
+
+    // Calculate score for current question
+    const question = currentQuiz.questions[currentQuestion];
+    totalScore += question.scores[userAnswers[currentQuestion]];
+
+    if (currentQuestion < currentQuiz.questions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function showResults() {
+    quizModal.style.display = 'none';
+    resultsSection.style.display = 'block';
+
+    // Calculate risk percentage (0-100)
+    const maxScore = currentQuiz.questions.reduce((sum, q) => sum + Math.max(...q.scores), 0);
+    const riskPercentage = Math.min(Math.round((totalScore / maxScore) * 100), 100);
+
+    // Update UI
+    riskLevel.textContent = `${riskPercentage}%`;
+    meterFill.style.width = `${riskPercentage}%`;
+
+    // Set recommendation based on risk level
+    if (riskPercentage < 30) {
+        recommendationText.textContent = "Bạn đang an toàn! Hãy tiếp tục duy trì lối sống lành mạnh.";
+    } else if (riskPercentage < 70) {
+        recommendationText.textContent = "Bạn có một số nguy cơ. Hãy cẩn thận và tìm hiểu thêm về phòng ngừa ma túy.";
+    } else {
+        recommendationText.textContent = "Bạn có thể gặp rủi ro về ma túy. Hãy liên hệ chuyên gia ngay!";
+    }
+
+    // Scroll to results
+    resultsSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Close modals when clicking outside
+window.addEventListener('click', (e) => {
+    if (e.target === quizModal) {
+        quizModal.style.display = 'none';
+    }
+    if (e.target === consultationModal) {
+        consultationModal.style.display = 'none';
+    }
+});
+
+    </script>
+</body>
+</html>
