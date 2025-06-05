@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa học - Hệ thống hỗ trợ phòng ngừa sử dụng ma túy</title>
+    <!-- Sử dụng cùng CSS như trang index.html -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Sử dụng toàn bộ CSS từ trang index.html */
+        /* Thêm một số style riêng cho trang courses */
+        .courses-hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .courses-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .courses-hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .course-search {
+            margin-top: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+        
+        .course-search input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .course-search button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .course-search button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .pagination a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 5px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .pagination a.active, .pagination a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (giống trang chủ) -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/50x50" alt="Logo">
+                <span class="logo-text">Phòng ngừa Ma túy</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="courses.html" class="active">Khóa học</a></li>
+                    <li><a href="#">Bài kiểm tra</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">Đăng nhập</a>
+                <a href="login.html" class="btn btn-primary">Đăng ký</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Courses Hero -->
+    <section class="courses-hero">
+        <div class="container">
+            <h1>Khóa học phòng ngừa ma túy</h1>
+            <p>Các khóa học được thiết kế đặc biệt cho từng đối tượng, giúp nâng cao nhận thức và kỹ năng phòng tránh ma túy</p>
+            
+            <div class="course-search">
+                <input type="text" placeholder="Tìm kiếm khóa học...">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses">
+        <div class="container">
+            <div class="filter-section">
+                <h4 class="filter-title">Lọc theo đối tượng:</h4>
+                <div class="filter-buttons">
+                    <button class="btn-filter active">Tất cả</button>
+                    <button class="btn-filter">Học sinh</button>
+                    <button class="btn-filter">Sinh viên</button>
+                    <button class="btn-filter">Phụ huynh</button>
+                    <button class="btn-filter">Giáo viên</button>
+                    <button class="btn-filter">Người lao động</button>
+                </div>
+            </div>
+            
+            <div class="courses-grid">
+                <!-- Course 1 -->
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="https://via.placeholder.com/400x300" alt="Nhận biết và từ chối ma túy">
+                    </div>
+                    <div class="course-content">
+                        <span class="course-category">Học sinh</span>
+                        <h3>Nhận biết và từ chối ma túy</h3>
+                        <p class="course-description">Khóa học giúp học sinh nhận biết các loại ma túy phổ biến, tác hại và cách từ chối khi bị rủ rê, lôi kéo sử dụng ma túy.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 8 giờ</span>
+                            <span><i class="far fa-user"></i> 25 bài học</span>
+                        </div>
+                        <a href="course-detail.html" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="https://via.placeholder.com/400x300" alt="Phát hiện sớm con sử dụng ma túy">
+                    </div>
+                    <div class="course-content">
+                        <span class="course-category">Phụ huynh</span>
+                        <h3>Phát hiện sớm con sử dụng ma túy</h3>
+                        <p class="course-description">Khóa học cung cấp kiến thức giúp phụ huynh nhận biết dấu hiệu con em mình sử dụng ma túy và cách xử lý phù hợp.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 6 giờ</span>
+                            <span><i class="far fa-user"></i> 18 bài học</span>
+                        </div>
+                        <a href="course-detail.html" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+                
+                <!-- Course 3 -->
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="https://via.placeholder.com/400x300" alt="Kỹ năng sống phòng chống ma túy">
+                    </div>
+                    <div class="course-content">
+                        <span class="course-category">Sinh viên</span>
+                        <h3>Kỹ năng sống phòng chống ma túy</h3>
+                        <p class="course-description">Khóa học trang bị cho sinh viên các kỹ năng sống cần thiết để phòng tránh ma túy trong môi trường đại học.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 10 giờ</span>
+                            <span><i class="far fa-user"></i> 30 bài học</span>
+                        </div>
+                        <a href="course-detail.html" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+                
+                <!-- Course 4 -->
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="https://via.placeholder.com/400x300" alt="Giáo dục phòng chống ma túy trong trường học">
+                    </div>
+                    <div class="course-content">
+                        <span class="course-category">Giáo viên</span>
+                        <h3>Giáo dục phòng chống ma túy trong trường học</h3>
+                        <p class="course-description">Khóa học dành cho giáo viên với phương pháp giáo dục hiệu quả về phòng chống ma túy cho học sinh.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 12 giờ</span>
+                            <span><i class="far fa-user"></i> 35 bài học</span>
+                        </div>
+                        <a href="course-detail.html" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+                
+                <!-- Course 5 -->
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="https://via.placeholder.com/400x300" alt="Phòng chống ma túy nơi công sở">
+                    </div>
+                    <div class="course-content">
+                        <span class="course-category">Người lao động</span>
+                        <h3>Phòng chống ma túy nơi công sở</h3>
+                        <p class="course-description">Khóa học giúp người lao động nhận thức rõ nguy cơ và cách phòng tránh ma túy trong môi trường làm việc.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 5 giờ</span>
+                            <span><i class="far fa-user"></i> 15 bài học</span>
+                        </div>
+                        <a href="course-detail.html" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+                
+                <!-- Course 6 -->
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="https://via.placeholder.com/400x300" alt="Kỹ năng từ chối ma túy hiệu quả">
+                    </div>
+                    <div class="course-content">
+                        <span class="course-category">Học sinh</span>
+                        <h3>Kỹ năng từ chối ma túy hiệu quả</h3>
+                        <p class="course-description">Khóa học tập trung vào các tình huống thực tế và cách từ chối ma túy một cách khéo léo, hiệu quả.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 4 giờ</span>
+                            <span><i class="far fa-user"></i> 12 bài học</span>
+                        </div>
+                        <a href="course-detail.html" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <a href="#">&laquo;</a>
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">&raquo;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (giống trang chủ) -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Về chúng tôi</h3>
+                    <p>Tổ chức tình nguyện vì một cộng đồng không ma túy, hoạt động với mục tiêu nâng cao nhận thức và hỗ trợ phòng ngừa sử dụng ma túy.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Liên kết nhanh</h3>
+                    <ul>
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li><a href="#">Giới thiệu</a></li>
+                        <li><a href="courses.html">Khóa học</a></li>
+                        <li><a href="#">Bài kiểm tra</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Khóa học</h3>
+                    <ul>
+                        <li><a href="#">Cho học sinh</a></li>
+                        <li><a href="#">Cho sinh viên</a></li>
+                        <li><a href="#">Cho phụ huynh</a></li>
+                        <li><a href="#">Cho giáo viên</a></li>
+                        <li><a href="#">Cho người lao động</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Liên hệ</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận XYZ, TP.HCM</p>
+                        <p><i class="fas fa-phone"></i> (028) 1234 5678</p>
+                        <p><i class="fas fa-envelope"></i> info@phongnguamatuytinhnguyen.org</p>
+                        <p><i class="fas fa-clock"></i> Thứ 2 - Thứ 6: 8:00 - 17:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Hệ thống hỗ trợ phòng ngừa sử dụng ma túy. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
