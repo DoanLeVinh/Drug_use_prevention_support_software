@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Thành Viên - Hệ thống Phòng ngừa Ma túy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="/Drug_use_prevention_support_software/member/css/styles.css">
+</head>
+<body>
+   
+    <div id="header"></div>
+
+
+    <section class="drug-quiz-container">
+    <!-- Progress bar -->
+    <div class="inner-quiz-progress">
+        <div class="inner-progress-bar" style="width: 0%"></div>
+        <div class="inner-progress-text">0/10</div>
+    </div>
+
+    <!-- Quiz intro screen -->
+    <div class="inner-quiz-intro active">
+        <div class="inner-intro-content">
+            <h2 class="inner-intro-title">BÀI TRẮC NGHIỆM <span class="inner-quiz-name">ASSIST</span></h2>
+            <div class="inner-intro-image">
+                <img src="https://via.placeholder.com/400x200?text=Drug+Prevention" alt="Phòng chống ma túy">
+            </div>
+            <div class="inner-intro-description">
+                <p>Bài trắc nghiệm này gồm <span class="inner-quiz-count">10</span> câu hỏi giúp đánh giá kiến thức và nhận thức về ma túy.</p>
+                <ul class="inner-intro-features">
+                    <li>Thời gian: ~5 phút</li>
+                    <li>Kết quả cá nhân hóa</li>
+                    <li>Đề xuất tài liệu phù hợp</li>
+                </ul>
+            </div>
+            <button class="inner-start-btn">Bắt đầu làm bài</button>
+        </div>
+    </div>
+
+    <!-- Quiz question screen -->
+    <div class="inner-quiz-question">
+        <div class="inner-question-header">
+            <h3 class="inner-question-number">Câu hỏi 1/10</h3>
+            <h2 class="inner-question-text">Bạn đã bao giờ sử dụng ma túy hoặc các chất kích thích chưa?</h2>
+        </div>
+        
+        <div class="inner-question-image">
+            <img src="https://via.placeholder.com/600x300?text=Question+Image" alt="Minh họa câu hỏi">
+        </div>
+        
+        <div class="inner-answer-options">
+            <div class="inner-option">
+                <input type="radio" name="answer" id="option1">
+                <label for="option1">Chưa bao giờ</label>
+            </div>
+            <div class="inner-option">
+                <input type="radio" name="answer" id="option2">
+                <label for="option2">Đã thử 1-2 lần</label>
+            </div>
+            <div class="inner-option">
+                <input type="radio" name="answer" id="option3">
+                <label for="option3">Thỉnh thoảng</label>
+            </div>
+            <div class="inner-option">
+                <input type="radio" name="answer" id="option4">
+                <label for="option4">Thường xuyên</label>
+            </div>
+        </div>
+        
+        <div class="inner-quiz-navigation">
+            <button class="inner-prev-btn" disabled>Quay lại</button>
+            <button class="inner-next-btn">Tiếp theo</button>
+        </div>
+    </div>
+
+    <!-- Quiz result screen -->
+    <div class="inner-quiz-result">
+        <div class="inner-result-content">
+            <div class="inner-result-header">
+                <div class="inner-result-badge">KẾT QUẢ</div>
+                <h2 class="inner-result-title">Đánh giá mức độ hiểu biết của bạn</h2>
+                <div class="inner-result-score">
+                    <div class="inner-score-circle">
+                        <span class="inner-score-value">75</span>%
+                    </div>
+                </div>
+                <p class="inner-result-summary">Kiến thức của bạn về phòng chống ma túy ở mức <strong>Khá</strong></p>
+            </div>
+            
+            <div class="inner-result-details">
+                <div class="inner-detail-card">
+                    <h3>Điểm mạnh</h3>
+                    <ul>
+                        <li>Hiểu biết về tác hại của heroin</li>
+                        <li>Nhận diện được các dấu hiệu nghiện</li>
+                    </ul>
+                </div>
+                
+                <div class="inner-detail-card">
+                    <h3>Cần cải thiện</h3>
+                    <ul>
+                        <li>Kiến thức về ma túy đá</li>
+                        <li>Cách xử lý khi gặp người nghiện</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="inner-recommendations">
+                <h3>Tài liệu đề xuất</h3>
+                <div class="inner-recommendation-list">
+                    <a href="#" class="inner-recommendation-item">
+                        <img src="https://via.placeholder.com/100?text=PDF" alt="Tài liệu">
+                        <span>Cẩm nang phòng chống ma túy</span>
+                    </a>
+                    <a href="#" class="inner-recommendation-item">
+                        <img src="https://via.placeholder.com/100?text=Video" alt="Video">
+                        <span>Video nhận diện chất gây nghiện</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="inner-consultation-cta">
+                <h3>Bạn cần tư vấn chuyên sâu?</h3>
+                <p>Đặt lịch tư vấn trực tiếp với chuyên gia của chúng tôi</p>
+                <button class="inner-book-btn">Đặt lịch tư vấn ngay</button>
+            </div>
+            
+            <div class="inner-result-footer">
+                <button class="inner-retry-btn">Làm lại bài test</button>
+                <button class="inner-home-btn">Về trang chủ</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Các biến cần thiết
+    const quizIntro = document.querySelector('.inner-quiz-intro');
+    const quizQuestion = document.querySelector('.inner-quiz-question');
+    const quizResult = document.querySelector('.inner-quiz-result');
+    const startBtn = document.querySelector('.inner-start-btn');
+    const nextBtn = document.querySelector('.inner-next-btn');
+    const prevBtn = document.querySelector('.inner-prev-btn');
+    const progressBar = document.querySelector('.inner-progress-bar');
+    const progressText = document.querySelector('.inner-progress-text');
+    const quizProgress = document.querySelector('.inner-quiz-progress');
+    const retryBtn = document.querySelector('.inner-retry-btn');
+    const homeBtn = document.querySelector('.inner-home-btn');
+    const bookBtn = document.querySelector('.inner-book-btn');
+    
+    // Ẩn/hiện các phần
+    function showSection(section) {
+        quizIntro.classList.remove('active');
+        quizQuestion.style.display = 'none';
+        quizResult.style.display = 'none';
+        quizProgress.style.display = 'none';
+        
+        if (section === 'intro') {
+            quizIntro.classList.add('active');
+        } else if (section === 'question') {
+            quizQuestion.style.display = 'block';
+            quizProgress.style.display = 'block';
+        } else if (section === 'result') {
+            quizResult.style.display = 'block';
+        }
+    }
+    
+    // Xử lý nút bắt đầu
+    startBtn.addEventListener('click', function() {
+        showSection('question');
+        updateProgress(1); // Bắt đầu từ câu hỏi 1
+    });
+    
+    // Xử lý nút tiếp theo/quay lại
+    nextBtn.addEventListener('click', function() {
+        // Kiểm tra đã chọn đáp án chưa (trong thực tế sẽ kiểm tra từng câu hỏi)
+        const selectedOption = document.querySelector('input[name="answer"]:checked');
+        if (!selectedOption) {
+            alert('Vui lòng chọn một đáp án!');
+            return;
+        }
+        
+        // Ở đây chỉ là demo, thực tế sẽ xử lý chuyển câu hỏi
+        // Giả sử có 10 câu hỏi
+        const currentQuestion = parseInt(progressText.textContent.split('/')[0]);
+        if (currentQuestion < 10) {
+            updateProgress(currentQuestion + 1);
+        } else {
+            // Nếu là câu hỏi cuối, hiển thị kết quả
+            showSection('result');
+        }
+    });
+    
+    prevBtn.addEventListener('click', function() {
+        const currentQuestion = parseInt(progressText.textContent.split('/')[0]);
+        if (currentQuestion > 1) {
+            updateProgress(currentQuestion - 1);
+        }
+    });
+    
+    // Cập nhật thanh tiến trình
+    function updateProgress(currentQuestion) {
+        const totalQuestions = 10; // Số câu hỏi
+        const progressPercent = (currentQuestion / totalQuestions) * 100;
+        
+        progressBar.style.width = progressPercent + '%';
+        progressText.textContent = currentQuestion + '/' + totalQuestions;
+        
+        // Cập nhật số câu hỏi hiển thị
+        document.querySelector('.inner-question-number').textContent = 'Câu hỏi ' + currentQuestion + '/' + totalQuestions;
+        
+        // Disable nút quay lại nếu ở câu đầu
+        prevBtn.disabled = currentQuestion === 1;
+        
+        // Thay đổi text nút tiếp theo nếu là câu cuối
+        nextBtn.textContent = currentQuestion === totalQuestions ? 'Xem kết quả' : 'Tiếp theo';
+    }
+    
+    // Xử lý nút làm lại/trang chủ
+    retryBtn.addEventListener('click', function() {
+        showSection('question');
+        updateProgress(1);
+        // Reset các lựa chọn (trong thực tế cần reset tất cả câu hỏi)
+        document.querySelectorAll('input[name="answer"]').forEach(input => {
+            input.checked = false;
+        });
+    });
+    
+    homeBtn.addEventListener('click', function() {
+        // Trong thực tế sẽ chuyển về trang chủ
+        showSection('intro');
+    });
+    
+    // Xử lý nút đặt lịch tư vấn
+    bookBtn.addEventListener('click', function() {
+        alert('Chức năng đặt lịch tư vấn sẽ được kích hoạt!');
+        // Trong thực tế sẽ mở modal hoặc chuyển trang đặt lịch
+    });
+    
+    // Khởi tạo
+    showSection('intro');
+});
+</script>
+
+    
+
+   <div id="footer"></div>
+
+<script>
+    function loadComponent(id, file) {
+      fetch(file)
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        });
+    }
+
+    loadComponent("header", "includes/header.html");
+    loadComponent("footer", "includes/footer.html");
+  </script>
+    
+</body>
+</html>

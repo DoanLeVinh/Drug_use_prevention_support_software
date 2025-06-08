@@ -1446,3 +1446,851 @@
     }
 }
 /* End-Khảo-Sát */
+
+
+/* test */
+.drug-quiz-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Thanh tiến trình */
+.inner-quiz-progress {
+    height: 6px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    margin-bottom: 2rem;
+    position: relative;
+    display: none;
+}
+
+.inner-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.inner-progress-text {
+    position: absolute;
+    right: 0;
+    top: -25px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Màn hình giới thiệu */
+.inner-quiz-intro {
+    text-align: center;
+    display: none;
+}
+
+.inner-quiz-intro.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.inner-intro-content {
+    padding: 2rem;
+}
+
+.inner-intro-title {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.inner-intro-title:after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+}
+
+.inner-quiz-name {
+    color: #4b6cb7;
+}
+
+.inner-intro-image {
+    margin: 2rem 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.inner-intro-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.inner-intro-description {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.inner-intro-features {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+}
+
+.inner-intro-features li {
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.inner-intro-features li:before {
+    content: "✓";
+    color: #4b6cb7;
+    position: absolute;
+    left: 0;
+}
+
+.inner-start-btn {
+    background: linear-gradient(135deg, #4b6cb7, #182848);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(75, 108, 183, 0.3);
+}
+
+.inner-start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(75, 108, 183, 0.4);
+}
+
+/* Màn hình câu hỏi */
+.inner-quiz-question {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.inner-question-header {
+    margin-bottom: 2rem;
+}
+
+.inner-question-number {
+    color: #4b6cb7;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.inner-question-text {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    line-height: 1.4;
+}
+
+.inner-question-image {
+    margin: 1.5rem 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.inner-question-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.inner-answer-options {
+    margin: 2rem 0;
+}
+
+.inner-option {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.inner-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.inner-option label {
+    display: block;
+    padding: 1rem 1.5rem;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    padding-left: 3rem;
+}
+
+.inner-option label:before {
+    content: "";
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.inner-option input[type="radio"]:checked + label {
+    background: #e8f0fe;
+    border-color: #4b6cb7;
+}
+
+.inner-option input[type="radio"]:checked + label:before {
+    border-color: #4b6cb7;
+    background: #4b6cb7;
+    box-shadow: inset 0 0 0 3px white;
+}
+
+.inner-option label:hover {
+    background: #f0f4ff;
+}
+
+.inner-quiz-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.inner-prev-btn, .inner-next-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.inner-prev-btn {
+    background: #f0f0f0;
+    color: #666;
+}
+
+.inner-prev-btn:hover {
+    background: #e0e0e0;
+}
+
+.inner-next-btn {
+    background: #4b6cb7;
+    color: white;
+}
+
+.inner-next-btn:hover {
+    background: #3a5a9f;
+    transform: translateY(-2px);
+}
+
+.inner-prev-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Màn hình kết quả */
+.inner-quiz-result {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.inner-result-content {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.inner-result-badge {
+    display: inline-block;
+    background: #4b6cb7;
+    color: white;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.inner-result-title {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+}
+
+.inner-result-score {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.inner-score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(#4b6cb7 75%, #f0f0f0 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(75, 108, 183, 0.2);
+}
+
+.inner-score-circle:before {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: white;
+    border-radius: 50%;
+}
+
+.inner-score-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    position: relative;
+    z-index: 1;
+}
+
+.inner-result-summary {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.inner-result-details {
+    display: flex;
+    gap: 1.5rem;
+    margin: 3rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.inner-detail-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    flex: 1;
+    min-width: 250px;
+    text-align: left;
+}
+
+.inner-detail-card h3 {
+    color: #4b6cb7;
+    margin-top: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.inner-detail-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+}
+
+.inner-detail-card li {
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.inner-detail-card li:before {
+    content: "•";
+    color: #4b6cb7;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.inner-recommendations {
+    margin: 3rem 0;
+    text-align: left;
+}
+
+.inner-recommendations h3 {
+    color: #4b6cb7;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.inner-recommendation-list {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.inner-recommendation-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s;
+    min-width: 250px;
+}
+
+.inner-recommendation-item:hover {
+    background: #f0f4ff;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.inner-recommendation-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.inner-consultation-cta {
+    background: linear-gradient(135deg, #4b6cb7, #182848);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    margin: 3rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.inner-consultation-cta:before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+}
+
+.inner-consultation-cta h3 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    position: relative;
+}
+
+.inner-consultation-cta p {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.inner-book-btn {
+    background: white;
+    color: #4b6cb7;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    position: relative;
+    font-weight: bold;
+}
+
+.inner-book-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.inner-result-footer {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.inner-retry-btn, .inner-home-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.inner-retry-btn {
+    background: #f0f0f0;
+    color: #666;
+}
+
+.inner-retry-btn:hover {
+    background: #e0e0e0;
+}
+
+.inner-home-btn {
+    background: #4b6cb7;
+    color: white;
+}
+
+.inner-home-btn:hover {
+    background: #3a5a9f;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .drug-quiz-container {
+        padding: 1rem;
+        border-radius: 0;
+    }
+    
+    .inner-question-text {
+        font-size: 1.3rem;
+    }
+    
+    .inner-result-title {
+        font-size: 1.5rem;
+    }
+    
+    .inner-score-circle {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .inner-score-circle:before {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .inner-score-value {
+        font-size: 2rem;
+    }
+}
+/* end-test */
+
+
+/* đặt-lịch */
+.booking-main {
+    padding: 40px 0;
+    background-color: #f9f9f9;
+}
+
+.breadcrumb-container {
+    background-color: #f0f0f0;
+    padding: 15px 0;
+}
+
+.breadcrumb {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.breadcrumb-item {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.breadcrumb-item a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: #666;
+}
+
+.booking-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-title {
+    color: #2E7D32;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    color: #666;
+    font-size: 16px;
+}
+
+.booking-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.booking-steps:before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #e0e0e0;
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.step.active .step-number {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.step-text {
+    font-size: 14px;
+    color: #666;
+}
+
+.step.active .step-text {
+    color: #4CAF50;
+    font-weight: 500;
+}
+
+.booking-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.form-section {
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.form-section-title {
+    font-size: 18px;
+    color: #2E7D32;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.consult-type-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.consult-option {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.consult-option:hover {
+    border-color: #4CAF50;
+}
+
+.consult-option input {
+    display: none;
+}
+
+.option-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.option-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.option-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.option-desc {
+    font-size: 14px;
+    color: #666;
+}
+
+.consult-option input:checked + .option-content {
+    color: #4CAF50;
+}
+
+.consult-option input:checked {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group .required:after {
+    content: " *";
+    color: #f44336;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.error-message {
+    color: #f44336;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input {
+    width: auto;
+    margin-right: 10px;
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #3d8b40;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+}
+
+.btn-primary:hover {
+    background-color: #3d8b40;
+}
+
+.btn-text {
+    margin-right: 8px;
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    .booking-header {
+        margin-bottom: 20px;
+    }
+    
+    .page-title {
+        font-size: 24px;
+    }
+    
+    .page-subtitle {
+        font-size: 14px;
+    }
+    
+    .booking-steps {
+        margin-bottom: 20px;
+    }
+    
+    .booking-form {
+        padding: 20px;
+    }
+    
+    .consult-type-options {
+        grid-template-columns: 1fr;
+    }
+}
+/* End-đặt-lịch */
