@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DrugApplication<drug>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "edu.drug.drug.DrugApplication",
+            "projectName": "drug",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
