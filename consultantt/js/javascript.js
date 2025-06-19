@@ -33,26 +33,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Appointment actions
-    const startConsultationBtns = document.querySelectorAll('.appointment-actions .btn-primary');
-    
-    startConsultationBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+    document.addEventListener('click', function(e) {
+        // Start consultation buttons
+        if (e.target.closest('.appointment-actions .btn-primary')) {
             e.preventDefault();
-            const appointmentItem = this.closest('.appointment-item');
+            const appointmentItem = e.target.closest('.appointment-item');
             const clientName = appointmentItem.querySelector('.appointment-client strong').textContent;
-            
-            // In a real app, this would redirect to the consultation page
             alert(`Bắt đầu phiên tư vấn với ${clientName}`);
-        });
-    });
-    
-    // Confirm appointment button
-    const confirmAppointmentBtns = document.querySelectorAll('.appointment-actions .btn-success');
-    
-    confirmAppointmentBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        }
+        
+        // Confirm appointment button
+        if (e.target.closest('.appointment-actions .btn-success')) {
             e.preventDefault();
-            const appointmentItem = this.closest('.appointment-item');
+            const appointmentItem = e.target.closest('.appointment-item');
             
             // Change status to confirmed
             const statusBadge = appointmentItem.querySelector('.badge');
@@ -70,15 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <i class="fas fa-play"></i> Bắt đầu
                 </button>
             `;
-            
-            // Add event listener to the new button
-            const newStartBtn = actionsDiv.querySelector('.btn-primary');
-            newStartBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const clientName = appointmentItem.querySelector('.appointment-client strong').textContent;
-                alert(`Bắt đầu phiên tư vấn với ${clientName}`);
-            });
-        });
+        }
     });
     
     // Quick action buttons
@@ -91,10 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert(`Thực hiện hành động: ${actionText}`);
         });
     });
-});
-// Thêm code mới vào file consultant.js
-document.addEventListener('DOMContentLoaded', function() {
-    // ... (giữ nguyên code cũ)
     
     // Modal appointment form
     const appointmentModal = new bootstrap.Modal(document.getElementById('appointmentModal'));
@@ -104,11 +85,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalTitle = document.getElementById('appointmentModalLabel');
     
     // Mở modal thêm lịch hẹn
-    document.querySelector('.btn-primary[data-target="#appointmentModal"]')?.addEventListener('click', function() {
+    document.querySelector('.btn-primary[data-bs-target="#appointmentModal"]')?.addEventListener('click', function() {
         resetAppointmentForm();
         modalTitle.textContent = 'Thêm lịch hẹn mới';
         deleteBtn.style.display = 'none';
-        appointmentModal.show();
     });
     
     // Xử lý nút Lưu
@@ -142,23 +122,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // Xử lý khi click nút "Xem chi tiết" (sửa lịch hẹn)
     document.addEventListener('click', function(e) {
         if (e.target.closest('.appointment-actions .btn-outline-primary')) {
+            e.preventDefault();
             const appointmentItem = e.target.closest('.appointment-item');
-            const appointmentId = appointmentItem.dataset.id || '1'; // Lấy ID từ data attribute
+            const appointmentId = appointmentItem.dataset.id || Date.now().toString();
             
-            // Giả lập dữ liệu - trong thực tế sẽ gọi API hoặc lấy từ store
-            const appointmentData = {
+            // Lấy thông tin từ lịch hẹn hiện có
+            const clientName = appointmentItem.querySelector('.appointment-client strong').textContent;
+            const clientAge = appointmentItem.querySelector('.appointment-client').textContent.match(/\d+/)[0];
+            const timeRange = appointmentItem.querySelector('.appointment-time').textContent.split(' - ');
+            const riskLevel = appointmentItem.querySelector('.appointment-tag').className.includes('low') ? 'low' : 
+                             appointmentItem.querySelector('.appointment-tag').className.includes('medium') ? 'medium' : 'high';
+            
+            const notesElement = appointmentItem.querySelector('.appointment-note');
+            const notes = notesElement ? notesElement.textContent.replace('Tái khám', '').trim() : '';
+            
+            // Điền dữ liệu vào form
+            fillAppointmentForm({
                 id: appointmentId,
-                clientId: '1',
-                clientName: appointmentItem.querySelector('.appointment-client strong').textContent,
-                date: '2023-06-15',
-                startTime: '09:00',
-                endTime: '10:00',
-                type: 'online',
-                riskLevel: 'low',
-                notes: 'Tái khám'
-            };
+                clientId: '1', // Giả định ID khách hàng
+                clientName: `${clientName} (${clientAge} tuổi)`,
+                date: '2023-06-15', // Ngày mặc định
+                startTime: timeRange[0],
+                endTime: timeRange[1],
+                type: 'online', // Loại mặc định
+                riskLevel: riskLevel,
+                notes: notes,
+                status: appointmentItem.querySelector('.badge').textContent === 'Đã xác nhận' ? 'confirmed' : 'pending'
+            });
             
-            fillAppointmentForm(appointmentData);
             modalTitle.textContent = 'Chỉnh sửa lịch hẹn';
             deleteBtn.style.display = 'block';
             appointmentModal.show();
@@ -189,24 +180,23 @@ document.addEventListener('DOMContentLoaded', function() {
         return {
             id: document.getElementById('appointmentId').value,
             clientId: document.getElementById('clientSelect').value,
+            clientName: document.querySelector(`#clientSelect option[value="${document.getElementById('clientSelect').value}"]`).text,
             date: document.getElementById('appointmentDate').value,
             startTime: document.getElementById('startTime').value,
             endTime: document.getElementById('endTime').value,
             type: document.getElementById('appointmentType').value,
             riskLevel: document.getElementById('riskLevel').value,
-            notes: document.getElementById('appointmentNotes').value
+            notes: document.getElementById('appointmentNotes').value,
+            status: 'pending'
         };
     }
     
-    // Hàm thêm lịch hẹn mới (giả lập)
+    // Hàm thêm lịch hẹn mới
     function addNewAppointment(data) {
-        // Trong thực tế sẽ gọi API ở đây
-        console.log('Thêm lịch hẹn mới:', data);
-        
         // Tạo HTML cho lịch hẹn mới và thêm vào danh sách
         const newAppointment = createAppointmentItem({
             id: Date.now().toString(),
-            clientName: document.querySelector(`#clientSelect option[value="${data.clientId}"]`).text,
+            clientName: data.clientName,
             date: data.date,
             startTime: data.startTime,
             endTime: data.endTime,
@@ -220,16 +210,13 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Đã thêm lịch hẹn mới thành công!');
     }
     
-    // Hàm cập nhật lịch hẹn (giả lập)
+    // Hàm cập nhật lịch hẹn
     function updateAppointment(data) {
-        // Trong thực tế sẽ gọi API ở đây
-        console.log('Cập nhật lịch hẹn:', data);
-        
         // Tìm và cập nhật lịch hẹn trong danh sách
         const appointmentItem = document.querySelector(`.appointment-item[data-id="${data.id}"]`);
         if (appointmentItem) {
             appointmentItem.querySelector('.appointment-client strong').textContent = 
-                document.querySelector(`#clientSelect option[value="${data.clientId}"]`).text.split(' (')[0];
+                data.clientName.split(' (')[0];
             
             appointmentItem.querySelector('.appointment-time').textContent = 
                 `${data.startTime} - ${data.endTime}`;
@@ -257,11 +244,8 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Đã cập nhật lịch hẹn thành công!');
     }
     
-    // Hàm xóa lịch hẹn (giả lập)
+    // Hàm xóa lịch hẹn
     function deleteAppointment(id) {
-        // Trong thực tế sẽ gọi API ở đây
-        console.log('Xóa lịch hẹn:', id);
-        
         const appointmentItem = document.querySelector(`.appointment-item[data-id="${id}"]`);
         if (appointmentItem) {
             appointmentItem.remove();
@@ -283,11 +267,14 @@ document.addEventListener('DOMContentLoaded', function() {
             '<span class="badge bg-success">Đã xác nhận</span>' : 
             '<span class="badge bg-warning text-dark">Chờ xác nhận</span>';
         
+        const ageMatch = data.clientName.match(/\((\d+) tuổi\)/);
+        const ageText = ageMatch ? ageMatch[0] : '';
+        
         item.innerHTML = `
             <div class="appointment-details">
                 <div class="appointment-time">${data.startTime} - ${data.endTime}</div>
                 <div class="appointment-client">
-                    <strong>${data.clientName.split(' (')[0]}</strong> ${data.clientName.match(/\((\d+) tuổi\)/)[0]}
+                    <strong>${data.clientName.split(' (')[0]}</strong> ${ageText}
                     ${statusBadge}
                 </div>
                 <div class="appointment-info">

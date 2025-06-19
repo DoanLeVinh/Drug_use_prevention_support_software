@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Hỗ trợ Phòng ngừa Ma túy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --primary-light: #e2e6f9;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --white: #fff;
+            --gray: #dddfeb;
+            --gray-dark: #7a7f9a;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1.5rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .sidebar-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+
+        .sidebar-nav {
+            padding: 0 1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+
+        .menu-item a:hover {
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .menu-item a i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-item.active a {
+            color: var(--white);
+            background-color: var(--primary);
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--gray);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            color: var(--danger);
+            background-color: rgba(231, 74, 59, 0.1);
+        }
+
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-navbar {
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: var(--dark);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-bell {
+            position: relative;
+            margin-right: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+
+        .notification-bell .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 0.6rem;
+            background-color: var(--danger);
+            color: var(--white);
+            border-radius: 50%;
+            padding: 0.25rem 0.4rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+        }
+
+        .profile-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            color: var(--dark);
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            margin-bottom: 0;
+        }
+
+        /* Client Content */
+        .client-content {
+            flex: 1;
+            padding: 2rem;
+            background-color: #f8f9fc;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #224abe 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            opacity: 0.1;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            position: relative;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            position: relative;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.35rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-outline-white {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .btn-outline-white:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            transition: all 0.3s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(58, 59, 69, 0.15);
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .action-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .action-description {
+            color: var(--secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Assessment Section */
+        .assessment-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .assessment-icon {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(28, 200, 138, 0.1);
+            color: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-right: 2rem;
+            flex-shrink: 0;
+        }
+
+        .assessment-content {
+            flex: 1;
+        }
+
+        .assessment-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .assessment-description {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .assessment-progress {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: var(--gray);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--success);
+            width: 40%;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0;
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(58, 59, 69, 0.2);
+        }
+
+        .resource-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .resource-body {
+            padding: 1.5rem;
+        }
+
+        .resource-category {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .resource-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+
+        .resource-description {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .resource-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resource-duration {
+            color: var(--secondary);
+            font-size: 0.875rem;
+        }
+
+        .resource-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .resource-btn:hover {
+            background-color: #3a5bc7;
+        }
+
+        /* Appointment Card */
+        .appointment-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .appointment-status {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background-color: rgba(28, 200, 138, 0.1);
+            color: var(--success);
+        }
+
+        .appointment-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detail-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-label {
+            font-size: 0.875rem;
+            color: var(--secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-outline-primary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+
+            .assessment-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .assessment-icon {
+                margin-right: 0;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            
+            .user-actions {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="images/logo.png" alt="Logo" class="sidebar-logo">
+                <h3 class="sidebar-title">Phòng Ngừa Ma Túy</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="sidebar-menu">
+                    <li class="menu-item active">
+                        <a href="client-dashboard.html"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="client-courses.html"><i class="fas fa-graduation-cap"></i> <span>Khóa học</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="client-assessment.html"><i class="fas fa-clipboard-check"></i> <span>Đánh giá nguy cơ</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="client-appointment.html"><i class="fas fa-calendar-alt"></i> <span>Đặt lịch tư vấn</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="client-events.html"><i class="fas fa-calendar-day"></i> <span>Sự kiện cộng đồng</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="client-resources.html"><i class="fas fa-book"></i> <span>Tài nguyên</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="client-profile.html"><i class="fas fa-user"></i> <span>Hồ sơ cá nhân</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="page-header">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Trang chủ</h1>
+                    <p class="welcome-message">Chào mừng bạn trở lại, Trần Khánh Huyền!</p>
+                </div>
+                <div class="user-actions">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="profile-img">
+                        <div>
+                            <p class="profile-name">Nguyễn Văn A</p>
+                            <p class="profile-role">Khách hàng</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Client Content -->
+            <main class="client-content">
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <h1 class="hero-title">Hệ thống Hỗ trợ Phòng ngừa Ma túy</h1>
+                    <p class="hero-subtitle">Chúng tôi cung cấp kiến thức, kỹ năng và hỗ trợ cần thiết để giúp bạn và người thân phòng tránh ma túy hiệu quả</p>
+                    <div class="hero-actions">
+                        <a href="client-assessment.html" class="btn btn-primary">Đánh giá nguy cơ ngay</a>
+                        <a href="client-appointment.html" class="btn btn-outline-white">Đặt lịch tư vấn</a>
+                    </div>
+                </section>
+
+                <!-- Quick Actions -->
+                <section class="quick-actions">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="action-title">Kiến thức cơ bản</h3>
+                        <p class="action-description">Tìm hiểu về các loại ma túy và tác hại của chúng</p>
+                        <a href="#" class="btn btn-outline-primary">Xem ngay</a>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3 class="action-title">Kỹ năng từ chối</h3>
+                        <p class="action-description">Học cách nói "không" với ma túy trong mọi tình huống</p>
+                        <a href="#" class="btn btn-outline-primary">Tìm hiểu</a>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3 class="action-title">Hỗ trợ khẩn cấp</h3>
+                        <p class="action-description">Liên hệ ngay khi bạn hoặc người thân cần giúp đỡ</p>
+                        <a href="#" class="btn btn-outline-primary">Gọi ngay</a>
+                    </div>
+                </section>
+
+                <!-- Assessment Section -->
+                <section class="assessment-section">
+                    <div class="assessment-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="assessment-content">
+                        <h2 class="assessment-title">Đánh giá nguy cơ của bạn</h2>
+                        <p class="assessment-description">Hoàn thành bài đánh giá để nhận kết quả cá nhân hóa và các khuyến nghị phù hợp</p>
+                        
+                        <div class="assessment-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>Tiến độ: 40%</span>
+                                <span>2/5 bài đánh giá</span>
+                            </div>
+                        </div>
+                        
+                        <a href="client-assessment.html" class="btn btn-primary">Tiếp tục đánh giá</a>
+                    </div>
+                </section>
+
+                <!-- Upcoming Appointment -->
+                <section class="appointment-card">
+                    <div class="appointment-header">
+                        <h2 class="section-title">Cuộc hẹn sắp tới</h2>
+                        <div class="appointment-status">
+                            <span class="status-badge status-confirmed">Đã xác nhận</span>
+                        </div>
+                    </div>
+                    <div class="appointment-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Thời gian</div>
+                            <div class="detail-value">15:00 - 15:45, Thứ 5, 15/06/2023</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Tư vấn viên</div>
+                            <div class="detail-value">TS. Trần Thị Minh Hằng</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Hình thức</div>
+                            <div class="detail-value">Trực tuyến qua Zoom</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Nội dung</div>
+                            <div class="detail-value">Tư vấn kết quả đánh giá nguy cơ</div>
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <a href="#" class="btn btn-outline-primary">Xem chi tiết</a>
+                        <a href="#" class="btn btn-primary">Tham gia ngay</a>
+                    </div>
+                </section>
+
+                <!-- Resources Section -->
+                <section class="resources-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Tài nguyên đề xuất</h2>
+                        <a href="client-resources.html" class="view-all">Xem tất cả</a>
+                    </div>
+                    <div class="resources-grid">
+                        <!-- Resource 1 -->
+                        <div class="resource-card">
+                            <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tài nguyên" class="resource-img">
+                            <div class="resource-body">
+                                <span class="resource-category">Video</span>
+                                <h3 class="resource-title">Nhận diện các dấu hiệu sử dụng ma túy</h3>
+                                <p class="resource-description">Video hướng dẫn cách nhận biết người có thể đang sử dụng ma túy qua các dấu hiệu về thể chất và hành vi</p>
+                            </div>
+                            <div class="resource-footer">
+                                <span class="resource-duration">15 phút</span>
+                                <a href="#" class="resource-btn">Xem ngay</a>
+                            </div>
+                        </div>
+
+                        <!-- Resource 2 -->
+                        <div class="resource-card">
+                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tài nguyên" class="resource-img">
+                            <div class="resource-body">
+                                <span class="resource-category">Bài viết</span>
+                                <h3 class="resource-title">Cách nói chuyện với con về ma túy</h3>
+                                <p class="resource-description">Hướng dẫn chi tiết cho phụ huynh về cách tiếp cận chủ đề nhạy cảm này với con ở các độ tuổi khác nhau</p>
+                            </div>
+                            <div class="resource-footer">
+                                <span class="resource-duration">8 phút đọc</span>
+                                <a href="#" class="resource-btn">Đọc ngay</a>
+                            </div>
+                        </div>
+
+                        <!-- Resource 3 -->
+                        <div class="resource-card">
+                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tài nguyên" class="resource-img">
+                            <div class="resource-body">
+                                <span class="resource-category">Khóa học</span>
+                                <h3 class="resource-title">Kỹ năng từ chối ma túy</h3>
+                                <p class="resource-description">Khóa học ngắn hạn giúp bạn xây dựng các kỹ năng cần thiết để từ chối ma túy trong các tình huống xã hội</p>
+                            </div>
+                            <div class="resource-footer">
+                                <span class="resource-duration">2 giờ</span>
+                                <a href="#" class="resource-btn">Tham gia</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
+    </script>
+</body>
+</html>

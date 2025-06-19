@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo - Hệ thống Hỗ trợ Phòng ngừa Ma túy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --primary-light: #e2e6f9;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --white: #fff;
+            --gray: #dddfeb;
+            --gray-dark: #7a7f9a;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1.5rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .sidebar-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+
+        .sidebar-nav {
+            padding: 0 1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+
+        .menu-item a:hover {
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .menu-item a i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-item.active a {
+            color: var(--white);
+            background-color: var(--primary);
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--gray);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            color: var(--danger);
+            background-color: rgba(231, 74, 59, 0.1);
+        }
+
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-navbar {
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: var(--dark);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-bell {
+            position: relative;
+            margin-right: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+
+        .notification-bell .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 0.6rem;
+            background-color: var(--danger);
+            color: var(--white);
+            border-radius: 50%;
+            padding: 0.25rem 0.4rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+        }
+
+        .profile-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            color: var(--dark);
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            margin-bottom: 0;
+        }
+
+        /* Report Content */
+        .report-content {
+            flex: 1;
+            padding: 2rem;
+            background-color: #f8f9fc;
+        }
+
+        /* Report Filters */
+        .report-filters {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-control {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: 0.35rem;
+            font-size: 0.875rem;
+        }
+
+        .filter-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5bc7;
+        }
+
+        .btn-outline-secondary {
+            background-color: transparent;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--gray);
+        }
+
+        /* Report Cards */
+        .report-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .report-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+        }
+
+        .report-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .report-card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .report-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-card-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .change-up {
+            color: var(--success);
+        }
+
+        .change-down {
+            color: var(--danger);
+        }
+
+        /* Charts Section */
+        .chart-container {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Data Tables */
+        .data-table-container {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .data-table th {
+            font-weight: 700;
+            color: var(--dark);
+            background-color: var(--light);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .data-table tr:hover {
+            background-color: var(--primary-light);
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background-color: rgba(78, 115, 223, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background-color: rgba(28, 200, 138, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: rgba(246, 194, 62, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: rgba(231, 74, 59, 0.1);
+            color: var(--danger);
+        }
+
+        /* Export Section */
+        .export-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-top: 2rem;
+        }
+
+        .export-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .export-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .export-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .export-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            background-color: var(--light);
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            background-color: var(--gray);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            
+            .user-actions {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .report-filters {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .chart-actions, .table-actions, .export-options {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="images/logo.png" alt="Logo" class="sidebar-logo">
+                <h3 class="sidebar-title">Phòng Ngừa Ma Túy</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="sidebar-menu">
+                    <li class="menu-item">
+                        <a href="/consultantt/pages/index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/consultantt/pages/calendar.html"><i class="fas fa-calendar-alt"></i> <span>Lịch Làm Việc</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/consultantt/pages/Consulting.html"><i class="fas fa-comments"></i> <span>Phiên Tư Vấn</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="consultant-clients.html"><i class="fas fa-users"></i> <span>Khách Hàng</span></a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="consultant-reports.html"><i class="fas fa-chart-line"></i> <span>Báo Cáo</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="consultant-resources.html"><i class="fas fa-book"></i> <span>Tài Liệu</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="page-header">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Báo cáo & Thống kê</h1>
+                    <p class="welcome-message">Dữ liệu từ 01/06/2023 đến 30/06/2023</p>
+                </div>
+                <div class="user-actions">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">2</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Profile" class="profile-img">
+                        <div>
+                            <p class="profile-name">Trần Khánh Huyền </p>
+                            <p class="profile-role">Chuyên gia tư vấn</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Report Content -->
+            <main class="report-content">
+                <!-- Report Filters -->
+                <section class="report-filters">
+                    <div class="filter-group">
+                        <label for="report-period" class="filter-label">Kỳ báo cáo</label>
+                        <select id="report-period" class="filter-control">
+                            <option value="this-month">Tháng này</option>
+                            <option value="last-month">Tháng trước</option>
+                            <option value="this-quarter">Quý này</option>
+                            <option value="last-quarter">Quý trước</option>
+                            <option value="custom">Tùy chỉnh</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="report-type" class="filter-label">Loại báo cáo</label>
+                        <select id="report-type" class="filter-control">
+                            <option value="all">Tất cả</option>
+                            <option value="consultations">Tư vấn</option>
+                            <option value="assessments">Đánh giá</option>
+                            <option value="clients">Khách hàng</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="client-type" class="filter-label">Nhóm khách hàng</label>
+                        <select id="client-type" class="filter-control">
+                            <option value="all">Tất cả</option>
+                            <option value="students">Học sinh/Sinh viên</option>
+                            <option value="parents">Phụ huynh</option>
+                            <option value="teachers">Giáo viên</option>
+                            <option value="high-risk">Nguy cơ cao</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="align-self: flex-end;">
+                        <button class="btn btn-primary">Áp dụng</button>
+                        <button class="btn btn-outline-secondary">Đặt lại</button>
+                    </div>
+                </section>
+
+                <!-- Report Summary Cards -->
+                <section class="report-cards">
+                    <div class="report-card">
+                        <div class="report-card-header">
+                            <h3 class="report-card-title">Tổng số phiên tư vấn</h3>
+                            <i class="fas fa-comments" style="color: var(--primary); opacity: 0.3; font-size: 1.5rem;"></i>
+                        </div>
+                        <div class="report-card-value">42</div>
+                        <div class="report-card-change">
+                            <i class="fas fa-arrow-up change-up"></i>
+                            <span class="change-up">12% so với tháng trước</span>
+                        </div>
+                    </div>
+                    <div class="report-card">
+                        <div class="report-card-header">
+                            <h3 class="report-card-title">Khách hàng mới</h3>
+                            <i class="fas fa-user-plus" style="color: var(--success); opacity: 0.3; font-size: 1.5rem;"></i>
+                        </div>
+                        <div class="report-card-value">18</div>
+                        <div class="report-card-change">
+                            <i class="fas fa-arrow-up change-up"></i>
+                            <span class="change-up">5% so với tháng trước</span>
+                        </div>
+                    </div>
+                    <div class="report-card">
+                        <div class="report-card-header">
+                            <h3 class="report-card-title">Đánh giá nguy cơ</h3>
+                            <i class="fas fa-clipboard-check" style="color: var(--info); opacity: 0.3; font-size: 1.5rem;"></i>
+                        </div>
+                        <div class="report-card-value">76</div>
+                        <div class="report-card-change">
+                            <i class="fas fa-arrow-down change-down"></i>
+                            <span class="change-down">8% so với tháng trước</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Charts Section -->
+                <section class="chart-container">
+                    <div class="chart-header">
+                        <h2 class="chart-title">Xu hướng tư vấn theo tuần</h2>
+                        <div class="chart-actions">
+                            <button class="btn btn-outline-secondary">Tuần</button>
+                            <button class="btn btn-outline-secondary">Tháng</button>
+                            <button class="btn btn-outline-secondary">Quý</button>
+                            <button class="btn btn-primary">Năm</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="consultationTrendChart"></canvas>
+                    </div>
+                </section>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <!-- Risk Level Chart -->
+                    <section class="chart-container">
+                        <div class="chart-header">
+                            <h2 class="chart-title">Phân bổ mức độ nguy cơ</h2>
+                            <div class="chart-actions">
+                                <button class="btn btn-outline-secondary">Xem chi tiết</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="riskLevelChart"></canvas>
+                        </div>
+                    </section>
+
+                    <!-- Client Type Chart -->
+                    <section class="chart-container">
+                        <div class="chart-header">
+                            <h2 class="chart-title">Phân loại khách hàng</h2>
+                            <div class="chart-actions">
+                                <button class="btn btn-outline-secondary">Xem chi tiết</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="clientTypeChart"></canvas>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Consultations Table -->
+                <section class="data-table-container">
+                    <div class="table-header">
+                        <h2 class="table-title">Danh sách phiên tư vấn gần đây</h2>
+                        <div class="table-actions">
+                            <button class="btn btn-outline-secondary">Lọc</button>
+                            <button class="btn btn-outline-secondary">Sắp xếp</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Khách hàng</th>
+                                    <th>Loại</th>
+                                    <th>Thời lượng</th>
+                                    <th>Mức độ</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>28/06/2023</td>
+                                    <td>Nguyễn Văn A (17 tuổi)</td>
+                                    <td>Trực tiếp</td>
+                                    <td>45 phút</td>
+                                    <td><span class="badge badge-danger">Cao</span></td>
+                                    <td><span class="badge badge-success">Hoàn thành</span></td>
+                                    <td><a href="#" class="btn btn-outline-secondary btn-sm">Chi tiết</a></td>
+                                </tr>
+                                <tr>
+                                    <td>27/06/2023</td>
+                                    <td>Trần Thị B (Phụ huynh)</td>
+                                    <td>Trực tuyến</td>
+                                    <td>30 phút</td>
+                                    <td><span class="badge badge-warning">Trung bình</span></td>
+                                    <td><span class="badge badge-success">Hoàn thành</span></td>
+                                    <td><a href="#" class="btn btn-outline-secondary btn-sm">Chi tiết</a></td>
+                                </tr>
+                                <tr>
+                                    <td>25/06/2023</td>
+                                    <td>Lê Văn C (Giáo viên)</td>
+                                    <td>Trực tiếp</td>
+                                    <td>60 phút</td>
+                                    <td><span class="badge badge-primary">Thấp</span></td>
+                                    <td><span class="badge badge-success">Hoàn thành</span></td>
+                                    <td><a href="#" class="btn btn-outline-secondary btn-sm">Chi tiết</a></td>
+                                </tr>
+                                <tr>
+                                    <td>22/06/2023</td>
+                                    <td>Phạm Thị D (15 tuổi)</td>
+                                    <td>Trực tuyến</td>
+                                    <td>45 phút</td>
+                                    <td><span class="badge badge-danger">Cao</span></td>
+                                    <td><span class="badge badge-success">Hoàn thành</span></td>
+                                    <td><a href="#" class="btn btn-outline-secondary btn-sm">Chi tiết</a></td>
+                                </tr>
+                                <tr>
+                                    <td>20/06/2023</td>
+                                    <td>Hoàng Văn E (19 tuổi)</td>
+                                    <td>Trực tiếp</td>
+                                    <td>30 phút</td>
+                                    <td><span class="badge badge-warning">Trung bình</span></td>
+                                    <td><span class="badge badge-success">Hoàn thành</span></td>
+                                    <td><a href="#" class="btn btn-outline-secondary btn-sm">Chi tiết</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Export Section -->
+                <section class="export-section">
+                    <div class="export-header">
+                        <h2 class="export-title">Xuất báo cáo</h2>
+                        <div class="export-options">
+                            <a href="#" class="export-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>PDF</span>
+                            </a>
+                            <a href="#" class="export-btn">
+                                <i class="fas fa-file-excel"></i>
+                                <span>Excel</span>
+                            </a>
+                            <a href="#" class="export-btn">
+                                <i class="fas fa-file-csv"></i>
+                                <span>CSV</span>
+                            </a>
+                            <a href="#" class="export-btn">
+                                <i class="fas fa-print"></i>
+                                <span>In báo cáo</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="report-filters">
+                        <div class="filter-group">
+                            <label for="export-format" class="filter-label">Định dạng</label>
+                            <select id="export-format" class="filter-control">
+                                <option value="pdf">PDF</option>
+                                <option value="excel">Excel</option>
+                                <option value="csv">CSV</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="export-content" class="filter-label">Nội dung</label>
+                            <select id="export-content" class="filter-control">
+                                <option value="summary">Tóm tắt</option>
+                                <option value="detailed">Chi tiết</option>
+                                <option value="all">Tất cả dữ liệu</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" style="align-self: flex-end;">
+                            <button class="btn btn-primary">Xuất báo cáo</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
+
+        // Consultation Trend Chart
+        const trendCtx = document.getElementById('consultationTrendChart').getContext('2d');
+        const consultationTrendChart = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+                datasets: [{
+                    label: 'Phiên tư vấn',
+                    data: [8, 12, 14, 8],
+                    backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 2
+                        }
+                    }
+                }
+            }
+        });
+
+        // Risk Level Chart
+        const riskCtx = document.getElementById('riskLevelChart').getContext('2d');
+        const riskLevelChart = new Chart(riskCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Nguy cơ cao', 'Nguy cơ trung bình', 'Nguy cơ thấp'],
+                datasets: [{
+                    data: [15, 25, 36],
+                    backgroundColor: [
+                        'rgba(231, 74, 59, 0.8)',
+                        'rgba(246, 194, 62, 0.8)',
+                        'rgba(28, 200, 138, 0.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+
+        // Client Type Chart
+        const clientCtx = document.getElementById('clientTypeChart').getContext('2d');
+        const clientTypeChart = new Chart(clientCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Học sinh', 'Sinh viên', 'Phụ huynh', 'Giáo viên'],
+                datasets: [{
+                    label: 'Số lượng',
+                    data: [32, 18, 12, 8],
+                    backgroundColor: 'rgba(78, 115, 223, 0.8)',
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

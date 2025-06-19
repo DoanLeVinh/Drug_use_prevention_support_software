@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tư vấn phòng ngừa ma túy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --primary-light: #e2e6f9;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --white: #fff;
+            --gray: #dddfeb;
+            --gray-dark: #7a7f9a;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem 1.5rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .sidebar-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+        
+        .sidebar-nav {
+            padding: 0 1rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+        
+        .menu-item a:hover {
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+        
+        .menu-item a i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-item.active a {
+            color: var(--white);
+            background-color: var(--primary);
+        }
+        
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--gray);
+        }
+        
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            color: var(--danger);
+            background-color: rgba(231, 74, 59, 0.1);
+        }
+        
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .top-navbar {
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .sidebar-toggle {
+            display: none;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .consultation-container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .client-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            padding: 8px 12px;
+            background-color: var(--white);
+            border-radius: 0.35rem;
+            border: 1px solid var(--gray);
+        }
+        
+        .notes-editor {
+            min-height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 0.35rem;
+            padding: 15px;
+        }
+        
+        .btn-complete {
+            background-color: var(--success);
+            color: white;
+            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-complete:hover {
+            background-color: #17a673;
+            color: white;
+        }
+        
+        .risk-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .risk-low {
+            background-color: rgba(28, 200, 138, 0.1);
+            color: var(--success);
+        }
+        
+        .risk-medium {
+            background-color: rgba(246, 194, 62, 0.1);
+            color: var(--warning);
+        }
+        
+        .risk-high {
+            background-color: rgba(231, 74, 59, 0.1);
+            color: var(--danger);
+        }
+        
+        .consultant-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+        }
+        
+        .consultation-history {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s;
+        }
+        
+        .history-item:hover {
+            background-color: var(--primary-light);
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            border: none;
+            border-radius: 0.5rem;
+        }
+        
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+            border-bottom: none;
+            border-radius: 0.5rem 0.5rem 0 0;
+            padding: 1.25rem;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            border-top: none;
+            padding: 1rem 1.5rem;
+        }
+        
+        .btn-close {
+            filter: invert(1);
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .client-info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .top-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            
+            .consultation-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="images/logo.png" alt="Logo" class="sidebar-logo">
+                <h3 class="sidebar-title">Phòng Ngừa Ma Túy</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="sidebar-menu">
+                    <li class="menu-item">
+                        <a href="consultant-dashboard.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/consultantt/pages/calendar.html"><i class="fas fa-calendar-alt"></i> <span>Lịch Làm Việc</span></a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/consultantt/pages/Consulting.html"><i class="fas fa-comments"></i> <span>Phiên Tư Vấn</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="clients.html"><i class="fas fa-users"></i> <span>Khách Hàng</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/consultantt/pages/report.html"><i class="fas fa-chart-line"></i> <span>Báo Cáo</span></a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="resources.html"><i class="fas fa-book"></i> <span>Tài Liệu</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="top-navbar">
+                <div class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <h2 class="page-title mb-0">Phiên tư vấn</h2>
+                <div class="user-actions">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile ms-3">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="profile-img">
+                        <div>
+                            <p class="profile-name mb-0">Trần Khánh Huyền</p>
+                            <p class="profile-role mb-0">Chuyên gia tâm lý</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="consultation-container">
+                <div class="row">
+                    <!-- Thông tin khách hàng -->
+                    <div class="col-md-5">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-user me-2"></i> Thông tin khách hàng
+                            </div>
+                            <div class="card-body">
+                                <div class="client-info-grid">
+                                    <div class="info-item">
+                                        <div class="info-label">Họ và tên</div>
+                                        <div class="info-value">Trần Thị B</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Giới tính</div>
+                                        <div class="info-value">Nữ</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Ngày sinh</div>
+                                        <div class="info-value">15/05/2002</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Số điện thoại</div>
+                                        <div class="info-value">0987654321</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Email</div>
+                                        <div class="info-value">tranthib@example.com</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Địa chỉ</div>
+                                        <div class="info-value">123 Đường ABC, Quận 1, TP.HCM</div>
+                                    </div>
+                                </div>
+                                
+                                <hr>
+                                
+                                <div class="info-item">
+                                    <div class="info-label">Mức độ nguy cơ</div>
+                                    <div class="info-value">
+                                        <span class="risk-indicator risk-medium">Nguy cơ trung bình</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label">Bài test gần nhất</div>
+                                    <div class="info-value">ASSIST - 15/10/2023</div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-label">Đề xuất</div>
+                                    <div class="info-value">Tư vấn chuyên sâu + Tham gia khóa học phòng ngừa</div>
+                                </div>
+                                
+                                <hr>
+                                
+                                <h5 class="mb-3"><i class="fas fa-history me-2"></i> Lịch sử tư vấn</h5>
+                                <div class="consultation-history">
+                                    <div class="history-item">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>10/10/2023</strong>
+                                            <span class="badge bg-success">Hoàn thành</span>
+                                        </div>
+                                        <div class="small">Tư vấn nhận thức về ma túy</div>
+                                    </div>
+                                    <div class="history-item">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>25/09/2023</strong>
+                                            <span class="badge bg-success">Hoàn thành</span>
+                                        </div>
+                                        <div class="small">Tư vấn kỹ năng từ chối</div>
+                                    </div>
+                                    <div class="history-item">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>12/08/2023</strong>
+                                            <span class="badge bg-secondary">Hủy</span>
+                                        </div>
+                                        <div class="small">Không liên lạc được</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Form ghi chú buổi tư vấn -->
+                    <div class="col-md-7">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-edit me-2"></i> Ghi chú buổi tư vấn
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="consultationDate" class="form-label">Ngày tư vấn</label>
+                                    <input type="datetime-local" class="form-control" id="consultationDate" value="2023-10-20T14:00">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="consultationType" class="form-label">Hình thức tư vấn</label>
+                                    <select class="form-select" id="consultationType">
+                                        <option value="direct">Trực tiếp</option>
+                                        <option value="online" selected>Trực tuyến</option>
+                                        <option value="phone">Điện thoại</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="consultationTopic" class="form-label">Chủ đề tư vấn</label>
+                                    <select class="form-select" id="consultationTopic">
+                                        <option value="awareness">Nhận thức về ma túy</option>
+                                        <option value="refusal" selected>Kỹ năng từ chối</option>
+                                        <option value="prevention">Phòng ngừa tái nghiện</option>
+                                        <option value="family">Vấn đề gia đình</option>
+                                        <option value="other">Khác</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="consultationNotes" class="form-label">Nội dung tư vấn</label>
+                                    <div id="consultationNotes" class="notes-editor" contenteditable="true">
+                                        <p>Khách hàng chia sẻ đã từng bị bạn bè rủ rê sử dụng ma túy tại các buổi tiệc.</p>
+                                        <p>Hiện tại khách hàng đã từ chối nhưng cảm thấy áp lực từ nhóm bạn.</p>
+                                        <p>Đã hướng dẫn một số kỹ năng từ chối và cách xử lý tình huống.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="nextSteps" class="form-label">Kế hoạch tiếp theo</label>
+                                    <textarea class="form-control" id="nextSteps" rows="3">- Tham gia khóa học "Kỹ năng từ chối" vào tuần sau
+- Hẹn tư vấn tiếp vào 27/10/2023
+- Giới thiệu tham gia nhóm hỗ trợ</textarea>
+                                </div>
+                                
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="needFollowUp" checked>
+                                    <label class="form-check-label" for="needFollowUp">Cần tư vấn tiếp theo</label>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button type="button" class="btn btn-secondary me-3">Lưu nháp</button>
+                                    <button type="button" class="btn btn-complete" id="completeConsultation">
+                                        <i class="fas fa-check-circle me-2"></i> Hoàn thành
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal hoàn thành tư vấn -->
+    <div class="modal fade" id="completeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i> Hoàn thành phiên tư vấn</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn hoàn thành phiên tư vấn này?</p>
+                    <p>Sau khi hoàn thành, thông tin sẽ được lưu vào hồ sơ khách hàng và không thể chỉnh sửa.</p>
+                    
+                    <div class="mb-3">
+                        <label for="consultationRating" class="form-label">Đánh giá kết quả</label>
+                        <select class="form-select" id="consultationRating">
+                            <option value="excellent">Xuất sắc</option>
+                            <option value="good" selected>Tốt</option>
+                            <option value="average">Trung bình</option>
+                            <option value="poor">Kém</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-success" id="confirmComplete">Xác nhận hoàn thành</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo modal
+            var completeModal = new bootstrap.Modal(document.getElementById('completeModal'));
+            
+            // Xử lý nút hoàn thành
+            $('#completeConsultation').click(function() {
+                completeModal.show();
+            });
+            
+            // Xác nhận hoàn thành
+            $('#confirmComplete').click(function() {
+                // Ở đây bạn có thể thêm code để gửi dữ liệu lên server
+                alert('Phiên tư vấn đã được hoàn thành và lưu vào hồ sơ!');
+                completeModal.hide();
+                
+                // Chuyển hướng hoặc làm mới trang
+                // window.location.href = 'consultation-list.html';
+            });
+            
+            // Định dạng ngày giờ cho input
+            function formatDateTimeForInput(date) {
+                const pad = (num) => num.toString().padStart(2, '0');
+                return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+            }
+            
+            // Cập nhật ngày giờ hiện tại nếu cần
+            // $('#consultationDate').val(formatDateTimeForInput(new Date()));
+            
+            // Toggle sidebar trên mobile
+            $('.sidebar-toggle').click(function() {
+                $('.sidebar').toggleClass('show');
+            });
+        });
+    </script>
+</body>
+</html>
