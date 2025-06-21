@@ -4,20 +4,29 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class AuthController {
+public class HomeController {
+    @GetMapping({"/", "/index"})
+    public String index() {
+        return "index";
+    }
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // trả về login.html
+        return "Login"; // Đúng tên file login.html (chữ thường)
     }
 
     @GetMapping("/register")
     public String register() {
-        return "register"; // trả về register.html
+        return "register";
     }
 
     @GetMapping("/forgot-password")
     public String forgotPassword() {
-        return "forgot-password"; // trả về forgot-password.html
+        return "forgot-password";
+    }
+
+    @GetMapping("/courses")
+    public String courses() {
+        return "courses";
     }
 }

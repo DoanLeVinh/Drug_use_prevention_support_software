@@ -1,51 +1,435 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Đăng nhập hệ thống</title>
-    <link rel="stylesheet" th:href="@{/styles.css}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script th:src="@{/js.js}" defer></script>
+    <title>Đăng nhập - Hệ thống phòng ngừa ma túy</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --text-color: #495057;
+            --border-color: #dee2e6;
+            --facebook-color: #3b5998;
+            --google-color: #db4437;
+            --twitter-color: #1da1f2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+
+        .login-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .login-header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .login-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
+        }
+
+        .forgot-password a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .login-divider::before {
+            margin-right: 1rem;
+        }
+
+        .login-divider::after {
+            margin-left: 1rem;
+        }
+
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-social i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .btn-facebook {
+            background-color: var(--facebook-color);
+        }
+
+        .btn-facebook:hover {
+            background-color: #344e86;
+            transform: translateY(-2px);
+        }
+
+        .btn-google {
+            background-color: var(--google-color);
+        }
+
+        .btn-google:hover {
+            background-color: #c23321;
+            transform: translateY(-2px);
+        }
+
+        .btn-twitter {
+            background-color: var(--twitter-color);
+        }
+
+        .btn-twitter:hover {
+            background-color: #1991db;
+            transform: translateY(-2px);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .register-link a {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            background-color: var(--dark-gray);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .footer-section h3 {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+        }
+
+        .footer-section p, 
+        .footer-section a {
+            color: #adb5bd;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .footer-section a {
+            display: block;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            color: #adb5bd;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 1rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .login-body {
+                padding: 1.5rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .login-header {
+                padding: 1rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.3rem;
+            }
+
+            .login-body {
+                padding: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .btn, .btn-social {
+                padding: 10px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="login-container three-d-effect">
-        <div class="community-background">
-            <!-- Các hình ảnh 3D của cộng đồng đoàn kết -->
-        </div>
-        
-        <div class="login-form floating-card">
-            <div class="logo-3d">
-                <img th:src="@{/logo-organization-3d.png}" alt="Logo tổ chức">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Đăng nhập hệ thống</h1>
+                <p>Phần mềm hỗ trợ phòng ngừa sử dụng ma túy</p>
             </div>
-            
-            <h2>ĐĂNG NHẬP HỆ THỐNG</h2>
-            
-            <form th:action="@{/login}" method="post">
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" name="username" placeholder="Tên đăng nhập" class="three-d-input" required>
+            <div class="login-body">
+                {% comment %} <form th:action="@{/login}" method="post"> {% endcomment %}
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Nhập tên đăng nhập" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Nhập mật khẩu" required>
+                        </div>
+                    </div>
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Ghi nhớ đăng nhập</label>
+                        </div>
+                        <div class="forgot_password">
+                            <a th:href="@{/forgot-password}">Quên mật khẩu?</a>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                </form>
+
+                <div class="login-divider">Hoặc đăng nhập bằng</div>
+
+                <div class="social-login">
+                    <a href="#" class="btn-social btn-facebook">
+                        <i class="fab fa-facebook-f"></i>
+                        Đăng nhập với Facebook
+                    </a>
+                    <a href="#" class="btn-social btn-google">
+                        <i class="fab fa-google"></i>
+                        Đăng nhập với Google
+                    </a>
+                    <a href="#" class="btn-social btn-twitter">
+                        <i class="fab fa-twitter"></i>
+                        Đăng nhập với Twitter
+                    </a>
                 </div>
-                
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" name="password" placeholder="Mật khẩu" class="three-d-input" required>
+
+                <div class="register-link">
+                    Chưa có tài khoản? <a href="/register">Đăng ký ngay</a>
                 </div>
-                
-                <button type="submit" class="btn-login three-d-button">Đăng nhập</button>
-            </form>
-            
-            <div th:if="${param.error}" class="error-message">
-                Sai tên đăng nhập hoặc mật khẩu!
-            </div>
-            <div th:if="${param.logout}" class="success-message">
-                Đăng xuất thành công!
-            </div>
-            
-            <div class="links">
-                <a th:href="@{/forgot-password}" class="forgot-password">Quên mật khẩu?</a>
-                <a th:href="@{/register}" class="register">Đăng ký tài khoản</a>
             </div>
         </div>
     </div>
+
+
 </body>
 </html>

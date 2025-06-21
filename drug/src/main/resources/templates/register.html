@@ -1,78 +1,540 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Đăng ký thành viên</title>
-    <link rel="stylesheet" th:href="@{/styles.css}" />
-    <link rel="stylesheet" th:href="@{/css/fontawesome.min.css}" />
-    <script th:src="@{/js.js}" defer></script>
+    <title>Đăng ký - Hệ thống phòng ngừa ma túy</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --primary-light: #6d8cc0;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --text-color: #495057;
+            --border-color: #dee2e6;
+            --facebook-color: #3b5998;
+            --google-color: #db4437;
+            --twitter-color: #1da1f2;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .register-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 2rem;
+        }
+
+        .register-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .register-hero {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-hero::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .register-hero::after {
+            content: "";
+            position: absolute;
+            bottom: -80px;
+            left: -30px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            z-index: 1;
+        }
+
+        .register-hero h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            z-index: 1;
+        }
+
+        .register-hero p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            z-index: 1;
+        }
+
+        .hero-image {
+            width: 80%;
+            max-width: 250px;
+            margin-top: 1.5rem;
+            z-index: 1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .register-form {
+            flex: 1;
+            padding: 3rem 2.5rem;
+        }
+
+        .register-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .register-header h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .register-header p {
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background-color: var(--light-gray);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+            background-color: white;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: var(--transition);
+        }
+
+        .password-toggle:hover {
+            opacity: 1;
+            color: var(--primary-color);
+        }
+
+        .row {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        .terms-conditions {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .terms-conditions input {
+            margin-right: 0.75rem;
+            margin-top: 0.2rem;
+        }
+
+        .terms-conditions a {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .terms-conditions a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(74, 111, 165, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(74, 111, 165, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .social-login {
+            margin-top: 2rem;
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .login-divider::before {
+            margin-right: 1rem;
+        }
+
+        .login-divider::after {
+            margin-left: 1rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .btn-social:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-facebook {
+            background-color: var(--facebook-color);
+        }
+
+        .btn-google {
+            background-color: var(--google-color);
+        }
+
+        .btn-twitter {
+            background-color: var(--twitter-color);
+        }
+
+        .footer {
+            background-color: var(--dark-gray);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .register-card {
+                flex-direction: column;
+            }
+
+            .register-hero {
+                padding: 2rem 1.5rem;
+                border-radius: 15px 15px 0 0;
+            }
+
+            .register-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-image {
+                max-width: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 1rem;
+            }
+
+            .register-hero h2 {
+                font-size: 1.5rem;
+            }
+
+            .register-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-control {
+                padding: 10px 12px 10px 40px;
+            }
+
+            .btn {
+                padding: 10px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="register-container 3d-effect">
-  <div class="path-background">
-    <!-- Hình ảnh 3D các con đường lựa chọn -->
-  </div>
-  
-  <div class="register-form floating-card">
-    <div class="door-3d-animation">
-      <!-- Animation cửa mở -->
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-hero">
+                <div class="hero-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2>Tham gia cộng đồng phòng chống ma túy</h2>
+                <p>Cùng chung tay xây dựng môi trường sống lành mạnh không ma túy</p>
+                <img src="https://cdn-icons-png.flaticon.com/512/3022/3022859.png" alt="Phòng chống ma túy" class="hero-image">
+            </div>
+            <div class="register-form">
+                <div class="register-header">
+                    <h1>Tạo tài khoản mới</h1>
+                    <p>Điền thông tin để đăng ký tài khoản</p>
+                </div>
+                <form th:action="@{/register}" method="post">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="firstName">Họ</label>
+                            <div class="input-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="firstName" name="firstName" class="form-control" placeholder="Nhập họ của bạn" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Tên</label>
+                            <div class="input-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Nhập tên của bạn" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Nhập email của bạn" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user-tag"></i>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Tạo tên đăng nhập" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Tạo mật khẩu" required>
+                            <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Xác nhận mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Nhập lại mật khẩu" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ageGroup">Nhóm tuổi</label>
+                        <div class="input-icon">
+                            <i class="fas fa-users"></i>
+                            <select id="ageGroup" name="ageGroup" class="form-control" required>
+                                <option value="" disabled selected>Chọn nhóm tuổi của bạn</option>
+                                <option value="student">Học sinh (12-18 tuổi)</option>
+                                <option value="college">Sinh viên (18-25 tuổi)</option>
+                                <option value="parent">Phụ huynh</option>
+                                <option value="teacher">Giáo viên</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="terms-conditions">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a> của hệ thống</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Đăng ký tài khoản</button>
+                </form>
+                <div class="login-link">
+                    Đã có tài khoản? <a href="/login">Đăng nhập ngay</a>
+                </div>
+                <div class="social-login">
+                    <div class="login-divider">Hoặc đăng ký bằng</div>
+                    <div class="social-buttons">
+                        <a href="#" class="btn-social btn-facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="btn-social btn-google">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="#" class="btn-social btn-twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <h2>ĐĂNG KÝ THÀNH VIÊN</h2>
-    
-    <form th:action="@{/register}" method="post">
-      <div class="input-group 3d-input">
-        <i class="fas fa-user-tag"></i>
-        <input type="text" name="fullName" placeholder="Họ và tên" class="input-3d" required>
-      </div>
-      
-      <div class="input-group 3d-input">
-        <i class="fas fa-envelope"></i>
-        <input type="email" name="email" placeholder="Email" class="input-3d" required>
-      </div>
-      
-      <div class="input-group 3d-input">
-        <i class="fas fa-phone"></i>
-        <input type="tel" name="phone" placeholder="Số điện thoại" class="input-3d" required>
-      </div>
-      
-      <div class="input-group 3d-input">
-        <i class="fas fa-lock"></i>
-        <input type="password" name="password" placeholder="Mật khẩu" class="input-3d" required>
-      </div>
-      
-      <div class="input-group 3d-input">
-        <i class="fas fa-lock"></i>
-        <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" class="input-3d" required>
-      </div>
-      
-      <div class="role-selection 3d-tabs">
-        <label>
-          <input type="radio" name="role" value="MEMBER" checked style="display:none;">
-          <button type="button" class="role-btn active" onclick="selectRole(this, 'MEMBER')">Người dùng</button>
-        </label>
-        <label>
-          <input type="radio" name="role" value="STAFF" style="display:none;">
-          <button type="button" class="role-btn" onclick="selectRole(this, 'STAFF')">Tình nguyện viên</button>
-        </label>
-      </div>
-      
-      <button type="submit" class="btn-register 3d-button">Đăng ký</button>
-    </form>
-    
-    <div class="links">
-      <a th:href="@{/login}" class="login">Đã có tài khoản? Đăng nhập</a>
-    </div>
-  </div>
-</div>
 
-<script>
-function selectRole(btn, role) {
-  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('input[name="role"]').forEach(r => r.checked = false);
-  btn.previousElementSibling.checked = true;
-}
-</script>
+    <footer class="footer">
+        <p>Hệ thống phòng ngừa sử dụng ma túy trong cộng đồng &copy; 2023</p>
+    </footer>
+
+    <script>
+        // Hiển thị/ẩn mật khẩu
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Animation khi load trang
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerCard = document.querySelector('.register-card');
+            registerCard.style.opacity = '0';
+            registerCard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                registerCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                registerCard.style.opacity = '1';
+                registerCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
 </body>
 </html>
