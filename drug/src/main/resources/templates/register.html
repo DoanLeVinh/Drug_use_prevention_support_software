@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Đăng ký thành viên</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/fontawesome.min.css}" />
+    <script th:src="@{/js.js}" defer></script>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="register-container 3d-effect">
+  <div class="path-background">
+    <!-- Hình ảnh 3D các con đường lựa chọn -->
+  </div>
+  
+  <div class="register-form floating-card">
+    <div class="door-3d-animation">
+      <!-- Animation cửa mở -->
+    </div>
+    
+    <h2>ĐĂNG KÝ THÀNH VIÊN</h2>
+    
+    <form th:action="@{/register}" method="post">
+      <div class="input-group 3d-input">
+        <i class="fas fa-user-tag"></i>
+        <input type="text" name="fullName" placeholder="Họ và tên" class="input-3d" required>
+      </div>
+      
+      <div class="input-group 3d-input">
+        <i class="fas fa-envelope"></i>
+        <input type="email" name="email" placeholder="Email" class="input-3d" required>
+      </div>
+      
+      <div class="input-group 3d-input">
+        <i class="fas fa-phone"></i>
+        <input type="tel" name="phone" placeholder="Số điện thoại" class="input-3d" required>
+      </div>
+      
+      <div class="input-group 3d-input">
+        <i class="fas fa-lock"></i>
+        <input type="password" name="password" placeholder="Mật khẩu" class="input-3d" required>
+      </div>
+      
+      <div class="input-group 3d-input">
+        <i class="fas fa-lock"></i>
+        <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" class="input-3d" required>
+      </div>
+      
+      <div class="role-selection 3d-tabs">
+        <label>
+          <input type="radio" name="role" value="MEMBER" checked style="display:none;">
+          <button type="button" class="role-btn active" onclick="selectRole(this, 'MEMBER')">Người dùng</button>
+        </label>
+        <label>
+          <input type="radio" name="role" value="STAFF" style="display:none;">
+          <button type="button" class="role-btn" onclick="selectRole(this, 'STAFF')">Tình nguyện viên</button>
+        </label>
+      </div>
+      
+      <button type="submit" class="btn-register 3d-button">Đăng ký</button>
+    </form>
+    
+    <div class="links">
+      <a th:href="@{/login}" class="login">Đã có tài khoản? Đăng nhập</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectRole(btn, role) {
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('input[name="role"]').forEach(r => r.checked = false);
+  btn.previousElementSibling.checked = true;
+}
+</script>
+</body>
+</html>

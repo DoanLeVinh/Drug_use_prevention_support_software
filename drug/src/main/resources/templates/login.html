@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Đăng nhập hệ thống</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script th:src="@{/js.js}" defer></script>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div class="login-container three-d-effect">
+        <div class="community-background">
+            <!-- Các hình ảnh 3D của cộng đồng đoàn kết -->
+        </div>
+        
+        <div class="login-form floating-card">
+            <div class="logo-3d">
+                <img th:src="@{/logo-organization-3d.png}" alt="Logo tổ chức">
+            </div>
+            
+            <h2>ĐĂNG NHẬP HỆ THỐNG</h2>
+            
+            <form th:action="@{/login}" method="post">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="username" placeholder="Tên đăng nhập" class="three-d-input" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Mật khẩu" class="three-d-input" required>
+                </div>
+                
+                <button type="submit" class="btn-login three-d-button">Đăng nhập</button>
+            </form>
+            
+            <div th:if="${param.error}" class="error-message">
+                Sai tên đăng nhập hoặc mật khẩu!
+            </div>
+            <div th:if="${param.logout}" class="success-message">
+                Đăng xuất thành công!
+            </div>
+            
+            <div class="links">
+                <a th:href="@{/forgot-password}" class="forgot-password">Quên mật khẩu?</a>
+                <a th:href="@{/register}" class="register">Đăng ký tài khoản</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

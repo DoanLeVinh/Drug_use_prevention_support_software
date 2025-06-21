@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Khôi phục mật khẩu</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/fontawesome.min.css}" />
+    <script th:src="@{/js.js}" defer></script>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="forgot-container 3d-effect">
+  <div class="keyhole-background">
+    <!-- Hình ảnh 3D ổ khóa và chìa khóa -->
+  </div>
+  
+  <div class="forgot-form floating-card">
+    <div class="puzzle-animation">
+      <!-- Animation mảnh ghép puzzle -->
+    </div>
+    
+    <h2>KHÔI PHỤC MẬT KHẨU</h2>
+    
+    <p class="instruction">Vui lòng nhập email đã đăng ký để nhận liên kết khôi phục</p>
+    
+    <form th:action="@{/forgot-password}" method="post">
+      <div class="input-group 3d-input">
+        <i class="fas fa-envelope"></i>
+        <input type="email" name="email" placeholder="Email đăng ký" class="input-3d" required>
+      </div>
+      <button type="submit" class="btn-submit 3d-button">Gửi yêu cầu</button>
+    </form>
+    
+    <div th:if="${param.success}" style="color:green; margin-top:10px;">
+      Đã gửi email khôi phục mật khẩu!
+    </div>
+    <div th:if="${param.error}" style="color:red; margin-top:10px;">
+      Không tìm thấy email này!
+    </div>
+    
+    <div class="links">
+      <a th:href="@{/login}" class="login">Quay lại đăng nhập</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
