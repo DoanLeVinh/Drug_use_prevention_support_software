@@ -4,578 +4,577 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Tư Vấn Viên | Hệ Thống Phòng Chống Ma Túy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/consultantt/css/styles.css">
-<style>
-    :root {
-    --primary: #4e73df;
-    --primary-light: #e2e6f9;
-    --secondary: #858796;
-    --success: #1cc88a;
-    --info: #36b9cc;
-    --warning: #f6c23e;
-    --danger: #e74a3b;
-    --light: #f8f9fc;
-    --dark: #5a5c69;
-    --white: #fff;
-    --gray: #dddfeb;
-    --gray-dark: #7a7f9a;
-}
-
-/* Base Styles */
-body {
-    font-family: 'Nunito', sans-serif;
-    background-color: #f8f9fc;
-    color: #333;
-}
-
-.app-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* Sidebar Styles */
-.sidebar {
-    width: 250px;
-    background-color: var(--white);
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-    transition: all 0.3s;
-    z-index: 1000;
-}
-
-.sidebar-header {
-    padding: 1.5rem 1.5rem 0.5rem;
-    text-align: center;
-    border-bottom: 1px solid var(--gray);
-}
-
-.sidebar-logo {
-    height: 40px;
-    margin-bottom: 1rem;
-}
-
-.sidebar-title {
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--primary);
-    margin-bottom: 0;
-}
-
-.sidebar-nav {
-    padding: 0 1rem;
-}
-
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-}
-
-.menu-item {
-    margin-bottom: 0.5rem;
-}
-
-.menu-item a {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    color: var(--secondary);
-    text-decoration: none;
-    border-radius: 0.35rem;
-    transition: all 0.3s;
-}
-
-.menu-item a:hover {
-    color: var(--primary);
-    background-color: var(--primary-light);
-}
-
-.menu-item a i {
-    margin-right: 0.5rem;
-    width: 20px;
-    text-align: center;
-}
-
-.menu-item.active a {
-    color: var(--white);
-    background-color: var(--primary);
-}
-
-.sidebar-footer {
-    padding: 1rem;
-    border-top: 1px solid var(--gray);
-}
-
-.logout-btn {
-    display: flex;
-    align-items: center;
-    color: var(--secondary);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.35rem;
-    transition: all 0.3s;
-}
-
-.logout-btn:hover {
-    color: var(--danger);
-    background-color: rgba(231, 74, 59, 0.1);
-}
-
-.logout-btn i {
-    margin-right: 0.5rem;
-}
-
-/* Main Content Styles */
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.top-navbar {
-    background-color: var(--white);
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 100;
-}
-
-.page-header {
-    display: flex;
-    align-items: center;
-}
-
-.sidebar-toggle {
-    display: none;
-    margin-right: 1rem;
-    font-size: 1.25rem;
-    cursor: pointer;
-    color: var(--dark);
-}
-
-.page-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0;
-    color: var(--dark);
-}
-
-.welcome-message {
-    font-size: 0.875rem;
-    color: var(--secondary);
-    margin-left: 1rem;
-    margin-bottom: 0;
-}
-
-.user-actions {
-    display: flex;
-    align-items: center;
-}
-
-.notification-bell {
-    position: relative;
-    margin-right: 1.5rem;
-    font-size: 1.25rem;
-    color: var(--secondary);
-    cursor: pointer;
-}
-
-.notification-bell .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    font-size: 0.6rem;
-    background-color: var(--danger);
-    color: var(--white);
-    border-radius: 50%;
-    padding: 0.25rem 0.4rem;
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-}
-
-.profile-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 0.75rem;
-}
-
-.profile-name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    margin-bottom: 0;
-    color: var(--dark);
-}
-
-.profile-role {
-    font-size: 0.75rem;
-    color: var(--secondary);
-    margin-bottom: 0;
-}
-
-/* Dashboard Content Styles */
-.dashboard-content {
-    flex: 1;
-    padding: 1.5rem;
-    background-color: #f8f9fc;
-}
-
-/* Stats Cards */
-.stats-overview {
-    margin-bottom: 1.5rem;
-}
-
-.stat-card {
-    background-color: var(--white);
-    border-radius: 0.35rem;
-    padding: 1.25rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
-    height: 100%;
-}
-
-.stat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 0.75rem;
-}
-
-.stat-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--secondary);
-    text-transform: uppercase;
-    margin-bottom: 0;
-}
-
-.stat-icon {
-    font-size: 1.5rem;
-    color: var(--secondary);
-    opacity: 0.3;
-}
-
-.stat-value {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 0.25rem;
-}
-
-.stat-description {
-    font-size: 0.875rem;
-    color: var(--secondary);
-}
-
-.appointments .stat-icon {
-    color: var(--primary);
-}
-
-.clients .stat-icon {
-    color: var(--success);
-}
-
-.assessments .stat-icon {
-    color: var(--info);
-}
-
-/* Card Styles */
-.card {
-    border: none;
-    border-radius: 0.35rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
-    margin-bottom: 1.5rem;
-}
-
-.card-header {
-    background-color: var(--white);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    padding: 1rem 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 0.35rem 0.35rem 0 0 !important;
-}
-
-.card-body {
-    padding: 1.25rem;
-}
-
-.section-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 0;
-}
-
-/* Appointment List Styles */
-.appointment-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.appointment-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.appointment-item:last-child {
-    border-bottom: none;
-}
-
-.appointment-details {
-    flex: 1;
-}
-
-.appointment-time {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 0.25rem;
-}
-
-.appointment-client {
-    font-size: 0.9375rem;
-    margin-bottom: 0.25rem;
-}
-
-.appointment-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.appointment-tag {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    font-weight: 600;
-}
-
-.risk-low {
-    background-color: rgba(28, 200, 138, 0.1);
-    color: var(--success);
-}
-
-.risk-medium {
-    background-color: rgba(246, 194, 62, 0.1);
-    color: var(--warning);
-}
-
-.risk-high {
-    background-color: rgba(231, 74, 59, 0.1);
-    color: var(--danger);
-}
-
-.appointment-note {
-    font-size: 0.75rem;
-    color: var(--secondary);
-}
-
-.appointment-note i {
-    margin-right: 0.25rem;
-}
-
-.appointment-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-/* Notification Styles */
-.notification-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.notification-item {
-    display: flex;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-}
-
-.notification-item:last-child {
-    border-bottom: none;
-}
-
-.notification-item.unread {
-    background-color: rgba(78, 115, 223, 0.03);
-}
-
-.notification-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-}
-
-.bg-primary-light {
-    background-color: rgba(78, 115, 223, 0.1);
-}
-
-.bg-danger-light {
-    background-color: rgba(231, 74, 59, 0.1);
-}
-
-.bg-info-light {
-    background-color: rgba(54, 185, 204, 0.1);
-}
-
-.notification-content {
-    flex: 1;
-}
-
-.notification-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 0.25rem;
-}
-
-.notification-message {
-    font-size: 0.8125rem;
-    color: var(--secondary);
-    margin-bottom: 0.25rem;
-    line-height: 1.4;
-}
-
-.notification-time {
-    font-size: 0.75rem;
-    color: var(--gray-dark);
-}
-
-/* Quick Actions */
-.quick-actions .btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    font-size: 0.8125rem;
-}
-
-.quick-actions .btn i {
-    margin-right: 0.5rem;
-}
-
-/* Responsive Styles */
-@media (max-width: 992px) {
-    .sidebar {
-        position: fixed;
-        left: -250px;
-        top: 0;
-        bottom: 0;
-        z-index: 1000;
-    }
-    
-    .sidebar.show {
-        left: 0;
-    }
-    
-    .sidebar-toggle {
-        display: block;
-    }
-    
-    .main-content {
-        margin-left: 0;
-    }
-}
-
-@media (max-width: 768px) {
-    .top-navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 1rem;
-    }
-    
-    .user-actions {
-        margin-top: 1rem;
-        width: 100%;
-        justify-content: flex-end;
-    }
-    
-    .welcome-message {
-        margin-left: 0;
-        margin-top: 0.5rem;
-    }
-}
-/* Thêm vào cuối file consultant.css */
-
-/* Modal Styles */
-.modal-content {
-    border: none;
-    border-radius: 0.5rem;
-}
-
-.modal-header {
-    background-color: var(--primary);
-    color: white;
-    border-bottom: none;
-    border-radius: 0.5rem 0.5rem 0 0;
-    padding: 1.25rem;
-}
-
-.modal-title {
-    font-weight: 600;
-}
-
-.modal-body {
-    padding: 1.5rem;
-}
-
-.modal-footer {
-    border-top: none;
-    padding: 1rem 1.5rem;
-}
-
-.btn-close {
-    filter: invert(1);
-}
-
-/* Form Styles */
-.form-label {
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 0.5rem;
-}
-
-.form-control, .form-select {
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.35rem;
-    border: 1px solid var(--gray);
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
-}
-
-/* Responsive Modal */
-@media (max-width: 768px) {
-    .modal-dialog {
-        margin: 0.5rem auto;
-    }
-    
-    .modal-content {
-        border-radius: 0;
-    }
-}
-</style>
+    <style>
+        :root {
+            --primary: #4e73df;
+            --primary-light: #e2e6f9;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --white: #fff;
+            --gray: #dddfeb;
+            --gray-dark: #7a7f9a;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1.5rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .sidebar-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+
+        .sidebar-nav {
+            padding: 0 1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+
+        .menu-item a:hover {
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .menu-item a i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-item.active a {
+            color: var(--white);
+            background-color: var(--primary);
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--gray);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.35rem;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            color: var(--danger);
+            background-color: rgba(231, 74, 59, 0.1);
+        }
+
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .top-navbar {
+            background-color: var(--white);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: var(--dark);
+        }
+
+        .welcome-message {
+            font-size: 0.875rem;
+            color: var(--secondary);
+            margin-left: 1rem;
+            margin-bottom: 0;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-bell {
+            position: relative;
+            margin-right: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+
+        .notification-bell .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 0.6rem;
+            background-color: var(--danger);
+            color: var(--white);
+            border-radius: 50%;
+            padding: 0.25rem 0.4rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+        }
+
+        .profile-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            color: var(--dark);
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            margin-bottom: 0;
+        }
+
+        /* Dashboard Content Styles */
+        .dashboard-content {
+            flex: 1;
+            padding: 1.5rem;
+            background-color: #f8f9fc;
+        }
+
+        /* Stats Cards */
+        .stats-overview {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            border-radius: 0.35rem;
+            padding: 1.25rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            height: 100%;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-transform: uppercase;
+            margin-bottom: 0;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            opacity: 0.3;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-description {
+            font-size: 0.875rem;
+            color: var(--secondary);
+        }
+
+        .appointments .stat-icon {
+            color: var(--primary);
+        }
+
+        .clients .stat-icon {
+            color: var(--success);
+        }
+
+        .assessments .stat-icon {
+            color: var(--info);
+        }
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background-color: var(--white);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0.35rem 0.35rem 0 0 !important;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0;
+        }
+
+        /* Appointment List Styles */
+        .appointment-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .appointment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .appointment-item:last-child {
+            border-bottom: none;
+        }
+
+        .appointment-details {
+            flex: 1;
+        }
+
+        .appointment-time {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .appointment-client {
+            font-size: 0.9375rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .appointment-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .appointment-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+
+        .risk-low {
+            background-color: rgba(28, 200, 138, 0.1);
+            color: var(--success);
+        }
+
+        .risk-medium {
+            background-color: rgba(246, 194, 62, 0.1);
+            color: var(--warning);
+        }
+
+        .risk-high {
+            background-color: rgba(231, 74, 59, 0.1);
+            color: var(--danger);
+        }
+
+        .appointment-note {
+            font-size: 0.75rem;
+            color: var(--secondary);
+        }
+
+        .appointment-note i {
+            margin-right: 0.25rem;
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Notification Styles */
+        .notification-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .notification-item {
+            display: flex;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item.unread {
+            background-color: rgba(78, 115, 223, 0.03);
+        }
+
+        .notification-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .bg-primary-light {
+            background-color: rgba(78, 115, 223, 0.1);
+        }
+
+        .bg-danger-light {
+            background-color: rgba(231, 74, 59, 0.1);
+        }
+
+        .bg-info-light {
+            background-color: rgba(54, 185, 204, 0.1);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-message {
+            font-size: 0.8125rem;
+            color: var(--secondary);
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: var(--gray-dark);
+        }
+
+        /* Quick Actions */
+        .quick-actions .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            font-size: 0.8125rem;
+        }
+
+        .quick-actions .btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border: none;
+            border-radius: 0.5rem;
+        }
+
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+            border-bottom: none;
+            border-radius: 0.5rem 0.5rem 0 0;
+            padding: 1.25rem;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: none;
+            padding: 1rem 1.5rem;
+        }
+
+        .btn-close {
+            filter: invert(1);
+        }
+
+        /* Form Styles */
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.35rem;
+            border: 1px solid var(--gray);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            
+            .user-actions {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .welcome-message {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+            
+            .modal-dialog {
+                margin: 0.5rem auto;
+            }
+            
+            .modal-content {
+                border-radius: 0;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -592,7 +591,6 @@ body {
                     </li>
                     <li class="menu-item">
                         <a href="/consultantt/pages/calendar.html"><i class="fas fa-calendar-alt"></i> <span>Lịch Làm Việc</span></a>
-
                     </li>
                     <li class="menu-item">
                         <a href="/consultantt/pages/Consulting.html"><i class="fas fa-comments"></i> <span>Phiên Tư Vấn</span></a>
@@ -702,7 +700,8 @@ body {
                             </div>
                             <div class="card-body">
                                 <div class="appointment-list">
-                                    <div class="appointment-item">
+                                    <!-- Appointments will be loaded here -->
+                                    <div class="appointment-item" data-id="1">
                                         <div class="appointment-details">
                                             <div class="appointment-time">09:00 - 10:00</div>
                                             <div class="appointment-client">
@@ -724,7 +723,7 @@ body {
                                         </div>
                                     </div>
                                     
-                                    <div class="appointment-item">
+                                    <div class="appointment-item" data-id="2">
                                         <div class="appointment-details">
                                             <div class="appointment-time">11:00 - 12:00</div>
                                             <div class="appointment-client">
@@ -745,7 +744,7 @@ body {
                                         </div>
                                     </div>
                                     
-                                    <div class="appointment-item">
+                                    <div class="appointment-item" data-id="3">
                                         <div class="appointment-details">
                                             <div class="appointment-time">14:00 - 15:00</div>
                                             <div class="appointment-client">
@@ -855,340 +854,182 @@ body {
     </div>
 
     <!-- Modal Thêm/Sửa lịch hẹn -->
-<div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="appointmentModalLabel">Thêm lịch hẹn mới</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="appointmentForm">
-                    <input type="hidden" id="appointmentId">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="clientSelect" class="form-label">Khách hàng</label>
-                            <select class="form-select" id="clientSelect" required>
-                                <option value="" selected disabled>Chọn khách hàng</option>
-                                <option value="1">Trần Văn A (25 tuổi)</option>
-                                <option value="2">Nguyễn Thị B (18 tuổi)</option>
-                                <option value="3">Lê Văn C (30 tuổi)</option>
-                                <option value="4">Phạm Thị D (22 tuổi)</option>
-                            </select>
+    <div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="appointmentModalLabel">Thêm lịch hẹn mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="appointmentForm">
+                        <input type="hidden" id="appointmentId">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="clientName" class="form-label">Tên khách hàng</label>
+                                <input type="text" class="form-control" id="clientName" required placeholder="Nhập tên khách hàng">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="clientAge" class="form-label">Tuổi</label>
+                                <input type="number" class="form-control" id="clientAge" placeholder="Nhập tuổi">
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="appointmentDate" class="form-label">Ngày hẹn</label>
-                            <input type="date" class="form-control" id="appointmentDate" required>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="appointmentDate" class="form-label">Ngày hẹn</label>
+                                <input type="date" class="form-control" id="appointmentDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="appointmentTime" class="form-label">Khung giờ</label>
+                                <div class="input-group">
+                                    <input type="time" class="form-control" id="startTime" required>
+                                    <span class="input-group-text">đến</span>
+                                    <input type="time" class="form-control" id="endTime" required>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="startTime" class="form-label">Giờ bắt đầu</label>
-                            <input type="time" class="form-control" id="startTime" required>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="appointmentType" class="form-label">Loại tư vấn</label>
+                                <select class="form-select" id="appointmentType" required>
+                                    <option value="" selected disabled>Chọn loại tư vấn</option>
+                                    <option value="online">Trực tuyến</option>
+                                    <option value="offline">Trực tiếp</option>
+                                    <option value="phone">Điện thoại</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="riskLevel" class="form-label">Mức độ nguy cơ</label>
+                                <select class="form-select" id="riskLevel" required>
+                                    <option value="" selected disabled>Chọn mức độ nguy cơ</option>
+                                    <option value="low">Thấp</option>
+                                    <option value="medium">Trung bình</option>
+                                    <option value="high">Cao</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="endTime" class="form-label">Giờ kết thúc</label>
-                            <input type="time" class="form-control" id="endTime" required>
+                        <div class="mb-3">
+                            <label for="appointmentNotes" class="form-label">Ghi chú</label>
+                            <textarea class="form-control" id="appointmentNotes" rows="3" placeholder="Nhập ghi chú (nếu có)"></textarea>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="appointmentType" class="form-label">Loại tư vấn</label>
-                        <select class="form-select" id="appointmentType" required>
-                            <option value="" selected disabled>Chọn loại tư vấn</option>
-                            <option value="online">Trực tuyến</option>
-                            <option value="offline">Trực tiếp</option>
-                            <option value="phone">Điện thoại</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="riskLevel" class="form-label">Mức độ nguy cơ</label>
-                        <select class="form-select" id="riskLevel" required>
-                            <option value="" selected disabled>Chọn mức độ nguy cơ</option>
-                            <option value="low">Thấp</option>
-                            <option value="medium">Trung bình</option>
-                            <option value="high">Cao</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="appointmentNotes" class="form-label">Ghi chú</label>
-                        <textarea class="form-control" id="appointmentNotes" rows="3"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger me-auto" id="deleteBtn" style="display: none;">
-                    <i class="fas fa-trash-alt"></i> Xóa
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Hủy
-                </button>
-                <button type="button" class="btn btn-primary" id="saveBtn">
-                    <i class="fas fa-save"></i> Lưu
-                </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger me-auto" id="deleteBtn" style="display: none;">
+                        <i class="fas fa-trash-alt"></i> Xóa
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Hủy
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveBtn">
+                        <i class="fas fa-save"></i> Lưu
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Bootstrap JS và các thư viện cần thiết -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Mở modal khi nhấn nút Thêm lịch hẹn
-    document.getElementById('addAppointmentBtn').addEventListener('click', function() {
-        // Reset form trước khi hiển thị
-        document.getElementById('appointmentForm').reset();
-        document.getElementById('appointmentId').value = '';
-        document.getElementById('deleteBtn').style.display = 'none';
-        document.getElementById('appointmentModalLabel').textContent = 'Thêm lịch hẹn mới';
-        
-        // Đặt ngày mặc định là hôm nay
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('appointmentDate').value = today;
-        
-        // Hiển thị modal
-        const modal = new bootstrap.Modal(document.getElementById('appointmentModal'));
-        modal.show();
-    });
+    <!-- Bootstrap JS và các thư viện cần thiết -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Hàm sắp xếp lịch hẹn theo thời gian
+        function sortAppointments() {
+            const appointmentList = document.querySelector('.appointment-list');
+            const appointments = Array.from(appointmentList.children);
+            
+            appointments.sort((a, b) => {
+                const timeA = a.querySelector('.appointment-time').textContent.split(' - ')[0];
+                const timeB = b.querySelector('.appointment-time').textContent.split(' - ')[0];
+                return timeA.localeCompare(timeB);
+            });
+            
+            // Xóa tất cả lịch hẹn hiện có
+            while (appointmentList.firstChild) {
+                appointmentList.removeChild(appointmentList.firstChild);
+            }
+            
+            // Thêm lại theo thứ tự đã sắp xếp
+            appointments.forEach(appointment => {
+                appointmentList.appendChild(appointment);
+            });
+        }
 
-    // Xử lý khi nhấn nút Lưu
-    document.getElementById('saveBtn').addEventListener('click', function() {
-        // Lấy dữ liệu từ form
-        const clientId = document.getElementById('clientSelect').value;
-        const appointmentDate = document.getElementById('appointmentDate').value;
-        const startTime = document.getElementById('startTime').value;
-        const endTime = document.getElementById('endTime').value;
-        const appointmentType = document.getElementById('appointmentType').value;
-        const riskLevel = document.getElementById('riskLevel').value;
-        const notes = document.getElementById('appointmentNotes').value;
-        
-        // Kiểm tra dữ liệu
-        if (!clientId || !appointmentDate || !startTime || !endTime || !appointmentType || !riskLevel) {
-            alert('Vui lòng điền đầy đủ thông tin bắt buộc');
-            return;
-        }
-        
-        // Ở đây bạn có thể thêm code để gửi dữ liệu lên server
-        console.log('Dữ liệu lịch hẹn:', {
-            clientId,
-            appointmentDate,
-            startTime,
-            endTime,
-            appointmentType,
-            riskLevel,
-            notes
-        });
-        
-        // Hiển thị thông báo thành công
-        alert('Lịch hẹn đã được lưu thành công!');
-        
-        // Đóng modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('appointmentModal'));
-        modal.hide();
-        
-        // Tạm thời thêm lịch hẹn mới vào danh sách (trong thực tế sẽ load lại từ server)
-        addNewAppointmentToUI({
-            clientId,
-            appointmentDate,
-            startTime,
-            endTime,
-            appointmentType,
-            riskLevel,
-            notes
-        });
-    });
-
-    // Hàm thêm lịch hẹn mới vào UI (tạm thời)
-    function addNewAppointmentToUI(appointmentData) {
-        // Xác định thông tin khách hàng
-        let clientName = '';
-        let clientAge = '';
-        switch(appointmentData.clientId) {
-            case '1':
-                clientName = 'Trần Văn A';
-                clientAge = '25 tuổi';
-                break;
-            case '2':
-                clientName = 'Nguyễn Thị B';
-                clientAge = '18 tuổi';
-                break;
-            case '3':
-                clientName = 'Lê Văn C';
-                clientAge = '30 tuổi';
-                break;
-            case '4':
-                clientName = 'Phạm Thị D';
-                clientAge = '22 tuổi';
-                break;
-        }
-        
-        // Xác định badge nguy cơ
-        let riskClass = '';
-        let riskText = '';
-        switch(appointmentData.riskLevel) {
-            case 'low':
-                riskClass = 'risk-low';
-                riskText = 'Nguy cơ thấp';
-                break;
-            case 'medium':
-                riskClass = 'risk-medium';
-                riskText = 'Nguy cơ trung bình';
-                break;
-            case 'high':
-                riskClass = 'risk-high';
-                riskText = 'Nguy cơ cao';
-                break;
-        }
-        
-        // Tạo HTML cho lịch hẹn mới
-        const newAppointmentHTML = `
-            <div class="appointment-item">
-                <div class="appointment-details">
-                    <div class="appointment-time">${appointmentData.startTime} - ${appointmentData.endTime}</div>
-                    <div class="appointment-client">
-                        <strong>${clientName}</strong> - ${clientAge}
-                        <span class="badge bg-warning text-dark">Chờ xác nhận</span>
-                                       </div>
-                    <div class="appointment-info">
-                        <span class="appointment-tag ${riskClass}">${riskText}</span>
-                        ${appointmentData.notes ? `<span class="appointment-note"><i class="fas fa-info-circle"></i> ${appointmentData.notes}</span>` : ''}
+        // Hàm thêm lịch hẹn mới vào UI
+        function addNewAppointmentToUI(appointmentData) {
+            // Xác định badge nguy cơ
+            let riskClass = '';
+            let riskText = '';
+            switch(appointmentData.riskLevel) {
+                case 'low':
+                    riskClass = 'risk-low';
+                    riskText = 'Nguy cơ thấp';
+                    break;
+                case 'medium':
+                    riskClass = 'risk-medium';
+                    riskText = 'Nguy cơ trung bình';
+                    break;
+                case 'high':
+                    riskClass = 'risk-high';
+                    riskText = 'Nguy cơ cao';
+                    break;
+            }
+            
+            // Tạo HTML cho lịch hẹn mới
+            const newAppointmentHTML = `
+                <div class="appointment-item" data-id="${Date.now()}">
+                    <div class="appointment-details">
+                        <div class="appointment-time">${appointmentData.startTime} - ${appointmentData.endTime}</div>
+                        <div class="appointment-client">
+                            <strong>${appointmentData.clientName}</strong>${appointmentData.clientAge ? ` - ${appointmentData.clientAge} tuổi` : ''}
+                            <span class="badge bg-warning text-dark">Chờ xác nhận</span>
+                        </div>
+                        <div class="appointment-info">
+                            <span class="appointment-tag ${riskClass}">${riskText}</span>
+                            ${appointmentData.notes ? `<span class="appointment-note"><i class="fas fa-info-circle"></i> ${appointmentData.notes}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success" title="Xác nhận">
+                            <i class="fas fa-check"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="appointment-actions">
-                    <button class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-sm btn-success" title="Xác nhận">
-                        <i class="fas fa-check"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        // Thêm lịch hẹn mới vào đầu danh sách
-        const appointmentList = document.querySelector('.appointment-list');
-        appointmentList.insertAdjacentHTML('afterbegin', newAppointmentHTML);
-        
-        // Thêm sự kiện cho nút xác nhận
-        const confirmBtn = appointmentList.querySelector('.appointment-item:first-child .btn-success');
-        confirmBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const appointmentItem = this.closest('.appointment-item');
-            
-            // Thay đổi trạng thái sang "Đã xác nhận"
-            const statusBadge = appointmentItem.querySelector('.badge');
-            statusBadge.classList.remove('bg-warning', 'text-dark');
-            statusBadge.classList.add('bg-success');
-            statusBadge.textContent = 'Đã xác nhận';
-            
-            // Thay đổi nút thành "Bắt đầu tư vấn"
-            const actionsDiv = appointmentItem.querySelector('.appointment-actions');
-            actionsDiv.innerHTML = `
-                <button class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
-                    <i class="fas fa-eye"></i>
-                </button>
-                <button class="btn btn-sm btn-primary" title="Bắt đầu tư vấn">
-                    <i class="fas fa-play"></i> Bắt đầu
-                </button>
             `;
             
-            // Thêm sự kiện cho nút bắt đầu tư vấn
-            const startBtn = actionsDiv.querySelector('.btn-primary');
-            startBtn.addEventListener('click', function(e) {
+            // Thêm lịch hẹn mới vào danh sách
+            const appointmentList = document.querySelector('.appointment-list');
+            appointmentList.insertAdjacentHTML('beforeend', newAppointmentHTML);
+            
+            // Sắp xếp lại lịch hẹn
+            sortAppointments();
+            
+            // Thêm sự kiện cho nút xác nhận
+            const newAppointmentItem = appointmentList.querySelector(`.appointment-item[data-id="${Date.now()}"]`);
+            const confirmBtn = newAppointmentItem.querySelector('.btn-success');
+            confirmBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                const clientName = appointmentItem.querySelector('.appointment-client strong').textContent;
-                alert(`Bắt đầu phiên tư vấn với ${clientName}`);
+                confirmAppointment(newAppointmentItem);
             });
-        });
-        
-        // Thêm sự kiện cho nút xem chi tiết
-        const viewBtn = appointmentList.querySelector('.appointment-item:first-child .btn-outline-primary');
-        viewBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            editAppointment(appointmentList.querySelector('.appointment-item:first-child'));
-        });
-    }
-
-    // Hàm chỉnh sửa lịch hẹn
-    function editAppointment(appointmentItem) {
-        // Lấy thông tin từ lịch hẹn
-        const clientName = appointmentItem.querySelector('.appointment-client strong').textContent;
-        const clientAge = appointmentItem.querySelector('.appointment-client').textContent.match(/\d+/)[0];
-        const timeRange = appointmentItem.querySelector('.appointment-time').textContent.split(' - ');
-        const riskClass = appointmentItem.querySelector('.appointment-tag').className.includes('low') ? 'low' : 
-                         appointmentItem.querySelector('.appointment-tag').className.includes('medium') ? 'medium' : 'high';
-        
-        const notesElement = appointmentItem.querySelector('.appointment-note');
-        const notes = notesElement ? notesElement.textContent.replace('Tái khám', '').trim() : '';
-        
-        // Xác định clientId dựa trên tên
-        let clientId = '1';
-        if (clientName.includes('Nguyễn Thị B')) clientId = '2';
-        if (clientName.includes('Lê Văn C')) clientId = '3';
-        if (clientName.includes('Phạm Thị D')) clientId = '4';
-        
-        // Điền dữ liệu vào form
-        document.getElementById('appointmentId').value = appointmentItem.dataset.id || Date.now().toString();
-        document.getElementById('clientSelect').value = clientId;
-        document.getElementById('appointmentDate').value = '2023-06-15'; // Ngày mặc định
-        document.getElementById('startTime').value = timeRange[0];
-        document.getElementById('endTime').value = timeRange[1];
-        document.getElementById('appointmentType').value = 'online'; // Loại mặc định
-        document.getElementById('riskLevel').value = riskClass;
-        document.getElementById('appointmentNotes').value = notes;
-        
-        // Hiển thị nút xóa
-        document.getElementById('deleteBtn').style.display = 'block';
-        document.getElementById('appointmentModalLabel').textContent = 'Chỉnh sửa lịch hẹn';
-        
-        // Hiển thị modal
-        const modal = new bootstrap.Modal(document.getElementById('appointmentModal'));
-        modal.show();
-    }
-
-    // Xử lý nút Xóa
-    document.getElementById('deleteBtn').addEventListener('click', function() {
-        if (confirm('Bạn có chắc chắn muốn xóa lịch hẹn này?')) {
-            const appointmentId = document.getElementById('appointmentId').value;
             
-            // Ở đây bạn có thể thêm code để xóa trên server
-            console.log('Xóa lịch hẹn có ID:', appointmentId);
-            
-            // Đóng modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('appointmentModal'));
-            modal.hide();
-            
-            // Xóa khỏi UI (trong thực tế sẽ load lại từ server)
-            const appointmentItem = document.querySelector(`.appointment-item[data-id="${appointmentId}"]`);
-            if (appointmentItem) {
-                appointmentItem.remove();
-                alert('Đã xóa lịch hẹn thành công!');
-            }
+                        // Thêm sự kiện cho nút xem chi tiết
+                        const viewBtn = newAppointmentItem.querySelector('.btn-outline-primary');
+            viewBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                viewAppointmentDetails(newAppointmentItem);
+            });
         }
-    });
 
-    // Thêm sự kiện cho các nút xem chi tiết có sẵn
-    document.querySelectorAll('.appointment-actions .btn-outline-primary').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            editAppointment(this.closest('.appointment-item'));
-        });
-    });
-
-    // Thêm sự kiện cho các nút xác nhận có sẵn
-    document.querySelectorAll('.appointment-actions .btn-success').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const appointmentItem = this.closest('.appointment-item');
+        // Hàm xác nhận lịch hẹn
+        function confirmAppointment(appointmentItem) {
+            const badge = appointmentItem.querySelector('.badge');
+            badge.className = 'badge bg-success';
+            badge.textContent = 'Đã xác nhận';
             
-            // Thay đổi trạng thái sang "Đã xác nhận"
-            const statusBadge = appointmentItem.querySelector('.badge');
-            statusBadge.classList.remove('bg-warning', 'text-dark');
-            statusBadge.classList.add('bg-success');
-            statusBadge.textContent = 'Đã xác nhận';
-            
-            // Thay đổi nút thành "Bắt đầu tư vấn"
-            const actionsDiv = appointmentItem.querySelector('.appointment-actions');
-            actionsDiv.innerHTML = `
+            const actions = appointmentItem.querySelector('.appointment-actions');
+            actions.innerHTML = `
                 <button class="btn btn-sm btn-outline-primary" title="Xem chi tiết">
                     <i class="fas fa-eye"></i>
                 </button>
@@ -1197,31 +1038,234 @@ body {
                 </button>
             `;
             
-            // Thêm sự kiện cho nút bắt đầu tư vấn
-            const startBtn = actionsDiv.querySelector('.btn-primary');
-            startBtn.addEventListener('click', function(e) {
+            // Thêm sự kiện cho nút xem chi tiết
+            actions.querySelector('.btn-outline-primary').addEventListener('click', function(e) {
                 e.preventDefault();
-                const clientName = appointmentItem.querySelector('.appointment-client strong').textContent;
-                alert(`Bắt đầu phiên tư vấn với ${clientName}`);
+                viewAppointmentDetails(appointmentItem);
+            });
+            
+            // Thêm sự kiện cho nút bắt đầu tư vấn
+            actions.querySelector('.btn-primary').addEventListener('click', function(e) {
+                e.preventDefault();
+                startConsultation(appointmentItem);
+            });
+            
+            // Hiển thị thông báo thành công
+            showAlert('success', 'Đã xác nhận lịch hẹn thành công!');
+        }
+
+        // Hàm xem chi tiết lịch hẹn
+        function viewAppointmentDetails(appointmentItem) {
+            const modal = new bootstrap.Modal(document.getElementById('appointmentModal'));
+            const modalTitle = document.getElementById('appointmentModalLabel');
+            const deleteBtn = document.getElementById('deleteBtn');
+            
+            // Đặt tiêu đề modal
+            modalTitle.textContent = 'Chi tiết lịch hẹn';
+            
+            // Hiển thị nút xóa
+            deleteBtn.style.display = 'block';
+            
+            // Lấy dữ liệu từ lịch hẹn
+            const timeText = appointmentItem.querySelector('.appointment-time').textContent;
+            const [startTime, endTime] = timeText.split(' - ');
+            
+            const clientText = appointmentItem.querySelector('.appointment-client').textContent;
+            const clientName = clientText.split(' - ')[0].trim();
+            const clientAge = clientText.match(/\d+/) ? clientText.match(/\d+/)[0] : '';
+            
+            const riskTag = appointmentItem.querySelector('.appointment-tag');
+            let riskLevel = '';
+            if (riskTag.classList.contains('risk-low')) riskLevel = 'low';
+            else if (riskTag.classList.contains('risk-medium')) riskLevel = 'medium';
+            else if (riskTag.classList.contains('risk-high')) riskLevel = 'high';
+            
+            const noteElement = appointmentItem.querySelector('.appointment-note');
+            const notes = noteElement ? noteElement.textContent.replace('ⓘ', '').trim() : '';
+            
+            // Điền dữ liệu vào form
+            document.getElementById('clientName').value = clientName.replace(/\*/g, '').trim();
+            document.getElementById('clientAge').value = clientAge;
+            document.getElementById('appointmentDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('startTime').value = startTime;
+            document.getElementById('endTime').value = endTime;
+            document.getElementById('riskLevel').value = riskLevel;
+            document.getElementById('appointmentNotes').value = notes;
+            
+            // Lưu ID của lịch hẹn đang chỉnh sửa
+            document.getElementById('appointmentId').value = appointmentItem.dataset.id;
+            
+            // Hiển thị modal
+            modal.show();
+        }
+
+        // Hàm bắt đầu phiên tư vấn
+        function startConsultation(appointmentItem) {
+            // Lấy thông tin khách hàng
+            const clientName = appointmentItem.querySelector('.appointment-client strong').textContent;
+            
+            // Hiển thị thông báo
+            showAlert('info', `Bắt đầu phiên tư vấn với ${clientName}`);
+            
+            // Chuyển hướng đến trang tư vấn (trong thực tế)
+            // window.location.href = '/consulting-session.html?id=' + appointmentItem.dataset.id;
+        }
+
+        // Hàm hiển thị thông báo
+        function showAlert(type, message) {
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index: 1100;">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', alertHtml);
+            
+            // Tự động đóng thông báo sau 3 giây
+            setTimeout(() => {
+                const alert = document.querySelector('.alert');
+                if (alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            }, 3000);
+        }
+
+        // Hàm xử lý khi DOM đã tải xong
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sắp xếp lịch hẹn ban đầu
+            sortAppointments();
+            
+            // Thêm sự kiện cho nút thêm lịch hẹn
+            document.getElementById('addAppointmentBtn').addEventListener('click', function() {
+                const modal = new bootstrap.Modal(document.getElementById('appointmentModal'));
+                const modalTitle = document.getElementById('appointmentModalLabel');
+                const deleteBtn = document.getElementById('deleteBtn');
+                
+                // Đặt tiêu đề modal
+                modalTitle.textContent = 'Thêm lịch hẹn mới';
+                
+                // Ẩn nút xóa
+                deleteBtn.style.display = 'none';
+                
+                // Reset form
+                document.getElementById('appointmentForm').reset();
+                document.getElementById('appointmentId').value = '';
+                document.getElementById('appointmentDate').value = new Date().toISOString().split('T')[0];
+                
+                // Hiển thị modal
+                modal.show();
+            });
+            
+            // Thêm sự kiện cho nút lưu trong modal
+            document.getElementById('saveBtn').addEventListener('click', function() {
+                const form = document.getElementById('appointmentForm');
+                
+                // Kiểm tra hợp lệ
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    return;
+                }
+                
+                // Lấy dữ liệu từ form
+                const appointmentData = {
+                    clientName: document.getElementById('clientName').value,
+                    clientAge: document.getElementById('clientAge').value,
+                    appointmentDate: document.getElementById('appointmentDate').value,
+                    startTime: document.getElementById('startTime').value,
+                    endTime: document.getElementById('endTime').value,
+                    appointmentType: document.getElementById('appointmentType').value,
+                    riskLevel: document.getElementById('riskLevel').value,
+                    notes: document.getElementById('appointmentNotes').value
+                };
+                
+                // Nếu là thêm mới
+                if (!document.getElementById('appointmentId').value) {
+                    addNewAppointmentToUI(appointmentData);
+                    showAlert('success', 'Đã thêm lịch hẹn mới thành công!');
+                } else {
+                    // Cập nhật lịch hẹn (trong thực tế sẽ có hàm cập nhật UI)
+                    showAlert('success', 'Đã cập nhật lịch hẹn thành công!');
+                }
+                
+                // Đóng modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('appointmentModal'));
+                modal.hide();
+            });
+            
+            // Thêm sự kiện cho nút xóa trong modal
+            document.getElementById('deleteBtn').addEventListener('click', function() {
+                // Xác nhận trước khi xóa
+                if (confirm('Bạn có chắc chắn muốn xóa lịch hẹn này?')) {
+                    const appointmentId = document.getElementById('appointmentId').value;
+                    
+                    // Xóa lịch hẹn khỏi UI (trong thực tế sẽ có hàm xóa cụ thể)
+                    document.querySelector(`.appointment-item[data-id="${appointmentId}"]`).remove();
+                    
+                    showAlert('success', 'Đã xóa lịch hẹn thành công!');
+                    
+                    // Đóng modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('appointmentModal'));
+                    modal.hide();
+                }
+            });
+            
+            // Thêm sự kiện cho nút xác nhận các lịch hẹn hiện có
+            document.querySelectorAll('.appointment-item .btn-success').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const appointmentItem = this.closest('.appointment-item');
+                    confirmAppointment(appointmentItem);
+                });
+            });
+            
+            // Thêm sự kiện cho nút xem chi tiết các lịch hẹn hiện có
+            document.querySelectorAll('.appointment-item .btn-outline-primary').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const appointmentItem = this.closest('.appointment-item');
+                    viewAppointmentDetails(appointmentItem);
+                });
+            });
+            
+            // Thêm sự kiện cho nút bắt đầu tư vấn các lịch hẹn hiện có
+            document.querySelectorAll('.appointment-item .btn-primary').forEach(btn => {
+                if (btn.textContent.includes('Bắt đầu')) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const appointmentItem = this.closest('.appointment-item');
+                        startConsultation(appointmentItem);
+                    });
+                }
+            });
+            
+            // Thêm sự kiện cho nút đánh dấu đã đọc thông báo
+            document.querySelector('.notifications-section .btn-outline-secondary').addEventListener('click', function() {
+                document.querySelectorAll('.notification-item.unread').forEach(item => {
+                    item.classList.remove('unread');
+                });
+                
+                // Cập nhật badge thông báo
+                document.querySelector('.notification-bell .badge').textContent = '0';
+                
+                showAlert('success', 'Đã đánh dấu tất cả thông báo là đã đọc!');
+            });
+            
+            // Thêm sự kiện cho nút toggle sidebar trên mobile
+            document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('show');
+            });
+            
+            // Thêm sự kiện cho nút đăng xuất
+            document.querySelector('.logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                    // Trong thực tế sẽ có lệnh đăng xuất
+                    window.location.href = '/login.html';
+                }
             });
         });
-    });
-
-    // Thêm sự kiện cho các nút bắt đầu tư vấn có sẵn
-    document.querySelectorAll('.appointment-actions .btn-primary:not(.saveBtn)').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            if (this.textContent.includes('Bắt đầu')) {
-                e.preventDefault();
-                const clientName = this.closest('.appointment-item').querySelector('.appointment-client strong').textContent;
-                alert(`Bắt đầu phiên tư vấn với ${clientName}`);
-            }
-        });
-    });
-
-    // Toggle sidebar trên mobile
-    document.querySelector('.sidebar-toggle').addEventListener('click', function() {
-        document.querySelector('.sidebar').classList.toggle('show');
-    });
-</script>
+    </script>
 </body>
 </html>
