@@ -1,0 +1,258 @@
+<header class="inner-header">
+    <div class="inner-header-container">
+        <a href="/" class="inner-logo-container">
+            <div class="inner-logo-icon">DP</div>
+            <div class="inner-logo-text">Drug<span>Free</span></div>
+        </a>
+        
+        <nav class="inner-nav-menu">
+            <a href="/" class="inner-nav-link active">Trang chủ</a>
+            <a href="/courses" class="inner-nav-link">Khóa học</a>
+            <a href="/assessment" class="inner-nav-link">Đánh giá nguy cơ</a>
+            <a href="/consultation" class="inner-nav-link">Tư vấn</a>
+            <a href="/blog" class="inner-nav-link">Blog</a>
+            <a href="/about" class="inner-nav-link">Về chúng tôi</a>
+        </nav>
+        
+        <div class="inner-auth-buttons">
+            <button class="inner-btn-signin">Đăng nhập</button>
+            <button class="inner-btn-signup">Đăng ký</button>
+        </div>
+        
+        <button class="inner-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</header>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const innerMenuToggle = document.querySelector('.inner-menu-toggle');
+    const innerNavMenu = document.querySelector('.inner-nav-menu');
+    const innerAuthButtons = document.querySelector('.inner-auth-buttons');
+    
+    innerMenuToggle.addEventListener('click', function() {
+        // Tạo menu mobile tạm thời
+        const innerMobileMenu = document.createElement('div');
+        innerMobileMenu.className = 'inner-mobile-menu';
+        innerMobileMenu.style.position = 'fixed';
+        innerMobileMenu.style.top = '0';
+        innerMobileMenu.style.right = '0';
+        innerMobileMenu.style.width = '280px';
+        innerMobileMenu.style.height = '100vh';
+        innerMobileMenu.style.backgroundColor = 'white';
+        innerMobileMenu.style.boxShadow = '-5px 0 15px rgba(0,0,0,0.1)';
+        innerMobileMenu.style.padding = '80px 20px 20px';
+        innerMobileMenu.style.zIndex = '1000';
+        
+        // Clone các phần tử menu
+        const innerClonedNav = innerNavMenu.cloneNode(true);
+        innerClonedNav.style.display = 'flex';
+        innerClonedNav.style.flexDirection = 'column';
+        innerClonedNav.style.gap = '10px';
+        innerClonedNav.querySelectorAll('.inner-nav-link').forEach(link => {
+            link.style.padding = '12px 16px';
+        });
+        
+        const innerClonedAuth = innerAuthButtons.cloneNode(true);
+        innerClonedAuth.style.display = 'flex';
+        innerClonedAuth.style.flexDirection = 'column';
+        innerClonedAuth.style.gap = '10px';
+        innerClonedAuth.style.marginTop = '20px';
+        innerClonedAuth.querySelectorAll('button').forEach(btn => {
+            btn.style.width = '100%';
+        });
+        
+        // Thêm nút đóng
+        const innerCloseBtn = document.createElement('button');
+        innerCloseBtn.innerHTML = '<i class="fas fa-times"></i>';
+        innerCloseBtn.style.position = 'absolute';
+        innerCloseBtn.style.top = '20px';
+        innerCloseBtn.style.right = '20px';
+        innerCloseBtn.style.background = 'none';
+        innerCloseBtn.style.border = 'none';
+        innerCloseBtn.style.fontSize = '20px';
+        innerCloseBtn.style.cursor = 'pointer';
+        
+        innerCloseBtn.addEventListener('click', function() {
+            document.body.removeChild(innerMobileMenu);
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Thêm vào DOM
+        innerMobileMenu.appendChild(innerCloseBtn);
+        innerMobileMenu.appendChild(innerClonedNav);
+        innerMobileMenu.appendChild(innerClonedAuth);
+        document.body.appendChild(innerMobileMenu);
+        document.body.style.overflow = 'hidden';
+    });
+});
+
+    // Thêm sự kiện click cho các nút đăng nhập và đăng ký
+    document.querySelector('.inner-btn-signin').addEventListener('click', function() {
+        window.location.href = '/login';
+    });
+
+    document.querySelector('.inner-btn-signup').addEventListener('click', function() {
+        window.location.href = '/register';
+    });
+    // Thêm sự kiện click cho các liên kết trong menu
+    document.querySelectorAll('.inner-nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            document.body.style.overflow = 'auto';
+        });
+    });
+    // Thêm sự kiện click cho nút đóng trong menu mobile
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.inner-close-btn')) {
+            document.body.style.overflow = 'auto';
+        }
+    });
+</script>
+
+
+
+
+
+
+<footer class="inner-footer">
+    <div class="inner-footer-container">
+        <div class="inner-footer-grid">
+            <!-- Column 1: About -->
+            <div class="inner-footer-col">
+                <div class="inner-footer-logo">
+                    <div class="inner-footer-logo-icon">DP</div>
+                    <div class="inner-footer-logo-text">Drug<span>Free</span></div>
+                </div>
+                <p>Hệ thống phòng ngừa và hỗ trợ cai nghiện ma túy hàng đầu Việt Nam. Chúng tôi cam kết mang lại cuộc sống tốt đẹp hơn cho cộng đồng.</p>
+                
+                <div class="inner-social-links">
+                    <a href="#" class="inner-social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="inner-social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="inner-social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="inner-social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="inner-social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <!-- Column 2: Quick Links -->
+            <div class="inner-footer-col">
+                <h3>Liên kết nhanh</h3>
+                <div class="inner-footer-links">
+                    <ul>
+                        <li><a href="/">Trang chủ</a></li>
+                        <li><a href="/about">Về chúng tôi</a></li>
+                        <li><a href="/services">Dịch vụ</a></li>
+                        <li><a href="/team">Đội ngũ chuyên gia</a></li>
+                        <li><a href="/blog">Bài viết mới</a></li>
+                        <li><a href="/contact">Liên hệ</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Column 3: Services -->
+            <div class="inner-footer-col">
+                <h3>Dịch vụ</h3>
+                <div class="inner-footer-links">
+                    <ul>
+                        <li><a href="/services/education">Giáo dục phòng ngừa</a></li>
+                        <li><a href="/services/assessment">Đánh giá nguy cơ</a></li>
+                        <li><a href="/services/counseling">Tư vấn trực tuyến</a></li>
+                        <li><a href="/services/treatment">Điều trị cai nghiện</a></li>
+                        <li><a href="/services/support">Hỗ trợ sau cai</a></li>
+                        <li><a href="/services/training">Đào tạo chuyên môn</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Column 4: Contact -->
+            <div class="inner-footer-col">
+                <h3>Liên hệ</h3>
+                <ul class="inner-contact-info">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Số 123, Đường ABC, Quận XYZ, TP. Hồ Chí Minh</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone-alt"></i>
+                        <span>Hotline: <a href="tel:18001010">1800.1010</a></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span>Email: <a href="mailto:info@drugfree.vn">info@drugfree.vn</a></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-clock"></i>
+                        <span>Thứ 2 - Thứ 7: 8:00 - 17:00</span>
+                    </li>
+                </ul>
+                
+                <h4>Đăng ký nhận bản tin</h4>
+                <form class="inner-newsletter-form">
+                    <input type="email" placeholder="Email của bạn" class="inner-newsletter-input" required>
+                    <button type="submit" class="inner-newsletter-btn"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="inner-copyright">
+        <div class="inner-copyright-container">
+            <div>© 2023 DrugFree. Bảo lưu mọi quyền.</div>
+            <div class="inner-footer-legal-links">
+                <a href="/privacy">Chính sách bảo mật</a>
+                <a href="/terms">Điều khoản sử dụng</a>
+                <a href="/sitemap">Sơ đồ trang web</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<button class="inner-back-to-top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+<script> 
+    document.addEventListener('DOMContentLoaded', function() {
+    // Back to top button
+    const innerBackToTop = document.querySelector('.inner-back-to-top');
+    
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            innerBackToTop.classList.add('active');
+        } else {
+            innerBackToTop.classList.remove('active');
+        }
+    });
+    
+    innerBackToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Current year for copyright
+    document.querySelector('.inner-copyright div').innerHTML = 
+        `© ${new Date().getFullYear()} DrugFree. Bảo lưu mọi quyền.`;
+});
+    // Thêm sự kiện click cho các liên kết trong footer
+    document.querySelectorAll('.inner-footer-links a, .inner-contact-info a').forEach(link => {
+        link.addEventListener('click', function() {
+            document.body.style.overflow = 'auto';
+        });
+    });
+    // Thêm sự kiện click cho nút đăng ký nhận bản tin
+    document.querySelector('.inner-newsletter-form').addEventListener('submit', function(event)
+    {
+        event.preventDefault();
+        const emailInput = document.querySelector('.inner-newsletter-input');
+        if (emailInput.value) {
+            alert('Cảm ơn bạn đã đăng ký nhận bản tin!');
+            emailInput.value = ''; // Xóa trường nhập sau khi gửi
+        } else {
+            alert('Vui lòng nhập địa chỉ email hợp lệ.');
+        }
+    });
+</script>
+
+

@@ -3,11 +3,12 @@ package com.drug.drug.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 @Controller
 public class HomeController {
     @GetMapping({"/", "/index"})
     public String index() {
-        return "index";
+        return "member/index";
     }
 
     @GetMapping("/login")
@@ -27,6 +28,23 @@ public class HomeController {
 
     @GetMapping("/courses")
     public String courses() {
-        return "courses";
+        return "member/courses";
     }
+    @GetMapping("/assessment")
+    public String assessment() {
+        return "member/assessment";
+    }
+    @GetMapping("/consultation")
+    public String consultation() {
+        return "member/consultation";
+    }
+    @GetMapping("/blog")
+    public String blog() {
+        return "member/blog";
+    }
+    @GetMapping("/about")
+    public String about() {
+        return "member/about";
+    }
+    
 }

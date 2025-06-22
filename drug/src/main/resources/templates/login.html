@@ -21,6 +21,10 @@
             --facebook-color: #3b5998;
             --google-color: #db4437;
             --twitter-color: #1da1f2;
+            --member-color: #6c757d;
+            --staff-color: #17a2b8;
+            --doctor-color: #28a745;
+            --admin-color: #dc3545;
         }
 
         * {
@@ -76,6 +80,67 @@
 
         .login-body {
             padding: 2rem;
+        }
+
+        .role-selection {
+            margin-bottom: 1.5rem;
+        }
+
+        .role-selection label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .role-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .role-option {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .role-option input[type="radio"] {
+            display: none;
+        }
+
+        .role-option label {
+            display: block;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .role-option input[type="radio"]:checked + label {
+            color: white;
+            font-weight: 500;
+        }
+
+        .role-option input[type="radio"]:checked + label.member {
+            background-color: var(--member-color);
+            border-color: var(--member-color);
+        }
+
+        .role-option input[type="radio"]:checked + label.staff {
+            background-color: var(--staff-color);
+            border-color: var(--staff-color);
+        }
+
+        .role-option input[type="radio"]:checked + label.doctor {
+            background-color: var(--doctor-color);
+            border-color: var(--doctor-color);
+        }
+
+        .role-option input[type="radio"]:checked + label.admin {
+            background-color: var(--admin-color);
+            border-color: var(--admin-color);
         }
 
         .form-group {
@@ -256,72 +321,6 @@
             text-decoration: underline;
         }
 
-        .footer {
-            background-color: var(--dark-gray);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            text-align: left;
-        }
-
-        .footer-section h3 {
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            color: var(--accent-color);
-        }
-
-        .footer-section p, 
-        .footer-section a {
-            color: #adb5bd;
-            line-height: 1.6;
-            font-size: 0.9rem;
-        }
-
-        .footer-section a {
-            display: block;
-            text-decoration: none;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.8rem;
-            color: #adb5bd;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-icons a {
-            color: white;
-            font-size: 1.2rem;
-            transition: color 0.3s;
-        }
-
-        .social-icons a:hover {
-            color: var(--accent-color);
-        }
-
         /* Responsive styles */
         @media (max-width: 768px) {
             .login-container {
@@ -334,11 +333,6 @@
 
             .login-body {
                 padding: 1.5rem;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
             }
         }
 
@@ -368,6 +362,14 @@
             .btn, .btn-social {
                 padding: 10px 15px;
             }
+
+            .role-options {
+                flex-direction: column;
+            }
+
+            .role-option {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
@@ -379,7 +381,29 @@
                 <p>Phần mềm hỗ trợ phòng ngừa sử dụng ma túy</p>
             </div>
             <div class="login-body">
-                {% comment %} <form th:action="@{/login}" method="post"> {% endcomment %}
+                <form th:action="@{/login}" method="post">
+                    <div class="role-selection">
+                        <label>Vai trò</label>
+                        <div class="role-options">
+                            <div class="role-option">
+                                <input type="radio" id="member" name="role" value="member" checked>
+                                <label for="member" class="member">Member</label>
+                            </div>
+                            <div class="role-option">
+                                <input type="radio" id="staff" name="role" value="staff">
+                                <label for="staff" class="staff">Staff</label>
+                            </div>
+                            <div class="role-option">
+                                <input type="radio" id="doctor" name="role" value="doctor">
+                                <label for="doctor" class="doctor">Doctor</label>
+                            </div>
+                            <div class="role-option">
+                                <input type="radio" id="admin" name="role" value="admin">
+                                <label for="admin" class="admin">Admin</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="username">Tên đăng nhập</label>
                         <div class="input-icon">
@@ -399,7 +423,7 @@
                             <input type="checkbox" id="remember" name="remember">
                             <label for="remember">Ghi nhớ đăng nhập</label>
                         </div>
-                        <div class="forgot_password">
+                        <div class="forgot-password" id="forgotPasswordLink">
                             <a th:href="@{/forgot-password}">Quên mật khẩu?</a>
                         </div>
                     </div>
@@ -423,13 +447,39 @@
                     </a>
                 </div>
 
-                <div class="register-link">
+                <div class="register-link" id="registerLink">
                     Chưa có tài khoản? <a href="/register">Đăng ký ngay</a>
                 </div>
             </div>
         </div>
     </div>
 
+    <script>
+        // Lấy các phần tử DOM cần thiết
+        const roleRadios = document.querySelectorAll('input[name="role"]');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const registerLink = document.getElementById('registerLink');
 
+        // Ẩn/hiện chức năng đăng ký và quên mật khẩu dựa trên vai trò được chọn
+        function updateUIForRole() {
+            const selectedRole = document.querySelector('input[name="role"]:checked').value;
+            
+            if (selectedRole === 'member') {
+                forgotPasswordLink.style.display = 'block';
+                registerLink.style.display = 'block';
+            } else {
+                forgotPasswordLink.style.display = 'none';
+                registerLink.style.display = 'none';
+            }
+        }
+
+        // Thêm sự kiện change cho tất cả radio button vai trò
+        roleRadios.forEach(radio => {
+            radio.addEventListener('change', updateUIForRole);
+        });
+
+        // Khởi tạo UI lần đầu
+        updateUIForRole();
+    </script>
 </body>
 </html>

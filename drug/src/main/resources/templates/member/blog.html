@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Phòng ngừa Ma túy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/layout.css}">  
+
+    <style>
+        /* CSS Reset và Biến */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --text-color: #333;
+            --text-light: #7f8c8d;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 30px;
+            padding: 30px 0;
+        }
+        
+        .content-area {
+            flex: 3;
+        }
+        
+        .sidebar {
+            flex: 1;
+        }
+        
+        /* Header Blog */
+        .blog-header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .blog-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .blog-header p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-group h3 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            padding: 8px 15px;
+            background-color: var(--light-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-top: 20px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        /* Bài viết */
+        .post {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .post-thumbnail {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .post-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .post:hover .post-thumbnail img {
+            transform: scale(1.05);
+        }
+        
+        .post-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: var(--border-radius);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .post-content {
+            padding: 25px;
+        }
+        
+        .post-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .post-meta span {
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-meta i {
+            margin-right: 5px;
+        }
+        
+        .post-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        
+        .post-excerpt {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .read-more {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .read-more:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Video Post */
+        .video-post .post-thumbnail {
+            position: relative;
+        }
+        
+        .video-post .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .video-post .play-btn i {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-left: 5px;
+        }
+        
+        .video-post:hover .play-btn {
+            background-color: white;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        /* Sidebar */
+        .sidebar-widget {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .widget-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            color: var(--secondary-color);
+        }
+        
+        .popular-posts .post-item {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .popular-posts .post-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .popular-posts .post-thumb {
+            width: 80px;
+            height: 60px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .popular-posts .post-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .popular-posts .post-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .popular-posts .post-info .post-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .categories-list {
+            list-style: none;
+        }
+        
+        .categories-list li {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .categories-list li:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .categories-list a {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .categories-list a:hover {
+            color: var(--primary-color);
+        }
+        
+        .categories-list span {
+            background-color: var(--light-color);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .tags-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background-color: var(--light-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .newsletter-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+        
+        .newsletter-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .newsletter-form button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Phân trang */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .page-numbers {
+            display: flex;
+            list-style: none;
+        }
+        
+        .page-numbers li {
+            margin: 0 5px;
+        }
+        
+        .page-numbers a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            color: var(--text-color);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+        
+        .page-numbers a:hover, .page-numbers a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .post-thumbnail {
+                height: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .filter-options {
+                gap: 8px;
+            }
+            
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .post-content {
+                padding: 20px;
+            }
+            
+            .post-title {
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .blog-header {
+                padding: 40px 0;
+            }
+            
+            .blog-header h1 {
+                font-size: 2rem;
+            }
+            
+            .post-meta {
+                flex-wrap: wrap;
+            }
+            
+            .post-meta span {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header từ Thymeleaf -->
+    
+<header class="inner-header">
+    <div class="inner-header-container">
+        <a href="/" class="inner-logo-container">
+            <div class="inner-logo-icon">DP</div>
+            <div class="inner-logo-text">Drug<span>Free</span></div>
+        </a>
+        
+        <nav class="inner-nav-menu">
+            <a href="/" class="inner-nav-link active">Trang chủ</a>
+            <a href="/courses" class="inner-nav-link">Khóa học</a>
+            <a href="/assessment" class="inner-nav-link">Đánh giá nguy cơ</a>
+            <a href="/consultation" class="inner-nav-link">Tư vấn</a>
+            <a href="/blog" class="inner-nav-link">Blog</a>
+            <a href="/about" class="inner-nav-link">Về chúng tôi</a>
+        </nav>
+        
+        <div class="inner-auth-buttons">
+            <button class="inner-btn-signin">Đăng nhập</button>
+            <button class="inner-btn-signup">Đăng ký</button>
+        </div>
+        
+        <button class="inner-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</header>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const innerMenuToggle = document.querySelector('.inner-menu-toggle');
+    const innerNavMenu = document.querySelector('.inner-nav-menu');
+    const innerAuthButtons = document.querySelector('.inner-auth-buttons');
+    
+    innerMenuToggle.addEventListener('click', function() {
+        // Tạo menu mobile tạm thời
+        const innerMobileMenu = document.createElement('div');
+        innerMobileMenu.className = 'inner-mobile-menu';
+        innerMobileMenu.style.position = 'fixed';
+        innerMobileMenu.style.top = '0';
+        innerMobileMenu.style.right = '0';
+        innerMobileMenu.style.width = '280px';
+        innerMobileMenu.style.height = '100vh';
+        innerMobileMenu.style.backgroundColor = 'white';
+        innerMobileMenu.style.boxShadow = '-5px 0 15px rgba(0,0,0,0.1)';
+        innerMobileMenu.style.padding = '80px 20px 20px';
+        innerMobileMenu.style.zIndex = '1000';
+        
+        // Clone các phần tử menu
+        const innerClonedNav = innerNavMenu.cloneNode(true);
+        innerClonedNav.style.display = 'flex';
+        innerClonedNav.style.flexDirection = 'column';
+        innerClonedNav.style.gap = '10px';
+        innerClonedNav.querySelectorAll('.inner-nav-link').forEach(link => {
+            link.style.padding = '12px 16px';
+        });
+        
+        const innerClonedAuth = innerAuthButtons.cloneNode(true);
+        innerClonedAuth.style.display = 'flex';
+        innerClonedAuth.style.flexDirection = 'column';
+        innerClonedAuth.style.gap = '10px';
+        innerClonedAuth.style.marginTop = '20px';
+        innerClonedAuth.querySelectorAll('button').forEach(btn => {
+            btn.style.width = '100%';
+        });
+        
+        // Thêm nút đóng
+        const innerCloseBtn = document.createElement('button');
+        innerCloseBtn.innerHTML = '<i class="fas fa-times"></i>';
+        innerCloseBtn.style.position = 'absolute';
+        innerCloseBtn.style.top = '20px';
+        innerCloseBtn.style.right = '20px';
+        innerCloseBtn.style.background = 'none';
+        innerCloseBtn.style.border = 'none';
+        innerCloseBtn.style.fontSize = '20px';
+        innerCloseBtn.style.cursor = 'pointer';
+        
+        innerCloseBtn.addEventListener('click', function() {
+            document.body.removeChild(innerMobileMenu);
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Thêm vào DOM
+        innerMobileMenu.appendChild(innerCloseBtn);
+        innerMobileMenu.appendChild(innerClonedNav);
+        innerMobileMenu.appendChild(innerClonedAuth);
+        document.body.appendChild(innerMobileMenu);
+        document.body.style.overflow = 'hidden';
+    });
+});
+
+    // Thêm sự kiện click cho các nút đăng nhập và đăng ký
+    document.querySelector('.inner-btn-signin').addEventListener('click', function() {
+        window.location.href = '/login';
+    });
+
+    document.querySelector('.inner-btn-signup').addEventListener('click', function() {
+        window.location.href = '/register';
+    });
+    // Thêm sự kiện click cho các liên kết trong menu
+    document.querySelectorAll('.inner-nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            document.body.style.overflow = 'auto';
+        });
+    });
+    // Thêm sự kiện click cho nút đóng trong menu mobile
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.inner-close-btn')) {
+            document.body.style.overflow = 'auto';
+        }
+    });
+</script>
+
+    <!-- Blog Header -->
+    <header class="blog-header">
+        <div class="container">
+            <h1>Kiến thức Phòng ngừa Ma túy</h1>
+            <p>Cập nhật tin tức, chia sẻ kinh nghiệm, tâm sự và video hữu ích về phòng chống ma túy trong cộng đồng</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Nội dung chính -->
+            <main class="content-area">
+                <!-- Bộ lọc -->
+                <section class="filter-section">
+                    <div class="filter-group">
+                        <h3>Loại nội dung:</h3>
+                        <div class="filter-options">
+                            <button class="filter-btn active">Tất cả</button>
+                            <button class="filter-btn">Tin tức</button>
+                            <button class="filter-btn">Kinh nghiệm</button>
+                            <button class="filter-btn">Tâm sự</button>
+                            <button class="filter-btn">Video</button>
+                            <button class="filter-btn">Nghiên cứu</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h3>Đối tượng:</h3>
+                        <div class="filter-options">
+                            <button class="filter-btn">Học sinh</button>
+                            <button class="filter-btn">Sinh viên</button>
+                            <button class="filter-btn">Phụ huynh</button>
+                            <button class="filter-btn">Giáo viên</button>
+                            <button class="filter-btn">Người nghiện</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h3>Chủ đề:</h3>
+                        <div class="filter-options">
+                            <button class="filter-btn">Nhận biết</button>
+                            <button class="filter-btn">Phòng tránh</button>
+                            <button class="filter-btn">Cai nghiện</button>
+                            <button class="filter-btn">Hậu quả</button>
+                            <button class="filter-btn">Pháp luật</button>
+                        </div>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Tìm kiếm bài viết...">
+                    </div>
+                </section>
+
+                <!-- Danh sách bài viết -->
+                <article class="post">
+                    <div class="post-thumbnail">
+                        <img src="https://via.placeholder.com/800x450" alt="Hình ảnh bài viết">
+                        <span class="post-badge">Tin tức</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span><i class="far fa-calendar-alt"></i> 15/06/2023</span>
+                            <span><i class="far fa-user"></i> Admin</span>
+                            <span><i class="far fa-eye"></i> 1.2K lượt xem</span>
+                            <span><i class="far fa-comments"></i> 45 bình luận</span>
+                        </div>
+                        <h2 class="post-title">Cảnh báo ma túy trá hình dưới dạng kẹo, thuốc lá điện tử trong trường học</h2>
+                        <p class="post-excerpt">Các cơ quan chức năng vừa phát hiện nhiều loại ma túy trá hình dưới dạng kẹo, bánh, thuốc lá điện tử đang được rao bán tràn lan trên mạng xã hội, nhắm vào đối tượng học sinh, sinh viên...</p>
+                        <a href="#" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+
+                <!-- Bài viết video -->
+                <article class="post video-post">
+                    <div class="post-thumbnail">
+                        <img src="https://via.placeholder.com/800x450" alt="Video thumbnail">
+                        <div class="play-btn">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <span class="post-badge">Video</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span><i class="far fa-calendar-alt"></i> 10/06/2023</span>
+                            <span><i class="far fa-user"></i> Chuyên gia tư vấn</span>
+                            <span><i class="far fa-eye"></i> 2.5K lượt xem</span>
+                            <span><i class="far fa-comments"></i> 68 bình luận</span>
+                        </div>
+                        <h2 class="post-title">Kỹ năng từ chối ma túy - Cách nói KHÔNG hiệu quả</h2>
+                        <p class="post-excerpt">Video hướng dẫn các kỹ năng cần thiết để từ chối ma túy trong các tình huống xã hội, giúp bạn tự tin bảo vệ bản thân và bạn bè...</p>
+                        <a href="#" class="read-more">Xem video</a>
+                    </div>
+                </article>
+
+                <!-- Bài viết tâm sự -->
+                <article class="post">
+                    <div class="post-thumbnail">
+                        <img src="https://via.placeholder.com/800x450" alt="Hình ảnh bài viết">
+                        <span class="post-badge">Tâm sự</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span><i class="far fa-calendar-alt"></i> 05/06/2023</span>
+                            <span><i class="far fa-user"></i> Người từng nghiện</span>
+                            <span><i class="far fa-eye"></i> 3.1K lượt xem</span>
+                            <span><i class="far fa-comments"></i> 92 bình luận</span>
+                        </div>
+                        <h2 class="post-title">Hành trình thoát khỏi ma túy của tôi - Phần 1: Những ngày đầu sa ngã</h2>
+                        <p class="post-excerpt">Tôi từng là sinh viên giỏi của một trường đại học danh tiếng, nhưng chỉ sau một lần thử ma túy "cho biết", cuộc đời tôi rẽ sang một hướng khác...</p>
+                        <a href="#" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+
+                <!-- Bài viết kinh nghiệm -->
+                <article class="post">
+                    <div class="post-thumbnail">
+                        <img src="https://via.placeholder.com/800x450" alt="Hình ảnh bài viết">
+                        <span class="post-badge">Kinh nghiệm</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span><i class="far fa-calendar-alt"></i> 01/06/2023</span>
+                            <span><i class="far fa-user"></i> Phụ huynh</span>
+                            <span><i class="far fa-eye"></i> 1.8K lượt xem</span>
+                            <span><i class="far fa-comments"></i> 34 bình luận</span>
+                        </div>
+                        <h2 class="post-title">Làm thế nào để phát hiện con em mình sử dụng ma túy?</h2>
+                        <p class="post-excerpt">Là một người mẹ đã từng trải qua cú sốc khi phát hiện con trai sử dụng ma túy, tôi muốn chia sẻ những dấu hiệu nhận biết và cách tiếp cận vấn đề này...</p>
+                        <a href="#" class="read-more">Đọc tiếp</a>
+                    </div>
+                </article>
+
+                <!-- Phân trang -->
+                <div class="pagination">
+                    <ul class="page-numbers">
+                        <li><a href="#"><i class="fas fa-chevron-left"></i></a></li>
+                        <li><a href="#" class="active">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i></a></li>
+                    </ul>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Bài viết phổ biến -->
+                <div class="sidebar-widget popular-posts">
+                    <h3 class="widget-title">Bài viết nổi bật</h3>
+                    <div class="post-item">
+                        <div class="post-thumb">
+                            <img src="https://via.placeholder.com/100x75" alt="Bài viết nhỏ">
+                        </div>
+                        <div class="post-info">
+                            <h4>10 dấu hiệu nhận biết người sử dụng ma túy</h4>
+                            <span class="post-date">12/05/2023</span>
+                        </div>
+                    </div>
+                    <div class="post-item">
+                        <div class="post-thumb">
+                            <img src="https://via.placeholder.com/100x75" alt="Bài viết nhỏ">
+                        </div>
+                        <div class="post-info">
+                            <h4>Các loại ma túy phổ biến và tác hại của chúng</h4>
+                            <span class="post-date">08/05/2023</span>
+                        </div>
+                    </div>
+                    <div class="post-item">
+                        <div class="post-thumb">
+                            <img src="https://via.placeholder.com/100x75" alt="Bài viết nhỏ">
+                        </div>
+                        <div class="post-info">
+                            <h4>Hướng dẫn sơ cứu khi gặp người ngộ độc ma túy</h4>
+                            <span class="post-date">25/04/2023</span>
+                        </div>
+                    </div>
+                    <div class="post-item">
+                        <div class="post-thumb">
+                            <img src="https://via.placeholder.com/100x75" alt="Bài viết nhỏ">
+                        </div>
+                        <div class="post-info">
+                            <h4>Câu chuyện vượt qua cơn nghiện sau 5 năm</h4>
+                            <span class="post-date">18/04/2023</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danh mục -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">Danh mục</h3>
+                    <ul class="categories-list">
+                        <li><a href="#">Tin tức <span>24</span></a></li>
+                        <li><a href="#">Kinh nghiệm <span>18</span></a></li>
+                        <li><a href="#">Tâm sự <span>32</span></a></li>
+                        <li><a href="#">Video <span>15</span></a></li>
+                        <li><a href="#">Nghiên cứu <span>9</span></a></li>
+                        <li><a href="#">Phòng tránh <span>27</span></a></li>
+                        <li><a href="#">Cai nghiện <span>12</span></a></li>
+                    </ul>
+                </div>
+
+                <!-- Thẻ tag -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">Thẻ phổ biến</h3>
+                    <div class="tags-cloud">
+                        <a href="#" class="tag">ma túy đá</a>
+                        <a href="#" class="tag">heroin</a>
+                        <a href="#" class="tag">cần sa</a>
+                        <a href="#" class="tag">thuốc lắc</a>
+                        <a href="#" class="tag">phòng tránh</a>
+                        <a href="#" class="tag">dấu hiệu</a>
+                        <a href="#" class="tag">cai nghiện</a>
+                        <a href="#" class="tag">tư vấn</a>
+                        <a href="#" class="tag">học đường</a>
+                        <a href="#" class="tag">hậu quả</a>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">Nhận bản tin</h3>
+                    <p>Đăng ký để nhận thông tin mới nhất qua email</p>
+                    <form class="newsletter-form">
+                        <input type="text" placeholder="Họ và tên">
+                        <input type="email" placeholder="Email của bạn">
+                        <button type="submit">Đăng ký ngay</button>
+                    </form>
+                </div>
+
+                <!-- Banner quảng cáo/tư vấn -->
+                <div class="sidebar-widget">
+                    <div style="background-color: #e3f2fd; padding: 20px; border-radius: var(--border-radius); text-align: center;">
+                        <h3 style="margin-bottom: 15px; color: var(--secondary-color);">Cần tư vấn?</h3>
+                        <p style="margin-bottom: 15px;">Liên hệ ngay với chuyên viên của chúng tôi</p>
+                        <a href="#" style="display: inline-block; padding: 10px 20px; background-color: var(--primary-color); color: white; border-radius: var(--border-radius); text-decoration: none;">Đặt lịch hẹn</a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer từ Thymeleaf -->
+   
+
+    <script>
+        // Lọc bài viết
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Xóa active khỏi tất cả các nút
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // Thêm active cho nút được click
+                    this.classList.add('active');
+                    
+                    // Trong thực tế, ở đây sẽ gọi AJAX để lọc bài viết
+                    // hoặc lọc client-side nếu dữ liệu đã có sẵn
+                    console.log('Lọc theo: ', this.textContent);
+                });
+            });
+            
+            // Xử lý nút play video
+            const playBtns = document.querySelectorAll('.play-btn');
+            playBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Trong thực tế sẽ mở video hoặc chuyển đến trang video
+                    console.log('Play video');
+                    window.location.href = '#';
+                });
+            });
+            
+            // Xử lý tìm kiếm
+            const searchInput = document.querySelector('.search-box input');
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    // Thực hiện tìm kiếm
+                    console.log('Tìm kiếm: ', this.value);
+                    // Trong thực tế sẽ gửi AJAX request hoặc chuyển trang
+                }
+            });
+            
+            // Xử lý đăng ký newsletter
+            const newsletterForm = document.querySelector('.newsletter-form');
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = this.querySelector('input[type="text"]').value;
+                const email = this.querySelector('input[type="email"]').value;
+                
+                // Trong thực tế sẽ gửi dữ liệu đến server
+                console.log('Đăng ký newsletter:', { name, email });
+                alert('Cảm ơn bạn đã đăng ký nhận bản tin!');
+                this.reset();
+            });
+        });
+    </script>
+</body>
+</html>

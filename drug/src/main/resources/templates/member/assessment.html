@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{assessment.page.title}">Đánh giá nguy cơ | Hệ thống phòng ngừa ma túy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/layout.css}">
+    <style>
+        /* CSS Styles */
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fc;
+        }
+        
+        .assessment-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .assessment-header {
+            background-color: var(--light-color);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            background-image: url('/images/assessment-bg.png');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .assessment-title {
+            color: var(--dark-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .assessment-subtitle {
+            color: #5a5c69;
+            max-width: 800px;
+        }
+        
+        /* Filter section */
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .filter-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Assessment cards */
+        .assessment-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            height: 100%;
+        }
+        
+        .assessment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .assessment-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #5a5c69;
+        }
+        
+        .assessment-description {
+            margin-bottom: 1.5rem;
+            color: #5a5c69;
+        }
+        
+        .assessment-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        /* Result modal */
+        .result-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1050;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .result-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+        
+        .result-header {
+            border-bottom: 1px solid #e3e6f0;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .risk-level {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .risk-low {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .risk-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .risk-high {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .result-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .recommendation-list {
+            padding-left: 1.5rem;
+        }
+        
+        .recommendation-list li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .resource-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .resource-card {
+            flex: 1 1 300px;
+            border: 1px solid #e3e6f0;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .resource-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .assessment-header {
+                padding: 1.5rem;
+            }
+            
+            .assessment-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .assessment-container {
+                padding: 1rem;
+            }
+            
+            .result-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="inner-header">
+    <div class="inner-header-container">
+        <a href="/" class="inner-logo-container">
+            <div class="inner-logo-icon">DP</div>
+            <div class="inner-logo-text">Drug<span>Free</span></div>
+        </a>
+        
+        <nav class="inner-nav-menu">
+            <a href="/" class="inner-nav-link active">Trang chủ</a>
+            <a href="/courses" class="inner-nav-link">Khóa học</a>
+            <a href="/assessment" class="inner-nav-link">Đánh giá nguy cơ</a>
+            <a href="/consultation" class="inner-nav-link">Tư vấn</a>
+            <a href="/blog" class="inner-nav-link">Blog</a>
+            <a href="/about" class="inner-nav-link">Về chúng tôi</a>
+        </nav>
+        
+        <div class="inner-auth-buttons">
+            <button class="inner-btn-signin">Đăng nhập</button>
+            <button class="inner-btn-signup">Đăng ký</button>
+        </div>
+        
+        <button class="inner-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</header>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const innerMenuToggle = document.querySelector('.inner-menu-toggle');
+    const innerNavMenu = document.querySelector('.inner-nav-menu');
+    const innerAuthButtons = document.querySelector('.inner-auth-buttons');
+    
+    innerMenuToggle.addEventListener('click', function() {
+        // Tạo menu mobile tạm thời
+        const innerMobileMenu = document.createElement('div');
+        innerMobileMenu.className = 'inner-mobile-menu';
+        innerMobileMenu.style.position = 'fixed';
+        innerMobileMenu.style.top = '0';
+        innerMobileMenu.style.right = '0';
+        innerMobileMenu.style.width = '280px';
+        innerMobileMenu.style.height = '100vh';
+        innerMobileMenu.style.backgroundColor = 'white';
+        innerMobileMenu.style.boxShadow = '-5px 0 15px rgba(0,0,0,0.1)';
+        innerMobileMenu.style.padding = '80px 20px 20px';
+        innerMobileMenu.style.zIndex = '1000';
+        
+        // Clone các phần tử menu
+        const innerClonedNav = innerNavMenu.cloneNode(true);
+        innerClonedNav.style.display = 'flex';
+        innerClonedNav.style.flexDirection = 'column';
+        innerClonedNav.style.gap = '10px';
+        innerClonedNav.querySelectorAll('.inner-nav-link').forEach(link => {
+            link.style.padding = '12px 16px';
+        });
+        
+        const innerClonedAuth = innerAuthButtons.cloneNode(true);
+        innerClonedAuth.style.display = 'flex';
+        innerClonedAuth.style.flexDirection = 'column';
+        innerClonedAuth.style.gap = '10px';
+        innerClonedAuth.style.marginTop = '20px';
+        innerClonedAuth.querySelectorAll('button').forEach(btn => {
+            btn.style.width = '100%';
+        });
+        
+        // Thêm nút đóng
+        const innerCloseBtn = document.createElement('button');
+        innerCloseBtn.innerHTML = '<i class="fas fa-times"></i>';
+        innerCloseBtn.style.position = 'absolute';
+        innerCloseBtn.style.top = '20px';
+        innerCloseBtn.style.right = '20px';
+        innerCloseBtn.style.background = 'none';
+        innerCloseBtn.style.border = 'none';
+        innerCloseBtn.style.fontSize = '20px';
+        innerCloseBtn.style.cursor = 'pointer';
+        
+        innerCloseBtn.addEventListener('click', function() {
+            document.body.removeChild(innerMobileMenu);
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Thêm vào DOM
+        innerMobileMenu.appendChild(innerCloseBtn);
+        innerMobileMenu.appendChild(innerClonedNav);
+        innerMobileMenu.appendChild(innerClonedAuth);
+        document.body.appendChild(innerMobileMenu);
+        document.body.style.overflow = 'hidden';
+    });
+});
+
+    // Thêm sự kiện click cho các nút đăng nhập và đăng ký
+    document.querySelector('.inner-btn-signin').addEventListener('click', function() {
+        window.location.href = '/login';
+    });
+
+    document.querySelector('.inner-btn-signup').addEventListener('click', function() {
+        window.location.href = '/register';
+    });
+    // Thêm sự kiện click cho các liên kết trong menu
+    document.querySelectorAll('.inner-nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            document.body.style.overflow = 'auto';
+        });
+    });
+    // Thêm sự kiện click cho nút đóng trong menu mobile
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.inner-close-btn')) {
+            document.body.style.overflow = 'auto';
+        }
+    });
+</script>
+
+    <main class="assessment-container">
+        <!-- Header section -->
+        <div class="assessment-header">
+            <h1 class="assessment-title" th:text="#{assessment.title}">Đánh giá nguy cơ sử dụng ma túy</h1>
+            <p class="assessment-subtitle" th:text="#{assessment.subtitle}">
+                Hệ thống cung cấp các công cụ đánh giá khoa học giúp xác định mức độ nguy cơ và cung cấp khuyến nghị phù hợp.
+                Thực hiện bài đánh giá để nhận kết quả cá nhân hóa.
+            </p>
+        </div>
+
+        <!-- Filter section -->
+        <div class="filter-section">
+            <h3 class="filter-title"><i class="fas fa-filter me-2"></i><span th:text="#{assessment.filter.title}">Lọc bài đánh giá</span></h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="assessmentType" class="form-label" th:text="#{assessment.filter.type}">Loại đánh giá</label>
+                    <select class="form-select" id="assessmentType">
+                        <option value="all" selected th:text="#{assessment.filter.all}">Tất cả</option>
+                        <option value="screening" th:text="#{assessment.filter.screening}">Sàng lọc</option>
+                        <option value="diagnostic" th:text="#{assessment.filter.diagnostic}">Chẩn đoán</option>
+                        <option value="risk" th:text="#{assessment.filter.risk}">Đánh giá nguy cơ</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="assessmentTarget" class="form-label" th:text="#{assessment.filter.target}">Đối tượng</label>
+                    <select class="form-select" id="assessmentTarget">
+                        <option value="all" selected th:text="#{assessment.filter.all}">Tất cả</option>
+                        <option value="teen" th:text="#{assessment.filter.teen}">Thanh thiếu niên (12-18)</option>
+                        <option value="young" th:text="#{assessment.filter.young}">Thanh niên (18-25)</option>
+                        <option value="adult" th:text="#{assessment.filter.adult}">Người trưởng thành (25+)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="assessmentDuration" class="form-label" th:text="#{assessment.filter.duration}">Thời lượng</label>
+                    <select class="form-select" id="assessmentDuration">
+                        <option value="all" selected th:text="#{assessment.filter.all}">Tất cả</option>
+                        <option value="short" th:text="#{assessment.filter.short}">Ngắn (<5 phút)</option>
+                        <option value="medium" th:text="#{assessment.filter.medium}">Trung bình (5-10 phút)</option>
+                        <option value="long" th:text="#{assessment.filter.long}">Dài (>10 phút)</option>
+                    </select>
+                </div>
+                <div class="col-12 mt-3">
+                    <button id="filterBtn" class="btn btn-primary me-2" th:text="#{assessment.filter.apply}">Áp dụng bộ lọc</button>
+                    <button id="resetBtn" class="btn btn-outline-secondary" th:text="#{assessment.filter.reset}">Đặt lại</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessments list -->
+        <div class="row" id="assessmentsList">
+            <!-- Assessment 1 - ASSIST -->
+            <div class="col-lg-6" data-type="screening" data-target="teen,young,adult" data-duration="medium">
+                <div class="assessment-card">
+                    <div class="card-header">
+                        <i class="fas fa-clipboard-check me-2"></i> ASSIST - Đánh giá nguy cơ sử dụng chất
+                    </div>
+                    <div class="card-body">
+                        <div class="assessment-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-user-tag"></i> Thanh thiếu niên & Người lớn
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-clock"></i> 8-10 phút
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-question-circle"></i> 8 phần
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-chart-bar"></i> Tiêu chuẩn WHO
+                            </span>
+                        </div>
+                        
+                        <div class="assessment-description">
+                            Bài kiểm tra theo tiêu chuẩn của Tổ chức Y tế Thế giới (WHO) để đánh giá mức độ sử dụng các chất gây nghiện và nguy cơ liên quan.
+                        </div>
+                        
+                        <div class="assessment-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Phù hợp cho:</span>
+                                Người cần đánh giá toàn diện về sử dụng chất gây nghiện
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Đánh giá:</span>
+                                Rượu, thuốc lá, ma túy, chất kích thích
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Độ chính xác:</span>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-success" style="width: 92%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="/assessments/assist" class="btn btn-primary">
+                            <i class="fas fa-play-circle me-2"></i> Bắt đầu đánh giá
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessment 2 - CRAFFT -->
+            <div class="col-lg-6" data-type="screening" data-target="teen,young" data-duration="short">
+                <div class="assessment-card">
+                    <div class="card-header">
+                        <i class="fas fa-clipboard-list me-2"></i> CRAFFT - Sàng lọc thanh thiếu niên
+                    </div>
+                    <div class="card-body">
+                        <div class="assessment-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-user-tag"></i> Thanh thiếu niên (12-18)
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-clock"></i> 3-5 phút
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-question-circle"></i> 6 câu hỏi
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-chart-bar"></i> Tiêu chuẩn quốc tế
+                            </span>
+                        </div>
+                        
+                        <div class="assessment-description">
+                            Công cụ sàng lọc nhanh được thiết kế đặc biệt cho thanh thiếu niên, giúp phát hiện sớm nguy cơ lạm dụng chất.
+                        </div>
+                        
+                        <div class="assessment-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Phù hợp cho:</span>
+                                Thanh thiếu niên từ 12-18 tuổi
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Đánh giá:</span>
+                                Rượu, cần sa, chất kích thích
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Độ chính xác:</span>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-success" style="width: 88%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="/assessments/crafft" class="btn btn-primary">
+                            <i class="fas fa-play-circle me-2"></i> Bắt đầu đánh giá
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessment 3 - DAST-10 -->
+            <div class="col-lg-6" data-type="diagnostic" data-target="young,adult" data-duration="medium">
+                <div class="assessment-card">
+                    <div class="card-header">
+                        <i class="fas fa-vial me-2"></i> DAST-10 - Đánh giá lạm dụng ma túy
+                    </div>
+                    <div class="card-body">
+                        <div class="assessment-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-user-tag"></i> Người trưởng thành
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-clock"></i> 5-7 phút
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-question-circle"></i> 10 câu hỏi
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-chart-bar"></i> Đã được kiểm chứng
+                            </span>
+                        </div>
+                        
+                        <div class="assessment-description">
+                            Bảng câu hỏi ngắn giúp xác định các vấn đề liên quan đến lạm dụng ma túy ở người trưởng thành.
+                        </div>
+                        
+                        <div class="assessment-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Phù hợp cho:</span>
+                                Người nghi ngờ có vấn đề với ma túy
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Đánh giá:</span>
+                                Lạm dụng ma túy, hậu quả sử dụng
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Độ chính xác:</span>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-success" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="/assessments/dast-10" class="btn btn-primary">
+                            <i class="fas fa-play-circle me-2"></i> Bắt đầu đánh giá
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessment 4 - AUDIT -->
+            <div class="col-lg-6" data-type="risk" data-target="young,adult" data-duration="medium">
+                <div class="assessment-card">
+                    <div class="card-header">
+                        <i class="fas fa-wine-glass-alt me-2"></i> AUDIT - Đánh giá sử dụng rượu
+                    </div>
+                    <div class="card-body">
+                        <div class="assessment-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-user-tag"></i> Người trưởng thành
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-clock"></i> 5-8 phút
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-question-circle"></i> 10 câu hỏi
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-chart-bar"></i> Tiêu chuẩn WHO
+                            </span>
+                        </div>
+                        
+                        <div class="assessment-description">
+                            Công cụ đánh giá mức độ sử dụng rượu và nguy cơ phát triển các vấn đề liên quan đến rượu.
+                        </div>
+                        
+                        <div class="assessment-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Phù hợp cho:</span>
+                                Người thường xuyên sử dụng rượu bia
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Đánh giá:</span>
+                                Mức độ uống rượu, hậu quả, nguy cơ nghiện
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Độ chính xác:</span>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-success" style="width: 90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="/assessments/audit" class="btn btn-primary">
+                            <i class="fas fa-play-circle me-2"></i> Bắt đầu đánh giá
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Result Modal -->
+    <div class="result-modal" id="resultModal">
+        <div class="result-content">
+            <div class="result-header">
+                <h3><i class="fas fa-clipboard-check me-2"></i> Kết quả đánh giá</h3>
+                <button class="btn-close" id="closeModal"></button>
+            </div>
+            
+            <div class="result-section">
+                <h5>Bài kiểm tra: <strong id="resultAssessmentName">ASSIST - Đánh giá nguy cơ sử dụng chất</strong></h5>
+                <p>Hoàn thành vào: <strong id="resultDate">15/10/2023 14:30</strong></p>
+            </div>
+            
+            <div class="result-section">
+                <h5 class="section-title"><i class="fas fa-thermometer-half"></i> Mức độ nguy cơ</h5>
+                <span class="risk-level risk-medium" id="riskLevel">Nguy cơ trung bình</span>
+                <p id="riskDescription">
+                    Kết quả cho thấy bạn có một số hành vi sử dụng chất có thể dẫn đến nguy cơ. 
+                    Bạn nên thận trọng và xem xét thay đổi thói quen để giảm thiểu rủi ro.
+                </p>
+            </div>
+            
+            <div class="result-section">
+                <h5 class="section-title"><i class="fas fa-chart-pie"></i> Chi tiết kết quả</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="detail-item">
+                            <span class="detail-label">Rượu:</span>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-warning" style="width: 65%"></div>
+                            </div>
+                            <small>Nguy cơ trung bình</small>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Thuốc lá:</span>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-success" style="width: 30%"></div>
+                            </div>
+                            <small>Nguy cơ thấp</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="detail-item">
+                            <span class="detail-label">Cần sa:</span>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-danger" style="width: 80%"></div>
+                            </div>
+                            <small>Nguy cơ cao</small>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Chất kích thích:</span>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-success" style="width: 15%"></div>
+                            </div>
+                            <small>Nguy cơ thấp</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-section">
+                <h5 class="section-title"><i class="fas fa-lightbulb"></i> Khuyến nghị</h5>
+                <ul class="recommendation-list">
+                    <li>Hạn chế sử dụng rượu bia, không quá 1 ly/ngày</li>
+                    <li>Ngừng sử dụng cần sa ngay lập tức</li>
+                    <li>Tham gia chương trình tư vấn về sử dụng chất</li>
+                    <li>Tìm hiểu các chiến lược đối phó với căng thẳng thay thế</li>
+                    <li>Kiểm tra sức khỏe định kỳ</li>
+                </ul>
+            </div>
+            
+            <div class="result-section">
+                <h5 class="section-title"><i class="fas fa-book"></i> Tài liệu tham khảo</h5>
+                <div class="resource-list">
+                    <div class="resource-card">
+                        <div class="resource-title">Hướng dẫn cai nghiện tại nhà</div>
+                        <p>Tài liệu hướng dẫn các bước đầu tiên để giảm thiểu sử dụng chất</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Tải xuống</a>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-title">Danh sách trung tâm hỗ trợ</div>
+                        <p>Các địa chỉ uy tín cung cấp dịch vụ tư vấn và điều trị</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-section text-center mt-4">
+                <button class="btn btn-primary btn-lg me-3" id="saveResult">
+                    <i class="fas fa-download me-2"></i> Lưu kết quả
+                </button>
+                <button class="btn btn-success btn-lg" id="scheduleConsult">
+                    <i class="fas fa-calendar-check me-2"></i> Đặt lịch tư vấn
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter assessments
+            document.getElementById('filterBtn').addEventListener('click', function() {
+                const type = document.getElementById('assessmentType').value;
+                const target = document.getElementById('assessmentTarget').value;
+                const duration = document.getElementById('assessmentDuration').value;
+                
+                document.querySelectorAll('#assessmentsList > div').forEach(assessment => {
+                    const showAssessment = 
+                        (type === 'all' || assessment.dataset.type === type) &&
+                        (target === 'all' || assessment.dataset.target.includes(target)) &&
+                        (duration === 'all' || assessment.dataset.duration === duration);
+                    
+                    assessment.style.display = showAssessment ? 'block' : 'none';
+                });
+            });
+            
+            // Reset filters
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                document.getElementById('assessmentType').value = 'all';
+                document.getElementById('assessmentTarget').value = 'all';
+                document.getElementById('assessmentDuration').value = 'all';
+                
+                document.querySelectorAll('#assessmentsList > div').forEach(assessment => {
+                    assessment.style.display = 'block';
+                });
+            });
+            
+            // Simulate assessment completion (for demo)
+            const assessmentLinks = document.querySelectorAll('.assessment-card a.btn-primary');
+            assessmentLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Set result based on assessment
+                    const assessmentName = this.closest('.assessment-card').querySelector('.card-header').textContent.trim();
+                    document.getElementById('resultAssessmentName').textContent = assessmentName;
+                    
+                    // Show modal
+                    document.getElementById('resultModal').style.display = 'flex';
+                });
+            });
+            
+            // Close modal
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('resultModal').style.display = 'none';
+            });
+            
+            // Close when clicking outside
+            document.getElementById('resultModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+            
+            // Save result button
+            document.getElementById('saveResult').addEventListener('click', function() {
+                alert('Kết quả đã được lưu vào tài khoản của bạn');
+            });
+            
+            // Schedule consultation
+            document.getElementById('scheduleConsult').addEventListener('click', function() {
+                alert('Bạn sẽ được chuyển đến trang đặt lịch tư vấn');
+            });
+        });
+        /*]]>*/
+    </script>
+</body>
+</html>
