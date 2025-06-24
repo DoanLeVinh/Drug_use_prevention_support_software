@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch hẹn Tư vấn - Phòng ngừa Ma túy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* CSS chung cho layout */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --info-color: #1abc9c;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo h2 {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .nav-menu {
+            margin-top: 30px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* CSS riêng cho trang lịch hẹn tư vấn */
+        .appointment-container {
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .appointment-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-box {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #ddd;
+            color: #555;
+        }
+        
+        .btn-outline:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .filter-item label {
+            font-size: 0.8rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .filter-item select, 
+        .filter-item input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            min-width: 150px;
+        }
+        
+        .appointment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .appointment-table th {
+            background-color: #f5f7fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #444;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .appointment-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        .appointment-table tr:hover td {
+            background-color: #f9f9f9;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .badge-warning {
+            background-color: rgba(241, 196, 15, 0.2);
+            color: #f39c12;
+        }
+        
+        .badge-danger {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+        
+        .badge-info {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+        }
+        
+        .badge-secondary {
+            background-color: rgba(149, 165, 166, 0.2);
+            color: #7f8c8d;
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: transparent;
+            border: none;
+            color: #555;
+        }
+        
+        .action-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .action-btn.edit {
+            color: var(--primary-color);
+        }
+        
+        .action-btn.delete {
+            color: var(--accent-color);
+        }
+        
+        .action-btn.view {
+            color: var(--success-color);
+        }
+        
+        .action-btn.confirm {
+            color: var(--info-color);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .page-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: white;
+            border: 1px solid #ddd;
+            transition: var(--transition);
+        }
+        
+        .page-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .page-btn:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+        
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Calendar view */
+        .calendar-view {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .calendar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 8px;
+            background-color: #f5f7fa;
+            border-radius: 5px;
+        }
+
+        .calendar-day {
+            min-height: 100px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 8px;
+            background-color: white;
+        }
+
+        .calendar-day.today {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.5;
+            background-color: #f9f9f9;
+        }
+
+        .calendar-day-number {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .calendar-event {
+            font-size: 0.8rem;
+            padding: 3px 5px;
+            margin-bottom: 3px;
+            border-radius: 3px;
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calendar-event.important {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        /* Toggle switch */
+        .view-toggle {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .view-toggle-btn {
+            padding: 8px 15px;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .view-toggle-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: fixed;
+                width: 250px;
+                height: 100%;
+                left: -250px;
+                transition: var(--transition);
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .appointment-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .appointment-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+            }
+            
+            .filter-item {
+                width: 100%;
+            }
+            
+            .filter-item select, 
+            .filter-item input {
+                width: 100%;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            .calendar-day {
+                min-height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>Phòng ngừa Ma túy</h2>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="user-management.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Quản lý người dùng</span>
+                </a>
+                <a href="appointments.html" class="nav-item active">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Lịch hẹn tư vấn</span>
+                </a>
+                <a href="courses.html" class="nav-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Khóa học</span>
+                </a>
+                <a href="events.html" class="nav-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Chương trình</span>
+                </a>
+                <a href="reports.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Khảo sát & Báo cáo</span>
+                </a>
+                <a href="consultants.html" class="nav-item">
+                    <i class="fas fa-user-md"></i>
+                    <span>Chuyên viên</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Cài đặt</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 id="page-title">Lịch hẹn Tư vấn</h1>
+                <div class="user-info">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
+                    <span>Nguyễn Thị A</span>
+                </div>
+            </div>
+            
+            <!-- Nội dung quản lý lịch hẹn -->
+            <div class="appointment-container">
+                <div class="appointment-toolbar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="appointment-search" placeholder="Tìm kiếm lịch hẹn...">
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <div class="view-toggle">
+                            <button class="view-toggle-btn active" id="tableViewBtn">
+                                <i class="fas fa-list"></i> Danh sách
+                            </button>
+                            <button class="view-toggle-btn" id="calendarViewBtn">
+                                <i class="fas fa-calendar-alt"></i> Lịch
+                            </button>
+                        </div>
+                        <button class="btn btn-primary" id="add-appointment-btn">
+                            <i class="fas fa-plus"></i>
+                            Thêm lịch hẹn
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label for="appointment-status">Trạng thái</label>
+                        <select id="appointment-status">
+                            <option value="all">Tất cả</option>
+                            <option value="pending">Chờ xác nhận</option>
+                            <option value="confirmed">Đã xác nhận</option>
+                            <option value="completed">Đã hoàn thành</option>
+                            <option value="cancelled">Đã hủy</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="consultant">Chuyên viên</label>
+                        <select id="consultant">
+                            <option value="all">Tất cả</option>
+                            <option value="1">Nguyễn Văn A</option>
+                            <option value="2">Trần Thị B</option>
+                            <option value="3">Lê Văn C</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="date-range">Từ ngày</label>
+                        <input type="date" id="date-from">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="date-range">Đến ngày</label>
+                        <input type="date" id="date-to">
+                    </div>
+                </div>
+                
+                <!-- Table view -->
+                <div class="table-view" id="tableView">
+                    <div class="table-responsive">
+                        <table class="appointment-table" id="appointments-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Người đặt</th>
+                                    <th>Chuyên viên</th>
+                                    <th>Thời gian</th>
+                                    <th>Hình thức</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>APT001</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar">
+                                            <span>Nguyễn Văn A</span>
+                                        </div>
+                                    </td>
+                                    <td>Trần Thị B</td>
+                                    <td>
+                                        <div>10:00 - 15/07/2023</div>
+                                        <small>Còn 2 ngày</small>
+                                    </td>
+                                    <td>Trực tiếp</td>
+                                    <td><span class="badge badge-warning">Chờ xác nhận</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="action-btn confirm" title="Xác nhận">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button class="action-btn view" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn edit" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete" title="Hủy lịch">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>APT002</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar">
+                                            <span>Trần Thị B</span>
+                                        </div>
+                                    </td>
+                                    <td>Lê Văn C</td>
+                                    <td>
+                                        <div>14:00 - 16/07/2023</div>
+                                        <small>Còn 3 ngày</small>
+                                    </td>
+                                    <td>Trực tuyến</td>
+                                    <td><span class="badge badge-success">Đã xác nhận</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="action-btn view" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn edit" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete" title="Hủy lịch">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>APT003</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <img src="https://randomuser.me/api/portraits/men/67.jpg" class="user-avatar">
+                                            <span>Lê Văn C</span>
+                                        </div>
+                                    </td>
+                                    <td>Nguyễn Văn A</td>
+                                    <td>
+                                        <div>09:00 - 10/07/2023</div>
+                                        <small>Đã qua</small>
+                                    </td>
+                                    <td>Trực tiếp</td>
+                                    <td><span class="badge badge-info">Đã hoàn thành</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="action-btn view" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>APT004</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <img src="https://randomuser.me/api/portraits/women/28.jpg" class="user-avatar">
+                                            <span>Phạm Thị D</span>
+                                        </div>
+                                    </td>
+                                    <td>Trần Thị B</td>
+                                    <td>
+                                        <div>11:00 - 12/07/2023</div>
+                                        <small>Đã qua</small>
+                                    </td>
+                                    <td>Trực tuyến</td>
+                                    <td><span class="badge badge-secondary">Đã hủy</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="action-btn view" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination">
+                        <button class="page-btn disabled">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Calendar view -->
+                <div class="calendar-view" id="calendarView">
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button class="btn btn-outline" id="prevMonth">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h3 class="calendar-title" id="calendarMonth">Tháng 7, 2023</h3>
+                            <button class="btn btn-outline" id="nextMonth">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-outline" id="todayBtn">Hôm nay</button>
+                    </div>
+                    
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thêm mới lịch hẹn -->
+    <div id="addAppointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm lịch hẹn mới</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addAppointmentForm">
+                    <div class="form-group">
+                        <label for="appointment-user">Người đặt</label>
+                        <select id="appointment-user" class="form-control" required>
+                            <option value="">Chọn người đặt</option>
+                            <option value="1">Nguyễn Văn A (USR001)</option>
+                            <option value="2">Trần Thị B (USR002)</option>
+                            <option value="3">Lê Văn C (USR003)</option>
+                            <option value="4">Phạm Thị D (USR004)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointment-consultant">Chuyên viên</label>
+                        <select id="appointment-consultant" class="form-control" required>
+                            <option value="">Chọn chuyên viên</option>
+                            <option value="1">Nguyễn Văn A</option>
+                            <option value="2">Trần Thị B</option>
+                            <option value="3">Lê Văn C</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointment-date">Ngày hẹn</label>
+                            <input type="date" id="appointment-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointment-time">Giờ hẹn</label>
+                            <input type="time" id="appointment-time" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointment-type">Hình thức tư vấn</label>
+                        <select id="appointment-type" class="form-control" required>
+                            <option value="online">Trực tuyến</option>
+                            <option value="offline">Trực tiếp</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointment-note">Ghi chú</label>
+                        <textarea id="appointment-note" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="cancelAddAppointment">Hủy bỏ</button>
+                <button type="button" class="btn btn-primary" id="submitAddAppointment">Lưu lịch hẹn</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal chi tiết lịch hẹn -->
+    <div id="appointmentDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Chi tiết lịch hẹn</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="appointment-detail">
+                    <div class="detail-row">
+                        <span class="detail-label">Mã lịch hẹn:</span>
+                        <span class="detail-value" id="detail-id">APT001</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Người đặt:</span>
+                        <span class="detail-value" id="detail-user">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar">
+                            Nguyễn Văn A (USR001)
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Chuyên viên:</span>
+                        <span class="detail-value" id="detail-consultant">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar">
+                            Trần Thị B
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Thời gian:</span>
+                        <span class="detail-value" id="detail-time">10:00 - 15/07/2023</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Hình thức:</span>
+                        <span class="detail-value" id="detail-type">Trực tiếp</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Trạng thái:</span>
+                        <span class="detail-value"><span class="badge badge-warning">Chờ xác nhận</span></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Ghi chú:</span>
+                        <span class="detail-value" id="detail-note">Khách hàng muốn tư vấn về vấn đề sử dụng ma túy trong gia đình</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="closeDetailModal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="confirmAppointment">Xác nhận lịch hẹn</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo DataTable
+            $('#appointments-table').DataTable({
+                responsive: true,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/vi.json'
+                },
+                dom: '<"top"f>rt<"bottom"lip><"clear">',
+                pageLength: 10
+            });
+            
+            // Xử lý tìm kiếm
+            $('#appointment-search').on('keyup', function() {
+                $('#appointments-table').DataTable().search(this.value).draw();
+            });
+            
+            // Xử lý bộ lọc
+            $('#appointment-status, #consultant, #date-from, #date-to').on('change', function() {
+                console.log('Filter changed:', $(this).val());
+            });
+            
+            // Xử lý toggle view
+            $('#tableViewBtn').on('click', function() {
+                $(this).addClass('active');
+                $('#calendarViewBtn').removeClass('active');
+                $('#tableView').show();
+                $('#calendarView').hide();
+            });
+            
+            $('#calendarViewBtn').on('click', function() {
+                $(this).addClass('active');
+                $('#tableViewBtn').removeClass('active');
+                $('#tableView').hide();
+                $('#calendarView').show();
+                generateCalendar(currentMonth, currentYear);
+            });
+            
+            // Modal thêm lịch hẹn
+            const addAppointmentModal = $('#addAppointmentModal');
+            const addAppointmentForm = $('#addAppointmentForm');
+            
+            // Mở modal khi click nút thêm
+            $('#addAppointmentBtn').on('click', function() {
+                addAppointmentModal.modal('show');
+            });
+            // Đóng modal khi click nút hủy
+            $('#cancelAddAppointment').on('click', function() {
+                addAppointmentModal.modal('hide');
+            });
+            // Xử lý submit form thêm lịch hẹn
+            $('#submitAddAppointment').on('click', function() { 
+                if (addAppointmentForm[0].checkValidity()) {
+                    // Xử lý lưu lịch hẹn
+                    const newAppointment = {
+                        user: $('#appointment-user').val(),
+                        consultant: $('#appointment-consultant').val(),
+                        date: $('#appointment-date').val(),
+                        time: $('#appointment-time').val(),
+                        type: $('#appointment-type').val(),
+                        note: $('#appointment-note').val()
+                    };
+                    console.log('New appointment:', newAppointment);
+                    addAppointmentModal.modal('hide');
+                } else {
+                    addAppointmentForm[0].reportValidity();
+                }
+            });
+            // Modal chi tiết lịch hẹn
+            const appointmentDetailModal = $('#appointmentDetailModal');
+            // Mở modal chi tiết khi click vào nút xem
+            $(document).on('click', '.action-btn.view', function() {
+                const appointmentId = $(this).data('id');
+                // Tìm lịch hẹn theo ID và hiển thị thông tin
+                const appointment = findAppointmentById(appointmentId);
+                if (appointment) {
+                    $('#detail-appointment-user').text(appointment.user);
+                    $('#detail-appointment-consultant').text(appointment.consultant);
+                    $('#detail-appointment-date').text(appointment.date);
+                    $('#detail-appointment-time').text(appointment.time);
+                    $('#detail-appointment-type').text(appointment.type);
+                    $('#detail-appointment-note').text(appointment.note);
+                    appointmentDetailModal.modal('show');
+                }
+            });
+            // Đóng modal chi tiết khi click nút đóng
+            $('#closeDetailModal').on('click', function() {
+                appointmentDetailModal.modal('hide');
+            });
+            // Xử lý xác nhận lịch hẹn
+            $('#confirmAppointment').on('click', function() {
+                const appointmentId = $(this).data('id');
+                // Xác nhận lịch hẹn
+                confirmAppointment(appointmentId);
+            }); 
+            // Khởi tạo lịch
+            let currentMonth = new Date().getMonth();
+            let currentYear = new Date().getFullYear();
+            generateCalendar(currentMonth, currentYear);
+            // Xử lý chuyển tháng
+            $('#prevMonth').on('click', function() {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentMonth, currentYear);
+            }); 
+            $('#nextMonth').on('click', function() {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+            // Xử lý nút hôm nay
+            $('#todayBtn').on('click', function() {
+                currentMonth = new Date().getMonth();
+                currentYear = new Date().getFullYear();
+                generateCalendar(currentMonth, currentYear);
+            });
+            // Khởi tạo Flatpickr cho các trường ngày
+            flatpickr('#appointment-date', {
+                dateFormat: 'Y-m-d',
+                minDate: 'today',
+                locale: {
+                    firstDayOfWeek: 1 // Thứ Hai là ngày đầu tuần
+                }
+            });
+            flatpickr('#date-from', {
+                dateFormat: 'Y-m-d',
+                minDate: 'today',
+                locale: {
+                    firstDayOfWeek: 1 // Thứ Hai là ngày đầu tuần
+                }
+            });
+            flatpickr('#date-to', {
+                dateFormat: 'Y-m-d',
+                minDate: 'today',
+                locale: {
+                    firstDayOfWeek: 1 // Thứ Hai là ngày đầu tuần
+                }
+            });
+
+            // Hàm tạo lịch
+            function generateCalendar(month, year) {
+                const calendarBody = $('#calendar-body');
+                calendarBody.empty();
+
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+
+                // Tạo các ô cho ngày
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayCell = $('<div class="calendar-day"></div>').text(i);
+                    calendarBody.append(dayCell);
+                }
+            }
+            // Hàm tìm lịch hẹn theo ID
+            function findAppointmentById(id) {
+                return appointments.find(appointment => appointment.id === id);
+            }
+            // Hàm xác nhận lịch hẹn
+            function confirmAppointment(id) {
+                const appointment = findAppointmentById(id);
+                if (appointment) {
+                    appointment.status = 'confirmed';
+                    alert('Lịch hẹn đã được xác nhận.');
+                } else {
+                    alert('Không tìm thấy lịch hẹn.');
+                }
+            }
+
+            // Dữ liệu mẫu lịch hẹn
+            const appointments = [
+                {
+                    id: 'APT001',
+                    date: '2023-10-01',
+                    time: '10:00',
+                    patient: 'Nguyễn Văn A',
+                    status: 'pending'
+                },
+                {
+                    id: 'APT002',
+                    date: '2023-10-02',
+                    time: '14:00',
+                    patient: 'Trần Thị B',
+                    status: 'pending'
+                }
+            ];
+            // Hàm tìm lịch hẹn theo ID
+            function findAppointmentById(id) {
+                return appointments.find(appointment => appointment.id === id);
+            }
+            // Hàm xác nhận lịch hẹn
+            function confirmAppointment(id) {
+                const appointment = findAppointmentById(id);
+                if (appointment) {
+                    appointment.status = 'confirmed';
+                    alert('Lịch hẹn đã được xác nhận.');
+                } else {
+                    alert('Không tìm thấy lịch hẹn.');
+                }
+            }
+        });
+        
+
+    </script>
