@@ -5,67 +5,58 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
-    @GetMapping({"/", "/index"})
-    public String index() {
-        return "member/index";
+
+    // Trang Dashboard (Trang chủ của member)
+    @GetMapping({"/", "/dashboard"})
+    public String dashboard() {
+        return "member/dashboard";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login"; // Đã sửa thành chữ thường
-    }
-
-    @GetMapping("/register")
-    public String register() {
-        return "register";
-    }
-
-    @GetMapping("/forgot-password")
-    public String forgotPassword() {
-        return "forgot-password";
-    }
-
+    // Trang khóa học
     @GetMapping("/courses")
     public String courses() {
         return "member/courses";
     }
 
+    // Trang làm bài đánh giá (khảo sát trắc nghiệm)
     @GetMapping("/assessment")
     public String assessment() {
         return "member/assessment";
     }
 
+    // Trang đặt lịch tư vấn với chuyên viên
     @GetMapping("/consultation")
     public String consultation() {
         return "member/consultation";
     }
 
+    // Trang blog/chia sẻ kinh nghiệm
     @GetMapping("/blog")
     public String blog() {
         return "member/blog";
     }
 
+    // Trang giới thiệu (about)
     @GetMapping("/about")
     public String about() {
         return "member/about";
     }
 
-    @GetMapping("/dashboard") 
-    public String dashboard() {
-        return "staff/dashboard";
+    // Trang đăng nhập
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
-    @GetMapping("/layout")
-    public String layout() {
-        return "staff/layout";
+    // Trang đăng ký
+    @GetMapping("/register")
+    public String register() {
+        return "register";
     }
 
-    @GetMapping("/user-management")
-    public String userManagement() {
-        return "staff/user-management";
-    }
-    @GetMapping("/appointments")
-    public String appointments() {
-        return "staff/appointments";
+    // Trang quên mật khẩu
+    @GetMapping("/forgot-password")
+    public String forgotPassword() {
+        return "forgot-password";
     }
 }

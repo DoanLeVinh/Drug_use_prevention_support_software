@@ -1,1298 +1,493 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Giới thiệu hệ thống | Drug Prevention Support System</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Về Chúng Tôi - Hệ thống Phòng ngừa Ma túy</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/layout.css}">  
-
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700,900&display=swap" rel="stylesheet">
     <style>
-        /* CSS Reset và Biến */
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --text-color: #333;
-            --text-light: #7f8c8d;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --primary: #2176ae;
+            --secondary: #57b8ff;
+            --white: #fff;
+            --bg: #f7fbfd;
+            --shadow: 0 6px 32px rgba(33,118,174,0.13);
+            --dark: #204360;
+            --soft: #eaf4fa;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: #f9f9f9;
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--dark);
         }
-        
-        /* Layout */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .about-main-wrap {
+            width: 98vw; max-width: 1280px; margin: 0 auto; padding: 0 0 72px 0;
+            display: flex; flex-direction: column; align-items: center;
         }
-        
-        /* Hero Section */
         .about-hero {
-            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-            color: white;
-            padding: 80px 0;
+            width: 100%;
+            background: linear-gradient(95deg, var(--primary) 64%, var(--secondary) 100%);
+            color: #fff;
+            border-radius: 26px;
+            margin-top: 28px;
+            padding: 48px 6vw 38px 6vw;
+            box-shadow: var(--shadow);
             text-align: center;
             position: relative;
             overflow: hidden;
+            animation: fadeInDown 0.9s;
         }
-        
-        .about-hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://via.placeholder.com/1920x600') center/cover no-repeat;
-            opacity: 0.2;
-            z-index: 0;
-        }
-        
-        .about-hero .container {
-            position: relative;
-            z-index: 1;
-        }
-        
+        @keyframes fadeInDown {from {opacity:0;transform:translateY(-20px);} to {opacity:1;transform:translateY(0);}}
         .about-hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            animation: fadeInDown 1s ease;
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin: 0 0 18px 0;
+            letter-spacing: 0.03em;
+            line-height: 1.09;
         }
-        
-        .about-hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            animation: fadeInUp 1s ease;
+        .about-hero-desc {
+            font-size: 1.22em;
+            max-width: 840px;
+            margin: 0 auto 24px auto;
+            font-weight: 500;
+            opacity: 0.95;
         }
-        
-        /* About Sections */
-        .about-section {
-            padding: 60px 0;
+        .about-hero-quote {
+            font-size: 1.13em;
+            font-style: italic;
+            color: #d3e9f8;
+            margin-top: 22px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        
-        .section-title {
+
+        /* Timeline */
+        .timeline-section {
+            width: 100%;
+            margin: 46px 0 26px 0;
+        }
+        .timeline-title {
+            font-size: 2.05em;
+            font-weight: 800;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
+            color: var(--primary);
+            letter-spacing: 0.04em;
+        }
+        .timeline-wrap {
             position: relative;
-        }
-        
-        .section-title h2 {
-            font-size: 2rem;
-            color: var(--secondary-color);
-            display: inline-block;
-            padding-bottom: 10px;
-        }
-        
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background-color: var(--primary-color);
-        }
-        
-        /* Our Story */
-        .our-story {
-            background-color: white;
-        }
-        
-        .story-timeline {
-            position: relative;
-            max-width: 800px;
+            padding-left: 30px;
+            max-width: 850px;
             margin: 0 auto;
-            padding: 0 20px;
         }
-        
-        .story-timeline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            height: 100%;
-            background-color: var(--primary-color);
+        .timeline-bar {
+            position: absolute; left: 17px; top: 0; bottom: 0;
+            width: 7px; background: linear-gradient(180deg, #57b8ff 20%, #2176ae 95%);
+            border-radius: 7px;
         }
-        
         .timeline-item {
             position: relative;
-            margin-bottom: 40px;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            background-color: var(--light-color);
-            box-shadow: var(--box-shadow);
-            width: calc(50% - 40px);
-            opacity: 0;
-            transition: var(--transition);
+            margin-bottom: 42px;
         }
-        
-        .timeline-item:nth-child(odd) {
-            left: 0;
-            transform: translateX(-20px);
+        .timeline-dot {
+            position: absolute; left: -2px; top: 0;
+            width: 18px; height: 18px;
+            background: var(--primary);
+            border-radius: 50%; border: 3px solid var(--white);
+            box-shadow: 0 2px 8px #2176ae44;
+            z-index: 2;
         }
-        
-        .timeline-item:nth-child(even) {
-            left: 50%;
-            transform: translateX(20px);
+        .timeline-content {
+            margin-left: 36px;
+            background: var(--white);
+            border-radius: 13px;
+            box-shadow: 0 2px 11px #2176ae17;
+            padding: 18px 26px 17px 20px;
+            min-height: 58px;
+            animation: fadeInForm 0.6s;
         }
-        
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateX(0);
+        .timeline-content strong { color: var(--primary); font-weight: 800;}
+        @keyframes fadeInForm {from {opacity:0;transform:translateY(25px);} to {opacity:1;transform:translateY(0);}}
+
+        /* Giá trị/tinh thần */
+        .about-values-section {
+            width: 100%; margin: 60px 0 28px 0; text-align: center;
         }
-        
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            top: 30px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            z-index: 1;
+        .about-values-title {
+            font-size: 1.55em; font-weight: 700; color: var(--primary); margin-bottom: 24px;
         }
-        
-        .timeline-item:nth-child(odd)::before {
-            right: -50px;
-        }
-        
-        .timeline-item:nth-child(even)::before {
-            left: -50px;
-        }
-        
-        .timeline-year {
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        .timeline-content h3 {
-            margin-bottom: 10px;
-            color: var(--secondary-color);
-        }
-        
-        /* Our Values */
-        .our-values {
-            background-color: #f5f7fa;
-        }
-        
         .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+            display: flex; flex-wrap: wrap; gap: 26px; justify-content: center;
         }
-        
         .value-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 30px;
-            text-align: center;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-            opacity: 0;
-            transform: translateY(20px);
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 3px 17px #2176ae11;
+            padding: 34px 22px 26px 22px;
+            width: 250px;
+            min-width: 200px;
+            display: flex; flex-direction: column; align-items: center;
+            transition: box-shadow .16s, transform .12s;
         }
-        
-        .value-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
         .value-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px #57b8ff22;
+            transform: scale(1.045);
         }
-        
         .value-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background-color: var(--light-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            font-size: 2rem;
+            font-size: 2.1rem; color: var(--secondary); margin-bottom: 10px;
         }
-        
-        /* Our Team */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+        .value-title {
+            font-size: 1.13em; font-weight: 700; color: var(--primary); margin-bottom: 9px;
         }
-        
-        .team-member {
-            background-color: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-            opacity: 0;
-            transform: translateY(20px);
+        .value-desc {
+            font-size: 1em; color: #3b5876;
         }
-        
-        .team-member.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .team-member:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .member-photo {
-            height: 250px;
-            overflow: hidden;
-        }
-        
-        .member-photo img {
+
+        /* Tree Achievements - New Style */
+        .about-achievements-section {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-        
-        .team-member:hover .member-photo img {
-            transform: scale(1.1);
-        }
-        
-        .member-info {
-            padding: 20px;
+            margin: 70px 0 28px 0;
             text-align: center;
+            position: relative;
         }
-        
-        .member-info h3 {
-            margin-bottom: 5px;
-            color: var(--secondary-color);
-        }
-        
-        .member-position {
-            color: var(--primary-color);
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-        
-        .member-social {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .member-social a {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background-color: var(--light-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-color);
-            transition: var(--transition);
-        }
-        
-        .member-social a:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        /* Programs & Activities */
-        .programs-section {
-            background-color: #f5f7fa;
-        }
-        
-        .program-tabs {
-            display: flex;
-            justify-content: center;
+        .about-achievements-title {
+            font-size: 1.45em;
+            font-weight: 700;
+            color: var(--primary);
             margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 10px;
         }
-        
-        .tab-btn {
-            padding: 10px 20px;
-            background-color: white;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
-            box-shadow: var(--box-shadow);
+        .tree-timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            padding: 0 0 70px 0;
         }
-        
-        .tab-btn.active {
-            background-color: var(--primary-color);
-            color: white;
+        .tree-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(180deg, #57b8ff 15%, #2176ae 95%);
+            border-radius: 6px;
+            transform: translateX(-50%);
+            z-index: 0;
         }
-        
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s ease;
+        .tree-achievement {
+            position: relative;
+            width: 48%;
+            min-width: 250px;
+            margin-bottom: 54px;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 2px 15px #2176ae16;
+            padding: 30px 28px 22px 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            animation: fadeInForm 0.75s;
+            border-left: 7px solid var(--primary);
         }
-        
-        .tab-content.active {
-            display: block;
+        .tree-achievement.right {
+            margin-left: 52%;
+            border-left: none;
+            border-right: 7px solid var(--secondary);
+            flex-direction: row-reverse;
         }
-        
-        .program-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 20px;
-        }
-        
-        .program-header {
+        .tree-icon {
+            font-size: 2.3em;
+            color: var(--secondary);
+            background: #eaf4fa;
+            border-radius: 50%;
+            width: 54px;
+            height: 54px;
             display: flex;
             align-items: center;
-            padding: 15px 20px;
-            background-color: var(--light-color);
-            cursor: pointer;
+            justify-content: center;
+            box-shadow: 0 2px 10px #2176ae11;
         }
-        
-        .program-header h3 {
+        .tree-achievement-content {
             flex: 1;
-            margin-bottom: 0;
+            text-align: left;
         }
-        
-        .program-toggle {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
+        .tree-title {
+            font-size: 1.12em;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
         }
-        
-        .program-header.active .program-toggle {
-            transform: rotate(45deg);
-        }
-        
-        .program-body {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .program-body-content {
-            padding: 20px 0;
-        }
-        
-        /* Stats Section */
-        .stats-section {
-            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-            color: white;
-            padding: 60px 0;
-            text-align: center;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-        }
-        
-        .stat-item {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-        }
-        
-        .stat-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .stat-number {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .stat-label {
-            font-size: 1.1rem;
-        }
-        
-        /* Testimonials */
-        .testimonials-section {
-            background-color: white;
-        }
-        
-        .testimonial-slider {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-        
-        .testimonial {
-            background-color: var(--light-color);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            margin: 0 15px;
-            text-align: center;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .testimonial.active {
-            display: block;
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        
-        .testimonial-text::before,
-        .testimonial-text::after {
-            content: '"';
-            font-size: 2rem;
-            color: var(--primary-color);
-            opacity: 0.3;
-        }
-        
-        .testimonial-author {
-            font-weight: bold;
-            color: var(--secondary-color);
-        }
-        
-        .testimonial-role {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-        
-        .slider-nav {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-            gap: 10px;
-        }
-        
-        .slider-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ccc;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .slider-dot.active {
-            background-color: var(--primary-color);
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 60px 0;
-            text-align: center;
-        }
-        
-        .cta-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .cta-btn {
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
+        .tree-desc {
+            font-size: 1em;
+            color: #2a496e;
             font-weight: 500;
-            transition: var(--transition);
         }
-        
-        .cta-btn.primary {
-            background-color: white;
-            color: var(--primary-color);
+        .tree-dot {
+            position: absolute;
+            top: 34px;
+            left: 100%;
+            transform: translate(-50%, -50%);
+            width: 23px;
+            height: 23px;
+            background: var(--secondary);
+            border-radius: 50%;
+            border: 5px solid #fff;
+            box-shadow: 0 2px 12px #57b8ff44;
+            z-index: 3;
         }
-        
-        .cta-btn.secondary {
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
+        .tree-achievement.right .tree-dot {
+            left: -5%;
+            right: auto;
         }
-        
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        /* Sóng lan tỏa phía dưới cây */
+        .tree-wave {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100px;
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
         }
-        
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        /* Products */
+        .about-products-section {
+            width: 100%; margin: 46px 0 20px 0;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .about-products-title {
+            font-size: 1.45em; font-weight: 800; color: var(--primary); margin-bottom: 24px; text-align:center;
         }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .products-grid {
+            display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;
         }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .about-hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .about-hero p {
-                font-size: 1rem;
-            }
-            
-            .story-timeline::before {
-                left: 30px;
-            }
-            
-            .timeline-item {
-                width: calc(100% - 80px);
-                margin-left: 80px;
-            }
-            
-            .timeline-item:nth-child(odd),
-            .timeline-item:nth-child(even) {
-                left: 0;
-                transform: translateX(0);
-            }
-            
-            .timeline-item:nth-child(odd)::before,
-            .timeline-item:nth-child(even)::before {
-                left: -50px;
-            }
-            
-            .section-title h2 {
-                font-size: 1.8rem;
-            }
+        .product-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 26px 22px 23px 22px;
+            width: 265px;
+            min-width: 190px;
+            display: flex; flex-direction: column; align-items: center;
+            transition: box-shadow .17s, transform .12s;
         }
-        
-        @media (max-width: 576px) {
-            .about-hero h1 {
-                font-size: 2rem;
+        .product-card:hover {
+            box-shadow: 0 8px 32px #2176ae19;
+            transform: translateY(-4px) scale(1.025);
+        }
+        .product-icon {
+            font-size: 2rem; color: var(--primary); margin-bottom: 9px;
+        }
+        .product-title {
+            font-size: 1.13em; font-weight: 700; margin-bottom: 7px; color: #2176ae;
+        }
+        .product-desc {
+            font-size: 1em; color: #325581;
+            text-align: center;
+        }
+        @media (max-width:1000px){
+            .tree-achievement, .tree-achievement.right {
+                width: 96vw; max-width: 440px; margin-left: 0 !important; border-radius: 12px;
+                border-left: 7px solid var(--primary);
+                border-right: none;
+                flex-direction: row;
             }
-            
-            .cta-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .cta-btn {
-                width: 100%;
-            }
+            .tree-achievement.right { border-right: none; border-left: 7px solid var(--secondary);}
+            .tree-dot, .tree-achievement.right .tree-dot {left: 100%; right:auto;}
+        }
+        @media (max-width:700px){
+            .about-main-wrap{ padding:0;}
+            .tree-timeline {padding-bottom: 25px;}
+            .tree-achievement, .tree-achievement.right { padding: 16px 6vw;}
+        }
+        @media (max-width:500px) {
+            .about-hero h1 { font-size: 1.17rem;}
+            .timeline-title, .about-values-title, .about-products-title, .about-achievements-title { font-size: 1.01rem;}
         }
     </style>
 </head>
 <body>
-    <!-- Header từ Thymeleaf -->
-    
-<header class="inner-header">
-    <div class="inner-header-container">
-        <a href="/" class="inner-logo-container">
-            <div class="inner-logo-icon">DP</div>
-            <div class="inner-logo-text">Drug<span>Free</span></div>
-        </a>
-        
-        <nav class="inner-nav-menu">
-            <a href="/" class="inner-nav-link active">Trang chủ</a>
-            <a href="/courses" class="inner-nav-link">Khóa học</a>
-            <a href="/assessment" class="inner-nav-link">Đánh giá nguy cơ</a>
-            <a href="/consultation" class="inner-nav-link">Tư vấn</a>
-            <a href="/blog" class="inner-nav-link">Blog</a>
-            <a href="/about" class="inner-nav-link">Về chúng tôi</a>
-        </nav>
-        
-        <div class="inner-auth-buttons">
-            <button class="inner-btn-signin">Đăng nhập</button>
-            <button class="inner-btn-signup">Đăng ký</button>
-        </div>
-        
-        <button class="inner-menu-toggle">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-</header>
-<script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-    const innerMenuToggle = document.querySelector('.inner-menu-toggle');
-    const innerNavMenu = document.querySelector('.inner-nav-menu');
-    const innerAuthButtons = document.querySelector('.inner-auth-buttons');
-    
-    innerMenuToggle.addEventListener('click', function() {
-        // Tạo menu mobile tạm thời
-        const innerMobileMenu = document.createElement('div');
-        innerMobileMenu.className = 'inner-mobile-menu';
-        innerMobileMenu.style.position = 'fixed';
-        innerMobileMenu.style.top = '0';
-        innerMobileMenu.style.right = '0';
-        innerMobileMenu.style.width = '280px';
-        innerMobileMenu.style.height = '100vh';
-        innerMobileMenu.style.backgroundColor = 'white';
-        innerMobileMenu.style.boxShadow = '-5px 0 15px rgba(0,0,0,0.1)';
-        innerMobileMenu.style.padding = '80px 20px 20px';
-        innerMobileMenu.style.zIndex = '1000';
-        
-        // Clone các phần tử menu
-        const innerClonedNav = innerNavMenu.cloneNode(true);
-        innerClonedNav.style.display = 'flex';
-        innerClonedNav.style.flexDirection = 'column';
-        innerClonedNav.style.gap = '10px';
-        innerClonedNav.querySelectorAll('.inner-nav-link').forEach(link => {
-            link.style.padding = '12px 16px';
-        });
-        
-        const innerClonedAuth = innerAuthButtons.cloneNode(true);
-        innerClonedAuth.style.display = 'flex';
-        innerClonedAuth.style.flexDirection = 'column';
-        innerClonedAuth.style.gap = '10px';
-        innerClonedAuth.style.marginTop = '20px';
-        innerClonedAuth.querySelectorAll('button').forEach(btn => {
-            btn.style.width = '100%';
-        });
-        
-        // Thêm nút đóng
-        const innerCloseBtn = document.createElement('button');
-        innerCloseBtn.innerHTML = '<i class="fas fa-times"></i>';
-        innerCloseBtn.style.position = 'absolute';
-        innerCloseBtn.style.top = '20px';
-        innerCloseBtn.style.right = '20px';
-        innerCloseBtn.style.background = 'none';
-        innerCloseBtn.style.border = 'none';
-        innerCloseBtn.style.fontSize = '20px';
-        innerCloseBtn.style.cursor = 'pointer';
-        
-        innerCloseBtn.addEventListener('click', function() {
-            document.body.removeChild(innerMobileMenu);
-            document.body.style.overflow = 'auto';
-        });
-        
-        // Thêm vào DOM
-        innerMobileMenu.appendChild(innerCloseBtn);
-        innerMobileMenu.appendChild(innerClonedNav);
-        innerMobileMenu.appendChild(innerClonedAuth);
-        document.body.appendChild(innerMobileMenu);
-        document.body.style.overflow = 'hidden';
-    });
-});
-
-    // Thêm sự kiện click cho các nút đăng nhập và đăng ký
-    document.querySelector('.inner-btn-signin').addEventListener('click', function() {
-        window.location.href = '/login';
-    });
-
-    document.querySelector('.inner-btn-signup').addEventListener('click', function() {
-        window.location.href = '/register';
-    });
-    // Thêm sự kiện click cho các liên kết trong menu
-    document.querySelectorAll('.inner-nav-link').forEach(link => {
-        link.addEventListener('click', function() {
-            document.body.style.overflow = 'auto';
-        });
-    });
-    // Thêm sự kiện click cho nút đóng trong menu mobile
-    document.addEventListener('click', function(event) {
-        if (event.target.closest('.inner-close-btn')) {
-            document.body.style.overflow = 'auto';
-        }
-    });
-</script>
-
-    <!-- Hero Section -->
+<div th:replace="member/header :: main-header"></div>
+<div class="about-main-wrap">
+    <!-- Hero -->
     <section class="about-hero">
-        <div class="container">
-            <h1>Về Chúng Tôi</h1>
-            <p>Hành trình xây dựng hệ thống phòng ngừa và hỗ trợ cộng đồng vượt qua thách thức ma túy</p>
+        <h1><i class="fa-solid fa-shield-heart"></i> Drug Prevention Support System</h1>
+        <div class="about-hero-desc">
+            Từ năm 2017, hệ thống tiên phong kết nối tri thức, chuyên gia và cộng đồng để bảo vệ thế hệ trẻ khỏi hiểm họa ma túy. Chúng tôi là <b>cầu nối tri thức – kỹ năng – niềm tin</b> với những giải pháp giáo dục, tư vấn và truyền thông sáng tạo, lấy con người làm trung tâm, phát triển bền vững vì một xã hội khỏe mạnh, nhân văn.
+        </div>
+        <div class="about-hero-quote">
+            “Phòng ngừa là đầu tư cho tương lai – sức mạnh lớn nhất chính là sự đồng hành và sẻ chia của cộng đồng.” <br>
+            <span style="color:#ffe066;font-weight:bold;">– Drug Prevention Team</span>
         </div>
     </section>
-
-    <!-- Our Story -->
-    <section class="about-section our-story">
-        <div class="container">
-            <div class="section-title">
-                <h2>Lịch Sử Hình Thành</h2>
+    <!-- Timeline lịch sử -->
+    <section class="timeline-section">
+        <div class="timeline-title">Hành trình phát triển & Dấu mốc lịch sử</div>
+        <div class="timeline-wrap">
+            <div class="timeline-bar"></div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2017:</strong> Khởi động dự án truyền thông phòng chống ma túy với 10 tình nguyện viên đầu tiên.
+                </div>
             </div>
-            
-            <div class="story-timeline">
-                <div class="timeline-item">
-                    <div class="timeline-year">2010</div>
-                    <div class="timeline-content">
-                        <h3>Khởi nguồn ý tưởng</h3>
-                        <p>Nhóm sáng lập gồm các chuyên gia tâm lý và cựu nghiện nhận thấy sự thiếu hụt các chương trình phòng ngừa ma túy hiệu quả tại cộng đồng.</p>
-                    </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2019:</strong> Ra mắt nền tảng khảo sát nhận thức <b>ASSIST</b> đầu tiên tại Việt Nam, hợp tác cùng UNICEF.
                 </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-year">2012</div>
-                    <div class="timeline-content">
-                        <h3>Thành lập tổ chức</h3>
-                        <p>Chính thức thành lập tổ chức với 5 thành viên ban đầu, bắt đầu các hoạt động tư vấn và giáo dục cộng đồng tại địa phương.</p>
-                    </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2021:</strong> Phát triển hệ thống học trực tuyến, đào tạo kỹ năng từ chối chất gây nghiện cho học sinh và phụ huynh.
                 </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-year">2015</div>
-                    <div class="timeline-content">
-                        <h3>Mở rộng quy mô</h3>
-                        <p>Nhận được tài trợ từ Bộ Y tế, mở rộng hoạt động ra 5 tỉnh thành với 20 tình nguyện viên.</p>
-                    </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2023:</strong> Được WHO, Red Cross trao bằng khen cho sáng kiến “Trường học an toàn không ma túy”.
                 </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-year">2018</div>
-                    <div class="timeline-content">
-                        <h3>Phát triển hệ thống online</h3>
-                        <p>Xây dựng nền tảng trực tuyến đầu tiên, cung cấp các khóa học và tư vấn từ xa, tiếp cận hàng ngàn người dùng.</p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-year">2023</div>
-                    <div class="timeline-content">
-                        <h3>Hệ thống toàn diện</h3>
-                        <p>Phát triển thành hệ thống tích hợp đa dịch vụ từ phòng ngừa, đánh giá nguy cơ đến hỗ trợ cai nghiện với mạng lưới 50 chuyên gia trên toàn quốc.</p>
-                    </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2025:</strong> Hệ sinh thái Drug Prevention lan tỏa đến 31 tỉnh, có hơn 150 chuyên gia, 60.000+ thành viên, đa nền tảng số.
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Our Mission -->
-    <section class="about-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Sứ Mệnh & Tầm Nhìn</h2>
+    <!-- Giá trị/tinh thần/tiêu chí/châm ngôn -->
+    <section class="about-values-section">
+        <div class="about-values-title"><i class="fa fa-heart"></i> Giá trị cốt lõi & Châm ngôn hành động</div>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="value-title">Cộng đồng đồng hành</div>
+                <div class="value-desc">Gắn kết – sẻ chia – hỗ trợ, cùng nhau phòng ngừa hiểm họa, vun đắp tương lai.</div>
             </div>
-            
-            <div class="mission-content" style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <p style="font-size: 1.2rem; margin-bottom: 20px;">"Chúng tôi tin rằng mọi cá nhân đều xứng đáng có một cuộc sống lành mạnh, tự do khỏi ma túy. Sứ mệnh của chúng tôi là trang bị kiến thức, kỹ năng và hỗ trợ cần thiết để cộng đồng có thể phòng ngừa và vượt qua thách thức này."</p>
-                
-                <div style="display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 250px;">
-                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">Sứ Mệnh</h3>
-                        <p>Xây dựng cộng đồng mạnh mẽ có khả năng phòng ngừa và ứng phó với vấn đề ma túy thông qua giáo dục, tư vấn và hỗ trợ chuyên nghiệp.</p>
-                    </div>
-                    
-                    <div style="flex: 1; min-width: 250px;">
-                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">Tầm Nhìn</h3>
-                        <p>Trở thành hệ thống hỗ trợ phòng ngừa ma túy toàn diện hàng đầu, góp phần giảm thiểu tác hại của ma túy trong cộng đồng.</p>
-                    </div>
-                </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="value-title">Kiến thức – Kỹ năng</div>
+                <div class="value-desc">Nền tảng mọi thay đổi đến từ nhận thức, giáo dục, kỹ năng thực tiễn.</div>
             </div>
-        </div>
-    </section>
-
-    <!-- Our Values -->
-    <section class="about-section our-values">
-        <div class="container">
-            <div class="section-title">
-                <h2>Giá Trị Cốt Lõi</h2>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                <div class="value-title">Sáng tạo & Đổi mới</div>
+                <div class="value-desc">Luôn đổi mới, tận dụng công nghệ, truyền cảm hứng tích cực đến cộng đồng.</div>
             </div>
-            
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3>Nhân Văn</h3>
-                    <p>Đặt con người làm trung tâm, tôn trọng và thấu hiểu mọi hoàn cảnh cá nhân.</p>
-                </div>
-                
-                <div class="value-card">
-                    <div class="value-icon">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <h3>Khoa Học</h3>
-                    <p>Áp dụng các phương pháp đã được kiểm chứng và liên tục cập nhật kiến thức mới.</p>
-                </div>
-                
-                <div class="value-card">
-                    <div class="value-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Cộng Đồng</h3>
-                    <p>Xây dựng mạng lưới hỗ trợ mạnh mẽ từ cộng đồng và vì cộng đồng.</p>
-                </div>
-                
-                <div class="value-card">
-                    <div class="value-icon">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    <h3>Bảo Mật</h3>
-                    <p>Cam kết bảo vệ thông tin cá nhân và sự riêng tư của mọi khách hàng.</p>
-                </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <div class="value-title">Tận tâm & Trách nhiệm</div>
+                <div class="value-desc">Chuyên gia tận tụy, sẵn sàng hỗ trợ 24/7, luôn đặt quyền lợi người dùng lên trên hết.</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-globe"></i></div>
+                <div class="value-title">Phát triển bền vững</div>
+                <div class="value-desc">Vì một Việt Nam khỏe mạnh, hội nhập, phát triển lâu dài và nhân văn.</div>
             </div>
         </div>
     </section>
-
-    <!-- Our Team -->
-    <section class="about-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Đội Ngũ Của Chúng Tôi</h2>
+    <!-- Thành tựu/làn tỏa - Tree timeline trái phải -->
+    <section class="about-achievements-section">
+        <div class="about-achievements-title"><i class="fa-solid fa-trophy"></i> Thành tựu nổi bật & Tác động cộng đồng</div>
+        <div class="tree-timeline">
+            <div class="tree-line"></div>
+            <!-- Trái -->
+            <div class="tree-achievement">
+                <div class="tree-icon"><i class="fa-solid fa-medal"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Top 10 Sáng kiến xã hội</div>
+                    <div class="tree-desc">Được Bộ Y tế & WHO vinh danh 2023 với mô hình “Phòng chống ma túy học đường”.</div>
+                </div>
+                <div class="tree-dot"></div>
             </div>
-            
-            <div class="team-grid">
-                <div class="team-member">
-                    <div class="member-photo">
-                        <img src="https://via.placeholder.com/400x500" alt="Tiến sĩ Nguyễn Văn A">
-                    </div>
-                    <div class="member-info">
-                        <h3>TS. Nguyễn Văn A</h3>
-                        <div class="member-position">Giám đốc chuyên môn</div>
-                        <p>Chuyên gia tâm lý học lâm sàng với 15 năm kinh nghiệm nghiên cứu về ma túy.</p>
-                        <div class="member-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fas fa-envelope"></i></a>
-                        </div>
-                    </div>
+            <!-- Phải -->
+            <div class="tree-achievement right">
+                <div class="tree-icon"><i class="fa-solid fa-award"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Lan tỏa 60.000+ thành viên</div>
+                    <div class="tree-desc">Cộng đồng Drug Prevention phủ rộng 31 tỉnh/thành, hàng trăm trường học hưởng lợi.</div>
                 </div>
-                
-                <div class="team-member">
-                    <div class="member-photo">
-                        <img src="https://via.placeholder.com/400x500" alt="ThS. Trần Thị B">
-                    </div>
-                    <div class="member-info">
-                        <h3>ThS. Trần Thị B</h3>
-                        <div class="member-position">Trưởng phòng đào tạo</div>
-                        <p>Chuyên viên giáo dục phòng chống ma túy với nhiều năm làm việc tại các trường học.</p>
-                        <div class="member-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fas fa-envelope"></i></a>
-                        </div>
-                    </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Trái -->
+            <div class="tree-achievement">
+                <div class="tree-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Đối tác UNICEF, Red Cross</div>
+                    <div class="tree-desc">Hợp tác, hỗ trợ dự án giáo dục nhận thức, truyền thông đa phương tiện về phòng chống ma túy.</div>
                 </div>
-                
-                <div class="team-member">
-                    <div class="member-photo">
-                        <img src="https://via.placeholder.com/400x500" alt="BS. Lê Văn C">
-                    </div>
-                    <div class="member-info">
-                        <h3>BS. Lê Văn C</h3>
-                        <div class="member-position">Chuyên gia y tế</div>
-                        <p>Bác sĩ chuyên khoa tâm thần với chuyên môn sâu về điều trị nghiện chất.</p>
-                        <div class="member-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fas fa-envelope"></i></a>
-                        </div>
-                    </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Phải -->
+            <div class="tree-achievement right">
+                <div class="tree-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">150+ chuyên gia, bác sĩ</div>
+                    <div class="tree-desc">Đội ngũ chuyên gia đồng hành, tổ chức hơn 2000 buổi tư vấn online & offline trong 5 năm.</div>
                 </div>
-                
-                <div class="team-member">
-                    <div class="member-photo">
-                        <img src="https://via.placeholder.com/400x500" alt="Nguyễn Thị D">
-                    </div>
-                    <div class="member-info">
-                        <h3>Nguyễn Thị D</h3>
-                        <div class="member-position">Cựu nghiện viên</div>
-                        <p>Chuyên viên tư vấn đồng đẳng, người đã vượt qua 8 năm nghiện heroin.</p>
-                        <div class="member-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fas fa-envelope"></i></a>
-                        </div>
-                    </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Trái -->
+            <div class="tree-achievement">
+                <div class="tree-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Nền tảng học tập sáng tạo</div>
+                    <div class="tree-desc">Hệ thống khóa học đa dạng, cá nhân hóa, truyền cảm hứng phòng chống ma túy hiệu quả.</div>
                 </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Phải -->
+            <div class="tree-achievement right">
+                <div class="tree-icon"><i class="fa-solid fa-globe"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Tác động quốc tế</div>
+                    <div class="tree-desc">Nhiều sáng kiến được chia sẻ tại diễn đàn ASEAN, Hội đồng phòng chống ma túy quốc tế.</div>
+                </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Sóng dưới -->
+            <div class="tree-wave">
+                <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="width:100%;height:100%;">
+                    <path d="M0,80 Q240,10 480,60 T960,50 T1440,80 L1440,100 L0,100Z" fill="#57b8ff" fill-opacity="0.22"/>
+                </svg>
             </div>
         </div>
     </section>
-
-    <!-- Programs & Activities -->
-    <section class="about-section programs-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Chương Trình & Hoạt Động</h2>
+    <!-- Sản phẩm/hệ sinh thái hiện có -->
+    <section class="about-products-section">
+        <div class="about-products-title"><i class="fa fa-cube"></i> Hệ sinh thái & Sản phẩm tiêu biểu</div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-book-open"></i></div>
+                <div class="product-title">Đào tạo online</div>
+                <div class="product-desc">Khóa học nhận thức, kỹ năng từ chối, phòng ngừa dành cho học sinh, phụ huynh, giáo viên.</div>
             </div>
-            
-            <div class="program-tabs">
-                <button class="tab-btn active" data-tab="training">Khóa Đào Tạo</button>
-                <button class="tab-btn" data-tab="community">Hoạt Động Cộng Đồng</button>
-                <button class="tab-btn" data-tab="research">Nghiên Cứu</button>
-                <button class="tab-btn" data-tab="support">Hỗ Trợ Cai Nghiện</button>
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-clipboard-question"></i></div>
+                <div class="product-title">Khảo sát & Trắc nghiệm</div>
+                <div class="product-desc">ASSIST, CRAFFT… Hệ thống đánh giá nhận thức, cá nhân hóa lộ trình hỗ trợ hiệu quả.</div>
             </div>
-            
-            <div class="tab-content active" id="training">
-                <div class="program-card">
-                    <div class="program-header">
-                        <h3>Khóa học "Nhận biết và phòng tránh ma túy" cho học sinh</h3>
-                        <div class="program-toggle">+</div>
-                    </div>
-                    <div class="program-body">
-                        <div class="program-body-content">
-                            <p>Chương trình đào tạo trực tuyến và trực tiếp dành cho học sinh THCS và THPT, cung cấp kiến thức cơ bản về các loại ma túy, cách nhận biết và kỹ năng từ chối. Khóa học kéo dài 8 buổi với sự tham gia của các chuyên gia tâm lý và cựu nghiện.</p>
-                            <ul style="margin-top: 10px; padding-left: 20px;">
-                                <li>Đối tượng: Học sinh từ 12-18 tuổi</li>
-                                <li>Hình thức: Online/Offline</li>
-                                <li>Thời lượng: 16 giờ</li>
-                                <li>Chứng chỉ: Có</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="program-card">
-                    <div class="program-header">
-                        <h3>Đào tạo kỹ năng cho phụ huynh và giáo viên</h3>
-                        <div class="program-toggle">+</div>
-                    </div>
-                    <div class="program-body">
-                        <div class="program-body-content">
-                            <p>Chương trình chuyên sâu giúp phụ huynh và giáo viên nhận biết dấu hiệu sử dụng ma túy, cách tiếp cận và hỗ trợ con em/ học sinh. Bao gồm các buổi workshop thực hành và tình huống thực tế.</p>
-                            <ul style="margin-top: 10px; padding-left: 20px;">
-                                <li>Đối tượng: Phụ huynh, giáo viên</li>
-                                <li>Hình thức: Offline</li>
-                                <li>Thời lượng: 24 giờ</li>
-                                <li>Tài liệu: Cung cấp đầy đủ</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-user-doctor"></i></div>
+                <div class="product-title">Tư vấn chuyên gia</div>
+                <div class="product-desc">Chuyên gia, bác sĩ đồng hành trực tuyến hoặc trực tiếp. Đặt lịch nhanh, bảo mật tuyệt đối.</div>
             </div>
-            
-            <div class="tab-content" id="community">
-                <div class="program-card">
-                    <div class="program-header">
-                        <h3>Chiến dịch "Ngày hội không ma túy"</h3>
-                        <div class="program-toggle">+</div>
-                    </div>
-                    <div class="program-body">
-                        <div class="program-body-content">
-                            <p>Tổ chức thường niên tại các trường học và khu dân cư, bao gồm các hoạt động: triển lãm hình ảnh, chia sẻ từ chuyên gia và người thật việc thật, gameshow kiến thức, cam kết không sử dụng ma túy.</p>
-                            <p style="margin-top: 10px;"><strong>Thành tích:</strong> Đã tổ chức tại 15 tỉnh thành với hơn 50.000 người tham gia.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="program-card">
-                    <div class="program-header">
-                        <h3>Câu lạc bộ "Thanh niên nói không với ma túy"</h3>
-                        <div class="program-toggle">+</div>
-                    </div>
-                    <div class="program-body">
-                        <div class="program-body-content">
-                            <p>Mạng lưới các câu lạc bộ tại các trường đại học, nơi sinh viên cùng nhau tổ chức các hoạt động tuyên truyền, sự kiện và hỗ trợ nhau trong việc phòng chống ma túy. Được hướng dẫn bởi các chuyên gia của hệ thống.</p>
-                            <p style="margin-top: 10px;"><strong>Hiện có:</strong> 32 CLB tại 25 trường đại học trên toàn quốc.</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-blog"></i></div>
+                <div class="product-title">Blog & Truyền thông</div>
+                <div class="product-desc">Chia sẻ kinh nghiệm thực tế, tin tức, câu chuyện truyền cảm hứng, cảnh báo xu hướng mới.</div>
             </div>
-            
-            <div class="tab-content" id="research">
-                <!-- Nội dung nghiên cứu -->
-            </div>
-            
-            <div class="tab-content" id="support">
-                <!-- Nội dung hỗ trợ cai nghiện -->
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-handshake"></i></div>
+                <div class="product-title">Kết nối cộng đồng</div>
+                <div class="product-desc">Tương tác, giao lưu – từ tình nguyện viên đến chuyên gia, doanh nghiệp, tổ chức quốc tế.</div>
             </div>
         </div>
     </section>
-
-    <!-- Stats Section -->
-    <section class="about-section stats-section">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number" data-count="5000">0</div>
-                    <div class="stat-label">Người được đào tạo</div>
-                </div>
-                
-                <div class="stat-item">
-                    <div class="stat-number" data-count="120">0</div>
-                    <div class="stat-label">Chương trình cộng đồng</div>
-                </div>
-                
-                <div class="stat-item">
-                    <div class="stat-number" data-count="50">0</div>
-                    <div class="stat-label">Chuyên gia</div>
-                </div>
-                
-                <div class="stat-item">
-                    <div class="stat-number" data-count="15">0</div>
-                    <div class="stat-label">Tỉnh thành hoạt động</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="about-section testimonials-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Cảm Nhận</h2>
-            </div>
-            
-            <div class="testimonial-slider">
-                <div class="testimonial active">
-                    <div class="testimonial-text">
-                        Hệ thống đã thay đổi hoàn toàn cách tiếp cận vấn đề ma túy tại trường chúng tôi. Các em học sinh không chỉ hiểu biết mà còn tự tin hơn trong việc bảo vệ bản thân và bạn bè.
-                    </div>
-                    <div class="testimonial-author">Ông Nguyễn Văn M</div>
-                    <div class="testimonial-role">Hiệu trưởng trường THPT ABC</div>
-                </div>
-                
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        Nhờ các khóa học của hệ thống, tôi đã có đủ kiến thức để phát hiện sớm con mình có dấu hiệu sử dụng ma túy và kịp thời can thiệp. Đây thực sự là chương trình ý nghĩa với các bậc phụ huynh.
-                    </div>
-                    <div class="testimonial-author">Chị Trần Thị N</div>
-                    <div class="testimonial-role">Phụ huynh học sinh</div>
-                </div>
-                
-                <div class="testimonial">
-                    <div class="testimonial-text">
-                        Từ một người nghiện heroin 10 năm, tôi đã tìm lại được cuộc sống bình thường nhờ chương trình hỗ trợ của hệ thống. Giờ đây tôi có thể giúp đỡ những người khác thoát khỏi con đường này.
-                    </div>
-                    <div class="testimonial-author">Anh Lê Văn P</div>
-                    <div class="testimonial-role">Cựu nghiện, nay là tình nguyện viên</div>
-                </div>
-                
-                <div class="slider-nav">
-                    <div class="slider-dot active" data-slide="0"></div>
-                    <div class="slider-dot" data-slide="1"></div>
-                    <div class="slider-dot" data-slide="2"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="about-section cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2 style="color: white; margin-bottom: 20px;">Bạn muốn tham gia cùng chúng tôi?</h2>
-                <p style="color: white; margin-bottom: 20px;">Dù là tình nguyện viên, đối tác hay chỉ đơn giản muốn tìm hiểu thêm về các chương trình của chúng tôi, hãy kết nối ngay hôm nay!</p>
-                
-                <div class="cta-buttons">
-                    <a href="#" class="cta-btn primary">Đăng ký tình nguyện</a>
-                    <a href="#" class="cta-btn secondary">Liên hệ hợp tác</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer từ Thymeleaf -->
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Hiệu ứng scroll cho timeline
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            
-            function checkTimeline() {
-                const triggerBottom = window.innerHeight / 5 * 4;
-                
-                timelineItems.forEach(item => {
-                    const itemTop = item.getBoundingClientRect().top;
-                    
-                    if (itemTop < triggerBottom) {
-                        item.classList.add('visible');
-                    }
-                });
-            }
-            
-            // Hiệu ứng scroll cho value cards và team members
-            const valueCards = document.querySelectorAll('.value-card');
-            const teamMembers = document.querySelectorAll('.team-member');
-            const statItems = document.querySelectorAll('.stat-item');
-            
-            function checkScroll() {
-                const triggerBottom = window.innerHeight / 5 * 4;
-                
-                valueCards.forEach(card => {
-                    const cardTop = card.getBoundingClientRect().top;
-                    
-                    if (cardTop < triggerBottom) {
-                        card.classList.add('visible');
-                    }
-                });
-                
-                teamMembers.forEach(member => {
-                    const memberTop = member.getBoundingClientRect().top;
-                    
-                    if (memberTop < triggerBottom) {
-                        member.classList.add('visible');
-                    }
-                });
-                
-                statItems.forEach(stat => {
-                    const statTop = stat.getBoundingClientRect().top;
-                    
-                    if (statTop < triggerBottom) {
-                        stat.classList.add('visible');
-                        startCountUp();
-                    }
-                });
-            }
-            
-            // Count up animation for stats
-            function startCountUp() {
-                const counters = document.querySelectorAll('.stat-number');
-                const speed = 200;
-                
-                counters.forEach(counter => {
-                    const target = +counter.getAttribute('data-count');
-                    const count = +counter.innerText;
-                    const increment = target / speed;
-                    
-                    if (count < target) {
-                        counter.innerText = Math.ceil(count + increment);
-                        setTimeout(startCountUp, 1);
-                    } else {
-                        counter.innerText = target;
-                    }
-                });
-            }
-            
-            // Tab system for programs
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // Remove active from all buttons and tabs
-                    tabBtns.forEach(btn => btn.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(tab => {
-                        tab.classList.remove('active');
-                    });
-                    
-                    // Add active to clicked button and corresponding tab
-                    this.classList.add('active');
-                    document.getElementById(tabId).classList.add('active');
-                });
-            });
-            
-            // Accordion for program cards
-            const programHeaders = document.querySelectorAll('.program-header');
-            
-            programHeaders.forEach(header => {
-                header.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    const body = this.nextElementSibling;
-                    
-                    if (this.classList.contains('active')) {
-                        body.style.maxHeight = body.scrollHeight + 'px';
-                    } else {
-                        body.style.maxHeight = 0;
-                    }
-                });
-            });
-            
-            // Testimonial slider
-            const testimonialDots = document.querySelectorAll('.slider-dot');
-            const testimonials = document.querySelectorAll('.testimonial');
-            
-            testimonialDots.forEach(dot => {
-                dot.addEventListener('click', function() {
-                    const slideIndex = this.getAttribute('data-slide');
-                    
-                    // Remove active from all dots and testimonials
-                    testimonialDots.forEach(d => d.classList.remove('active'));
-                    testimonials.forEach(t => t.classList.remove('active'));
-                    
-                    // Add active to clicked dot and corresponding testimonial
-                    this.classList.add('active');
-                    testimonials[slideIndex].classList.add('active');
-                });
-            });
-            
-            // Auto slide change for testimonials
-            let currentSlide = 0;
-            function autoSlide() {
-                testimonialDots.forEach(d => d.classList.remove('active'));
-                testimonials.forEach(t => t.classList.remove('active'));
-                
-                currentSlide = (currentSlide + 1) % testimonials.length;
-                
-                testimonialDots[currentSlide].classList.add('active');
-                testimonials[currentSlide].classList.add('active');
-            }
-            
-            let slideInterval = setInterval(autoSlide, 5000);
-            
-            // Pause auto slide when hovering
-            const slider = document.querySelector('.testimonial-slider');
-            slider.addEventListener('mouseenter', () => {
-                clearInterval(slideInterval);
-            });
-            
-            slider.addEventListener('mouseleave', () => {
-                slideInterval = setInterval(autoSlide, 5000);
-            });
-            
-            // Initial check
-            checkTimeline();
-            checkScroll();
-            
-            // Event listeners
-            window.addEventListener('scroll', checkTimeline);
-            window.addEventListener('scroll', checkScroll);
-            
-            // Open first program by default
-            if (programHeaders.length > 0) {
-                const firstHeader = programHeaders[0];
-                firstHeader.classList.add('active');
-                const firstBody = firstHeader.nextElementSibling;
-                firstBody.style.maxHeight = firstBody.scrollHeight + 'px';
-            }
-        });
-    </script>
+</div>
+<div th:replace="member/footer :: main-footer"></div>
 </body>
 </html>

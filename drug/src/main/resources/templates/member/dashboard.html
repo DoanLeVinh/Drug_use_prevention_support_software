@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trang chủ | Drug Prevention Support System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #2176ae;
+    --secondary: #57b8ff;
+    --bg: #f7fbfd;
+    --white: #fff;
+    --soft: #f0f7fa;
+    --shadow: 0 4px 32px 0 rgba(33,118,174,0.10);
+    --soft-shadow: 0 2px 14px 0 rgba(33,118,174,0.07);
+}
+
+html, body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden !important;
+    box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    margin: 0;
+    color: #24415d;
+    scroll-behavior: smooth;
+    min-width: 0;
+}
+
+/* Wrapper chính */
+.main-wrap {
+    max-width: 1440px;
+    width: 90vw;
+    min-width: 300px;
+    margin: 0 auto;
+    padding: 0 0 50px 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.section, .dashboard-section {
+    width: 100%;
+    margin: 40px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.section-title, .cert-title {
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 26px;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+/* ========== HERO ========== */
+.home-hero {
+    width: 100%;
+    background: linear-gradient(100deg, var(--primary) 40%, var(--secondary) 100%);
+    color: #fff;
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    margin-top: 26px;
+    padding: 48px 2vw 44px 2vw;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.home-hero h1 {
+    font-size: 2.7rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    letter-spacing: 0.04em;
+}
+.home-hero .hero-desc {
+    font-size: 1.18rem;
+    max-width: 820px;
+    margin: 0 auto 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    opacity: 0.94;
+}
+.home-hero .hero-quote {
+    margin-top: 18px;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #dff4fc;
+}
+.home-hero .hero-img {
+    margin: 32px auto 0;
+    display: block;
+    max-width: 420px;
+    width: 80vw;
+    border-radius: 14px;
+    box-shadow: 0 8px 36px #193c4a27;
+}
+
+/* ========== BLOG ========== */
+.blog-grid {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 32px;
+    margin: 0 auto 24px auto;
+    padding: 0;
+}
+.blog-card {
+    background: var(--white);
+    border-radius: 13px;
+    box-shadow: var(--shadow);
+    width: 340px;
+    max-width: 370px;
+    min-width: 260px;
+    margin: 0 10px;
+    padding: 24px 18px 20px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.18s, transform 0.13s;
+    cursor: pointer;
+}
+.blog-card:hover {
+    box-shadow: 0 7px 24px #57b8ff22;
+    transform: translateY(-4px) scale(1.018);
+}
+.blog-card img {
+    width: 95%;
+    max-width: 235px;
+    min-height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #57b8ff1a;
+    margin-bottom: 15px;
+}
+.blog-title {
+    font-size: 1.22em;
+    font-weight: 700;
+    color: #1c2f49;
+    margin-bottom: 7px;
+    text-align: center;
+}
+.blog-desc {
+    font-size: 1em;
+    color: #4b637f;
+    margin-bottom: 13px;
+    text-align: center;
+}
+.blog-link {
+    color: var(--secondary);
+    font-size: 1em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: text-decoration 0.18s, color 0.2s;
+}
+.blog-link:hover {
+    text-decoration: underline;
+    color: var(--primary);
+}
+
+/* ========== COURSES ========== */
+.courses-grid {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 32px;
+    margin: 0 auto 24px auto;
+    padding: 0;
+}
+.course-card {
+    background: var(--white);
+    border-radius: 13px;
+    box-shadow: var(--shadow);
+    width: 320px;
+    min-width: 240px;
+    max-width: 370px;
+    margin: 0 10px;
+    padding: 24px 18px 20px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.18s, transform 0.13s;
+    cursor: pointer;
+}
+.course-card:hover {
+    box-shadow: 0 7px 24px #57b8ff22;
+    transform: translateY(-4px) scale(1.018);
+}
+.course-card img {
+    width: 95%;
+    max-width: 235px;
+    min-height: 110px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #57b8ff1a;
+    margin-bottom: 15px;
+}
+.course-title {
+    font-size: 1.18em;
+    font-weight: 700;
+    color: #1c2f49;
+    margin-bottom: 7px;
+    text-align: center;
+}
+.course-desc {
+    font-size: 1em;
+    color: #4b637f;
+    margin-bottom: 12px;
+    text-align: center;
+}
+.course-btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(90deg, #2176ae 80%, #57b8ff 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.13s, transform 0.13s;
+    box-shadow: 0 1px 5px #2176ae18;
+    margin-top: 8px;
+}
+.course-btn:hover {
+    background: linear-gradient(90deg, #1761b3 60%, #3eaafc 100%);
+    box-shadow: 0 4px 10px #2176ae24;
+    transform: scale(1.03);
+}
+
+/* ========== TESTS ========== */
+.test-grid {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 32px;
+    margin: 0 auto 24px auto;
+    padding: 0;
+}
+.test-card {
+    background: var(--white);
+    border-radius: 13px;
+    box-shadow: var(--soft-shadow);
+    width: 340px;
+    max-width: 390px;
+    min-width: 210px;
+    margin: 0 10px;
+    padding: 20px 18px 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    transition: box-shadow 0.18s, transform 0.13s;
+}
+.test-card:hover {
+    box-shadow: 0 7px 24px #57b8ff18;
+    transform: translateY(-2px) scale(1.015);
+}
+.test-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.test-title {
+    font-size: 1.13em;
+    font-weight: 700;
+    color: #2176ae;
+    margin-bottom: 8px;
+}
+.test-desc {
+    font-size: 1em;
+    color: #4b637f;
+    margin-bottom: 13px;
+}
+.test-btn {
+    padding: 7px 17px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(90deg, #2176ae 80%, #57b8ff 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.98em;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.13s, transform 0.13s;
+    box-shadow: 0 1px 5px #2176ae18;
+    margin-top: 5px;
+}
+.test-btn:hover {
+    background: linear-gradient(90deg, #1761b3 60%, #3eaafc 100%);
+    box-shadow: 0 4px 10px #2176ae24;
+    transform: scale(1.03);
+}
+.test-card img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    background: #f0f7fa;
+    border-radius: 12px;
+    box-shadow: 0 2px 7px #2176ae10;
+}
+
+/* ========== SPONSOR ========== */
+.sponsor-frame {
+    background: linear-gradient(100deg, #d2edff 60%, #e4f4fc 100%);
+    border-radius: 16px;
+    box-shadow: 0 4px 25px #2176ae0c;
+    padding: 28px 0;
+    margin: 50px 0 32px 0;
+    width: 100%;
+    max-width: 1200px;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.sponsor-title {
+    color: #274060;
+    font-size: 1.22em;
+    margin-bottom: 19px;
+    font-weight: 600;
+    text-align: center;
+}
+.sponsor-carousel {
+    display: flex;
+    gap: 44px;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+    padding: 8px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #b7d8f5 #eaf3fa;
+    max-width: 100%;
+    width: 100%;
+}
+.sponsor-logo {
+    width: 114px;
+    height: 44px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 7px;
+    box-shadow: 0 1px 6px #2176ae13;
+    padding: 7px 10px;
+    transition: box-shadow 0.18s, transform 0.13s;
+    flex-shrink: 0;
+}
+.sponsor-logo:hover {
+    box-shadow: 0 6px 18px #57b8ff1c;
+    transform: scale(1.06) rotate(-2deg);
+}
+
+/* ========== SPIRIT/VALUES ========== */
+.spirit-section {
+    width: 100%;
+    margin: 44px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.spirit-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 26px;
+    width: 100%;
+    max-width: 1200px;
+}
+.spirit-card {
+    background: linear-gradient(90deg, #e9f6fb 60%, #f5fafe 100%);
+    border-radius: 13px;
+    box-shadow: 0 1px 6px #2176ae14;
+    padding: 26px 24px 21px 24px;
+    min-width: 210px;
+    max-width: 280px;
+    flex: 1 1 210px;
+    margin-bottom: 8px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.spirit-card i {
+    font-size: 2.1rem;
+    color: #57b8ffbb;
+    opacity: 0.78;
+    margin-bottom: 10px;
+}
+.spirit-title {
+    font-size: 1.08em;
+    font-weight: 700;
+    color: #2176ae;
+    margin-bottom: 7px;
+}
+.spirit-desc {
+    font-size: 0.97em;
+    color: #3d5772;
+}
+
+/* ========== DOCTORS ========== */
+.doctor-section {
+    width: 100%;
+    margin-top: 42px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.doctor-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+}
+.doctor-card {
+    background: #fff;
+    border-radius: 13px;
+    box-shadow: 0 2px 9px #2176ae1a;
+    padding: 20px 16px 16px 16px;
+    min-width: 220px;
+    max-width: 260px;
+    text-align: center;
+    transition: box-shadow 0.16s, transform 0.13s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.doctor-card:hover {
+    box-shadow: 0 7px 28px #57b8ff19;
+    transform: translateY(-4px) scale(1.025);
+}
+.doctor-avatar {
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3.5px solid #57b8ff;
+    margin-bottom: 12px;
+    margin-top: -18px;
+    background: #eaf4fa;
+}
+.doctor-name {
+    font-size: 1.08em;
+    font-weight: 700;
+    color: #2176ae;
+    margin-bottom: 2px;
+}
+.doctor-role {
+    color: #21ae66;
+    font-size: 0.96em;
+    font-weight: 500;
+}
+.doctor-email {
+    color: #6c7b8c;
+    font-size: 0.97em;
+    margin: 6px 0 0 0;
+}
+.doctor-contact {
+    margin-top: 10px;
+}
+.doctor-contact a {
+    display: inline-block;
+    color: #2176ae;
+    text-decoration: none;
+    margin: 0 7px;
+    font-size: 1.18em;
+    transition: color 0.18s;
+}
+.doctor-contact a:hover { color: #57b8ff; }
+
+/* ========== CERTIFICATES ========== */
+.cert-section {
+    width: 100%;
+    margin: 48px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cert-title {
+    font-size: 1.34rem;
+    font-weight: 700;
+    color: #2176ae;
+    margin-bottom: 26px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    justify-content: center;
+}
+.cert-list {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px;
+}
+.cert-card {
+    background: #fff;
+    border-radius: 13px;
+    box-shadow: 0 2px 14px #2176ae14;
+    padding: 22px 18px 19px 18px;
+    min-width: 210px;
+    max-width: 260px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.14s, transform 0.14s;
+}
+.cert-card:hover {
+    box-shadow: 0 7px 22px #57b8ff12;
+    transform: scale(1.025);
+}
+.cert-card img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    margin-bottom: 13px;
+    background: #eaf3fa;
+    border-radius: 50%;
+    box-shadow: 0 1px 5px #57b8ff11;
+}
+.cert-name {
+    font-size: 1.04em;
+    font-weight: 600;
+    color: #215fae;
+    margin-bottom: 5px;
+}
+.cert-issuer {
+    font-size: 0.98em;
+    color: #4b637f;
+}
+
+@media (max-width: 1200px) {
+    .main-wrap, .courses-grid, .blog-grid, .test-grid, .doctor-list, .spirit-list, .cert-list, .sponsor-frame { max-width: 98vw;}
+}
+@media (max-width: 900px) {
+    .main-wrap { width: 99vw;}
+    .blog-card, .course-card, .test-card, .doctor-card, .cert-card { width: 95vw; max-width: 440px;}
+    .spirit-card { max-width: 350px;}
+}
+@media (max-width: 600px) {
+    .main-wrap { padding: 0;}
+    .section-title, .cert-title { font-size: 1.1rem;}
+    .home-hero h1 { font-size: 1.08rem;}
+    .blog-card, .course-card, .test-card, .doctor-card, .cert-card { min-width: 180px; width: 99vw;}
+    .spirit-list, .doctor-list, .cert-list, .blog-grid, .courses-grid, .test-grid { flex-direction: column; gap: 22px;}
+    .home-hero { padding: 14px 0 14px 0;}
+}
+
+    </style>
+</head>
+<body>
+    <!-- Kế thừa header -->
+    <div th:replace="member/header :: main-header"></div>
+    <div class="main-wrap">
+        <!-- Hero section -->
+        <section class="home-hero">
+            <h1>Phần mềm hỗ trợ phòng ngừa sử dụng ma túy</h1>
+            <div class="hero-desc">
+                Tổ chức tình nguyện tiên phong trong giáo dục phòng chống ma túy, cung cấp nền tảng đào tạo, khảo sát nhận thức, blog chia sẻ kinh nghiệm thực tế, kết nối cộng đồng và chuyên gia đồng hành!
+            </div>
+            <div class="hero-quote">
+                “Sức mạnh phòng ngừa xuất phát từ cộng đồng, giáo dục và sự sẻ chia.” <br> – Hệ thống Drug Prevention Support System
+            </div>
+            <img src="https://images.unsplash.com/photo-1485841890310-6a055c88698a?auto=format&fit=crop&w=900&q=80" alt="Chung tay phòng chống ma túy" class="hero-img">
+        </section>
+
+        <!-- Blog nổi bật -->
+        <section class="dashboard-section" style="margin-top:48px;">
+            <div class="section-title"><i class="fa-solid fa-blog"></i> Chia sẻ kinh nghiệm & Blog nổi bật</div>
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=500&q=80" alt="Blog kỹ năng từ chối">
+                    <div class="blog-body">
+                        <div class="blog-title">5 kỹ năng từ chối chất gây nghiện cho học sinh</div>
+                        <div class="blog-desc">Tình huống thực tế, cách xử lý và những bài học quý giá từ chuyên gia tâm lý học đường.</div>
+                        <a href="#" class="blog-link">Đọc chi tiết</a>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=500&q=80" alt="Blog phòng tránh">
+                    <div class="blog-body">
+                        <div class="blog-title">Hướng dẫn nhận biết nguy cơ và phòng tránh</div>
+                        <div class="blog-desc">Chia sẻ kinh nghiệm nhận diện dấu hiệu, tăng cường kết nối giữa gia đình và nhà trường.</div>
+                        <a href="#" class="blog-link">Đọc chi tiết</a>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="Blog phụ huynh giáo dục">
+                    <div class="blog-body">
+                        <div class="blog-title">Lời khuyên cho phụ huynh đồng hành cùng con</div>
+                        <div class="blog-desc">Vai trò của cha mẹ, tạo dựng môi trường tích cực và truyền cảm hứng mạnh mẽ.</div>
+                        <a href="#" class="blog-link">Đọc chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Khóa học đề xuất -->
+        <section class="dashboard-section">
+            <div class="section-title"><i class="fa-solid fa-graduation-cap"></i> Khóa học nổi bật</div>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="Khóa học nhận thức ma túy">
+                    <div class="card-body">
+                        <div class="course-title">Nhận thức về ma túy cho học sinh</div>
+                        <div class="course-desc">Kiến thức cơ bản, dấu hiệu nhận biết và kỹ năng phòng ngừa.</div>
+                        <button class="course-btn">Xem khóa học</button>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Kỹ năng từ chối">
+                    <div class="card-body">
+                        <div class="course-title">Kỹ năng từ chối chất gây nghiện</div>
+                        <div class="course-desc">Tình huống thực tế, bài tập thực hành giúp rèn luyện kỹ năng từ chối.</div>
+                        <button class="course-btn">Xem khóa học</button>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=600&q=80" alt="Khóa học cho phụ huynh">
+                    <div class="card-body">
+                        <div class="course-title">Phòng ngừa cho phụ huynh</div>
+                        <div class="course-desc">Giúp cha mẹ phát hiện sớm và hỗ trợ con em vượt qua nguy cơ.</div>
+                        <button class="course-btn">Xem khóa học</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bài test, khảo sát đề xuất -->
+        <section class="dashboard-section">
+            <div class="section-title"><i class="fa-solid fa-clipboard-question"></i> Bài khảo sát, trắc nghiệm</div>
+            <div class="test-grid">
+                <div class="test-card">
+                    <div class="test-info">
+                        <div class="test-title">Khảo sát ASSIST</div>
+                        <div class="test-desc">Xác định nguy cơ sử dụng ma túy chỉ với 8 câu hỏi!</div>
+                        <button class="test-btn">Bắt đầu khảo sát</button>
+                    </div>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3986/3986986.png" alt="Survey">
+                </div>
+                <div class="test-card">
+                    <div class="test-info">
+                        <div class="test-title">Test CRAFFT</div>
+                        <div class="test-desc">Đánh giá nguy cơ nghiện chất gây nghiện, dành cho thanh thiếu niên.</div>
+                        <button class="test-btn">Bắt đầu test</button>
+                    </div>
+                    <img src="https://cdn-icons-png.flaticon.com/512/6064/6064090.png" alt="Test">
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo nhà tài trợ -->
+        <div class="dashboard-section sponsor-frame">
+            <div class="sponsor-title"><i class="fa fa-handshake"></i> Đồng hành cùng các tổ chức uy tín</div>
+            <div class="sponsor-carousel" id="sponsorCarousel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png" alt="Sponsor 1" class="sponsor-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Sponsor 2" class="sponsor-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Unicef_logo.svg" alt="Sponsor 3" class="sponsor-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/World_Health_Organization_Logo.svg" alt="Sponsor 4" class="sponsor-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Red_Cross_logo.svg" alt="Sponsor 5" class="sponsor-logo">
+            </div>
+        </div>
+
+        <!-- Giá trị/tinh thần hệ thống -->
+        <div class="spirit-section">
+            <div class="section-title"><i class="fa fa-heart"></i> Giá trị & Tinh thần hệ thống</div>
+            <div class="spirit-list">
+                <div class="spirit-card">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="spirit-title">Cộng đồng vì sức khỏe</div>
+                    <div class="spirit-desc">Xây dựng cộng đồng mạnh khỏe, không ma túy qua sự sẻ chia, đồng hành.</div>
+                </div>
+                <div class="spirit-card">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <div class="spirit-title">Sáng tạo & Đổi mới</div>
+                    <div class="spirit-desc">Không ngừng đổi mới nội dung, công nghệ và hoạt động cộng đồng.</div>
+                </div>
+                <div class="spirit-card">
+                    <i class="fa-solid fa-brain"></i>
+                    <div class="spirit-title">Giáo dục nhận thức</div>
+                    <div class="spirit-desc">Trang bị kiến thức, kỹ năng, phòng ngừa cho cá nhân, gia đình, nhà trường.</div>
+                </div>
+                <div class="spirit-card">
+                    <i class="fa-solid fa-hands-holding"></i>
+                    <div class="spirit-title">Chuyên gia đồng hành</div>
+                    <div class="spirit-desc">Bác sĩ & tư vấn viên tâm huyết sát cánh cùng người dùng.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chuyên gia, bác sĩ đồng hành -->
+        <div class="doctor-section">
+            <div class="section-title"><i class="fa-solid fa-user-doctor"></i> Đội ngũ chuyên gia, bác sĩ đồng hành</div>
+            <div class="doctor-list">
+                <div class="doctor-card">
+                    <img class="doctor-avatar" src="https://randomuser.me/api/portraits/men/83.jpg" alt="BS. Nguyễn Văn Hùng">
+                    <div class="doctor-name">BS. Nguyễn Văn Hùng</div>
+                    <div class="doctor-role">Bác sĩ tâm lý & cai nghiện</div>
+                    <div class="doctor-email">hung.drugfree@gmail.com</div>
+                    <div class="doctor-contact">
+                        <a href="mailto:hung.drugfree@gmail.com"><i class="fa fa-envelope"></i></a>
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="doctor-card">
+                    <img class="doctor-avatar" src="https://randomuser.me/api/portraits/women/65.jpg" alt="Chuyên gia Phạm Thị Lan">
+                    <div class="doctor-name">Phạm Thị Lan</div>
+                    <div class="doctor-role">Chuyên gia tâm lý trẻ vị thành niên</div>
+                    <div class="doctor-email">lan.counselor@gmail.com</div>
+                    <div class="doctor-contact">
+                        <a href="mailto:lan.counselor@gmail.com"><i class="fa fa-envelope"></i></a>
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="doctor-card">
+                    <img class="doctor-avatar" src="https://randomuser.me/api/portraits/men/67.jpg" alt="TS. Trần Minh Quân">
+                    <div class="doctor-name">TS. Trần Minh Quân</div>
+                    <div class="doctor-role">Chuyên gia đào tạo & nghiên cứu</div>
+                    <div class="doctor-email">minhquan.training@gmail.com</div>
+                    <div class="doctor-contact">
+                        <a href="mailto:minhquan.training@gmail.com"><i class="fa fa-envelope"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="doctor-card">
+                    <img class="doctor-avatar" src="https://randomuser.me/api/portraits/women/45.jpg" alt="BS. Lê Thu Hiền">
+                    <div class="doctor-name">BS. Lê Thu Hiền</div>
+                    <div class="doctor-role">Bác sĩ cộng đồng</div>
+                    <div class="doctor-email">thuhien.doctor@gmail.com</div>
+                    <div class="doctor-contact">
+                        <a href="mailto:thuhien.doctor@gmail.com"><i class="fa fa-envelope"></i></a>
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Giấy chứng nhận, bằng khen -->
+        <div class="cert-section">
+            <div class="cert-title"><i class="fa fa-certificate"></i> Giấy chứng nhận & Bằng khen</div>
+            <div class="cert-list">
+                <div class="cert-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3208/3208726.png" alt="Certificate">
+                    <div class="cert-name">Chứng nhận Tổ chức Xanh</div>
+                    <div class="cert-issuer">Bộ Y tế</div>
+                </div>
+                <div class="cert-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1256/1256650.png" alt="Award">
+                    <div class="cert-name">Bằng khen cống hiến cộng đồng</div>
+                    <div class="cert-issuer">UNICEF Vietnam</div>
+                </div>
+                <div class="cert-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1049/1049969.png" alt="Medal">
+                    <div class="cert-name">Top 10 Sáng kiến xã hội</div>
+                    <div class="cert-issuer">WHO Việt Nam</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Kế thừa footer -->
+    <div th:replace="member/footer :: main-footer"></div>
+    <script>
+        // Sponsor carousel auto-scroll
+        let sponsorCarousel = document.getElementById('sponsorCarousel');
+        setInterval(() => {
+            if (!sponsorCarousel) return;
+            if(sponsorCarousel.scrollLeft + sponsorCarousel.clientWidth >= sponsorCarousel.scrollWidth - 1) {
+                sponsorCarousel.scrollTo({left: 0, behavior: 'smooth'});
+            } else {
+                sponsorCarousel.scrollBy({left: 170, behavior: 'smooth'});
+            }
+        }, 2600);
+    </script>
+</body>
+</html>

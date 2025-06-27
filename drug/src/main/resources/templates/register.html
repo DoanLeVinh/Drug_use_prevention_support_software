@@ -4,408 +4,274 @@
     <title>Đăng ký - Hệ thống phòng ngừa ma túy</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4a6fa5;
-            --primary-light: #6d8cc0;
-            --secondary-color: #166088;
-            --accent-color: #4fc3f7;
-            --success-color: #28a745;
-            --danger-color: #dc3545;
-            --warning-color: #ffc107;
-            --light-gray: #f8f9fa;
-            --medium-gray: #e9ecef;
-            --dark-gray: #343a40;
-            --text-color: #495057;
-            --border-color: #dee2e6;
-            --facebook-color: #3b5998;
-            --google-color: #db4437;
-            --twitter-color: #1da1f2;
-            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --primary-color: #4a90e2;
+            --secondary-color: #a0d8ef;
+            --accent-color: #67d6ff;
+            --light-blue: #eaf6fb;
+            --border-color: #d1eaff;
+            --text-color: #293245;
+            --footer-dark: #222c3c;
+            --box-shadow: 0 10px 38px 0 #4a90e23b, 0 1.5px 7px 0 #1e90ff21;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box;}
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+            font-family: 'Poppins', 'Roboto', sans-serif;
+            background: var(--light-blue);
             color: var(--text-color);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            overflow-x: hidden;
         }
-
+        /* WAVE BACKGROUND */
+        .wave-bg {
+            position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+            overflow: hidden; z-index: 0; pointer-events: none;
+        }
+        .wave-layer {
+            position: absolute; left: 0; top: 0;
+            width: 100%; height: 100%;
+            transition: transform 0.18s cubic-bezier(.16,.81,.68,1.01);
+        }
+        /* CARD & LAYOUT */
         .register-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-grow: 1;
-            padding: 2rem;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
         }
-
         .register-card {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: var(--box-shadow);
-            width: 100%;
-            max-width: 800px;
-            overflow: hidden;
             display: flex;
             flex-direction: row;
-        }
-
-        .register-hero {
-            flex: 1;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-            color: white;
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
+            width: 100%;
+            max-width: 900px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.98);
+            box-shadow: var(--box-shadow);
             overflow: hidden;
+            margin: 60px 0 40px 0;
+            transition: box-shadow 0.2s;
         }
-
-        .register-hero::before {
-            content: "";
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+        .register-hero {
+            flex: 1.15;
+            background: linear-gradient(93deg, #4a90e2 70%, #a0d8ef 100%);
+            color: white;
+            padding: 2.5rem 1.7rem 2.3rem 1.7rem;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; min-width: 240px;
         }
-
-        .register-hero::after {
-            content: "";
-            position: absolute;
-            bottom: -80px;
-            left: -30px;
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
         .hero-icon {
             font-size: 3rem;
-            margin-bottom: 1.5rem;
-            color: white;
-            z-index: 1;
+            margin-bottom: 1.25rem;
         }
-
         .register-hero h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            z-index: 1;
+            font-size: 1.52rem;
+            font-weight: 700;
+            margin-bottom: 1.05rem;
         }
-
         .register-hero p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 2rem;
-            z-index: 1;
+            font-size: 1.02rem;
+            opacity: .95;
+            margin-bottom: 1.45rem;
         }
-
         .hero-image {
-            width: 80%;
-            max-width: 250px;
-            margin-top: 1.5rem;
-            z-index: 1;
-            animation: float 6s ease-in-out infinite;
+            width: 68%;
+            max-width: 230px;
+            margin-top: 1.15rem;
+            animation: float 5.3s ease-in-out infinite;
+            filter: drop-shadow(0 2px 10px #61a3d48a);
         }
-
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+            0% { transform: translateY(0px);}
+            50% { transform: translateY(-15px);}
+            100% { transform: translateY(0);}
         }
-
+        /* FORM */
         .register-form {
-            flex: 1;
-            padding: 3rem 2.5rem;
+            flex: 1.7;
+            padding: 2.8rem 2.8rem 2.3rem 2.8rem;
+            background: transparent;
         }
-
-        .register-header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
+        .register-header {margin-bottom: 2.1rem; text-align: center;}
         .register-header h1 {
-            color: var(--primary-color);
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            color: #4a90e2; font-size: 2rem;
+            margin-bottom: 0.45rem; font-weight: 700;
         }
-
-        .register-header p {
-            color: var(--text-color);
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
+        .register-header p {color: #345c85; font-size: 1.01rem;}
+        .row {display: flex; gap: 1.6rem;}
+        .row .form-group {flex: 1;}
+        .form-group {margin-bottom: 1.1rem;}
         .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark-gray);
-            font-size: 0.9rem;
+            display: block; margin-bottom: 0.5rem;
+            font-weight: 600; color: #345c85; font-size: 0.97rem;
         }
-
-        .input-icon {
-            position: relative;
-        }
-
+        .input-icon {position: relative;}
         .input-icon i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
+            position: absolute; left: 15px; top: 50%;
             transform: translateY(-50%);
-            color: var(--primary-color);
-            font-size: 1rem;
+            color: #4a90e2; font-size: 1rem;
         }
-
         .form-control {
             width: 100%;
-            padding: 12px 15px 12px 45px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            background-color: var(--light-gray);
+            padding: 13px 14px 13px 43px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 7px;
+            font-size: 1.09rem;
+            background: rgba(245,250,255,0.93);
+            box-shadow: 0 0.5px 1.2px #1e90ff04;
+            transition: border-color 0.3s, box-shadow 0.16s;
         }
-
         .form-control:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
-            background-color: white;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px #4a90e233;
+            background: white;
         }
-
         .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
+            position: absolute; right: 15px; top: 50%;
             transform: translateY(-50%);
-            color: var(--text-color);
-            cursor: pointer;
-            opacity: 0.6;
-            transition: var(--transition);
+            color: #888; cursor: pointer; opacity: 0.7;
+            font-size: 1.11rem; transition: color 0.2s, opacity 0.2s;
         }
-
         .password-toggle:hover {
-            opacity: 1;
-            color: var(--primary-color);
+            opacity: 1; color: #4a90e2;
         }
-
-        .row {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .row .form-group {
-            flex: 1;
-        }
-
         .terms-conditions {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 1.5rem;
-            font-size: 0.85rem;
+            font-size: 0.93rem;
+            margin-bottom: 1.1rem;
         }
-
-        .terms-conditions input {
-            margin-right: 0.75rem;
-            margin-top: 0.2rem;
-        }
-
-        .terms-conditions a {
-            color: var(--primary-color);
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .terms-conditions a:hover {
-            text-decoration: underline;
-        }
-
+        .terms-conditions input {margin-right: 0.7rem; margin-top: 0.19rem;}
+        .terms-conditions a {color: #4a90e2; text-decoration: none;}
+        .terms-conditions a:hover {text-decoration: underline;}
         .btn {
-            display: inline-block;
-            padding: 12px 20px;
+            display: inline-block; padding: 15px 22px;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 1.09rem;
             font-weight: 600;
             text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            width: 100%;
+            cursor: pointer; border: none;
+            width: 100%; letter-spacing: 0.10em;
+            box-shadow: 0 0.5px 6px #1abc9c11;
+            transition: background 0.26s, box-shadow 0.23s, transform 0.21s;
         }
-
         .btn-primary {
-            background-color: var(--primary-color);
+            background: linear-gradient(90deg, #4a90e2 70%, #a0d8ef 100%);
             color: white;
-            box-shadow: 0 4px 6px rgba(74, 111, 165, 0.2);
+            border: none;
         }
-
         .btn-primary:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(74, 111, 165, 0.3);
+            background: linear-gradient(90deg, #276db9 30%, #76c5f6 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 2px 10px #a0d8ef88;
         }
-
         .login-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
+            text-align: center; margin-top: 1.35rem; font-size: 1rem;
         }
-
-        .login-link a {
-            color: var(--primary-color);
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-
-        .social-login {
-            margin-top: 2rem;
-        }
-
+        .login-link a {color: #4a90e2; font-weight: 600; text-decoration: none;}
+        .login-link a:hover {text-decoration: underline;}
+        .social-login {margin-top: 1.8rem;}
         .login-divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-            color: #adb5bd;
-            font-size: 0.9rem;
+            display: flex; align-items: center;
+            margin: 1.4rem 0 1.15rem 0;
+            color: #adb5bd; font-size: 0.98rem;
         }
-
         .login-divider::before,
         .login-divider::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid var(--border-color);
+            content: ""; flex: 1;
+            border-bottom: 1.2px solid #d1eaff;
         }
-
-        .login-divider::before {
-            margin-right: 1rem;
-        }
-
-        .login-divider::after {
-            margin-left: 1rem;
-        }
-
-        .social-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-
+        .login-divider::before {margin-right: 1.1rem;}
+        .login-divider::after {margin-left: 1.1rem;}
+        .social-buttons {display: flex; justify-content: center; gap: 1.1rem;}
         .btn-social {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            width: 42px; height: 42px;
             border-radius: 50%;
-            color: white;
-            font-size: 1.2rem;
-            transition: var(--transition);
+            color: white; font-size: 1.23rem;
+            transition: background 0.18s, transform 0.21s;
         }
-
         .btn-social:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: 0 3px 8px #67d6ff33;
         }
-
-        .btn-facebook {
-            background-color: var(--facebook-color);
-        }
-
-        .btn-google {
-            background-color: var(--google-color);
-        }
-
-        .btn-twitter {
-            background-color: var(--twitter-color);
-        }
-
+        .btn-facebook {background: #3b5998;}
+        .btn-google {background: #db4437;}
+        .btn-twitter {background: #1da1f2;}
         .footer {
-            background-color: var(--dark-gray);
+            background: var(--footer-dark);
             color: white;
-            padding: 2rem 1rem;
+            padding: 1.2rem 1rem;
             text-align: center;
+            margin-top: 0; letter-spacing: 0.03em;
         }
-
-        .footer p {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
+        .footer p {font-size: 1rem; color: rgba(255,255,255,0.78);}
         /* Responsive styles */
-        @media (max-width: 768px) {
-            .register-card {
-                flex-direction: column;
-            }
-
-            .register-hero {
-                padding: 2rem 1.5rem;
-                border-radius: 15px 15px 0 0;
-            }
-
-            .register-form {
-                padding: 2rem 1.5rem;
-            }
-
-            .row {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .hero-image {
-                max-width: 180px;
-            }
+        @media (max-width: 900px) {
+            .register-card {max-width: 99vw;}
+            .register-form {padding: 1.5rem;}
+            .register-hero {padding: 1.5rem;}
+            .row {gap: 0.7rem;}
+            .hero-image {max-width: 150px;}
         }
-
+        @media (max-width: 680px) {
+            .register-card {flex-direction: column;}
+            .register-form {padding: 1.3rem;}
+            .register-hero {padding: 1.3rem;}
+            .hero-image {max-width: 120px;}
+        }
         @media (max-width: 480px) {
-            .register-container {
-                padding: 1rem;
-            }
-
-            .register-hero h2 {
-                font-size: 1.5rem;
-            }
-
-            .register-header h1 {
-                font-size: 1.5rem;
-            }
-
-            .form-control {
-                padding: 10px 12px 10px 40px;
-            }
-
-            .btn {
-                padding: 10px 15px;
-            }
+            .register-container {padding: 0.3rem;}
+            .register-header h1 {font-size: 1.24rem;}
+            .register-hero h2 {font-size: 1.05rem;}
+            .row {flex-direction: column; gap: 0.4rem;}
+            .form-control {padding: 10px 11px 10px 40px;}
+            .btn {padding: 12px 13px;}
+            .hero-image {max-width: 80px;}
         }
     </style>
 </head>
 <body>
+    <!-- Sóng nền động -->
+    <div class="wave-bg">
+        <svg class="wave-layer" id="wave1" viewBox="0 0 1440 520" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path fill="url(#bluewave1)" fill-opacity="0.7"
+                  d="M0,220 Q400,320 900,200 Q1300,110 1440,210 L1440,520 L0,520Z"/>
+            <defs>
+                <linearGradient id="bluewave1" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#a0d8ef"/>
+                    <stop offset="1" stop-color="#4a90e2"/>
+                </linearGradient>
+            </defs>
+        </svg>
+        <svg class="wave-layer" id="wave2" style="top:40px;opacity:.7" viewBox="0 0 1440 420" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path fill="url(#bluewave2)" fill-opacity="0.5"
+                  d="M0,170 Q400,220 900,160 Q1300,120 1440,170 L1440,420 L0,420Z"/>
+            <defs>
+                <linearGradient id="bluewave2" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#eaf6fb"/>
+                    <stop offset="1" stop-color="#67d6ff"/>
+                </linearGradient>
+            </defs>
+        </svg>
+        <svg class="wave-layer" id="wave3" style="top:80px;opacity:.45" viewBox="0 0 1440 340" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path fill="url(#bluewave3)" fill-opacity="0.36"
+                  d="M0,100 Q400,130 900,100 Q1300,120 1440,110 L1440,340 L0,340Z"/>
+            <defs>
+                <linearGradient id="bluewave3" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#eaf6fb"/>
+                    <stop offset="1" stop-color="#a0d8ef"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
     <div class="register-container">
         <div class="register-card">
             <div class="register-hero">
@@ -421,7 +287,7 @@
                     <h1>Tạo tài khoản mới</h1>
                     <p>Điền thông tin để đăng ký tài khoản</p>
                 </div>
-                <form th:action="@{/register}" method="post">
+                <form th:action="@{/register}" method="post" autocomplete="off">
                     <div class="row">
                         <div class="form-group">
                             <label for="firstName">Họ</label>
@@ -507,27 +373,38 @@
             </div>
         </div>
     </div>
-
-
+ 
     <script>
-        // Hiển thị/ẩn mật khẩu
+        // Show/hide password
         const togglePassword = document.querySelector('#togglePassword');
         const password = document.querySelector('#password');
-        
         togglePassword.addEventListener('click', function() {
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
             this.classList.toggle('fa-eye-slash');
         });
-
+        // Sóng nền parallax động
+        const wave1 = document.getElementById('wave1');
+        const wave2 = document.getElementById('wave2');
+        const wave3 = document.getElementById('wave3');
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth - 0.5;
+            wave1.style.transform = `translateX(${x*24}px)`;
+            wave2.style.transform = `translateX(${x*38}px)`;
+            wave3.style.transform = `translateX(${x*60}px)`;
+        });
+        document.addEventListener('mouseleave', () => {
+            wave1.style.transform = '';
+            wave2.style.transform = '';
+            wave3.style.transform = '';
+        });
         // Animation khi load trang
         document.addEventListener('DOMContentLoaded', function() {
             const registerCard = document.querySelector('.register-card');
             registerCard.style.opacity = '0';
             registerCard.style.transform = 'translateY(20px)';
-            
             setTimeout(() => {
-                registerCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                registerCard.style.transition = 'opacity 0.5s, transform 0.5s';
                 registerCard.style.opacity = '1';
                 registerCard.style.transform = 'translateY(0)';
             }, 100);

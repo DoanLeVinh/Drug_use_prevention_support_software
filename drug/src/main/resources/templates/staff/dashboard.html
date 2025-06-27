@@ -1,704 +1,320 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Dashboard Staff | Drug Use Prevention Support System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Dashboard - Phòng ngừa Ma túy</title>
+    <!-- ICON & CHARTJS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2980b9;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-            --info-color: #1abc9c;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: #f5f7fa;
-            color: #333;
-            overflow-x: hidden;
+            background: #f6fbff;
+            color: #233044;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
         }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            min-height: 100vh;
+        .main-header { margin-bottom: 0; }
+        .dashboard-container {
+            width: 100vw;
+            min-height: calc(100vh - 60px);
+            padding: 0 36px 36px 36px;
+            box-sizing: border-box;
         }
-
-        /* Sidebar */
-        .sidebar {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 20px 0;
+        .dashboard-title {
+            font-size: 1.33rem;
+            font-weight: 600;
+            margin: 32px 0 18px 0;
+            color: #2176ae;
+            letter-spacing: 0.01em;
+        }
+        .stats-row {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            flex: 1 1 180px;
+            min-width: 180px;
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 2px 8px #b7d7ef1a;
+            padding: 19px 23px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             position: relative;
-            z-index: 10;
+            margin-bottom: 0;
         }
-
-        .logo {
-            text-align: center;
-            padding: 0 20px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .stat-title {
+            font-size: 1em;
+            color: #2560a7;
+            font-weight: 500;
+            margin-bottom: 7px;
+            opacity: 0.85;
+            letter-spacing: 0.01em;
         }
-
-        .logo img {
-            max-width: 80%;
+        .stat-value {
+            font-size: 2.1em;
+            font-weight: 600;
+            color: #2176ae;
         }
-
-        .logo h2 {
-            font-size: 1.2rem;
-            margin-top: 10px;
+        .stat-icon {
+            position: absolute;
+            top: 20px; right: 24px;
+            font-size: 2.1em;
+            opacity: 0.12;
         }
-
-        .nav-menu {
-            margin-top: 30px;
+        .stat-label {
+            margin-top: 3px;
+            font-size: 0.98em;
+            color: #8ea3bb;
+            font-weight: 400;
         }
-
-        .nav-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: var(--transition);
+        /* Chart Card */
+        .chart-row {
             display: flex;
-            align-items: center;
-            color: white;
-            text-decoration: none;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
         }
-
-        .nav-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            text-decoration: none;
-        }
-
-        .nav-item.active {
-            background-color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .nav-item i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .header h1 {
-            font-size: 1.8rem;
-            color: var(--dark-color);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        /* Cards */
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            text-decoration: none;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .card-icon.users {
-            background-color: rgba(52, 152, 219, 0.2);
-            color: var(--primary-color);
-        }
-
-        .card-icon.courses {
-            background-color: rgba(46, 204, 113, 0.2);
-            color: var(--success-color);
-        }
-
-        .card-icon.appointments {
-            background-color: rgba(231, 76, 60, 0.2);
-            color: var(--accent-color);
-        }
-
-        .card-icon.events {
-            background-color: rgba(155, 89, 182, 0.2);
-            color: #9b59b6;
-        }
-
-        .card-value {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .card-title {
-            color: #777;
-            font-size: 0.9rem;
-        }
-
-        /* Charts */
-        .charts-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
         .chart-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--shadow);
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 2px 8px #b7d7ef1a;
+            padding: 20px 26px 16px 26px;
+            flex: 1 1 330px;
+            min-width: 300px;
         }
-
-        .chart-header {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
         .chart-title {
-            font-size: 1.2rem;
+            font-size: 1.09em;
+            color: #2176ae;
             font-weight: 600;
+            margin-bottom: 14px;
+            margin-top: 0;
         }
-
-        .chart-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chart-btn {
-            background-color: transparent;
-            border: 1px solid #ddd;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: var(--transition);
-        }
-
-        .chart-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
+        /* Recent list */
+        .recent-table {
             width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            margin-top: 18px;
+            border-radius: 11px;
+            overflow: hidden;
+            box-shadow: 0 1px 7px #d0e8fd33;
         }
-
-        /* Recent Activity */
-        .activity-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
+        .recent-table th, .recent-table td {
+            padding: 11px 14px;
+            font-size: 0.99em;
         }
-
-        .activity-list {
-            margin-top: 20px;
-        }
-
-        .activity-item {
-            display: flex;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-            align-items: center;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(52, 152, 219, 0.2);
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-
-        .activity-details {
-            flex-grow: 1;
-        }
-
-        .activity-title {
+        .recent-table th {
+            background: #eaf3fa;
+            text-align: left;
+            color: #255c88;
+            text-transform: uppercase;
             font-weight: 600;
-            margin-bottom: 5px;
+            border-bottom: 2px solid #e3eaf2;
         }
-
-        .activity-time {
-            color: #777;
-            font-size: 0.8rem;
+        .recent-table td {
+            border-bottom: 1px solid #f3f3f3;
+            color: #232e33;
         }
-
-        .activity-badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            background-color: var(--light-color);
+        .recent-table tr:hover td {
+            background: #f8fcfe;
         }
-
-        .badge-success {
-            background-color: rgba(46, 204, 113, 0.2);
-            color: var(--success-color);
-        }
-
-        .badge-warning {
-            background-color: rgba(243, 156, 18, 0.2);
-            color: var(--warning-color);
-        }
-
-        .badge-danger {
-            background-color: rgba(231, 76, 60, 0.2);
-            color: var(--accent-color);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .charts-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                position: fixed;
-                width: 250px;
-                height: 100%;
-                left: -250px;
-                transition: var(--transition);
-            }
-            
-            .sidebar.active {
-                left: 0;
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-
-        /* Smooth transitions */
-        a, button {
-            transition: var(--transition);
-        }
-
-        /* Loading spinner */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+        .user-avatar {
+            width: 27px;
+            height: 27px;
             border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
+            object-fit: cover;
+            margin-right: 7px;
+            vertical-align: middle;
+            border: 1.5px solid #2176ae;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .badge {
+            display: inline-block;
+            padding: 4px 11px;
+            border-radius: 6px;
+            font-size: 0.94em;
+            font-weight: 500;
+        }
+        .badge-success {
+            background: #eafaf1;
+            color: #21ae66;
+        }
+        .badge-warning {
+            background: #fffbe2;
+            color: #fbc02d;
+        }
+        .badge-info {
+            background: #e9f7fe;
+            color: #2176ae;
+        }
+        .badge-cancelled {
+            background: #f8dddd;
+            color: #e74c3c;
+        }
+        @media (max-width: 950px) {
+            .dashboard-container { padding-left: 2vw; padding-right: 2vw; }
+            .stats-row, .chart-row { flex-direction: column; gap: 14px;}
+        }
+        @media (max-width: 700px) {
+            .dashboard-title { font-size: 1.08rem; }
+            .stat-value { font-size: 1.25em; }
+            .dashboard-container { padding: 0 1vw 30px 1vw;}
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo">
-                <h2>Phòng ngừa Ma túy</h2>
-            </div>
-            
-            <div class="nav-menu">
-                <a href="dashboard.html" class="nav-item active">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="user-management.html" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span>Quản lý người dùng</span>
-                </a>
-                <a href="appointments.html" class="nav-item">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Lịch hẹn tư vấn</span>
-                </a>
-                <a href="courses.html" class="nav-item">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>Khóa học</span>
-                </a>
-                <a href="events.html" class="nav-item">
-                    <i class="fas fa-bullhorn"></i>
-                    <span>Chương trình</span>
-                </a>
-                <a href="reports.html" class="nav-item">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Khảo sát & Báo cáo</span>
-                </a>
-                <a href="consultants.html" class="nav-item">
-                    <i class="fas fa-user-md"></i>
-                    <span>Chuyên viên</span>
-                </a>
-                <a href="settings.html" class="nav-item">
-                    <i class="fas fa-cog"></i>
-                    <span>Cài đặt</span>
-                </a>
-            </div>
+
+<!-- HEADER -->
+<div th:replace="staff/header :: main-header"></div>
+
+<!-- DASHBOARD CONTENT -->
+<div class="dashboard-container">
+
+    <div class="dashboard-title">Dashboard nhân viên hỗ trợ phòng ngừa ma túy</div>
+
+    <!-- STATISTIC CARDS -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="stat-title">Lịch hẹn hôm nay</span>
+            <span class="stat-value" th:text="${todayCount}">6</span>
+            <span class="stat-label">Tổng số lịch hẹn hôm nay</span>
+            <span class="stat-icon"><i class="fa-solid fa-calendar-day"></i></span>
         </div>
-        
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="header">
-                <h1>Dashboard Nhân viên</h1>
-                <div class="user-info">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
-                    <span>Nguyễn Thị A</span>
-                </div>
-            </div>
-            
-            <!-- Cards -->
-            <div class="cards-container">
-                <a href="user-management.html" class="card fade-in delay-1">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">1,254</div>
-                            <div class="card-title">Người dùng</div>
-                        </div>
-                        <div class="card-icon users">
-                            <i class="fas fa-users"></i>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="courses.html" class="card fade-in delay-2">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">48</div>
-                            <div class="card-title">Khóa học</div>
-                        </div>
-                        <div class="card-icon courses">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="appointments.html" class="card fade-in delay-3">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">126</div>
-                            <div class="card-title">Lịch hẹn</div>
-                        </div>
-                        <div class="card-icon appointments">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="events.html" class="card fade-in delay-4">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">15</div>
-                            <div class="card-title">Sự kiện</div>
-                        </div>
-                        <div class="card-icon events">
-                            <i class="fas fa-bullhorn"></i>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            
-            <!-- Charts -->
-            <div class="charts-container">
-                <div class="chart-card fade-in">
-                    <div class="chart-header">
-                        <div class="chart-title">Thống kê người dùng theo tháng</div>
-                        <div class="chart-actions">
-                            <button class="chart-btn active">Tháng</button>
-                            <button class="chart-btn">Quý</button>
-                            <button class="chart-btn">Năm</button>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="userChart"></canvas>
-                    </div>
-                </div>
-                
-                <div class="chart-card fade-in">
-                    <div class="chart-header">
-                        <div class="chart-title">Phân bổ người dùng</div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="distributionChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Recent Activity -->
-            <div class="activity-container fade-in">
-                <div class="chart-header">
-                    <div class="chart-title">Hoạt động gần đây</div>
-                    <a href="activities.html" class="chart-btn">Xem tất cả</a>
-                </div>
-                
-                <div class="activity-list">
-                    <a href="user-detail.html?id=USR001" class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Người dùng mới đăng ký</div>
-                            <div class="activity-time">10 phút trước</div>
-                        </div>
-                        <div class="activity-badge badge-success">Mới</div>
-                    </a>
-                    
-                    <a href="appointment-detail.html?id=APT001" class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Lịch hẹn mới với chuyên viên</div>
-                            <div class="activity-time">1 giờ trước</div>
-                        </div>
-                        <div class="activity-badge badge-warning">Chờ xác nhận</div>
-                    </a>
-                    
-                    <a href="survey-result.html?id=SRV001" class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-file-alt"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Kết quả khảo sát mới</div>
-                            <div class="activity-time">3 giờ trước</div>
-                        </div>
-                        <div class="activity-badge">Xem xét</div>
-                    </a>
-                    
-                    <a href="high-risk-user.html?id=USR005" class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Người dùng có nguy cơ cao</div>
-                            <div class="activity-time">5 giờ trước</div>
-                        </div>
-                        <div class="activity-badge badge-danger">Cao</div>
-                    </a>
-                    
-                    <a href="course-completion.html?id=CRS012" class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Hoàn thành khóa học</div>
-                            <div class="activity-time">Hôm qua</div>
-                        </div>
-                        <div class="activity-badge badge-success">Hoàn thành</div>
-                    </a>
-                </div>
-            </div>
+        <div class="stat-card">
+            <span class="stat-title">Tổng lịch hẹn</span>
+            <span class="stat-value" th:text="${totalAppointmentCount}">120</span>
+            <span class="stat-label">Từ trước đến nay</span>
+            <span class="stat-icon"><i class="fa-solid fa-calendar-check"></i></span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-title">Chuyên viên</span>
+            <span class="stat-value" th:text="${consultantCount}">8</span>
+            <span class="stat-label">Số lượng chuyên viên</span>
+            <span class="stat-icon"><i class="fa-solid fa-user-md"></i></span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-title">Người dùng</span>
+            <span class="stat-value" th:text="${userCount}">340</span>
+            <span class="stat-label">Người đặt lịch</span>
+            <span class="stat-icon"><i class="fa-solid fa-users"></i></span>
         </div>
     </div>
 
-    <script>
-        // Initialize charts after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // User Growth Chart
-            const userCtx = document.getElementById('userChart').getContext('2d');
-            const userChart = new Chart(userCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
-                    datasets: [{
-                        label: 'Người dùng mới',
-                        data: [120, 190, 170, 220, 250, 300],
-                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                        borderColor: 'rgba(52, 152, 219, 1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+    <!-- BIỂU ĐỒ -->
+    <div class="chart-row">
+        <div class="chart-card">
+            <div class="chart-title">Biểu đồ lịch hẹn theo trạng thái</div>
+            <canvas id="appointmentStatusChart" height="112"></canvas>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Lịch hẹn từng tháng</div>
+            <canvas id="appointmentMonthChart" height="112"></canvas>
+        </div>
+    </div>
 
-            // User Distribution Chart
-            const distCtx = document.getElementById('distributionChart').getContext('2d');
-            const distChart = new Chart(distCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Học sinh', 'Sinh viên', 'Phụ huynh', 'Giáo viên', 'Khác'],
-                    datasets: [{
-                        data: [35, 25, 20, 15, 5],
-                        backgroundColor: [
-                            'rgba(52, 152, 219, 0.7)',
-                            'rgba(155, 89, 182, 0.7)',
-                            'rgba(46, 204, 113, 0.7)',
-                            'rgba(241, 196, 15, 0.7)',
-                            'rgba(231, 76, 60, 0.7)'
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right'
-                        }
-                    },
-                    cutout: '70%'
-                }
-            });
+    <!-- DANH SÁCH LỊCH HẸN GẦN ĐÂY -->
+    <div class="section-title">Lịch hẹn gần đây</div>
+    <div class="table-responsive">
+        <table class="recent-table">
+            <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Người đặt</th>
+                <th>Chuyên viên</th>
+                <th>Thời gian</th>
+                <th>Hình thức</th>
+                <th>Trạng thái</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="appointment : ${recentAppointments}">
+                <td th:text="${appointment.code}">APT001</td>
+                <td>
+                    <img th:src="@{${appointment.user.avatarUrl}}"
+                         src="https://randomuser.me/api/portraits/men/32.jpg"
+                         class="user-avatar"
+                         th:if="${appointment.user.avatarUrl}">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg"
+                         class="user-avatar"
+                         th:unless="${appointment.user.avatarUrl}">
+                    <span th:text="${appointment.user.fullName}">Nguyễn Văn A</span>
+                </td>
+                <td th:text="${appointment.consultant.fullName}">Trần Thị B</td>
+                <td th:text="${appointment.time} + ' - ' + ${appointment.date}">10:00 - 15/07/2023</td>
+                <td th:text="${appointment.type == 'online' ? 'Trực tuyến' : 'Trực tiếp'}">Trực tiếp</td>
+                <td>
+                    <span th:switch="${appointment.status}" class="badge">
+                        <span th:case="'pending'" class="badge-warning">Chờ xác nhận</span>
+                        <span th:case="'confirmed'" class="badge-success">Đã xác nhận</span>
+                        <span th:case="'completed'" class="badge-info">Hoàn thành</span>
+                        <span th:case="'cancelled'" class="badge-cancelled">Đã hủy</span>
+                    </span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(recentAppointments)}">
+                <td colspan="6" style="text-align:center;color:#bbb;padding:18px 0;">
+                    Không có lịch hẹn gần đây.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-            // Time period switcher
-            document.querySelectorAll('.chart-actions .chart-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelector('.chart-actions .chart-btn.active').classList.remove('active');
-                    this.classList.add('active');
-                    
-                    // Simulate data change
-                    const newData = this.textContent === 'Tháng' ? 
-                        [120, 190, 170, 220, 250, 300] :
-                        this.textContent === 'Quý' ?
-                        [450, 520, 600] :
-                        [1500, 2100, 2800, 3200];
-                    
-                    userChart.data.datasets[0].data = newData;
-                    userChart.update();
-                });
-            });
+<!-- CHARTJS DUMMY DATA (có thể lấy từ backend và render JS, hoặc Thymeleaf in thẳng JS variable) -->
+<script>
+    // Biểu đồ trạng thái
+    const statusChart = document.getElementById('appointmentStatusChart').getContext('2d');
+    new Chart(statusChart, {
+        type: 'doughnut',
+        data: {
+            labels: ['Chờ xác nhận', 'Đã xác nhận', 'Hoàn thành', 'Đã hủy'],
+            datasets: [{
+                data: [
+                    /*[[${pendingCount}]], [[${confirmedCount}]], [[${completedCount}]], [[${cancelledCount}]]*/
+                    10, 45, 56, 9 // demo
+                ],
+                backgroundColor: ['#fbc02d', '#21ae66', '#2176ae', '#e74c3c'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            cutout: '68%',
+            plugins: {
+                legend: {display: true, position: 'bottom'}
+            }
+        }
+    });
 
-            // Card hover effect
-            document.querySelectorAll('.card').forEach(card => {
-                card.addEventListener('mousemove', function(e) {
-                    const x = e.clientX - this.getBoundingClientRect().left;
-                    const y = e.clientY - this.getBoundingClientRect().top;
-                    
-                    const centerX = this.offsetWidth / 2;
-                    const centerY = this.offsetHeight / 2;
-                    
-                    const angleX = (y - centerY) / 10;
-                    const angleY = (centerX - x) / 10;
-                    
-                    this.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.05)`;
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-                });
-            });
-        });
-    </script>
+    // Biểu đồ lịch hẹn từng tháng
+    const monthChart = document.getElementById('appointmentMonthChart').getContext('2d');
+    new Chart(monthChart, {
+        type: 'bar',
+        data: {
+            labels: [
+                'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'
+            ],
+            datasets: [{
+                label: 'Lịch hẹn',
+                data: [
+                    /*[[${countMonth1}]], [[${countMonth2}]], ...*/
+                    8, 10, 19, 15, 21, 29, 33, 40, 30, 16, 12, 7 // demo
+                ],
+                backgroundColor: '#2176ae',
+                borderRadius: 6,
+                maxBarThickness: 22
+            }]
+        },
+        options: {
+            plugins: {legend: {display: false}},
+            scales: {y: {beginAtZero: true, ticks: {stepSize: 5}}}
+        }
+    });
+</script>
+
 </body>
 </html>

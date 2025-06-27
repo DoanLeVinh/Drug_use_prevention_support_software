@@ -1,0 +1,259 @@
+<!-- header.html -->
+<header class="main-header" th:fragment="main-header">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Inter:400,500&display=swap');
+        .main-header {
+            background: linear-gradient(90deg, #2469e3 0%, #57b8ff 85%);
+            color: #fff;
+            min-height: 70px; /* Tăng height */
+            box-shadow: 0 2px 12px 0 #2469e325;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            letter-spacing: 0.02em;
+            position: sticky; top: 0; left: 0; z-index: 99;
+        }
+        .main-header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 36px;
+            min-height: 70px; /* Tăng height */
+        }
+        .brand-logo {
+            font-size: 1.02rem; /* Giảm font */
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .brand-logo i {
+            font-size: 1.18em;
+            color: #ffe066;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+        .nav-link {
+            color: #fff;
+            text-decoration: none !important; /* Không gạch chân */
+            font-size: 0.93em; /* Giảm font */
+            font-family: inherit;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 6px;
+            background: none;
+            letter-spacing: 0.01em;
+            opacity: 0.95;
+            transition: background 0.16s, color 0.13s;
+        }
+        .nav-link.active, .nav-link:hover, .nav-link:focus-visible {
+            background: rgba(255,255,255,0.10);
+            color: #ffe066;
+            opacity: 1;
+            /* Không transform, không underline, không zoom */
+            box-shadow: 0 1px 10px #4a90e215;
+        }
+        .nav-link:active {
+            background: #e0f2fa33;
+            color: #3e8fd3;
+        }
+        .avatar-dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 12px;
+            transition: box-shadow 0.14s;
+        }
+        .avatar-img, .avatar-placeholder {
+            width: 33px; height: 33px;
+            border-radius: 50%;
+            border: 1.6px solid #fff7;
+            object-fit: cover;
+            background: #f6fafd;
+            box-shadow: 0 1.5px 6px #57b8ff19;
+            transition: border 0.15s, box-shadow 0.13s;
+        }
+        .avatar-dropdown:hover .avatar-img,
+        .avatar-dropdown:focus-within .avatar-img,
+        .avatar-dropdown:hover .avatar-placeholder,
+        .avatar-dropdown:focus-within .avatar-placeholder {
+            border: 1.6px solid #ffe066;
+            box-shadow: 0 0 13px #ffe06647, 0 1.5px 7px #57b8ff19;
+        }
+        .avatar-placeholder {
+            display: flex; align-items: center; justify-content: center;
+            color: #2176ae;
+            font-size: 1.07em;
+            background: linear-gradient(135deg,#eaf6fb 40%, #c4e3fa 100%);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 108%;
+            min-width: 180px;
+            background: #fff;
+            color: #294364;
+            border-radius: 12px;
+            box-shadow: 0 5px 22px #2176ae1b;
+            padding: 15px 16px 9px 16px;
+            z-index: 1001;
+            animation: dropdown-in 0.22s cubic-bezier(.51,.22,.53,.92);
+        }
+        .avatar-dropdown:hover .dropdown-content,
+        .avatar-dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+        @keyframes dropdown-in {
+            from { opacity: 0; transform: translateY(10px);}
+            to   { opacity: 1; transform: translateY(0);}
+        }
+        .dropdown-header {
+            display: flex; align-items: center; gap: 11px; margin-bottom: 4px;
+        }
+        .dropdown-header .avatar-img, .dropdown-header .avatar-placeholder {
+            width: 36px; height: 36px; border-width: 1.5px;
+        }
+        .dropdown-name {
+            font-weight: 600; font-size: 0.97em; color: #2176ae;
+            letter-spacing: 0.01em;
+        }
+        .dropdown-role {
+            font-size: 0.90em;
+            background: #e8f2ff;
+            color: #2176ae;
+            border-radius: 6px;
+            padding: 2.5px 8px;
+            font-weight: 500;
+            margin-top: 2.5px;
+            display: inline-block; opacity: 0.86;
+        }
+        .dropdown-email {
+            font-size: 0.95em;
+            color: #7d98b3;
+            margin-bottom: 6px;
+            display: block;
+            word-break: break-all;
+        }
+        .dropdown-actions {
+            border-top: 1px solid #eaf1f8;
+            margin-top: 7px; padding-top: 8px;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .dropdown-action-btn {
+            background: #f6fafd;
+            border: none;
+            color: #2176ae;
+            padding: 7px 0 7px 10px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: left;
+            transition: background 0.13s, color 0.13s;
+            cursor: pointer;
+            font-size: 0.96em;
+        }
+        .dropdown-action-btn:hover {
+            background: linear-gradient(90deg,#eaf6fb 60%, #e0f2fa 100%);
+            color: #ff7043;
+        }
+        .dropdown-action-btn:active {
+            background: #e0f2fa;
+            color: #2176ae;
+        }
+        @media (max-width: 900px) {
+            .main-header-inner { padding: 0 3vw;}
+            .brand-logo { font-size: 0.91rem;}
+            .nav-menu { gap: 3px;}
+            .dropdown-content { min-width: 130px; }
+        }
+        @media (max-width: 600px) {
+            .main-header-inner { flex-direction: column; gap: 8px; padding: 0 1.5vw;}
+            .nav-menu { flex-wrap: wrap; gap: 2px;}
+        }
+    </style>
+    <div class="main-header-inner">
+
+        <!-- Logo/Brand -->
+        <p href="/" class="brand-logo" title="Trang chủ">
+            <i class="fa-solid fa-shield-heart"></i>
+            Drug Prevention <span style="color:#ffe066;"></span>
+        </p>
+
+        <nav class="nav-menu">
+            <a href="/staff/dashboard" class="nav-link" th:classappend="${page=='dashboard'} ? 'active'">Dashboard</a>
+            <a href="/staff/courses" class="nav-link" th:classappend="${page=='courses'} ? 'active'">Khóa học</a>
+            <a href="/staff/surveys" class="nav-link" th:classappend="${page=='surveys'} ? 'active'">Khảo sát</a>
+            <a href="/staff/appointments" class="nav-link" th:classappend="${page=='appointments'} ? 'active'">Lịch hẹn tư vấn</a>
+            <a href="/staff/events" class="nav-link" th:classappend="${page=='events'} ? 'active'">Chương trình</a>
+            <a href="/staff/consultants" class="nav-link" th:classappend="${page=='consultants'} ? 'active'">Chuyên viên</a>
+            <a href="/staff/user-management" class="nav-link" th:classappend="${page=='user-management'} ? 'active'">Quản lý người dùng</a>
+        </nav>
+
+        <!-- Avatar & dropdown info -->
+        <div class="avatar-dropdown" tabindex="0">
+            <!-- Khi đã đăng nhập -->
+            <img th:if="${session.user != null}"
+                 class="avatar-img"
+                 th:src="@{${session.user.avatarUrl}}"
+                 src="https://randomuser.me/api/portraits/men/32.jpg"
+                 alt="avatar"/>
+
+            <!-- Khi chưa đăng nhập -->
+            <div th:unless="${session.user != null}" class="avatar-placeholder">
+                <i class="fa fa-user"></i>
+            </div>
+
+            <!-- Dropdown khi hover vào avatar -->
+            <div class="dropdown-content">
+
+                <!-- Nếu đã đăng nhập -->
+                <div th:if="${session.user != null}">
+                    <div class="dropdown-header">
+                        <img class="avatar-img"
+                             th:src="@{${session.user.avatarUrl}}"
+                             src="https://randomuser.me/api/portraits/men/32.jpg"
+                             alt="avatar"/>
+                        <div>
+                            <div class="dropdown-name" th:text="${session.user.fullName}">Nguyễn Văn A</div>
+                            <div class="dropdown-role" th:text="${session.user.role}">Staff</div>
+                        </div>
+                    </div>
+                    <div class="dropdown-email" th:text="${session.user.email}">vinh@gptplus.com</div>
+                    <div class="dropdown-actions">
+                        <a class="dropdown-action-btn" href="/profile">
+                            <i class="fa fa-id-card"></i> Thông tin tài khoản
+                        </a>
+                        <a class="dropdown-action-btn" href="/change-password">
+                            <i class="fa fa-key"></i> Đổi mật khẩu
+                        </a>
+                        <form th:action="@{/logout}" method="post" style="margin:0;padding:0;">
+                            <button class="dropdown-action-btn" type="submit">
+                                <i class="fa fa-sign-out-alt"></i> Đăng xuất
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Nếu chưa đăng nhập -->
+                <div th:unless="${session.user != null}" style="min-width:100px;">
+                    <div class="dropdown-header" style="justify-content: center;">
+                        <div class="avatar-placeholder" style="width:36px;height:36px;">
+                            <i class="fa fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="dropdown-actions" style="margin-top:0;">
+                        <a class="dropdown-action-btn" href="/login" style="text-align:center;">
+                            <i class="fa fa-sign-in-alt"></i> Đăng nhập
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

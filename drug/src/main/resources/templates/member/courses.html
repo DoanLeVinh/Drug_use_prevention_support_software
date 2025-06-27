@@ -1,589 +1,431 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Khóa học | Drug Prevention Support System</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khóa học phòng chống ma túy | Hệ thống phòng ngừa</title>
-        <link rel="stylesheet" th:href="@{/layout.css}">    
-
-    <!-- Load Bootstrap CSS trước -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Sau đó load Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Cuối cùng là CSS custom -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
     <style>
-        /* Reset một số style có thể gây xung đột */
-        .card, .card-body, .card-header, .progress, .btn {
+        :root {
+            --primary: #2176ae;
+            --secondary: #57b8ff;
+            --bg: #f7fbfd;
+            --white: #fff;
+            --soft: #f0f7fa;
+            --shadow: 0 4px 32px 0 rgba(33,118,174,0.09);
+        }
+        html, body {
+            width: 100%;
+            min-width: 0;
+            overflow-x: hidden !important;
             box-sizing: border-box;
         }
-        
-        /* Main content styling */
-        .container-fluid.main-content {
-            padding: 20px;
-            margin-top: 20px;
+        body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            color: #24415d;
+            scroll-behavior: smooth;
         }
-        
-        /* Breadcrumb styling */
-        .breadcrumb-custom {
-            background-color: #f8f9fa;
-            padding: 0.75rem 1rem;
-            border-radius: 0.35rem;
-            margin-bottom: 1.5rem;
+        .main-wrap {
+            max-width: 1440px;
+            width: 90vw;
+            margin: 0 auto 0 auto;
+            padding: 0 0 40px 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        
-        /* Card styling */
-        .course-card {
-            border: none;
-            border-radius: 0.5rem;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
-            height: 100%;
+        .section {
+            width: 100%;
+            margin: 32px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        
-        .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15);
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: 0.02em;
         }
-        
-        .course-card .card-header-custom {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #e3e6f0;
-            font-weight: 600;
-            padding: 0.75rem 1.25rem;
+        .courses-filter-bar {
+            background: #fff;
+            box-shadow: 0 2px 12px #2176ae0e;
+            border-radius: 12px;
+            padding: 18px 30px 12px 30px;
+            display: flex;
+            gap: 18px;
+            margin-bottom: 22px;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        
-        /* Border colors for different card types */
-        .border-left-primary {
-            border-left: 0.25rem solid #4e73df !important;
+        .courses-filter-bar select, .courses-filter-bar input[type="text"] {
+            font-family: inherit;
+            border-radius: 7px;
+            border: 1px solid #c7e7fa;
+            font-size: 1em;
+            padding: 6px 14px;
+            background: #f4fbff;
+            color: #274060;
+            outline: none;
+            margin-right: 8px;
         }
-        
-        .border-left-success {
-            border-left: 0.25rem solid #1cc88a !important;
+        .courses-filter-bar input[type="text"] {
+            width: 170px;
         }
-        
-        .border-left-info {
-            border-left: 0.25rem solid #36b9cc !important;
-        }
-        
-        .border-left-warning {
-            border-left: 0.25rem solid #f6c23e !important;
-        }
-        
-        /* Progress bar styling */
-        .progress-custom {
-            height: 0.5rem;
-            border-radius: 0.25rem;
-            margin-bottom: 1rem;
-        }
-        
-        .progress-bar-custom {
-            border-radius: 0.25rem;
-        }
-        
-        /* Button styling */
-        .btn-custom-sm {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            margin-top: 0.5rem;
-        }
-        
-        /* Filter section styling */
-        .filter-section .form-select-custom {
-            padding: 0.375rem 2.25rem 0.375rem 0.75rem;
-            background-size: 12px 12px;
-            margin-bottom: 1rem;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .course-card .card-body {
-                padding: 1rem;
-            }
-            
-            .col-custom {
-                flex: 0 0 100%;
-                max-width: 100%;
-            }
-        }
-        
-        /* Pagination styling */
-        .pagination-custom {
-            margin-top: 2rem;
+        .courses-grid {
+            width: 100%;
+            max-width: 1260px;
+            display: flex;
+            flex-wrap: wrap;
             justify-content: center;
+            align-items: stretch;
+            gap: 32px;
+            margin: 0 auto 24px auto;
+            padding: 0;
         }
-        
-        .page-item.active .page-link {
-            background-color: #4e73df;
-            border-color: #4e73df;
+        .course-card {
+            background: var(--white);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            width: 340px;
+            min-width: 220px;
+            max-width: 370px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: box-shadow 0.18s, transform 0.13s;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
         }
-        
-        .page-link-custom {
-            color: #4e73df;
+        .course-card[hidden] { display: none !important;}
+        .course-card:active {
+            transform: scale(0.98);
         }
-        
-        /* Modal styling */
-        .modal-header-custom {
-            background-color: #1cc88a;
-            color: white;
+        .course-card:focus-within {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
         }
-        
-        /* Utility classes */
-        .text-xs {
-            font-size: 0.7rem;
+        .course-card:hover {
+            box-shadow: 0 10px 30px #57b8ff2e;
+            transform: translateY(-4px) scale(1.012);
         }
-        
-        .font-weight-bold {
+        .course-card img {
+            width: 100%;
+            max-height: 168px;
+            object-fit: cover;
+            background: #eaf6fa;
+        }
+        .course-card-body {
+            padding: 22px 18px 16px 18px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .course-title {
+            font-size: 1.22em;
+            font-weight: 700;
+            color: #1c2f49;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .course-meta {
+            font-size: 0.97em;
+            color: #589cd7;
+            margin-bottom: 7px;
+            text-align: center;
+        }
+        .course-desc {
+            font-size: 1em;
+            color: #416084;
+            margin-bottom: 13px;
+            text-align: center;
+        }
+        .course-info-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 9px;
+            justify-content: center;
+            color: #6fa3ce;
+            font-size: 0.98em;
+        }
+        .course-chip {
+            background: linear-gradient(90deg, #e9f7ff 75%, #d2edff 100%);
+            color: #2176ae;
+            border-radius: 7px;
+            font-size: 0.97em;
             font-weight: 600;
+            padding: 2.5px 10px;
+            margin-right: 4px;
+            display: inline-block;
+            letter-spacing: 0.02em;
         }
-        
-        .text-uppercase {
-            text-transform: uppercase;
+        .course-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eaf3fa;
+            border-radius: 8px;
+            margin: 5px 0 7px 0;
+            overflow: hidden;
         }
-        
-        .text-gray-800 {
-            color: #2d3748;
+        .course-progress {
+            height: 8px;
+            background: linear-gradient(90deg, #2176ae 80%, #57b8ff 100%);
+            border-radius: 8px;
+            transition: width 0.4s;
         }
-        
-        .text-muted {
-            color: #6c757d !important;
+        .course-btn {
+            padding: 9px 18px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(90deg, #2176ae 85%, #57b8ff 100%);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.15s, box-shadow 0.13s, transform 0.13s;
+            box-shadow: 0 1px 5px #2176ae18;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .course-btn:active {
+            transform: scale(0.97);
+        }
+        .course-btn:hover {
+            background: linear-gradient(90deg, #1761b3 65%, #3eaafc 100%);
+            box-shadow: 0 4px 10px #2176ae24;
+            transform: scale(1.02);
+        }
+        .course-ribbon {
+            position: absolute;
+            top: 14px; left: -40px;
+            background: linear-gradient(90deg, #57b8ff 80%, #2176ae 100%);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.93em;
+            padding: 5px 50px 5px 48px;
+            transform: rotate(-22deg);
+            border-radius: 8px 18px 9px 0;
+            box-shadow: 0 3px 8px #57b8ff2a;
+            letter-spacing: 0.04em;
+        }
+        @media (max-width: 1150px) {
+            .main-wrap { width: 98vw;}
+            .courses-grid { max-width: 99vw;}
+        }
+        @media (max-width: 800px) {
+            .main-wrap { width: 99vw;}
+            .courses-grid { gap: 22px;}
+            .course-card { min-width: 220px; width: 94vw; max-width: 98vw;}
+        }
+        @media (max-width: 600px) {
+            .main-wrap { width: 100vw; padding: 0;}
+            .section-title { font-size: 1.4rem;}
+            .courses-grid { gap: 13px;}
+            .course-card { min-width: 160px; width: 99vw;}
+            .courses-filter-bar { padding: 12px 6px 8px 6px; flex-direction: column; gap: 9px;}
         }
     </style>
 </head>
 <body>
-    <header class="inner-header">
-    <div class="inner-header-container">
-        <a href="/" class="inner-logo-container">
-            <div class="inner-logo-icon">DP</div>
-            <div class="inner-logo-text">Drug<span>Free</span></div>
-        </a>
-        
-        <nav class="inner-nav-menu">
-            <a href="/" class="inner-nav-link active">Trang chủ</a>
-            <a href="/courses" class="inner-nav-link">Khóa học</a>
-            <a href="/assessment" class="inner-nav-link">Đánh giá nguy cơ</a>
-            <a href="/consultation" class="inner-nav-link">Tư vấn</a>
-            <a href="/blog" class="inner-nav-link">Blog</a>
-            <a href="/about" class="inner-nav-link">Về chúng tôi</a>
-        </nav>
-        
-        <div class="inner-auth-buttons">
-            <button class="inner-btn-signin">Đăng nhập</button>
-            <button class="inner-btn-signup">Đăng ký</button>
+<div th:replace="member/header :: main-header"></div>
+<div class="main-wrap">
+    <section class="section">
+        <div class="section-title"><i class="fa-solid fa-graduation-cap"></i> Danh sách Khóa học</div>
+        <div class="courses-filter-bar" id="coursesFilterBar">
+            <select id="filterTarget">
+                <option value="">Tất cả đối tượng</option>
+                <option value="Học sinh">Học sinh</option>
+                <option value="Sinh viên">Sinh viên</option>
+                <option value="Phụ huynh">Phụ huynh</option>
+                <option value="Giáo viên">Giáo viên</option>
+            </select>
+            <select id="filterTopic">
+                <option value="">Tất cả chủ đề</option>
+                <option value="Nhận thức về ma túy">Nhận thức về ma túy</option>
+                <option value="Kỹ năng phòng tránh">Kỹ năng phòng tránh</option>
+                <option value="Kỹ năng từ chối">Kỹ năng từ chối</option>
+            </select>
+            <input id="searchInput" type="text" placeholder="Tìm kiếm khóa học...">
         </div>
-        
-        <button class="inner-menu-toggle">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-</header>
+    </section>
+    <section class="section">
+        <div class="courses-grid" id="coursesGrid">
+            <!-- CARD DATA DYNAMICALLY GENERATED BY JS -->
+        </div>
+        <div id="noCourseMsg" style="display:none; color:#57b8ff;font-weight:500;font-size:1.1em;text-align:center;padding:26px;">Không tìm thấy khóa học nào phù hợp.</div>
+    </section>
+</div>
+<div th:replace="member/footer :: main-footer"></div>
 <script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-    const innerMenuToggle = document.querySelector('.inner-menu-toggle');
-    const innerNavMenu = document.querySelector('.inner-nav-menu');
-    const innerAuthButtons = document.querySelector('.inner-auth-buttons');
-    
-    innerMenuToggle.addEventListener('click', function() {
-        // Tạo menu mobile tạm thời
-        const innerMobileMenu = document.createElement('div');
-        innerMobileMenu.className = 'inner-mobile-menu';
-        innerMobileMenu.style.position = 'fixed';
-        innerMobileMenu.style.top = '0';
-        innerMobileMenu.style.right = '0';
-        innerMobileMenu.style.width = '280px';
-        innerMobileMenu.style.height = '100vh';
-        innerMobileMenu.style.backgroundColor = 'white';
-        innerMobileMenu.style.boxShadow = '-5px 0 15px rgba(0,0,0,0.1)';
-        innerMobileMenu.style.padding = '80px 20px 20px';
-        innerMobileMenu.style.zIndex = '1000';
-        
-        // Clone các phần tử menu
-        const innerClonedNav = innerNavMenu.cloneNode(true);
-        innerClonedNav.style.display = 'flex';
-        innerClonedNav.style.flexDirection = 'column';
-        innerClonedNav.style.gap = '10px';
-        innerClonedNav.querySelectorAll('.inner-nav-link').forEach(link => {
-            link.style.padding = '12px 16px';
-        });
-        
-        const innerClonedAuth = innerAuthButtons.cloneNode(true);
-        innerClonedAuth.style.display = 'flex';
-        innerClonedAuth.style.flexDirection = 'column';
-        innerClonedAuth.style.gap = '10px';
-        innerClonedAuth.style.marginTop = '20px';
-        innerClonedAuth.querySelectorAll('button').forEach(btn => {
-            btn.style.width = '100%';
-        });
-        
-        // Thêm nút đóng
-        const innerCloseBtn = document.createElement('button');
-        innerCloseBtn.innerHTML = '<i class="fas fa-times"></i>';
-        innerCloseBtn.style.position = 'absolute';
-        innerCloseBtn.style.top = '20px';
-        innerCloseBtn.style.right = '20px';
-        innerCloseBtn.style.background = 'none';
-        innerCloseBtn.style.border = 'none';
-        innerCloseBtn.style.fontSize = '20px';
-        innerCloseBtn.style.cursor = 'pointer';
-        
-        innerCloseBtn.addEventListener('click', function() {
-            document.body.removeChild(innerMobileMenu);
-            document.body.style.overflow = 'auto';
-        });
-        
-        // Thêm vào DOM
-        innerMobileMenu.appendChild(innerCloseBtn);
-        innerMobileMenu.appendChild(innerClonedNav);
-        innerMobileMenu.appendChild(innerClonedAuth);
-        document.body.appendChild(innerMobileMenu);
-        document.body.style.overflow = 'hidden';
-    });
-});
-
-    // Thêm sự kiện click cho các nút đăng nhập và đăng ký
-    document.querySelector('.inner-btn-signin').addEventListener('click', function() {
-        window.location.href = '/login';
-    });
-
-    document.querySelector('.inner-btn-signup').addEventListener('click', function() {
-        window.location.href = '/register';
-    });
-    // Thêm sự kiện click cho các liên kết trong menu
-    document.querySelectorAll('.inner-nav-link').forEach(link => {
-        link.addEventListener('click', function() {
-            document.body.style.overflow = 'auto';
-        });
-    });
-    // Thêm sự kiện click cho nút đóng trong menu mobile
-    document.addEventListener('click', function(event) {
-        if (event.target.closest('.inner-close-btn')) {
-            document.body.style.overflow = 'auto';
+    // Dữ liệu mẫu (bạn có thể thay fetch API về sau)
+    const coursesData = [
+        {
+            id: 1,
+            title: "Nhận thức về ma túy cho học sinh",
+            meta: "Dành cho: Học sinh | 10 bài học",
+            chip: "Học sinh",
+            topic: "Nhận thức về ma túy",
+            desc: "Kiến thức nền tảng, nhận biết dấu hiệu, phòng tránh và ứng phó với nguy cơ.",
+            progress: 85,
+            ribbon: "Phổ biến",
+            img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 2,
+            title: "Kỹ năng từ chối chất gây nghiện",
+            meta: "Dành cho: Sinh viên | 8 bài học",
+            chip: "Sinh viên",
+            topic: "Kỹ năng từ chối",
+            desc: "Rèn luyện kỹ năng giao tiếp, nhận diện tình huống và tự tin nói không với chất kích thích.",
+            progress: 60,
+            ribbon: "",
+            img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 3,
+            title: "Phòng ngừa cho phụ huynh",
+            meta: "Dành cho: Phụ huynh | 7 bài học",
+            chip: "Phụ huynh",
+            topic: "Nhận thức về ma túy",
+            desc: "Giúp cha mẹ nhận diện nguy cơ, bảo vệ và đồng hành cùng con tránh xa ma túy.",
+            progress: 20,
+            ribbon: "",
+            img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 4,
+            title: "Kỹ năng phòng tránh",
+            meta: "Dành cho: Giáo viên | 6 bài học",
+            chip: "Giáo viên",
+            topic: "Kỹ năng phòng tránh",
+            desc: "Hướng dẫn giáo viên phát hiện sớm và xử lý khi học sinh có dấu hiệu sử dụng chất kích thích.",
+            progress: 42,
+            ribbon: "",
+            img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 5,
+            title: "Kỹ năng sống tích cực",
+            meta: "Dành cho: Học sinh | 8 bài học",
+            chip: "Học sinh",
+            topic: "Kỹ năng phòng tránh",
+            desc: "Giúp học sinh hình thành thói quen sống lành mạnh, kiểm soát bản thân trước mọi cám dỗ.",
+            progress: 70,
+            ribbon: "",
+            img: "https://images.unsplash.com/photo-1485841890310-6a055c88698a?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 6,
+            title: "Kết nối gia đình & phòng ngừa",
+            meta: "Dành cho: Phụ huynh | 5 bài học",
+            chip: "Phụ huynh",
+            topic: "Nhận thức về ma túy",
+            desc: "Bí quyết xây dựng mối quan hệ gắn bó giữa cha mẹ và con cái để phòng ngừa hiệu quả.",
+            progress: 40,
+            ribbon: "",
+            img: "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+            id: 7,
+            title: "Đồng hành cùng học sinh",
+            meta: "Dành cho: Giáo viên | 6 bài học",
+            chip: "Giáo viên",
+            topic: "Kỹ năng từ chối",
+            desc: "Kỹ năng hỗ trợ, tư vấn và động viên học sinh trước các nguy cơ về ma túy.",
+            progress: 28,
+            ribbon: "",
+            img: "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?auto=format&fit=crop&w=600&q=80"
         }
+    ];
+
+    // Render danh sách khóa học
+    function renderCourses(filterTarget = '', filterTopic = '', keyword = '') {
+        const grid = document.getElementById('coursesGrid');
+        const noMsg = document.getElementById('noCourseMsg');
+        grid.innerHTML = '';
+        let count = 0;
+        coursesData.forEach(course => {
+            let matched = true;
+            if (filterTarget && course.chip !== filterTarget) matched = false;
+            if (filterTopic && course.topic !== filterTopic) matched = false;
+            if (keyword && !course.title.toLowerCase().includes(keyword.toLowerCase()) && !course.desc.toLowerCase().includes(keyword.toLowerCase())) matched = false;
+            if (!matched) return;
+            count++;
+
+            const card = document.createElement('div');
+            card.className = 'course-card';
+            card.tabIndex = 0;
+
+            // ribbon (nếu có)
+            if(course.ribbon) {
+                const ribbon = document.createElement('span');
+                ribbon.className = 'course-ribbon';
+                ribbon.textContent = course.ribbon;
+                card.appendChild(ribbon);
+            }
+
+            // ảnh
+            const img = document.createElement('img');
+            img.src = course.img;
+            img.alt = course.title;
+            card.appendChild(img);
+
+            // body
+            const body = document.createElement('div');
+            body.className = 'course-card-body';
+
+            body.innerHTML = `
+                <div class="course-title">${course.title}</div>
+                <div class="course-meta">Dành cho: <span class="course-chip">${course.chip}</span> | ${course.meta.split('|')[1]}</div>
+                <div class="course-desc">${course.desc}</div>
+                <div class="course-progress-bar"><div class="course-progress" style="width:${course.progress}%;"></div></div>
+                <button class="course-btn" tabindex="0">Vào học</button>
+            `;
+            card.appendChild(body);
+
+            // Nút click hiệu ứng
+            card.querySelector('.course-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                this.textContent = "Đang mở...";
+                this.style.background = "linear-gradient(90deg, #21ae66 80%, #57b8ff 100%)";
+                setTimeout(() => {
+                    this.textContent = "Vào học";
+                    this.style.background = "";
+                }, 700);
+            });
+
+            // Card hover mượt hơn
+            card.addEventListener('mousedown', () => card.classList.add('pressed'));
+            card.addEventListener('mouseup', () => card.classList.remove('pressed'));
+            card.addEventListener('mouseleave', () => card.classList.remove('pressed'));
+
+            grid.appendChild(card);
+        });
+        noMsg.style.display = count === 0 ? '' : 'none';
+    }
+
+    // Sự kiện lọc/tìm kiếm
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterTarget = document.getElementById('filterTarget');
+        const filterTopic = document.getElementById('filterTopic');
+        const searchInput = document.getElementById('searchInput');
+        function doFilter() {
+            renderCourses(filterTarget.value, filterTopic.value, searchInput.value.trim());
+            window.scrollTo({ top: document.querySelector('.main-wrap').offsetTop, behavior: 'smooth' });
+        }
+        filterTarget.addEventListener('change', doFilter);
+        filterTopic.addEventListener('change', doFilter);
+        searchInput.addEventListener('input', doFilter);
+        renderCourses(); // initial
     });
 </script>
-    <!-- Main Content -->
-    <main class="container-fluid main-content">
-        <h1 class="mt-4">Các khóa học phòng chống ma túy</h1>
-        <ol class="breadcrumb breadcrumb-custom mb-4">
-            <li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
-            <li class="breadcrumb-item active">Khóa học</li>
-        </ol>
-
-        <!-- Filter Section -->
-        <div class="card mb-4">
-            <div class="card-header-custom">
-                <i class="fas fa-filter me-1"></i>
-                Bộ lọc khóa học
-            </div>
-            <div class="card-body">
-                <div class="row g-3 filter-section">
-                    <div class="col-md-4">
-                        <label for="ageGroup" class="form-label">Đối tượng</label>
-                        <select class="form-select form-select-custom" id="ageGroup">
-                            <option value="all" selected>Tất cả</option>
-                            <option value="student">Học sinh</option>
-                            <option value="college">Sinh viên</option>
-                            <option value="parent">Phụ huynh</option>
-                            <option value="teacher">Giáo viên</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="courseType" class="form-label">Loại khóa học</label>
-                        <select class="form-select form-select-custom" id="courseType">
-                            <option value="all" selected>Tất cả</option>
-                            <option value="awareness">Nhận thức ma túy</option>
-                            <option value="prevention">Kỹ năng phòng tránh</option>
-                            <option value="refusal">Kỹ năng từ chối</option>
-                            <option value="recovery">Hỗ trợ cai nghiện</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="difficulty" class="form-label">Mức độ</label>
-                        <select class="form-select form-select-custom" id="difficulty">
-                            <option value="all" selected>Tất cả</option>
-                            <option value="beginner">Cơ bản</option>
-                            <option value="intermediate">Trung cấp</option>
-                            <option value="advanced">Nâng cao</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <button id="filterBtn" class="btn btn-primary me-2">Lọc khóa học</button>
-                        <button id="resetBtn" class="btn btn-outline-secondary">Đặt lại</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Courses Grid -->
-        <div class="row" id="coursesContainer">
-            <!-- Course Item 1 -->
-            <div class="col-xl-3 col-md-6 col-custom mb-4" data-age-group="student" data-course-type="awareness" data-difficulty="beginner">
-                <div class="card course-card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    [Học sinh] Nhận thức cơ bản
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">Ma túy và tác hại</div>
-                                <div class="mt-2 mb-3 text-muted">
-                                    <small><i class="fas fa-clock me-1"></i> 2 giờ</small>
-                                    <small class="ms-2"><i class="fas fa-user-graduate me-1"></i> Cơ bản</small>
-                                </div>
-                                <p class="text-sm mb-2">Khóa học cung cấp kiến thức cơ bản về các loại ma túy và tác hại của chúng đối với học sinh.</p>
-                                <div class="progress progress-custom mb-3">
-                                    <div class="progress-bar progress-bar-custom bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <a th:href="@{/course-detail/1}" class="btn btn-primary btn-custom-sm">Xem chi tiết</a>
-                                <button class="btn btn-outline-success btn-custom-sm ms-2 enroll-btn">Đăng ký ngay</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Course Item 2 -->
-            <div class="col-xl-3 col-md-6 col-custom mb-4" data-age-group="college" data-course-type="prevention" data-difficulty="intermediate">
-                <div class="card course-card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    [Sinh viên] Kỹ năng phòng tránh
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">Từ chối ma túy trong môi trường đại học</div>
-                                <div class="mt-2 mb-3 text-muted">
-                                    <small><i class="fas fa-clock me-1"></i> 3 giờ</small>
-                                    <small class="ms-2"><i class="fas fa-user-graduate me-1"></i> Trung cấp</small>
-                                </div>
-                                <p class="text-sm mb-2">Học cách nhận biết và từ chối ma túy trong các tình huống xã hội ở môi trường đại học.</p>
-                                <div class="progress progress-custom mb-3">
-                                    <div class="progress-bar progress-bar-custom bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <a th:href="@{/course-detail/2}" class="btn btn-success btn-custom-sm">Xem chi tiết</a>
-                                <button class="btn btn-outline-success btn-custom-sm ms-2 enroll-btn">Đăng ký ngay</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Course Item 3 -->
-            <div class="col-xl-3 col-md-6 col-custom mb-4" data-age-group="parent" data-course-type="awareness" data-difficulty="beginner">
-                <div class="card course-card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                    [Phụ huynh] Nhận thức
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">Dấu hiệu con sử dụng ma túy</div>
-                                <div class="mt-2 mb-3 text-muted">
-                                    <small><i class="fas fa-clock me-1"></i> 1.5 giờ</small>
-                                    <small class="ms-2"><i class="fas fa-user-graduate me-1"></i> Cơ bản</small>
-                                </div>
-                                <p class="text-sm mb-2">Nhận biết các dấu hiệu cảnh báo và cách tiếp cận khi nghi ngờ con sử dụng ma túy.</p>
-                                <div class="progress progress-custom mb-3">
-                                    <div class="progress-bar progress-bar-custom bg-info" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <a th:href="@{/course-detail/3}" class="btn btn-info btn-custom-sm">Xem chi tiết</a>
-                                <button class="btn btn-outline-success btn-custom-sm ms-2 enroll-btn">Đăng ký ngay</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Course Item 4 -->
-            <div class="col-xl-3 col-md-6 col-custom mb-4" data-age-group="teacher" data-course-type="refusal" data-difficulty="advanced">
-                <div class="card course-card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    [Giáo viên] Kỹ năng từ chối
-                                </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">Giáo dục phòng chống ma túy trong trường học</div>
-                                <div class="mt-2 mb-3 text-muted">
-                                    <small><i class="fas fa-clock me-1"></i> 4 giờ</small>
-                                    <small class="ms-2"><i class="fas fa-user-graduate me-1"></i> Nâng cao</small>
-                                </div>
-                                <p class="text-sm mb-2">Phương pháp giảng dạy và can thiệp hiệu quả về phòng chống ma túy trong môi trường học đường.</p>
-                                <div class="progress progress-custom mb-3">
-                                    <div class="progress-bar progress-bar-custom bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <a th:href="@{/course-detail/4}" class="btn btn-warning btn-custom-sm">Xem chi tiết</a>
-                                <button class="btn btn-outline-success btn-custom-sm ms-2 enroll-btn">Đăng ký ngay</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <nav aria-label="Course pagination">
-            <ul class="pagination pagination-custom">
-                <li class="page-item disabled">
-                    <a class="page-link page-link-custom" href="#" tabindex="-1" aria-disabled="true">Trước</a>
-                </li>
-                <li class="page-item active"><a class="page-link page-link-custom" href="#">1</a></li>
-                <li class="page-item"><a class="page-link page-link-custom" href="#">2</a></li>
-                <li class="page-item"><a class="page-link page-link-custom" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link page-link-custom" href="#">Tiếp</a>
-                </li>
-            </ul>
-        </nav>
-    </main>
-
-    <!-- Course Enrollment Modal -->
-    <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-header-custom text-white">
-                    <h5 class="modal-title" id="enrollModalLabel">Đăng ký khóa học</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn đăng ký khóa học <strong id="courseTitle"></strong>?</p>
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle me-2"></i>Sau khi đăng ký, bạn có thể bắt đầu học ngay trong mục "Khóa học của tôi".
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
-                    <button type="button" class="btn btn-success" id="confirmEnroll">Xác nhận đăng ký</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-     <!-- Footer Section -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <a href="#" class="logo">
-                        <img th:src="@{/images/logo-white.png}" alt="Drug Prevention Logo">
-                        <span>DrugFree</span>
-                    </a>
-                    <p>Tổ chức tình nguyện vì cộng đồng không ma túy. Chúng tôi cam kết hỗ trợ phòng ngừa và nâng cao nhận thức về tác hại của ma túy.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Liên kết nhanh</h3>
-                    <ul>
-                        <li><a href="#">Trang chủ</a></li>
-                        <li><a th:href="@{/about}">Về chúng tôi</a></li>
-                        <li><a th:href="@{/services}">Dịch vụ</a></li>
-                        <li><a th:href="@{/team}">Đội ngũ</a></li>
-                        <li><a th:href="@{/blog}">Blog</a></li>
-                        <li><a th:href="@{/contact}">Liên hệ</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Dịch vụ</h3>
-                    <ul>
-                        <li><a th:href="@{/courses}">Khóa học trực tuyến</a></li>
-                        <li><a th:href="@{/assessment}">Đánh giá nguy cơ</a></li>
-                        <li><a th:href="@{/consultation}">Tư vấn chuyên gia</a></li>
-                        <li><a th:href="@{/events}">Sự kiện cộng đồng</a></li>
-                        <li><a th:href="@{/resources}">Tài nguyên</a></li>
-                        <li><a th:href="@{/faq}">Câu hỏi thường gặp</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Liên hệ</h3>
-                    <ul class="contact-info">
-                        <li><i class="fas fa-map-marker-alt"></i> Số 123, đường ABC, quận XYZ, Hà Nội</li>
-                        <li><i class="fas fa-phone"></i> (024) 1234 5678</li>
-                        <li><i class="fas fa-envelope"></i> info@drugfree.org.vn</li>
-                        <li><i class="fas fa-clock"></i> Thứ 2 - Thứ 6: 8:00 - 17:00</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div class="copyright">
-            <div class="container">
-                <p>&copy; 2023 DrugFree. Tất cả quyền được bảo lưu.</p>
-                <div class="footer-links">
-                    <a href="#">Chính sách bảo mật</a>
-                    <a href="#">Điều khoản sử dụng</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Filter functionality
-            document.getElementById('filterBtn').addEventListener('click', function() {
-                const ageGroup = document.getElementById('ageGroup').value;
-                const courseType = document.getElementById('courseType').value;
-                const difficulty = document.getElementById('difficulty').value;
-                
-                const courses = document.querySelectorAll('#coursesContainer > div');
-                
-                courses.forEach(course => {
-                    const showCourse = 
-                        (ageGroup === 'all' || course.dataset.ageGroup === ageGroup) &&
-                        (courseType === 'all' || course.dataset.courseType === courseType) &&
-                        (difficulty === 'all' || course.dataset.difficulty === difficulty);
-                    
-                    course.style.display = showCourse ? 'block' : 'none';
-                });
-            });
-            
-            // Reset filter
-            document.getElementById('resetBtn').addEventListener('click', function() {
-                document.getElementById('ageGroup').value = 'all';
-                document.getElementById('courseType').value = 'all';
-                document.getElementById('difficulty').value = 'all';
-                
-                const courses = document.querySelectorAll('#coursesContainer > div');
-                courses.forEach(course => {
-                    course.style.display = 'block';
-                });
-            });
-            
-            // Enrollment modal
-            const enrollButtons = document.querySelectorAll('.enroll-btn');
-            const enrollModal = new bootstrap.Modal(document.getElementById('enrollModal'));
-            
-            enrollButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const card = this.closest('.card');
-                    const courseName = card.querySelector('.h5').textContent;
-                    document.getElementById('courseTitle').textContent = courseName;
-                    enrollModal.show();
-                });
-            });
-            
-            // Confirm enrollment
-            document.getElementById('confirmEnroll').addEventListener('click', function() {
-                enrollModal.hide();
-                alert('Bạn đã đăng ký khóa học thành công!');
-                // Here you would typically send an AJAX request to the server to save the enrollment
-            });
-        });
-    </script>
-    
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang cá nhân Staff | Drug Use Prevention Support System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #f6fbff;
+            color: #233044;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+        .profile-container {
+            max-width: 620px;
+            margin: 38px auto 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #bbe1fa22;
+            padding: 38px 40px 30px 40px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 26px;
+        }
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3.5px solid #2176ae55;
+            object-fit: cover;
+            box-shadow: 0 1px 12px #57b8ff22;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #2176ae;
+            margin-bottom: 3px;
+        }
+        .profile-role {
+            background: #e8f2ff;
+            color: #2176ae;
+            font-weight: 600;
+            padding: 4px 16px;
+            border-radius: 7px;
+            display: inline-block;
+            font-size: 1.03em;
+        }
+        .profile-email {
+            color: #597394;
+            font-size: 1em;
+            margin: 7px 0;
+            display: block;
+        }
+        .profile-actions {
+            display: flex;
+            gap: 14px;
+            margin-top: 10px;
+        }
+        .btn {
+            padding: 9px 18px;
+            border-radius: 9px;
+            font-size: 1em;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            background: #2176ae;
+            color: #fff;
+            transition: 0.17s;
+        }
+        .btn:hover {
+            background: #57b8ff;
+            color: #233044;
+        }
+        .btn-outline {
+            background: #fff;
+            color: #2176ae;
+            border: 1.5px solid #2176ae;
+        }
+        .btn-outline:hover {
+            background: #e8f2ff;
+        }
+        .profile-section {
+            margin-bottom: 32px;
+        }
+        .profile-label {
+            font-weight: 600;
+            color: #2e4e7e;
+            font-size: 1.05em;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .profile-value {
+            font-size: 1.06em;
+            margin-bottom: 9px;
+        }
+        .profile-form input, .profile-form textarea {
+            width: 100%;
+            padding: 8px 11px;
+            border: 1.3px solid #d0e8fd;
+            border-radius: 7px;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        .profile-form textarea {
+            resize: vertical;
+            min-height: 54px;
+            max-height: 130px;
+        }
+        .profile-form .btn {
+            margin-top: 8px;
+        }
+        .profile-history {
+            background: #f2f8fd;
+            border-radius: 10px;
+            padding: 19px 18px 8px 18px;
+            box-shadow: 0 1px 7px #eaf1fa11;
+        }
+        .history-title {
+            font-weight: 600;
+            margin-bottom: 9px;
+            color: #2176ae;
+        }
+        .history-item {
+            border-bottom: 1px solid #e3eaf2;
+            padding: 7px 0 7px 0;
+            font-size: 1.01em;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        @media (max-width: 700px) {
+            .profile-container { padding: 11vw 2vw 7vw 2vw; }
+            .profile-header { flex-direction: column; gap: 10px; align-items: flex-start;}
+        }
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(33, 118, 174, 0.15);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 13px;
+            width: 100%;
+            max-width: 370px;
+            box-shadow: 0 2px 16px #2176ae2a;
+            padding: 29px 30px 20px 30px;
+            position: relative;
+            animation: modalIn 0.19s;
+        }
+        .modal-close {
+            position: absolute;
+            right: 18px;
+            top: 10px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.3em;
+            cursor: pointer;
+        }
+        .modal-close:hover {
+            color: #e74c3c;
+        }
+        .modal-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2176ae;
+            margin-bottom: 18px;
+        }
+        .modal-action-btns {
+            display: flex;
+            gap: 13px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="staff/header :: main-header"></div>
+
+<div class="profile-container">
+
+    <div class="profile-header">
+        <img class="profile-avatar"
+             th:src="@{${user.avatarUrl}}"
+             src="https://randomuser.me/api/portraits/women/44.jpg"
+             alt="avatar">
+
+        <div class="profile-info">
+            <div class="profile-name"
+                 th:text="${user.fullName}">Nguyễn Thị A</div>
+            <div class="profile-role"
+                 th:text="${user.role}">Staff</div>
+            <div class="profile-email"
+                 th:text="${user.email}">staff01@example.com</div>
+            <div class="profile-actions">
+                <button class="btn-outline" type="button"
+                        onclick="editInfo()">
+                    <i class="fa fa-edit"></i> Sửa thông tin
+                </button>
+                <button class="btn" type="button"
+                        onclick="openModal('changePwdModal')">
+                    <i class="fa fa-key"></i> Đổi mật khẩu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <span class="profile-label">Số điện thoại</span>
+        <span class="profile-value"
+              th:text="${user.phone}">0357 123 456</span>
+        <span class="profile-label">Địa chỉ</span>
+        <span class="profile-value"
+              th:text="${user.address}">123 Đường ABC, TP. Hồ Chí Minh</span>
+        <span class="profile-label">Giới thiệu</span>
+        <span class="profile-value"
+              th:text="${user.bio}">Tôi là nhân viên tư vấn, với mong muốn đóng góp cho cộng đồng phòng chống ma túy.</span>
+    </div>
+
+    <form class="profile-form" id="profile-edit-form" style="display:none;">
+        <span class="profile-label">Họ tên</span>
+        <input type="text" name="fullName" th:value="${user.fullName}" required>
+        <span class="profile-label">Email</span>
+        <input type="email" name="email" th:value="${user.email}" required>
+        <span class="profile-label">Số điện thoại</span>
+        <input type="text" name="phone" th:value="${user.phone}">
+        <span class="profile-label">Địa chỉ</span>
+        <input type="text" name="address" th:value="${user.address}">
+        <span class="profile-label">Giới thiệu</span>
+        <textarea name="bio" th:text="${user.bio}"></textarea>
+        <button class="btn" type="submit">Lưu thay đổi</button>
+        <button class="btn-outline" type="button" onclick="cancelEdit()">Hủy</button>
+    </form>
+
+    <div class="profile-section profile-history">
+        <div class="history-title">
+            <i class="fa fa-history"></i> Hoạt động gần đây
+        </div>
+        <div class="history-item">
+            <i class="fa fa-calendar-check"></i>
+            Đã tạo lịch hẹn với chuyên viên <span style="color:#21ae66;">(10 phút trước)</span>
+        </div>
+        <div class="history-item">
+            <i class="fa fa-file-alt"></i>
+            Thực hiện khảo sát CRAFFT <span style="color:#2176ae;">(1 giờ trước)</span>
+        </div>
+        <div class="history-item">
+            <i class="fa fa-user-plus"></i>
+            Tham gia khóa học Kỹ năng phòng tránh <span style="color:#2176ae;">(Hôm qua)</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal đổi mật khẩu -->
+<div id="changePwdModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('changePwdModal')">&times;</button>
+        <div class="modal-title">Đổi mật khẩu</div>
+        <form>
+            <label>Mật khẩu hiện tại</label>
+            <input type="password" required>
+            <label>Mật khẩu mới</label>
+            <input type="password" required>
+            <label>Nhập lại mật khẩu mới</label>
+            <input type="password" required>
+            <div class="modal-action-btns">
+                <button class="btn-outline" type="button"
+                        onclick="closeModal('changePwdModal')">Hủy
+                </button>
+                <button class="btn" type="submit">Đổi mật khẩu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Sửa thông tin
+    function editInfo() {
+        document.querySelector('.profile-section').style.display = "none";
+        document.getElementById('profile-edit-form').style.display = "block";
+    }
+    function cancelEdit() {
+        document.getElementById('profile-edit-form').reset();
+        document.getElementById('profile-edit-form').style.display = "none";
+        document.querySelector('.profile-section').style.display = "block";
+    }
+    // Modal đổi mật khẩu
+    function openModal(id) {
+        document.getElementById(id).classList.add('show');
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('show');
+    }
+    window.addEventListener('keydown', function(e){
+        if (e.key === "Escape") closeModal('changePwdModal');
+    });
+    // Xử lý submit đổi mật khẩu (demo)
+    document.querySelector('#changePwdModal form').onsubmit = function(e){
+        e.preventDefault();
+        closeModal('changePwdModal');
+        alert('Đổi mật khẩu thành công (demo)!');
+    };
+    // Xử lý submit chỉnh sửa thông tin (demo)
+    document.getElementById('profile-edit-form').onsubmit = function(e){
+        e.preventDefault();
+        document.getElementById('profile-edit-form').style.display = "none";
+        document.querySelector('.profile-section').style.display = "block";
+        alert('Cập nhật thông tin thành công (demo)!');
+    };
+</script>
+</body>
+</html>

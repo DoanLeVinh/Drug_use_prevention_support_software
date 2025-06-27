@@ -1,528 +1,482 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Đặt lịch tư vấn | Drug Prevention Support System</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tư vấn phòng ngừa ma túy</title>
-    <link rel="stylesheet" th:href="@{/layout.css}">     
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
     <style>
-        /* CSS chung */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
+        :root {
+            --primary: #2176ae;
+            --secondary: #57b8ff;
+            --bg: #f7fbfd;
+            --white: #fff;
+            --soft: #eaf4fa;
+            --shadow: 0 6px 28px rgba(33,118,174,0.10);
+            --highlight: #21ae66;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        body { background: var(--bg); font-family: 'Inter', 'Segoe UI', Arial, sans-serif; margin: 0; color: #24415d;}
+        .main-wrap {
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+            padding: 40px 0 50px 0;
         }
-        
-        h1, h2, h3 {
-            color: #2c3e50;
+        .consult-title {
+            font-size: 2.2rem; font-weight: 800; color: var(--primary); text-align: center; margin: 20px 0 18px 0;
         }
-        
-        /* Phần tư vấn */
-        .consultation-section {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            margin-bottom: 30px;
+        .consult-desc {
+            font-size: 1.12em; color: #355485; background: #eaf6fa; border-radius: 16px; padding: 16px 32px 12px 32px;
+            box-shadow: 0 2px 13px #2176ae13; max-width: 640px; margin: 0 auto 38px auto; text-align: center;
         }
-        
-        .consultation-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 20px;
+        .method-select-row {
+            display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin: 0 0 38px 0;
         }
-        
-        .consultation-card {
-            flex: 1 1 300px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid #ddd;
+        .method-card {
+            background: var(--white); border-radius: 14px; box-shadow: var(--shadow);
+            padding: 32px 30px 22px 30px; display: flex; flex-direction: column; align-items: center;
+            min-width: 220px; max-width: 290px; cursor: pointer; position: relative;
+            transition: box-shadow 0.15s, transform 0.13s, filter 0.23s;
+            opacity: 0.92; filter: grayscale(25%);
         }
-        
-        .consultation-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-color: #3498db;
+        .method-card.selected, .method-card:hover {
+            box-shadow: 0 9px 28px #2176ae2a; transform: scale(1.025) translateY(-2px);
+            border: 2.3px solid var(--primary); filter: grayscale(0%); opacity: 1;
         }
-        
-        .consultation-card h3 {
-            margin-top: 0;
-            color: #3498db;
+        .method-icon {
+            font-size: 2.2rem; margin-bottom: 9px; color: var(--primary);
         }
-        
-        .consultation-card p {
-            color: #666;
+        .method-title {
+            font-size: 1.18em; font-weight: 700; margin-bottom: 7px;
         }
-        
-        .consultation-card i {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #3498db;
+        .method-desc {
+            font-size: 1em; color: #426897; text-align: center; margin-bottom: 8px; opacity: 0.93;
         }
-        
-        /* Form đặt lịch */
-        .appointment-form {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
+        .form-frame {
+            margin: 0 auto; background: var(--white); border-radius: 15px; box-shadow: var(--shadow);
+            padding: 34px 32px 30px 32px; width: 100%; max-width: 480px;
+            display: flex; flex-direction: column; align-items: center;
+            animation: fadeInForm 0.6s;
         }
-        
-        .appointment-form.active {
-            display: block;
+        @keyframes fadeInForm {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
         }
-        
-        .form-group {
-            margin-bottom: 15px;
+        .form-frame label {
+            display: block; font-weight: 600; margin: 14px 0 6px 0; color: #2e527d; font-size: 1.05em;
         }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+        .form-frame select, .form-frame input, .form-frame textarea {
+            width: 100%; padding: 9px 13px; border-radius: 8px; border: 1px solid #b7d8f5;
+            font-size: 1em; background: #f4fbff; color: #274060; margin-bottom: 5px;
         }
-        
-        .form-group input, 
-        .form-group select, 
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
+        .form-frame textarea { resize: vertical; min-height: 58px; max-height: 130px;}
+        .form-actions {
+            width: 100%; display: flex; gap: 14px; margin-top: 28px; justify-content: center;
         }
-        
-        .form-group textarea {
-            height: 100px;
+        .consult-btn, .cancel-btn {
+            flex: 1 1 0; padding: 12px 0; border-radius: 8px; border: none; font-weight: 700;
+            font-size: 1.06em; cursor: pointer; box-shadow: 0 1px 9px #2176ae16;
+            transition: background 0.14s, box-shadow 0.13s, transform 0.13s;
         }
-        
-        .btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+        .consult-btn {
+            background: linear-gradient(90deg, #2176ae 85%, #57b8ff 100%); color: #fff;
         }
-        
-        .btn:hover {
-            background-color: #2980b9;
+        .consult-btn:active { transform: scale(0.97);}
+        .consult-btn:hover { background: linear-gradient(90deg, #21ae66 80%, #57b8ff 100%);}
+        .cancel-btn {
+            background: #eaf4fa; color: #b22626;
+            border: 1.5px solid #e1c9c9; font-weight: 700;
         }
-        
-        /* Phần chat */
-        .chat-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 15px;
+        .cancel-btn:hover { background: #fbeeee; color: #d41c1c;}
+        /* Modal xác nhận, thành công */
+        .modal-backdrop {
+            position: fixed; z-index: 1100; top:0;left:0;right:0;bottom:0; background: rgba(33,118,174,0.13);
+            display: none; align-items: center; justify-content: center;
         }
-        
-        .chat-option {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            background-color: #f9f9f9;
-            border-radius: 30px;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s;
-            border: 1px solid #ddd;
+        .modal-backdrop.show { display: flex;}
+        .modal-box {
+            background: #fff; border-radius: 15px; box-shadow: 0 8px 36px #2176ae36;
+            padding: 36px 32px 26px 32px; min-width: 310px; max-width: 95vw; text-align: center;
+            animation: fadeInForm 0.5s;
         }
-        
-        .chat-option:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        .modal-box h2 { color: var(--primary); font-weight: 700; font-size: 1.28em;}
+        .modal-box .success-icon { font-size: 3.3rem; color: var(--highlight); margin: 12px 0 7px 0;}
+        .modal-actions {
+            display: flex; gap: 18px; justify-content: center; margin-top: 22px;
         }
-        
-        .chat-option i {
-            margin-right: 10px;
-            font-size: 20px;
+        .modal-btn {
+            padding: 11px 20px; border-radius: 8px; font-weight: 600; font-size: 1em;
+            border: none; cursor: pointer; box-shadow: 0 1px 5px #2176ae19; background: var(--primary); color: #fff;
+            transition: background 0.13s, color 0.13s, transform 0.13s;
         }
-        
-        .facebook { color: #1877f2; border-color: #1877f2; }
-        .zalo { color: #0068ff; border-color: #0068ff; }
-        .telegram { color: #0088cc; border-color: #0088cc; }
-        .instagram { color: #e4405f; border-color: #e4405f; }
-        .twitter { color: #1da1f2; border-color: #1da1f2; }
-        
-        /* Call option */
-        .call-option {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            margin-top: 20px;
+        .modal-btn.cancel { background: #eaf4fa; color: #c42525; border: 1.2px solid #e0b5b5;}
+        .modal-btn:hover { background: var(--secondary);}
+        .modal-btn.cancel:hover { background: #fce5e5; color: #e12a2a;}
+        .success-msg { color: #21ae66; text-align: center; font-weight: 700; margin: 12px 0 0 0; font-size: 1.09em;}
+        /* Select giờ đẹp */
+        .hour-list {
+            display: flex; flex-wrap: wrap; gap: 9px; margin: 7px 0 6px 0;
         }
-        
-        .call-option i {
-            font-size: 24px;
-            color: #27ae60;
-            margin-right: 15px;
+        .hour-btn {
+            background: #f4fbff; border: 1.6px solid #b7d8f5; border-radius: 7px;
+            padding: 8px 17px; font-size: 1.02em; font-weight: 600; color: var(--primary);
+            cursor: pointer; transition: background 0.12s, border 0.12s, color 0.12s;
         }
-        
-        .phone-number {
-            font-size: 18px;
-            font-weight: bold;
-            color: #27ae60;
+        .hour-btn.selected, .hour-btn:hover {
+            background: var(--primary); color: #fff; border-color: var(--primary);
         }
-        
-        /* Thông báo */
-        .notification {
-            display: none;
-            padding: 15px;
-            background-color: #d4edda;
-            color: #155724;
-            border-radius: 4px;
-            margin-top: 20px;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .notification.active {
-            display: block;
-        }
-        
         /* Responsive */
-        @media (max-width: 768px) {
-            .consultation-options {
-                flex-direction: column;
-            }
-            
-            .consultation-card {
-                flex: 1 1 auto;
-            }
+        @media (max-width: 900px) {
+            .main-wrap { padding: 12px 0;}
+            .method-select-row { gap: 18px;}
         }
+        @media (max-width: 650px) {
+            .form-frame, .modal-box { padding: 16px 6vw;}
+            .method-card { min-width: 98vw; max-width: 99vw;}
+        }
+        .method-card {
+    /* ... giữ lại các style gốc ... */
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 32px 30px 22px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 220px;
+    max-width: 290px;
+    cursor: pointer;
+    position: relative;
+    transition: box-shadow 0.15s, transform 0.13s, border 0.23s, background 0.25s, filter 0.23s;
+    opacity: 0.93;
+    filter: grayscale(25%);
+    border: 2.3px solid transparent;
+}
+.method-card.selected, .method-card:hover, .method-card:focus-within {
+    box-shadow: 0 9px 28px #2176ae2a;
+    transform: scale(1.035) translateY(-2px);
+    border: 2.3px solid var(--primary);
+    filter: grayscale(0%);
+    opacity: 1;
+    background: linear-gradient(106deg, #e8f4fb 68%, #f6faff 100%);
+}
+.method-card[data-method="hotline"].selected .method-icon,
+.method-card[data-method="hotline"]:hover .method-icon,
+.method-card[data-method="social"].selected .method-icon,
+.method-card[data-method="social"]:hover .method-icon {
+    color: #21ae66; /* Xanh lá nổi bật hotline, có thể chỉnh màu nếu muốn */
+    text-shadow: 0 3px 9px #21ae6632;
+}
+.method-quick-contact {
+    margin-top: 14px;
+    width: 100%;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.24s cubic-bezier(.33,1.12,.7,.93);
+    animation: none;
+}
+.method-card.selected .method-quick-contact,
+.method-card:hover .method-quick-contact {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px 18px;
+    opacity: 1;
+    animation: fadeInQC 0.36s;
+}
+@keyframes fadeInQC {
+    from { opacity: 0; transform: translateY(11px);}
+    to   { opacity: 1; transform: translateY(0);}
+}
+/* Tô viền hoặc bóng khi quick-contact hiện */
+.method-card.selected,
+.method-card:hover {
+    z-index: 3;
+}
+
+/* Nút quick contact */
+.method-quick-contact a, .method-quick-contact button {
+    background: #eaf4fa;
+    color: #2176ae;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 18px;
+    margin: 6px 4px 0 4px;
+    font-weight: 600;
+    font-size: 1.05em;
+    text-decoration: none;
+    box-shadow: 0 1px 5px #2176ae18;
+    cursor: pointer;
+    transition: background 0.15s, color 0.13s, transform 0.13s;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.method-quick-contact a:hover,
+.method-quick-contact button:hover,
+.method-quick-contact a:focus,
+.method-quick-contact button:focus {
+    background: var(--primary);
+    color: #fff;
+    transform: translateY(-1px) scale(1.06);
+}
+
     </style>
-    <!-- Font Awesome cho icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Header từ Thymeleaf -->
-  <header class="inner-header">
-    <div class="inner-header-container">
-        <a href="/" class="inner-logo-container">
-            <div class="inner-logo-icon">DP</div>
-            <div class="inner-logo-text">Drug<span>Free</span></div>
-        </a>
-        
-        <nav class="inner-nav-menu">
-            <a href="/" class="inner-nav-link active">Trang chủ</a>
-            <a href="/courses" class="inner-nav-link">Khóa học</a>
-            <a href="/assessment" class="inner-nav-link">Đánh giá nguy cơ</a>
-            <a href="/consultation" class="inner-nav-link">Tư vấn</a>
-            <a href="/blog" class="inner-nav-link">Blog</a>
-            <a href="/about" class="inner-nav-link">Về chúng tôi</a>
-        </nav>
-        
-        <div class="inner-auth-buttons">
-            <button class="inner-btn-signin">Đăng nhập</button>
-            <button class="inner-btn-signup">Đăng ký</button>
-        </div>
-        
-        <button class="inner-menu-toggle">
-            <i class="fas fa-bars"></i>
-        </button>
+<div th:replace="member/header :: main-header"></div>
+<div class="main-wrap">
+    <div class="consult-title"><i class="fa-solid fa-headset"></i> Đặt lịch tư vấn</div>
+    <div class="consult-desc">
+        Chọn hình thức tư vấn phù hợp: Online (qua Zoom/Meet) hoặc trực tiếp tại văn phòng. Các khung giờ được cập nhật realtime theo chuyên gia bạn chọn!
     </div>
-</header>
-<script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-    const innerMenuToggle = document.querySelector('.inner-menu-toggle');
-    const innerNavMenu = document.querySelector('.inner-nav-menu');
-    const innerAuthButtons = document.querySelector('.inner-auth-buttons');
+    <div class="method-select-row" id="methodRow">
+        <div class="method-card" data-method="online">
+            <div class="method-icon"><i class="fa-solid fa-laptop-medical"></i></div>
+            <div class="method-title">Tư vấn Online</div>
+            <div class="method-desc">Trao đổi 1-1 cùng chuyên gia qua Zoom, Google Meet. Nhanh, riêng tư, bảo mật.</div>
+        </div>
+        <div class="method-card" data-method="offline">
+            <div class="method-icon"><i class="fa-solid fa-user-doctor"></i></div>
+            <div class="method-title">Tư vấn tại văn phòng</div>
+            <div class="method-desc">Đến phòng tư vấn chuyên nghiệp, không gian riêng tư, chuyên gia tận tâm hỗ trợ.</div>
+        </div>
+        <!-- Hotline -->
+        <div class="method-card" data-method="hotline">
+            <div class="method-icon"><i class="fa-solid fa-phone-volume"></i></div>
+            <div class="method-title">Hotline 24/7</div>
+            <div class="method-desc">Liên hệ tư vấn gấp với bác sĩ qua số tổng đài.</div>
+            <div class="method-quick-contact" style="display:none;">
+                <button onclick="copyHotline(event)" type="button"><i class="fa fa-copy"></i> Sao chép số</button>
+                <a href="tel:18001111"><i class="fa fa-phone"></i> Gọi ngay 1800 1111</a>
+            </div>
+        </div>
+        <!-- Social -->
+        <div class="method-card" data-method="social">
+            <div class="method-icon"><i class="fa-brands fa-facebook-messenger"></i></div>
+            <div class="method-title">Mạng xã hội</div>
+            <div class="method-desc">Nhắn tin ngay cho tư vấn viên qua Facebook, Zalo, Telegram, Email.</div>
+            <div class="method-quick-contact" style="display:none;">
+                <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="https://zalo.me/" target="_blank"><i class="fa-brands fa-facebook-messenger"></i> Zalo</a>
+                <a href="https://t.me/" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="mailto:info@drugprevention.vn"><i class="fa fa-envelope"></i> Email</a>
+            </div>
+        </div>
+    </div>
+    </div>
     
-    innerMenuToggle.addEventListener('click', function() {
-        // Tạo menu mobile tạm thời
-        const innerMobileMenu = document.createElement('div');
-        innerMobileMenu.className = 'inner-mobile-menu';
-        innerMobileMenu.style.position = 'fixed';
-        innerMobileMenu.style.top = '0';
-        innerMobileMenu.style.right = '0';
-        innerMobileMenu.style.width = '280px';
-        innerMobileMenu.style.height = '100vh';
-        innerMobileMenu.style.backgroundColor = 'white';
-        innerMobileMenu.style.boxShadow = '-5px 0 15px rgba(0,0,0,0.1)';
-        innerMobileMenu.style.padding = '80px 20px 20px';
-        innerMobileMenu.style.zIndex = '1000';
-        
-        // Clone các phần tử menu
-        const innerClonedNav = innerNavMenu.cloneNode(true);
-        innerClonedNav.style.display = 'flex';
-        innerClonedNav.style.flexDirection = 'column';
-        innerClonedNav.style.gap = '10px';
-        innerClonedNav.querySelectorAll('.inner-nav-link').forEach(link => {
-            link.style.padding = '12px 16px';
+    <!-- Form đặt lịch -->
+    <form class="form-frame" id="consultForm" autocomplete="off" style="display:none;">
+        <input type="hidden" id="method" name="method">
+        <label for="fullname">Họ tên <span style="color:#e74c3c">*</span></label>
+        <input type="text" id="fullname" name="fullname" required maxlength="80" placeholder="Nhập họ tên">
+        <label for="phone">Số điện thoại <span style="color:#e74c3c">*</span></label>
+        <input type="tel" id="phone" name="phone" required maxlength="20" pattern="[0-9\+\-\s]{9,20}" placeholder="Nhập số điện thoại">
+        <label for="email">Email <span style="color:#e74c3c">*</span></label>
+        <input type="email" id="email" name="email" required maxlength="60" placeholder="Email nhận xác nhận">
+        <label for="service">Chọn dịch vụ tư vấn</label>
+        <select id="service" name="service" required>
+            <option value="" disabled selected>-- Chọn dịch vụ --</option>
+            <option>Tham vấn tâm lý học đường</option>
+            <option>Giải đáp, phòng ngừa sử dụng ma túy</option>
+            <option>Hỗ trợ phụ huynh - trẻ vị thành niên</option>
+            <option>Phục hồi & cai nghiện</option>
+        </select>
+        <label for="consultant">Chọn chuyên gia tư vấn</label>
+        <select id="consultant" name="consultant" required>
+            <option value="" disabled selected>-- Chọn chuyên gia --</option>
+            <option value="hung">BS. Nguyễn Văn Hùng - Tâm lý, Cai nghiện</option>
+            <option value="lan">Phạm Thị Lan - Trẻ vị thành niên</option>
+            <option value="quan">TS. Trần Minh Quân - Gia đình, Xã hội</option>
+            <option value="hien">BS. Lê Thu Hiền - Học đường</option>
+        </select>
+        <label for="date">Chọn ngày</label>
+        <input type="date" id="date" name="date" required min="">
+        <label>Chọn giờ</label>
+        <div class="hour-list" id="hourList"></div>
+        <label for="note">Mô tả tình trạng (tùy chọn)</label>
+        <textarea id="note" name="note" placeholder="Bạn muốn tư vấn về điều gì?"></textarea>
+        <div class="form-actions">
+            <button type="button" class="cancel-btn" onclick="cancelBooking()">Hủy</button>
+            <button type="button" class="consult-btn" onclick="openConfirmModal()">Đặt lịch</button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal xác nhận -->
+<div class="modal-backdrop" id="modalConfirm">
+    <div class="modal-box">
+        <h2>Xác nhận đặt lịch?</h2>
+        <div>Thông tin bạn nhập sẽ được gửi đến chuyên gia. Bạn chắc chắn muốn đặt lịch tư vấn này?</div>
+        <div class="modal-actions">
+            <button class="modal-btn cancel" onclick="closeConfirmModal()">Hủy</button>
+            <button class="modal-btn" onclick="successBooking()">Đồng ý</button>
+        </div>
+    </div>
+</div>
+<!-- Modal thành công -->
+<div class="modal-backdrop" id="modalSuccess">
+    <div class="modal-box">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h2>Đặt lịch thành công!</h2>
+        <div>Cảm ơn bạn đã tin tưởng hệ thống.<br>Bạn sẽ nhận được email xác nhận lịch tư vấn.</div>
+        <div class="modal-actions">
+            <a class="modal-btn" href="/" style="text-decoration:none;">Về trang chủ</a>
+            <button class="modal-btn cancel" onclick="closeSuccessModal()">Tiếp tục đặt lịch</button>
+        </div>
+    </div>
+</div>
+<div th:replace="member/footer :: main-footer"></div>
+<script>
+    // Giả lập dữ liệu giờ trống
+    const doctorAvailableHours = {
+        hung: { '2025-06-30': ['08:30', '09:30', '14:00', '15:00'], '2025-07-01': ['08:30', '10:00', '16:00'] },
+        lan:  { '2025-06-30': ['09:00', '11:00', '16:00'],           '2025-07-01': ['10:00', '13:30', '15:00'] },
+        quan: { '2025-06-30': ['08:30', '13:00'],                     '2025-07-01': ['09:00', '11:00', '15:30'] },
+        hien: { '2025-06-30': ['08:00', '09:00', '14:30'],            '2025-07-01': ['08:00', '10:00', '14:30'] }
+    };
+    // Chọn ngày min là ngày hôm nay
+    document.addEventListener('DOMContentLoaded', function() {
+        const methodCards = document.querySelectorAll('.method-card');
+        const consultForm = document.getElementById('consultForm');
+        const methodInput = document.getElementById('method');
+        const consultant = document.getElementById('consultant');
+        const dateInput = document.getElementById('date');
+        const hourList = document.getElementById('hourList');
+        let selectedHour = '';
+
+        // Method chọn
+        methodCards.forEach(card => {
+            card.onclick = function() {
+                methodCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                consultForm.style.display = 'flex';
+                methodInput.value = card.dataset.method;
+                consultForm.reset();
+                // Set min date là hôm nay
+                let today = new Date();
+                let yyyy = today.getFullYear(), mm = String(today.getMonth()+1).padStart(2, '0'), dd = String(today.getDate()).padStart(2, '0');
+                dateInput.min = `${yyyy}-${mm}-${dd}`;
+                dateInput.value = dateInput.min;
+                hourList.innerHTML = '';
+                selectedHour = '';
+            }
         });
-        
-        const innerClonedAuth = innerAuthButtons.cloneNode(true);
-        innerClonedAuth.style.display = 'flex';
-        innerClonedAuth.style.flexDirection = 'column';
-        innerClonedAuth.style.gap = '10px';
-        innerClonedAuth.style.marginTop = '20px';
-        innerClonedAuth.querySelectorAll('button').forEach(btn => {
-            btn.style.width = '100%';
-        });
-        
-        // Thêm nút đóng
-        const innerCloseBtn = document.createElement('button');
-        innerCloseBtn.innerHTML = '<i class="fas fa-times"></i>';
-        innerCloseBtn.style.position = 'absolute';
-        innerCloseBtn.style.top = '20px';
-        innerCloseBtn.style.right = '20px';
-        innerCloseBtn.style.background = 'none';
-        innerCloseBtn.style.border = 'none';
-        innerCloseBtn.style.fontSize = '20px';
-        innerCloseBtn.style.cursor = 'pointer';
-        
-        innerCloseBtn.addEventListener('click', function() {
-            document.body.removeChild(innerMobileMenu);
-            document.body.style.overflow = 'auto';
-        });
-        
-        // Thêm vào DOM
-        innerMobileMenu.appendChild(innerCloseBtn);
-        innerMobileMenu.appendChild(innerClonedNav);
-        innerMobileMenu.appendChild(innerClonedAuth);
-        document.body.appendChild(innerMobileMenu);
-        document.body.style.overflow = 'hidden';
+
+        // Khi chọn bác sĩ hoặc ngày => cập nhật giờ trống
+        consultant.onchange = dateInput.onchange = function() {
+            hourList.innerHTML = '';
+            selectedHour = '';
+            let doctor = consultant.value;
+            let date = dateInput.value;
+            if(!doctor || !date) return;
+            let hours = (doctorAvailableHours[doctor] && doctorAvailableHours[doctor][date]) || [];
+            if(hours.length === 0) {
+                hourList.innerHTML = '<span style="color:#e74c3c">Không có giờ trống. Chọn ngày khác.</span>';
+                return;
+            }
+            hours.forEach(h => {
+                let btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'hour-btn';
+                btn.textContent = h;
+                btn.onclick = function() {
+                    hourList.querySelectorAll('.hour-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedHour = h;
+                };
+                hourList.appendChild(btn);
+            });
+        };
+
+        // Đóng form
+        window.cancelBooking = function() {
+            consultForm.style.display = 'none';
+            methodCards.forEach(c => c.classList.remove('selected'));
+        };
+
+        // Mở modal xác nhận
+        window.openConfirmModal = function() {
+            if(!consultForm.checkValidity()) { consultForm.reportValidity(); return; }
+            if(!selectedHour) { alert('Vui lòng chọn giờ trống!'); return; }
+            document.getElementById('modalConfirm').classList.add('show');
+        };
+        window.closeConfirmModal = function() {
+            document.getElementById('modalConfirm').classList.remove('show');
+        };
+        // Thành công
+        window.successBooking = function() {
+            document.getElementById('modalConfirm').classList.remove('show');
+            document.getElementById('modalSuccess').classList.add('show');
+        };
+        window.closeSuccessModal = function() {
+            document.getElementById('modalSuccess').classList.remove('show');
+            consultForm.reset();
+            consultForm.style.display = 'none';
+            methodCards.forEach(c => c.classList.remove('selected'));
+        };
     });
+    // Copy hotline & hiệu ứng quick contact cho Hotline và Social
+function copyHotline(e) {
+    e.preventDefault();
+    navigator.clipboard.writeText('18001111');
+    e.target.textContent = "Đã sao chép!";
+    setTimeout(() => { e.target.innerHTML = '<i class="fa fa-copy"></i> Sao chép số'; }, 1600);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    let methodCards = document.querySelectorAll('.method-card');
+    let consultForm = document.getElementById('consultForm');
+    let methodInput = document.getElementById('method');
+
+    methodCards.forEach(card => {
+        card.classList.remove('selected');
+        let qcontact = card.querySelector('.method-quick-contact');
+        if (qcontact) qcontact.style.display = 'none';
+    });
+    consultForm.style.display = 'none';
+
+    methodCards.forEach(card => {
+        card.onclick = function() {
+            // Reset trạng thái các card
+            methodCards.forEach(c => {
+                c.classList.remove('selected');
+                let qcontact = c.querySelector('.method-quick-contact');
+                if (qcontact) qcontact.style.display = 'none';
+            });
+            card.classList.add('selected');
+            let selected = card.dataset.method;
+            // Nếu hotline/social: chỉ hiện quick-contact, ẩn form
+            if (selected === 'hotline' || selected === 'social') {
+                consultForm.style.display = 'none';
+                let qcontact = card.querySelector('.method-quick-contact');
+                if (qcontact) {
+                    qcontact.style.display = 'block';
+                    // Auto focus vào hotline copy hoặc đầu link
+                    let firstBtn = qcontact.querySelector('button, a');
+                    if (firstBtn) firstBtn.focus();
+                }
+            } else {
+                // Online/offline: hiện form
+                methodInput.value = selected;
+                consultForm.style.display = 'flex';
+                if (document.getElementById('datetime')) {
+                    let now = new Date();
+                    now.setHours(now.getHours() + 2);
+                    let min = now.toISOString().slice(0,16);
+                    document.getElementById('datetime').min = min;
+                    document.getElementById('datetime').value = min;
+                }
+                document.getElementById('successMsg').style.display = 'none';
+            }
+        }
+    });
+
+    // Gửi form demo (bạn đã có rồi, có thể dùng lại)
 });
 
-    // Thêm sự kiện click cho các nút đăng nhập và đăng ký
-    document.querySelector('.inner-btn-signin').addEventListener('click', function() {
-        window.location.href = '/login';
-    });
-
-    document.querySelector('.inner-btn-signup').addEventListener('click', function() {
-        window.location.href = '/register';
-    });
-    // Thêm sự kiện click cho các liên kết trong menu
-    document.querySelectorAll('.inner-nav-link').forEach(link => {
-        link.addEventListener('click', function() {
-            document.body.style.overflow = 'auto';
-        });
-    });
-    // Thêm sự kiện click cho nút đóng trong menu mobile
-    document.addEventListener('click', function(event) {
-        if (event.target.closest('.inner-close-btn')) {
-            document.body.style.overflow = 'auto';
-        }
-    });
 </script>
-
-    <div class="container">
-        <h1>Dịch vụ Tư vấn Phòng ngừa Ma túy</h1>
-        <p>Chúng tôi cung cấp các dịch vụ tư vấn và hỗ trợ để giúp bạn phòng ngừa và vượt qua các vấn đề liên quan đến ma túy.</p>
-        
-        <div class="consultation-section">
-            <h2><i class="fas fa-calendar-alt"></i> Đặt lịch hẹn tư vấn</h2>
-            <p>Đặt lịch hẹn trực tiếp với chuyên viên tư vấn của chúng tôi để được hỗ trợ tốt nhất.</p>
-            
-            <div class="consultation-options">
-                <div class="consultation-card" onclick="showAppointmentForm('online')">
-                    <i class="fas fa-video"></i>
-                    <h3>Tư vấn trực tuyến</h3>
-                    <p>Tư vấn qua video call với chuyên viên, tiện lợi và bảo mật.</p>
-                </div>
-                
-                <div class="consultation-card" onclick="showAppointmentForm('offline')">
-                    <i class="fas fa-building"></i>
-                    <h3>Tư vấn trực tiếp</h3>
-                    <p>Gặp mặt trực tiếp tại văn phòng của chúng tôi.</p>
-                </div>
-            </div>
-            
-            <!-- Form đặt lịch hẹn -->
-            <div id="appointmentForm" class="appointment-form">
-                <h3 id="appointmentTitle">Đặt lịch hẹn tư vấn</h3>
-                
-                <form id="bookingForm" onsubmit="submitAppointment(event)">
-                    <input type="hidden" id="consultationType" name="consultationType">
-                    
-                    <div class="form-group">
-                        <label for="fullName">Họ và tên</label>
-                        <input type="text" id="fullName" name="fullName" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phone">Số điện thoại</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="consultant">Chọn chuyên viên</label>
-                        <select id="consultant" name="consultant" required>
-                            <option value="">-- Chọn chuyên viên --</option>
-                            <option value="1">Nguyễn Văn A - Chuyên gia tâm lý</option>
-                            <option value="2">Trần Thị B - Chuyên viên cai nghiện</option>
-                            <option value="3">Lê Văn C - Bác sĩ tâm thần</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="date">Ngày hẹn</label>
-                        <input type="date" id="date" name="date" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="time">Giờ hẹn</label>
-                        <input type="time" id="time" name="time" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="notes">Ghi chú (nếu có)</label>
-                        <textarea id="notes" name="notes"></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn">Đặt lịch ngay</button>
-                </form>
-            </div>
-            
-            <!-- Thông báo đặt lịch thành công -->
-            <div id="successNotification" class="notification">
-                <i class="fas fa-check-circle"></i> Đặt lịch hẹn thành công! Chúng tôi sẽ liên hệ với bạn để xác nhận.
-            </div>
-        </div>
-        
-        <div class="consultation-section">
-            <h2><i class="fas fa-comments"></i> Trò chuyện trực tiếp</h2>
-            <p>Bạn có thể liên hệ với chúng tôi qua các nền tảng mạng xã hội dưới đây:</p>
-            
-            <div class="chat-options">
-                <a href="https://facebook.com" class="chat-option facebook" target="_blank">
-                    <i class="fab fa-facebook-f"></i> Facebook
-                </a>
-                
-                <a href="https://zalo.me" class="chat-option zalo" target="_blank">
-                    <i class="fab fa-zalo"></i> Zalo
-                </a>
-                
-                <a href="https://telegram.org" class="chat-option telegram" target="_blank">
-                    <i class="fab fa-telegram-plane"></i> Telegram
-                </a>
-                
-                <a href="https://instagram.com" class="chat-option instagram" target="_blank">
-                    <i class="fab fa-instagram"></i> Instagram
-                </a>
-                
-                <a href="https://twitter.com" class="chat-option twitter" target="_blank">
-                    <i class="fab fa-twitter"></i> Twitter
-                </a>
-            </div>
-            
-            <div class="call-option">
-                <i class="fas fa-phone-alt"></i>
-                <div>
-                    <p>Gọi điện thoại trực tiếp:</p>
-                    <p class="phone-number">1900 1234</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer từ Thymeleaf -->
-    
-
-    <script>
-        // Hiển thị form đặt lịch
-        function showAppointmentForm(type) {
-            const form = document.getElementById('appointmentForm');
-            const title = document.getElementById('appointmentTitle');
-            const consultationType = document.getElementById('consultationType');
-            
-            if (type === 'online') {
-                title.textContent = 'Đặt lịch hẹn tư vấn trực tuyến';
-                consultationType.value = 'online';
-            } else {
-                title.textContent = 'Đặt lịch hẹn tư vấn trực tiếp';
-                consultationType.value = 'offline';
-            }
-            
-            // Ẩn thông báo thành công nếu có
-            document.getElementById('successNotification').classList.remove('active');
-            
-            // Hiển thị form
-            form.classList.add('active');
-            
-            // Cuộn đến form
-            form.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Gửi form đặt lịch
-        function submitAppointment(event) {
-            event.preventDefault();
-            
-            // Lấy dữ liệu form (trong thực tế sẽ gửi AJAX đến server)
-            const formData = new FormData(document.getElementById('bookingForm'));
-            const data = Object.fromEntries(formData.entries());
-            
-            console.log('Dữ liệu đặt lịch:', data);
-            
-            // Ẩn form
-            document.getElementById('appointmentForm').classList.remove('active');
-            
-            // Hiển thị thông báo thành công
-            document.getElementById('successNotification').classList.add('active');
-            
-            // Cuộn đến thông báo
-            document.getElementById('successNotification').scrollIntoView({ behavior: 'smooth' });
-            
-            // Reset form
-            document.getElementById('bookingForm').reset();
-            
-            // Trong thực tế, bạn sẽ gửi dữ liệu đến server bằng AJAX
-            // fetch('/api/appointments', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(data),
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log('Success:', data);
-            //     document.getElementById('appointmentForm').classList.remove('active');
-            //     document.getElementById('successNotification').classList.add('active');
-            // })
-            // .catch((error) => {
-            //     console.error('Error:', error);
-            //     alert('Có lỗi xảy ra khi đặt lịch. Vui lòng thử lại.');
-            // });
-        }
-        
-        // Tạo icon Zalo vì Font Awesome không có
-        document.addEventListener('DOMContentLoaded', function() {
-            const zaloIcon = document.createElement('style');
-            zaloIcon.innerHTML = `
-                .fa-zalo:before {
-                    content: "Z";
-                    font-family: Arial, sans-serif;
-                    font-weight: bold;
-                    font-style: normal;
-                }
-            `;
-            document.head.appendChild(zaloIcon);
-        });
-    </script>
 </body>
 </html>
