@@ -1,0 +1,287 @@
+<!-- doctor/header.html -->
+<header class="doctor-header" th:fragment="main-header">
+    <style>
+        :root {
+            --header-bg: linear-gradient(135deg, #2176ae 80%, #57b8ff 100%);
+            --header-text: #fff;
+            --header-highlight: #f6fafd31;
+            --header-role-bg: #21ae66cc;
+            --header-role-text: #d9ffe8;
+            --header-border: rgba(183, 216, 245, 0.3);
+        }
+        
+        .doctor-header {
+            width: 100%;
+            background: var(--header-bg);
+            color: var(--header-text);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(33, 118, 174, 0.15);
+        }
+        
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        
+        .header-logo {
+            font-size: 1.8rem;
+            color: var(--header-text);
+            background: var(--header-role-bg);
+            border-radius: 8px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0 15px;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+            flex: 1;
+        }
+        
+        .header-nav::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        
+        .header-link {
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .header-link:hover,
+        .header-link:focus,
+        .header-link.active {
+            background: var(--header-highlight);
+            color: var(--header-text);
+            transform: translateY(-1px);
+        }
+        
+        .header-link i {
+            font-size: 1rem;
+        }
+        
+        .header-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 15px;
+            border-left: 1px solid var(--header-border);
+            margin-left: 10px;
+        }
+        
+        .header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--header-text);
+            object-fit: cover;
+        }
+        
+        .header-info {
+            display: none;
+            flex-direction: column;
+        }
+        
+        .header-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .header-role {
+            color: var(--header-role-text);
+            background: var(--header-role-bg);
+            font-size: 0.75rem;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        
+        .header-mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--header-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            margin-left: 10px;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 1200px) {
+            .header-link {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .header-link i {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .header-info {
+                display: flex;
+            }
+            
+            .header-brand {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .doctor-header {
+                padding: 0 15px;
+                height: 60px;
+            }
+            
+            .header-nav {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: var(--header-bg);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 20px;
+                gap: 5px;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .header-nav.active {
+                max-height: 400px;
+                padding-bottom: 15px;
+            }
+            
+            .header-link {
+                width: 100%;
+                padding: 8px 10px;
+            }
+            
+            .header-mobile-menu {
+                display: block;
+            }
+            
+            .header-profile {
+                border-left: none;
+                padding-left: 0;
+                margin-left: 0;
+            }
+            
+            .header-info {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .doctor-header {
+                padding: 0 10px;
+            }
+            
+            .header-brand {
+                font-size: 1rem;
+                gap: 8px;
+            }
+            
+            .header-logo {
+                font-size: 1.5rem;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+    
+    <div class="header-brand">
+        <span class="header-logo"><i class="fa-solid fa-stethoscope"></i></span>
+        <span>Doctor Dashboard</span>
+    </div>
+    
+    <button class="header-mobile-menu" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav class="header-nav" id="headerNav">
+        <a class="header-link active" href="/doctor/dashboard"><i class="fa-solid fa-gauge"></i> Tổng quan</a>
+        <a class="header-link" href="/doctor/appointments"><i class="fa-solid fa-calendar-day"></i> Lịch tư vấn</a>
+        <a class="header-link" href="/doctor/patients"><i class="fa-solid fa-users"></i> Bệnh nhân</a>
+        <a class="header-link" href="/doctor/notifications"><i class="fa-solid fa-bell"></i> Thông báo</a>
+        <a class="header-link" href="/doctor/profile"><i class="fa-solid fa-user-gear"></i> Cá nhân</a>
+        <a class="header-link" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+    </nav>
+    <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const headerNav = document.getElementById('headerNav');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+        headerNav.classList.toggle('active');
+        mobileMenuBtn.innerHTML = headerNav.classList.contains('active') 
+            ? '<i class="fas fa-times"></i>' 
+            : '<i class="fas fa-bars"></i>';
+    });
+
+    // Đóng menu mobile khi click ngoài nav hoặc chọn link
+    document.addEventListener('click', (e) => {
+        if (!headerNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            headerNav.classList.remove('active');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+    });
+
+    // Link active highlight khi click
+    document.querySelectorAll('.header-link').forEach(link => {
+        link.addEventListener('click', function() {
+            document.querySelectorAll('.header-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            // Nếu trên mobile thì ấn xong tự đóng menu luôn cho gọn (tùy chọn)
+            if (window.innerWidth < 769) {
+                headerNav.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+    });
+
+    // Active link theo đường dẫn (nếu muốn vẫn duy trì khi reload)
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll('.header-link');
+        const currentPath = window.location.pathname;
+        links.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+</header>

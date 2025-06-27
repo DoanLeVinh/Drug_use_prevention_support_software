@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thông báo | Drug Prevention Support System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2176ae;
+            --secondary: #57b8ff;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --success: #21ae66;
+            --soft: #f7fbfd;
+            --white: #fff;
+            --gray: #f0f4f8;
+            --radius: 14px;
+            --shadow: 0 4px 24px 0 rgba(33,118,174,0.09);
+            --transition: all 0.19s cubic-bezier(.4,1.2,.6,1);
+        }
+        body {
+            background: var(--soft);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            color: #194063;
+            min-width: 0;
+        }
+        .main-container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 2.4rem 2vw 3rem 2vw;
+        }
+        .notify-title {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+        }
+        .notify-title i {
+            font-size: 1.6em;
+            color: var(--secondary);
+        }
+        .notify-filter-row {
+            display: flex;
+            gap: 1.1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .notify-filter {
+            border-radius: var(--radius);
+            border: 1.5px solid #d0e8f6;
+            background: var(--white);
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.05em;
+            padding: 0.6em 1.6em;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .notify-filter.active, .notify-filter:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 1px 7px #2176ae15;
+        }
+        .notify-search {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+        .notify-search input {
+            border-radius: var(--radius);
+            border: 1px solid #c8d7ea;
+            font-size: 1.06em;
+            padding: 0.56em 1.2em;
+            background: #f6fbff;
+            color: #17405c;
+            outline: none;
+            transition: var(--transition);
+        }
+        .notify-search input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px #57b8ff22;
+        }
+
+        /* Notification Card */
+        .notify-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .notify-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: flex-start;
+            padding: 1.3rem 1.45rem 1.2rem 1.45rem;
+            gap: 1.3rem;
+            border-left: 6px solid var(--primary);
+            position: relative;
+            animation: fadeIn 0.28s;
+            cursor: pointer;
+            transition: box-shadow 0.15s, transform 0.12s;
+        }
+        .notify-card:hover {
+            box-shadow: 0 9px 28px #2176ae26;
+            transform: translateY(-4px) scale(1.014);
+        }
+        .notify-card .notify-icon {
+            font-size: 1.8rem;
+            margin-top: 0.12rem;
+            flex-shrink: 0;
+        }
+        /* Type color */
+        .notify-card.emergency { border-left-color: var(--danger);}
+        .notify-card.emergency .notify-icon { color: var(--danger);}
+        .notify-card.urgent { border-left-color: var(--warning);}
+        .notify-card.urgent .notify-icon { color: var(--warning);}
+        .notify-card.normal { border-left-color: var(--primary);}
+        .notify-card.normal .notify-icon { color: var(--primary);}
+        .notify-card.success { border-left-color: var(--success);}
+        .notify-card.success .notify-icon { color: var(--success);}
+        .notify-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .notify-head {
+            display: flex;
+            align-items: baseline;
+            gap: 1.2rem;
+        }
+        .notify-title-main {
+            font-size: 1.19em;
+            font-weight: 700;
+            color: #163a5c;
+        }
+        .notify-badge {
+            padding: 0.22em 1em;
+            font-size: 0.94em;
+            border-radius: 2em;
+            background: var(--danger-light);
+            color: var(--danger);
+            font-weight: 600;
+            margin-left: 3px;
+            letter-spacing: 0.04em;
+        }
+        .notify-card.urgent .notify-badge {
+            background: #fffbe6;
+            color: var(--warning);
+        }
+        .notify-card.normal .notify-badge {
+            background: #e1f0fa;
+            color: var(--primary);
+        }
+        .notify-card.success .notify-badge {
+            background: #e8f7ef;
+            color: var(--success);
+        }
+        .notify-time {
+            color: #899cb1;
+            font-size: 0.96em;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+        .notify-desc {
+            color: #274060;
+            font-size: 1.05em;
+            margin-top: 4px;
+            margin-bottom: 0.4em;
+            font-weight: 500;
+            word-break: break-word;
+        }
+        .notify-action-row {
+            margin-top: 2px;
+            display: flex;
+            gap: 0.9em;
+            flex-wrap: wrap;
+        }
+        .notify-action {
+            background: var(--soft);
+            border: 1.3px solid #d0e8f6;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1em;
+            padding: 0.44em 1.15em;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .notify-action:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        /* Responsive */
+        @media (max-width: 700px) {
+            .main-container { padding: 1.3rem 2vw;}
+            .notify-title { font-size: 1.27rem;}
+            .notify-card { flex-direction: column; gap: 0.8rem; padding: 1.2rem 1rem;}
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(22px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+<div th:replace="doctor/header :: main-header"></div>
+<div class="main-container">
+    <div class="notify-filter-row">
+        <button class="notify-filter active" data-type="all">Tất cả</button>
+        <button class="notify-filter" data-type="emergency">Khẩn cấp</button>
+        <button class="notify-filter" data-type="urgent">Đột xuất</button>
+        <button class="notify-filter" data-type="normal">Thường quy</button>
+        <div class="notify-search">
+            <input type="text" id="notifySearch" placeholder="Tìm kiếm nội dung...">
+        </div>
+    </div>
+    <div class="notify-list" id="notifyList">
+        <!-- Dữ liệu mẫu cho 7 thông báo đa dạng -->
+        <div class="notify-card emergency" data-type="emergency">
+            <div class="notify-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="notify-content">
+                <div class="notify-head">
+                    <span class="notify-title-main">[Khẩn cấp] Yêu cầu báo cáo danh sách ca nghiện nặng</span>
+                    <span class="notify-badge">Khẩn cấp</span>
+                </div>
+                <div class="notify-time">09:12, 27/06/2025</div>
+                <div class="notify-desc">
+                    Báo cáo gấp cho lãnh đạo khoa danh sách bệnh nhân có dấu hiệu tái nghiện trong 24h qua. Cần xử lý ngay.
+                </div>
+                <div class="notify-action-row">
+                    <button class="notify-action" onclick="alert('Chuyển tới báo cáo!')"><i class="fa fa-arrow-right"></i> Xem báo cáo</button>
+                </div>
+            </div>
+        </div>
+        <div class="notify-card urgent" data-type="urgent">
+            <div class="notify-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div class="notify-content">
+                <div class="notify-head">
+                    <span class="notify-title-main">Lịch họp khẩn với BGĐ lúc 16h chiều</span>
+                    <span class="notify-badge">Đột xuất</span>
+                </div>
+                <div class="notify-time">10:44, 27/06/2025</div>
+                <div class="notify-desc">
+                    Đề nghị các bác sĩ trưởng nhóm sắp xếp tham dự họp với Ban giám đốc vào 16h00, phòng họp tầng 2.
+                </div>
+                <div class="notify-action-row">
+                    <button class="notify-action" onclick="alert('Thêm vào lịch cá nhân!')"><i class="fa fa-calendar-plus"></i> Lưu lịch</button>
+                </div>
+            </div>
+        </div>
+        <div class="notify-card normal" data-type="normal">
+            <div class="notify-icon"><i class="fa-solid fa-bullhorn"></i></div>
+            <div class="notify-content">
+                <div class="notify-head">
+                    <span class="notify-title-main">Cập nhật giao diện hệ thống</span>
+                    <span class="notify-badge">Thường quy</span>
+                </div>
+                <div class="notify-time">14:15, 25/06/2025</div>
+                <div class="notify-desc">
+                    Giao diện dashboard bác sĩ đã được cập nhật mới, trải nghiệm hiện đại hơn. Đăng nhập lại để sử dụng đầy đủ tính năng!
+                </div>
+            </div>
+        </div>
+        <div class="notify-card emergency" data-type="emergency">
+            <div class="notify-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="notify-content">
+                <div class="notify-head">
+                    <span class="notify-title-main">[Khẩn cấp] Hệ thống sẽ bảo trì lúc 21h tối nay</span>
+                    <span class="notify-badge">Khẩn cấp</span>
+                </div>
+                <div class="notify-time">08:05, 25/06/2025</div>
+                <div class="notify-desc">
+                    Toàn bộ hệ thống sẽ ngừng hoạt động để bảo trì vào lúc 21h-23h hôm nay. Vui lòng chủ động lưu công việc.
+                </div>
+                <div class="notify-action-row">
+                    <button class="notify-action" onclick="alert('Đã hiểu!')"><i class="fa fa-check"></i> Đã hiểu</button>
+                </div>
+            </div>
+        </div>
+        <div class="notify-card urgent" data-type="urgent">
+            <div class="notify-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div class="notify-content">
+                <div class="notify-head">
+                    <span class="notify-title-main">Bổ sung bệnh án theo mẫu mới</span>
+                    <span class="notify-badge">Đột xuất</span>
+                </div>
+                <div class="notify-time">16:20, 24/06/2025</div>
+                <div class="notify-desc">
+                    Tất cả hồ sơ bệnh nhân nhập mới từ ngày 25/06/2025 phải theo mẫu ban hành, truy cập mục "Tài liệu" để tải file mẫu.
+                </div>
+                <div class="notify-action-row">
+                    <button class="notify-action" onclick="alert('Tới mục Tài liệu')"><i class="fa fa-download"></i> Tải mẫu</button>
+                </div>
+            </div>
+        </div>
+        <div class="notify-card normal" data-type="normal">
+            <div class="notify-icon"><i class="fa-solid fa-bullhorn"></i></div>
+            <div class="notify-content">
+                <div class="notify-head">
+                    <span class="notify-title-main">Khen thưởng bác sĩ có thành tích xuất sắc</span>
+                    <span class="notify-badge">Thường quy</span>
+                </div>
+                <div class="notify-time">10:40, 22/06/2025</div>
+                <div class="notify-desc">
+                    Chúc mừng các bác sĩ nhận bằng khen vì thành tích nổi bật trong công tác phòng, chống tái nghiện!
+                </div>
+            </div>
+        </div>
+        <div class="notify-card success" data-type="success">
+            <div class="notify-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="notify-content">
+                <div class="notify-head">
+                    <span class="notify-title-main">Hệ thống đã hoạt động ổn định trở lại</span>
+                    <span class="notify-badge">Đã xử lý</span>
+                </div>
+                <div class="notify-time">11:10, 22/06/2025</div>
+                <div class="notify-desc">
+                    Sự cố đăng nhập đã được giải quyết. Xin lỗi vì bất tiện vừa qua!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Lọc loại thông báo
+    document.querySelectorAll('.notify-filter').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.notify-filter').forEach(b=>b.classList.remove('active'));
+            this.classList.add('active');
+            let type = this.getAttribute('data-type');
+            document.querySelectorAll('.notify-card').forEach(card=>{
+                card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none';
+            });
+        });
+    });
+    // Tìm kiếm nội dung
+    document.getElementById('notifySearch').addEventListener('keyup', function() {
+        let val = this.value.toLowerCase();
+        document.querySelectorAll('.notify-card').forEach(card=>{
+            let content = card.textContent.toLowerCase();
+            card.style.display = content.includes(val) ? 'flex' : 'none';
+        });
+    });
+</script>
+</body>
+</html>
