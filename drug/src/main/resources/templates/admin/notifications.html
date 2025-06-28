@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản lý Thông báo | Hệ thống Phòng ngừa Ma túy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --info-color: #00b894;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #dfe6e9;
+        }
+        
+        body {
+            background: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            color: var(--text-color);
+        }
+        
+        /* Layout chung */
+        .main-admin-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* Thanh công cụ */
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+        }
+        
+        .search-container {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            outline: none;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            min-width: 180px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #219653;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+        }
+        
+        /* Layout chính */
+        .notification-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+        
+        /* Sidebar loại thông báo */
+        .notification-sidebar {
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            height: fit-content;
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .category-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+        
+        .category-item:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .category-item.active {
+            background: rgba(52, 152, 219, 0.2);
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .category-item .badge {
+            margin-left: auto;
+            background: var(--secondary-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+        
+        /* Danh sách thông báo */
+        .notification-list {
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .notification-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 15px;
+            transition: all 0.2s;
+        }
+        
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-item:hover {
+            background: rgba(52, 152, 219, 0.05);
+        }
+        
+        .notification-item.unread {
+            background: rgba(52, 152, 219, 0.03);
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .notification-icon.system {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .notification-icon.user {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success-color);
+        }
+        
+        .notification-icon.warning {
+            background: rgba(241, 196, 15, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .notification-icon.alert {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .notification-content {
+            flex-grow: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .notification-title .unread-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            display: inline-block;
+        }
+        
+        .notification-message {
+            color: #666;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .notification-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: #95a5a6;
+        }
+        
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .action-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .action-btn.delete {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .action-btn.delete:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        /* Modal tạo thông báo */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.2s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: white;
+        }
+        
+        /* Form tạo thông báo */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background: var(--card-bg);
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .notification-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .notification-sidebar {
+                display: none; /* Có thể thay bằng menu mobile */
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-admin-content {
+                padding: 20px 15px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .filter-select {
+                width: 100%;
+            }
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #95a5a6;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+<!-- Kế thừa header từ admin/header.html -->
+<div th:replace="admin/header :: main-header"></div>
+
+<div class="main-admin-content">
+    <div class="section-header">
+        <h1 class="section-title">
+            <i class="fas fa-bell"></i>
+            Quản lý Thông báo
+        </h1>
+        <button class="btn btn-primary" id="createNotificationBtn">
+            <i class="fas fa-plus"></i>
+            Tạo thông báo mới
+        </button>
+    </div>
+    
+    <div class="toolbar">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="notificationSearch" placeholder="Tìm kiếm thông báo...">
+        </div>
+        
+        <select class="filter-select" id="statusFilter">
+            <option value="all">Tất cả trạng thái</option>
+            <option value="unread">Chưa đọc</option>
+            <option value="read">Đã đọc</option>
+        </select>
+        
+        <select class="filter-select" id="typeFilter">
+            <option value="all">Tất cả loại</option>
+            <option value="system">Hệ thống</option>
+            <option value="user">Người dùng</option>
+            <option value="warning">Cảnh báo</option>
+            <option value="alert">Khẩn cấp</option>
+        </select>
+        
+        <button class="btn btn-success" id="markAllReadBtn">
+            <i class="fas fa-check-circle"></i>
+            Đánh dấu đã đọc
+        </button>
+    </div>
+    
+    <div class="notification-layout">
+        <!-- Sidebar danh mục -->
+        <div class="notification-sidebar">
+            <h3 class="sidebar-title">
+                <i class="fas fa-list"></i>
+                Danh mục
+            </h3>
+            <ul class="category-list">
+                <li class="category-item active">
+                    <i class="fas fa-inbox"></i>
+                    Tất cả thông báo
+                    <span class="badge">42</span>
+                </li>
+                <li class="category-item">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Cảnh báo
+                    <span class="badge">8</span>
+                </li>
+                <li class="category-item">
+                    <i class="fas fa-users"></i>
+                    Người dùng
+                    <span class="badge">15</span>
+                </li>
+                <li class="category-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    Khóa học
+                    <span class="badge">7</span>
+                </li>
+                <li class="category-item">
+                    <i class="fas fa-calendar-check"></i>
+                    Lịch hẹn
+                    <span class="badge">5</span>
+                </li>
+                <li class="category-item">
+                    <i class="fas fa-clipboard-check"></i>
+                    Bài kiểm tra
+                    <span class="badge">3</span>
+                </li>
+                <li class="category-item">
+                    <i class="fas fa-cog"></i>
+                    Hệ thống
+                    <span class="badge">4</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Danh sách thông báo -->
+        <div class="notification-list">
+            <!-- Thông báo mẫu 1 -->
+            <div class="notification-item unread">
+                <div class="notification-icon warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <span class="unread-dot"></span>
+                        Cảnh báo: Bài kiểm tra ASSIST có kết quả nguy cơ cao
+                    </div>
+                    <div class="notification-message">
+                        Người dùng Nguyễn Văn A (ID: USR-0012) có kết quả bài kiểm tra ASSIST với điểm số nguy cơ cao về ma túy đá. Vui lòng liên hệ tư vấn hỗ trợ.
+                    </div>
+                    <div class="notification-meta">
+                        <span><i class="far fa-clock"></i> 10 phút trước</span>
+                        <span><i class="fas fa-tag"></i> Bài kiểm tra</span>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-check"></i> Đánh dấu đã đọc
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Thông báo mẫu 2 -->
+            <div class="notification-item unread">
+                <div class="notification-icon user">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <span class="unread-dot"></span>
+                        Đăng ký tư vấn mới
+                    </div>
+                    <div class="notification-message">
+                        Người dùng Trần Thị B (Học sinh) vừa đăng ký lịch tư vấn với chuyên viên Nguyễn Văn C vào ngày 15/04/2023 lúc 14:00.
+                    </div>
+                    <div class="notification-meta">
+                        <span><i class="far fa-clock"></i> 1 giờ trước</span>
+                        <span><i class="fas fa-tag"></i> Lịch hẹn</span>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-check"></i> Đánh dấu đã đọc
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Thông báo mẫu 3 -->
+            <div class="notification-item">
+                <div class="notification-icon system">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        Hệ thống: Sao lưu dữ liệu thành công
+                    </div>
+                    <div class="notification-message">
+                        Hệ thống đã tự động sao lưu dữ liệu vào lúc 02:00 ngày 12/04/2023. Tất cả dữ liệu người dùng, khóa học và bài kiểm tra đã được bảo vệ.
+                    </div>
+                    <div class="notification-meta">
+                        <span><i class="far fa-clock"></i> Hôm qua, 02:00</span>
+                        <span><i class="fas fa-tag"></i> Hệ thống</span>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        <button class="action-btn delete">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Thông báo mẫu 4 -->
+            <div class="notification-item">
+                <div class="notification-icon alert">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        Khẩn cấp: Yêu cầu hỗ trợ từ người dùng
+                    </div>
+                    <div class="notification-message">
+                        Người dùng Lê Văn D (ID: USR-0045) đã bấm nút "Cần giúp đỡ khẩn cấp" từ ứng dụng di động. Vui lòng liên hệ ngay với người dùng này.
+                    </div>
+                    <div class="notification-meta">
+                        <span><i class="far fa-clock"></i> 2 ngày trước</span>
+                        <span><i class="fas fa-tag"></i> Khẩn cấp</span>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        <button class="action-btn delete">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Thông báo mẫu 5 -->
+            <div class="notification-item">
+                <div class="notification-icon user">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        Đăng ký khóa học mới
+                    </div>
+                    <div class="notification-message">
+                        5 người dùng mới đã đăng ký khóa học "Kỹ năng từ chối ma túy" trong ngày hôm nay. Tổng số học viên hiện tại: 128.
+                    </div>
+                    <div class="notification-meta">
+                        <span><i class="far fa-clock"></i> 3 ngày trước</span>
+                        <span><i class="fas fa-tag"></i> Khóa học</span>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        <button class="action-btn delete">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal tạo thông báo mới -->
+<div class="modal" id="createNotificationModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-bell"></i>
+                Tạo thông báo mới
+            </h3>
+            <button class="close-btn" onclick="closeModal('createNotificationModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="notificationForm">
+                <div class="form-group">
+                    <label class="form-label">Loại thông báo*</label>
+                    <select class="form-select" id="notificationType" required>
+                        <option value="">Chọn loại thông báo</option>
+                        <option value="system">Hệ thống</option>
+                        <option value="alert">Cảnh báo</option>
+                        <option value="announcement">Thông báo chung</option>
+                        <option value="reminder">Nhắc nhở</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tiêu đề*</label>
+                    <input type="text" class="form-control" id="notificationTitle" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nội dung*</label>
+                    <textarea class="form-control" id="notificationContent" required rows="5"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Đối tượng nhận*</label>
+                    <select class="form-select" id="notificationAudience" required>
+                        <option value="all">Tất cả người dùng</option>
+                        <option value="students">Học sinh</option>
+                        <option value="college">Sinh viên</option>
+                        <option value="parents">Phụ huynh</option>
+                        <option value="teachers">Giáo viên</option>
+                        <option value="custom">Tùy chọn...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Ưu tiên</label>
+                    <select class="form-select" id="notificationPriority">
+                        <option value="normal">Bình thường</option>
+                        <option value="high">Cao</option>
+                        <option value="urgent">Khẩn cấp</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Thời gian gửi</label>
+                    <select class="form-select" id="notificationSchedule">
+                        <option value="now">Gửi ngay lập tức</option>
+                        <option value="schedule">Lên lịch gửi</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="scheduleDateGroup" style="display: none;">
+                    <label class="form-label">Ngày giờ gửi</label>
+                    <input type="datetime-local" class="form-control" id="notificationScheduleDate">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('createNotificationModal')">
+                Hủy
+            </button>
+            <button class="btn btn-primary" id="sendNotificationBtn">
+                <i class="fas fa-paper-plane"></i> Gửi thông báo
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mở modal tạo thông báo
+    document.getElementById('createNotificationBtn').addEventListener('click', function() {
+        document.getElementById('createNotificationModal').classList.add('active');
+    });
+    
+    // Đóng modal
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+    
+    // Hiển thị/ẩn trường lịch gửi
+    document.getElementById('notificationSchedule').addEventListener('change', function(e) {
+        const scheduleDateGroup = document.getElementById('scheduleDateGroup');
+        scheduleDateGroup.style.display = e.target.value === 'schedule' ? 'block' : 'none';
+    });
+    
+    // Xử lý gửi thông báo
+    document.getElementById('sendNotificationBtn').addEventListener('click', function() {
+        alert('Thông báo đã được gửi thành công (demo)');
+        closeModal('createNotificationModal');
+        document.getElementById('notificationForm').reset();
+    });
+    
+    // Đánh dấu đã đọc tất cả
+    document.getElementById('markAllReadBtn').addEventListener('click', function() {
+        document.querySelectorAll('.unread').forEach(item => {
+            item.classList.remove('unread');
+        });
+        alert('Đã đánh dấu tất cả thông báo là đã đọc (demo)');
+    });
+    
+    // Tìm kiếm thông báo
+    document.getElementById('notificationSearch').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const notifications = document.querySelectorAll('.notification-item');
+        
+        notifications.forEach(notification => {
+            const title = notification.querySelector('.notification-title').textContent.toLowerCase();
+            const message = notification.querySelector('.notification-message').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm) || message.includes(searchTerm)) {
+                notification.style.display = 'flex';
+            } else {
+                notification.style.display = 'none';
+            }
+        });
+    });
+    
+    // Lọc theo trạng thái
+    document.getElementById('statusFilter').addEventListener('change', function(e) {
+        const status = e.target.value;
+        const notifications = document.querySelectorAll('.notification-item');
+        
+        notifications.forEach(notification => {
+            const isUnread = notification.classList.contains('unread');
+            
+            if (status === 'all' || 
+                (status === 'unread' && isUnread) || 
+                (status === 'read' && !isUnread)) {
+                notification.style.display = 'flex';
+            } else {
+                notification.style.display = 'none';
+            }
+        });
+    });
+    
+    // Lọc theo loại thông báo
+    document.getElementById('typeFilter').addEventListener('change', function(e) {
+        const type = e.target.value;
+        const notifications = document.querySelectorAll('.notification-item');
+        
+        notifications.forEach(notification => {
+            const icon = notification.querySelector('.notification-icon');
+            const notificationType = 
+                icon.classList.contains('system') ? 'system' :
+                icon.classList.contains('user') ? 'user' :
+                icon.classList.contains('warning') ? 'warning' :
+                'alert';
+            
+            if (type === 'all' || notificationType === type) {
+                notification.style.display = 'flex';
+            } else {
+                notification.style.display = 'none';
+            }
+        });
+    });
+    
+    // Chọn danh mục thông báo
+    document.querySelectorAll('.category-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            // Trong thực tế sẽ load thông báo theo danh mục
+        });
+    });
+    
+    // Đánh dấu đã đọc khi click vào thông báo
+    document.querySelectorAll('.notification-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (!e.target.closest('.notification-actions')) {
+                this.classList.remove('unread');
+            }
+        });
+    });
+    // Lọc thông báo theo danh mục
+document.querySelectorAll('.category-item').forEach(item => {
+    item.addEventListener('click', function() {
+        // Xóa active khỏi tất cả các mục
+        document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+        // Thêm active vào mục được chọn
+        this.classList.add('active');
+        
+        // Lấy tên danh mục (lấy text của thẻ i thứ 2)
+        const categoryIcon = this.querySelector('i');
+        const categoryName = categoryIcon ? categoryIcon.className.replace('fas fa-', '') : '';
+        
+        // Lọc thông báo theo danh mục
+        const notifications = document.querySelectorAll('.notification-item');
+        const allItems = this.textContent.includes('Tất cả thông báo');
+        
+        notifications.forEach(notification => {
+            if (allItems) {
+                notification.style.display = 'flex';
+                return;
+            }
+            
+            // Lấy tag của thông báo
+            const tagElement = notification.querySelector('.notification-meta span:nth-child(2)');
+            const tagText = tagElement ? tagElement.textContent.replace('Bài kiểm tra', 'clipboard-check')
+                                         .replace('Lịch hẹn', 'calendar-check')
+                                         .replace('Khóa học', 'graduation-cap')
+                                         .replace('Hệ thống', 'cog')
+                                         .replace('Khẩn cấp', 'bell') : '';
+            
+            // Kiểm tra xem thông báo có thuộc danh mục được chọn không
+            const isMatch = tagText.includes(categoryName);
+            
+            if (isMatch) {
+                notification.style.display = 'flex';
+            } else {
+                notification.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

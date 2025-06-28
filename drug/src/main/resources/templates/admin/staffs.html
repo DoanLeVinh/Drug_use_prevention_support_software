@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản lý Nhân viên | Admin Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --admin-header-bg: linear-gradient(120deg, #12213a 80%, #2176ae 100%);
+            --admin-header-text: #fff;
+            --admin-header-active: #21ae66;
+            --admin-header-shadow: 0 3px 18px rgba(33,118,174,0.15);
+            --admin-badge-bg: #21ae66cc;
+        }
+        body {
+            background: #f7fbfd;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            color: #183a55;
+            min-width: 0;
+            overflow-x: hidden;
+        }
+        .main-admin-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 38px 2vw 60px 2vw;
+            width: 100%;
+        }
+        .admin-section-title {
+            color: #2176ae;
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 32px;
+            letter-spacing: 0.01em;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .staff-actions-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .staff-actions-row .search-box {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .search-input {
+            padding: 11px 17px;
+            border-radius: 8px;
+            border: 1.5px solid #2176ae77;
+            font-size: 1em;
+            outline: none;
+            min-width: 210px;
+            background: #fff;
+            color: #183a55;
+            box-shadow: 0 2px 9px #2176ae10;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: #2176ae; }
+        .filter-select {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1.5px solid #2176ae77;
+            font-size: 1em;
+            outline: none;
+            background: #fff;
+            color: #2176ae;
+        }
+        .add-staff-btn {
+            background: var(--admin-header-active);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.05em;
+            padding: 12px 28px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #21ae6618;
+            transition: background 0.15s, transform 0.13s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .add-staff-btn:hover {
+            background: #12213a;
+            transform: translateY(-2px) scale(1.03);
+        }
+        .staff-table-wrap {
+            width: 100%;
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 4px 18px #2176ae0d;
+            overflow-x: auto;
+        }
+        table.staff-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+        table.staff-table th,
+        table.staff-table td {
+            padding: 18px 17px;
+            text-align: left;
+            border-bottom: 1px solid #eaf4fa;
+            font-size: 1.02em;
+            white-space: nowrap;
+        }
+        table.staff-table th {
+            background: #e1f0fa;
+            color: #2176ae;
+            font-size: 1.02em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        table.staff-table tr:hover {
+            background: #f7fbfd;
+        }
+        .staff-status {
+            padding: 7px 16px;
+            border-radius: 16px;
+            font-size: 0.97em;
+            font-weight: 600;
+            display: inline-block;
+            background: #e8f7ef;
+            color: #21ae66;
+        }
+        .staff-status.inactive {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+        .staff-status.on-leave {
+            background: #fffbe5;
+            color: #f39c12;
+        }
+        .staff-action-btn {
+            border: none;
+            background: #e1f0fa;
+            color: #2176ae;
+            border-radius: 8px;
+            padding: 9px 16px;
+            margin: 0 2px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.98em;
+            transition: background 0.12s, color 0.12s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .staff-action-btn:hover, .staff-action-btn.active {
+            background: var(--admin-header-active);
+            color: #fff;
+        }
+        .staff-action-btn.delete {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+        .staff-action-btn.delete:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        /* Modal */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(18,33,58,0.26);
+            z-index: 1200;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+        .modal-bg.active { display: flex; }
+        .modal-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 28px #2176ae2b;
+            padding: 2.1rem 2.2rem;
+            max-width: 480px;
+            width: 98vw;
+            animation: fadeInModal 0.16s;
+        }
+        @keyframes fadeInModal {
+            from { opacity:0; transform: translateY(24px);}
+            to { opacity:1; transform: translateY(0);}
+        }
+        .modal-title {
+            color: #2176ae;
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 19px;
+        }
+        .modal-row { margin-bottom: 13px; }
+        .modal-label { font-weight: 600; color: #183a55; }
+        .modal-value { color: #555; margin-left: 9px; }
+        .modal-actions {
+            margin-top: 17px;
+            text-align: right;
+            display: flex;
+            gap: 9px;
+            justify-content: flex-end;
+        }
+        .modal-close, .modal-save {
+            border: none;
+            background: #f0f8ff;
+            color: #12213a;
+            font-size: 1.08em;
+            padding: 8px 22px;
+            border-radius: 7px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal-save {
+            background: var(--admin-header-active);
+            color: #fff;
+        }
+        .modal-close:hover {
+            background: #2176ae;
+            color: #fff;
+        }
+        .modal-save:hover {
+            background: #12213a;
+            color: #fff;
+        }
+        .item-list {
+            margin: 7px 0 5px 0;
+            padding-left: 1.3em;
+            color: #2176ae;
+            font-size: 0.98em;
+            line-height: 1.56;
+        }
+        .department-tag {
+            display: inline-block;
+            background: #e1f0fa;
+            color: #2176ae;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.9em;
+            margin: 2px;
+        }
+        /* Modal Thêm nhân viên mới */
+        #addStaffModalBg .modal-card {
+            max-width: 450px;
+            width: 98vw;
+            border-radius: 18px;
+            box-shadow: 0 8px 28px #2176ae2b;
+            padding: 2.2rem 2.4rem 1.5rem 2.4rem;
+            background: #fff;
+            animation: fadeInModal 0.18s;
+            position: relative;
+        }
+        #addStaffModalBg .modal-title {
+            color: #2176ae;
+            font-size: 1.21em;
+            font-weight: 800;
+            margin-bottom: 21px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #addStaffModalBg .modal-row {
+            margin-bottom: 14px;
+        }
+        #addStaffModalBg label {
+            font-weight: 600;
+            color: #12213a;
+            margin-bottom: 6px;
+            display: block;
+        }
+        #addStaffModalBg input, #addStaffModalBg select, #addStaffModalBg textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #2176ae44;
+            font-size: 1em;
+            background: #f7fbfd;
+            color: #183a55;
+            margin-bottom: 2px;
+            outline: none;
+            box-shadow: 0 2px 8px #2176ae13;
+            transition: border-color 0.18s;
+        }
+        #addStaffModalBg input:focus, #addStaffModalBg select:focus, #addStaffModalBg textarea:focus {
+            border-color: #21ae66;
+        }
+        #addStaffModalBg .modal-actions {
+            margin-top: 18px;
+            text-align: right;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        #addStaffModalBg .modal-save {
+            background: var(--admin-header-active);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            padding: 12px 30px;
+            font-size: 1.05em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #21ae6610;
+            transition: background 0.15s, transform 0.13s;
+        }
+        #addStaffModalBg .modal-save:hover {
+            background: #12213a;
+            transform: translateY(-1px) scale(1.03);
+        }
+        #addStaffModalBg .modal-close {
+            background: #f0f8ff;
+            color: #12213a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 12px 28px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.12s, color 0.13s;
+        }
+        #addStaffModalBg .modal-close:hover {
+            background: #2176ae;
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            #addStaffModalBg .modal-card { padding: 1.2rem 3vw 1.2rem 3vw;}
+            #addStaffModalBg .modal-title { font-size: 1.04em;}
+        }
+        /* Responsive */
+        @media (max-width: 700px) {
+            .main-admin-content { padding: 12px 1vw; }
+            table.staff-table { min-width: 600px; font-size: 0.99em; }
+            .staff-table th, .staff-table td { padding: 10px 7px;}
+            .admin-section-title { font-size: 1.14rem; }
+        }
+        /* Cập nhật CSS cho modal thêm nhân viên */
+    #addStaffModalBg .modal-card {
+        max-width: 450px;
+        width: 98vw;
+        border-radius: 18px;
+        box-shadow: 0 8px 28px #2176ae2b;
+        padding: 10px 2.4rem; /* Thêm khoảng cách trên dưới 10px */
+        background: #fff;
+        animation: fadeInModal 0.18s;
+        position: relative;
+        max-height: 90vh; /* Giới hạn chiều cao tối đa */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #addStaffModalBg .modal-title {
+        color: #2176ae;
+        font-size: 1.21em;
+        font-weight: 800;
+        margin-bottom: 15px; /* Giảm margin để tiết kiệm không gian */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        padding: 10px 0;
+        z-index: 1;
+    }
+    
+    #addStaffModalBg .modal-content {
+        overflow-y: auto; /* Thêm thanh scroll khi cần */
+        flex-grow: 1;
+        padding: 5px 0;
+    }
+    
+    #addStaffModalBg .modal-actions {
+        margin-top: 15px;
+        text-align: right;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        padding: 10px 0;
+        z-index: 1;
+    }
+    </style>
+</head>
+<body>
+<div th:replace="admin/header :: main-header"></div>
+<div class="main-admin-content">
+    <div class="admin-section-title">
+        <i class="fa-solid fa-users-gear"></i> Quản lý Nhân viên
+    </div>
+    <div class="staff-actions-row">
+        <div class="search-box">
+            <input class="search-input" id="staffSearch" type="text" placeholder="Tìm kiếm theo tên, phòng ban...">
+            <select class="filter-select" id="statusFilter">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="active">Đang làm việc</option>
+                <option value="inactive">Ngừng làm việc</option>
+                <option value="on-leave">Nghỉ phép</option>
+            </select>
+            <select class="filter-select" id="departmentFilter">
+                <option value="all">Tất cả phòng ban</option>
+                <option value="admin">Hành chính</option>
+                <option value="support">Hỗ trợ</option>
+                <option value="it">Công nghệ</option>
+                <option value="hr">Nhân sự</option>
+                <option value="finance">Tài chính</option>
+            </select>
+            <button class="add-staff-btn" id="addStaffBtn"><i class="fa fa-user-plus"></i> Thêm nhân viên</button>
+        </div>
+    </div>
+
+    <div class="staff-table-wrap">
+        <table class="staff-table" id="staffTable">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Họ tên</th>
+                    <th>Phòng ban</th>
+                    <th>Chức vụ</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày vào làm</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dữ liệu tĩnh demo -->
+                <tr>
+                    <td>1</td>
+                    <td>Nguyễn Thị An</td>
+                    <td>
+                        <span class="department-tag">Hành chính</span>
+                    </td>
+                    <td>Nhân viên</td>
+                    <td><span class="staff-status active">Đang làm việc</span></td>
+                    <td>15/01/2023</td>
+                    <td>
+                        <button class="staff-action-btn" onclick="openStaffDetail('Nguyễn Thị An','Hành chính','Nhân viên','an.nguyen@company.com','0912 345 678','Đang làm việc','15/01/2023','Quản lý hồ sơ, Lễ tân')"><i class="fa fa-eye"></i> Xem</button>
+                        <button class="staff-action-btn" onclick="toggleStaffStatus(this,'inactive')"><i class="fa fa-user-slash"></i> Khóa</button>
+                        <button class="staff-action-btn delete"><i class="fa fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Trần Văn Bình</td>
+                    <td>
+                        <span class="department-tag">Công nghệ</span>
+                    </td>
+                    <td>Trưởng phòng</td>
+                    <td><span class="staff-status on-leave">Nghỉ phép</span></td>
+                    <td>12/05/2022</td>
+                    <td>
+                        <button class="staff-action-btn" onclick="openStaffDetail('Trần Văn Bình','Công nghệ','Trưởng phòng','binh.tran@company.com','0987 654 321','Nghỉ phép','12/05/2022','Quản lý hệ thống, Phát triển phần mềm')"><i class="fa fa-eye"></i> Xem</button>
+                        <button class="staff-action-btn" onclick="toggleStaffStatus(this,'active')"><i class="fa fa-check"></i> Đi làm</button>
+                        <button class="staff-action-btn delete"><i class="fa fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Lê Thị Cúc</td>
+                    <td>
+                        <span class="department-tag">Hỗ trợ</span>
+                    </td>
+                    <td>Nhân viên</td>
+                    <td><span class="staff-status inactive">Ngừng làm việc</span></td>
+                    <td>20/08/2023</td>
+                    <td>
+                        <button class="staff-action-btn" onclick="openStaffDetail('Lê Thị Cúc','Hỗ trợ','Nhân viên','cuc.le@company.com','0903 123 456','Ngừng làm việc','20/08/2023','Hỗ trợ khách hàng, Tư vấn')"><i class="fa fa-eye"></i> Xem</button>
+                        <button class="staff-action-btn" onclick="toggleStaffStatus(this,'active')"><i class="fa fa-rotate-left"></i> Mở lại</button>
+                        <button class="staff-action-btn delete"><i class="fa fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Phạm Văn Đức</td>
+                    <td>
+                        <span class="department-tag">Nhân sự</span>
+                    </td>
+                    <td>Phó phòng</td>
+                    <td><span class="staff-status active">Đang làm việc</span></td>
+                    <td>05/03/2021</td>
+                    <td>
+                        <button class="staff-action-btn" onclick="openStaffDetail('Phạm Văn Đức','Nhân sự','Phó phòng','duc.pham@company.com','0978 901 234','Đang làm việc','05/03/2021','Tuyển dụng, Đào tạo')"><i class="fa fa-eye"></i> Xem</button>
+                        <button class="staff-action-btn" onclick="toggleStaffStatus(this,'inactive')"><i class="fa fa-user-slash"></i> Khóa</button>
+                        <button class="staff-action-btn delete"><i class="fa fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Modal xem chi tiết nhân viên -->
+    <div class="modal-bg" id="staffModalBg">
+        <div class="modal-card">
+            <div class="modal-title"><i class="fa fa-id-card"></i> Chi tiết nhân viên</div>
+            <div id="staffDetailBox">
+                <!-- Render bằng JS -->
+            </div>
+            <div class="modal-actions">
+                <button class="modal-close" onclick="closeStaffModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal thêm nhân viên mới -->
+    <!-- Chỉ cần cập nhật phần CSS và HTML của modal thêm nhân viên, giữ nguyên các phần khác -->
+
+<style>
+    /* Cập nhật CSS cho modal thêm nhân viên */
+    #addStaffModalBg .modal-card {
+        max-width: 450px;
+        width: 98vw;
+        border-radius: 18px;
+        box-shadow: 0 8px 28px #2176ae2b;
+        padding: 10px 2.4rem; /* Thêm khoảng cách trên dưới 10px */
+        background: #fff;
+        animation: fadeInModal 0.18s;
+        position: relative;
+        max-height: 90vh; /* Giới hạn chiều cao tối đa */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #addStaffModalBg .modal-title {
+        color: #2176ae;
+        font-size: 1.21em;
+        font-weight: 800;
+        margin-bottom: 15px; /* Giảm margin để tiết kiệm không gian */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        padding: 10px 0;
+        z-index: 1;
+    }
+    
+    #addStaffModalBg .modal-content {
+        overflow-y: auto; /* Thêm thanh scroll khi cần */
+        flex-grow: 1;
+        padding: 5px 0;
+    }
+    
+    #addStaffModalBg .modal-actions {
+        margin-top: 15px;
+        text-align: right;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        padding: 10px 0;
+        z-index: 1;
+    }
+    
+    /* Giữ nguyên các phần CSS khác */
+</style>
+
+<!-- Cập nhật HTML cho modal thêm nhân viên -->
+<div class="modal-bg" id="addStaffModalBg">
+    <form class="modal-card" id="addStaffForm" autocomplete="off" onsubmit="return false">
+        <div class="modal-title"><i class="fa fa-user-plus"></i> Thêm nhân viên mới</div>
+        
+        <div class="modal-content"> <!-- Thêm wrapper cho nội dung scroll -->
+            <div class="modal-row">
+                <label>Họ tên</label>
+                <input required name="fullname" maxlength="80" placeholder="Nhập họ tên nhân viên...">
+            </div>
+            <div class="modal-row">
+                <label>Phòng ban</label>
+                <select name="department" required>
+                    <option value="admin">Hành chính</option>
+                    <option value="support">Hỗ trợ</option>
+                    <option value="it">Công nghệ</option>
+                    <option value="hr">Nhân sự</option>
+                    <option value="finance">Tài chính</option>
+                </select>
+            </div>
+            <div class="modal-row">
+                <label>Chức vụ</label>
+                <input name="position" required placeholder="Nhập chức vụ...">
+            </div>
+            <div class="modal-row">
+                <label>Email</label>
+                <input type="email" required name="email" maxlength="60" placeholder="Nhập email...">
+            </div>
+            <div class="modal-row">
+                <label>Số điện thoại</label>
+                <input type="tel" required name="phone" maxlength="15" placeholder="Nhập số điện thoại...">
+            </div>
+            <div class="modal-row">
+                <label>Trạng thái</label>
+                <select name="status" required>
+                    <option value="active">Đang làm việc</option>
+                    <option value="inactive">Ngừng làm việc</option>
+                    <option value="on-leave">Nghỉ phép</option>
+                </select>
+            </div>
+            <div class="modal-row">
+                <label>Ngày vào làm</label>
+                <input type="date" name="join-date" required>
+            </div>
+            <div class="modal-row">
+                <label>Nhiệm vụ</label>
+                <textarea name="responsibilities" rows="3" placeholder="Mô tả nhiệm vụ của nhân viên..."></textarea>
+            </div>
+            <!-- Có thể thêm nhiều trường khác nếu cần -->
+        </div>
+        
+        <div class="modal-actions">
+            <button class="modal-save" onclick="saveNewStaff()">Lưu</button>
+            <button class="modal-close" onclick="closeAddStaffModal()">Hủy</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Modal xem chi tiết nhân viên
+    function openStaffDetail(name, department, position, email, phone, status, joinDate, responsibilities) {
+        let responsibilitiesList = responsibilities.split(',').map(r => `<li>${r.trim()}</li>`).join('');
+        
+        let detailHtml = `
+            <div class="modal-row"><span class="modal-label">Họ tên:</span> <span class="modal-value">${name}</span></div>
+            <div class="modal-row"><span class="modal-label">Phòng ban:</span> <span class="modal-value"><span class="department-tag">${department}</span></span></div>
+            <div class="modal-row"><span class="modal-label">Chức vụ:</span> <span class="modal-value">${position}</span></div>
+            <div class="modal-row"><span class="modal-label">Email:</span> <span class="modal-value">${email}</span></div>
+            <div class="modal-row"><span class="modal-label">Số điện thoại:</span> <span class="modal-value">${phone}</span></div>
+            <div class="modal-row"><span class="modal-label">Trạng thái:</span> <span class="modal-value">${status}</span></div>
+            <div class="modal-row"><span class="modal-label">Ngày vào làm:</span> <span class="modal-value">${joinDate}</span></div>
+            <div class="modal-row"><span class="modal-label">Nhiệm vụ:</span>
+                <ul class="item-list">${responsibilitiesList}</ul>
+            </div>
+        `;
+        document.getElementById('staffDetailBox').innerHTML = detailHtml;
+        document.getElementById('staffModalBg').classList.add('active');
+    }
+    
+    function closeStaffModal() {
+        document.getElementById('staffModalBg').classList.remove('active');
+    }
+    
+    // Tìm kiếm & lọc trạng thái/phòng ban
+    document.getElementById('staffSearch').addEventListener('keyup', function() {
+        filterStaff();
+    });
+    
+    document.getElementById('statusFilter').addEventListener('change', function() {
+        filterStaff();
+    });
+    
+    document.getElementById('departmentFilter').addEventListener('change', function() {
+        filterStaff();
+    });
+    
+    function filterStaff() {
+        let search = document.getElementById('staffSearch').value.toLowerCase();
+        let status = document.getElementById('statusFilter').value;
+        let department = document.getElementById('departmentFilter').value;
+        
+        document.querySelectorAll('#staffTable tbody tr').forEach(row => {
+            let name = row.children[1].textContent.toLowerCase();
+            let dept = row.children[2].textContent.toLowerCase();
+            let state = row.children[4].textContent.trim();
+            
+            let matchSearch = name.includes(search) || dept.includes(search);
+            let matchStatus = (status === 'all') ||
+                (status === 'active' && state === 'Đang làm việc') ||
+                (status === 'inactive' && state === 'Ngừng làm việc') ||
+                (status === 'on-leave' && state === 'Nghỉ phép');
+            
+            let matchDepartment = (department === 'all') || 
+                (department === 'admin' && dept.includes('hành chính')) ||
+                (department === 'support' && dept.includes('hỗ trợ')) ||
+                (department === 'it' && dept.includes('công nghệ')) ||
+                (department === 'hr' && dept.includes('nhân sự')) ||
+                (department === 'finance' && dept.includes('tài chính'));
+            
+            row.style.display = matchSearch && matchStatus && matchDepartment ? '' : 'none';
+        });
+    }
+    
+    // Chuyển trạng thái nhân viên (giả lập)
+    function toggleStaffStatus(btn, toStatus) {
+        let row = btn.closest('tr');
+        let statusSpan = row.querySelector('.staff-status');
+        
+        if (toStatus === 'inactive') {
+            statusSpan.textContent = 'Ngừng làm việc';
+            statusSpan.className = 'staff-status inactive';
+            btn.innerHTML = '<i class="fa fa-rotate-left"></i> Mở lại';
+            btn.setAttribute('onclick', "toggleStaffStatus(this,'active')");
+        } else if (toStatus === 'active') {
+            statusSpan.textContent = 'Đang làm việc';
+            statusSpan.className = 'staff-status active';
+            btn.innerHTML = '<i class="fa fa-user-slash"></i> Khóa';
+            btn.setAttribute('onclick', "toggleStaffStatus(this,'inactive')");
+        } else if (toStatus === 'on-leave') {
+            statusSpan.textContent = 'Nghỉ phép';
+            statusSpan.className = 'staff-status on-leave';
+            btn.innerHTML = '<i class="fa fa-check"></i> Đi làm';
+            btn.setAttribute('onclick', "toggleStaffStatus(this,'active')");
+        }
+    }
+    
+    // Ẩn modal khi bấm ngoài vùng modal
+    document.getElementById('staffModalBg').addEventListener('click', function(e){
+        if(e.target === this) closeStaffModal();
+    });
+    
+    // Thêm nhân viên
+    document.getElementById('addStaffBtn').addEventListener('click', function(){
+        document.getElementById('addStaffModalBg').classList.add('active');
+    });
+    
+    function closeAddStaffModal() {
+        document.getElementById('addStaffModalBg').classList.remove('active');
+        document.getElementById('addStaffForm').reset();
+    }
+    
+    function saveNewStaff() {
+        alert("Demo: Đã gửi yêu cầu thêm nhân viên (bạn cần tích hợp backend để lưu).");
+        closeAddStaffModal();
+    }
+    
+    // Đóng modal thêm nhân viên khi click nền
+    document.getElementById('addStaffModalBg').addEventListener('click', function(e){
+        if(e.target === this) closeAddStaffModal();
+    });
+</script>
+</body>
+</html>
