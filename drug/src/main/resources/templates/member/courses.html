@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
     <style>
+        /* ...TOÀN BỘ CSS của bạn giữ nguyên ở đây... */
         :root {
             --primary: #2176ae;
             --secondary: #57b8ff;
@@ -15,12 +16,7 @@
             --soft: #f0f7fa;
             --shadow: 0 4px 32px 0 rgba(33,118,174,0.09);
         }
-        html, body {
-            width: 100%;
-            min-width: 0;
-            overflow-x: hidden !important;
-            box-sizing: border-box;
-        }
+        html, body { width: 100%; min-width: 0; overflow-x: hidden !important; box-sizing: border-box;}
         body {
             font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
             background: var(--bg);
@@ -28,210 +24,32 @@
             color: #24415d;
             scroll-behavior: smooth;
         }
-        .main-wrap {
-            max-width: 1440px;
-            width: 90vw;
-            margin: 0 auto 0 auto;
-            padding: 0 0 40px 0;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .section {
-            width: 100%;
-            margin: 32px 0 0 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .section-title {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 24px;
-            text-align: center;
-            letter-spacing: 0.02em;
-        }
-        .courses-filter-bar {
-            background: #fff;
-            box-shadow: 0 2px 12px #2176ae0e;
-            border-radius: 12px;
-            padding: 18px 30px 12px 30px;
-            display: flex;
-            gap: 18px;
-            margin-bottom: 22px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .courses-filter-bar select, .courses-filter-bar input[type="text"] {
-            font-family: inherit;
-            border-radius: 7px;
-            border: 1px solid #c7e7fa;
-            font-size: 1em;
-            padding: 6px 14px;
-            background: #f4fbff;
-            color: #274060;
-            outline: none;
-            margin-right: 8px;
-        }
-        .courses-filter-bar input[type="text"] {
-            width: 170px;
-        }
-        .courses-grid {
-            width: 100%;
-            max-width: 1260px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: stretch;
-            gap: 32px;
-            margin: 0 auto 24px auto;
-            padding: 0;
-        }
-        .course-card {
-            background: var(--white);
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            width: 340px;
-            min-width: 220px;
-            max-width: 370px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: box-shadow 0.18s, transform 0.13s;
-            cursor: pointer;
-            overflow: hidden;
-            position: relative;
-        }
+        .main-wrap { max-width: 1440px; width: 90vw; margin: 0 auto 0 auto; padding: 0 0 40px 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: center;}
+        .section { width: 100%; margin: 32px 0 0 0; display: flex; flex-direction: column; align-items: center;}
+        .section-title { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 24px; text-align: center; letter-spacing: 0.02em;}
+        .courses-filter-bar { background: #fff; box-shadow: 0 2px 12px #2176ae0e; border-radius: 12px; padding: 18px 30px 12px 30px; display: flex; gap: 18px; margin-bottom: 22px; align-items: center; flex-wrap: wrap;}
+        .courses-filter-bar select, .courses-filter-bar input[type="text"] { font-family: inherit; border-radius: 7px; border: 1px solid #c7e7fa; font-size: 1em; padding: 6px 14px; background: #f4fbff; color: #274060; outline: none; margin-right: 8px;}
+        .courses-filter-bar input[type="text"] { width: 170px;}
+        .courses-grid { width: 100%; max-width: 1260px; display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 32px; margin: 0 auto 24px auto; padding: 0;}
+        .course-card { background: var(--white); border-radius: 14px; box-shadow: var(--shadow); width: 340px; min-width: 220px; max-width: 370px; display: flex; flex-direction: column; align-items: center; transition: box-shadow 0.18s, transform 0.13s; cursor: pointer; overflow: hidden; position: relative;}
         .course-card[hidden] { display: none !important;}
-        .course-card:active {
-            transform: scale(0.98);
-        }
-        .course-card:focus-within {
-            outline: 2px solid var(--secondary);
-            outline-offset: 2px;
-        }
-        .course-card:hover {
-            box-shadow: 0 10px 30px #57b8ff2e;
-            transform: translateY(-4px) scale(1.012);
-        }
-        .course-card img {
-            width: 100%;
-            max-height: 168px;
-            object-fit: cover;
-            background: #eaf6fa;
-        }
-        .course-card-body {
-            padding: 22px 18px 16px 18px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .course-title {
-            font-size: 1.22em;
-            font-weight: 700;
-            color: #1c2f49;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .course-meta {
-            font-size: 0.97em;
-            color: #589cd7;
-            margin-bottom: 7px;
-            text-align: center;
-        }
-        .course-desc {
-            font-size: 1em;
-            color: #416084;
-            margin-bottom: 13px;
-            text-align: center;
-        }
-        .course-info-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 9px;
-            justify-content: center;
-            color: #6fa3ce;
-            font-size: 0.98em;
-        }
-        .course-chip {
-            background: linear-gradient(90deg, #e9f7ff 75%, #d2edff 100%);
-            color: #2176ae;
-            border-radius: 7px;
-            font-size: 0.97em;
-            font-weight: 600;
-            padding: 2.5px 10px;
-            margin-right: 4px;
-            display: inline-block;
-            letter-spacing: 0.02em;
-        }
-        .course-progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #eaf3fa;
-            border-radius: 8px;
-            margin: 5px 0 7px 0;
-            overflow: hidden;
-        }
-        .course-progress {
-            height: 8px;
-            background: linear-gradient(90deg, #2176ae 80%, #57b8ff 100%);
-            border-radius: 8px;
-            transition: width 0.4s;
-        }
-        .course-btn {
-            padding: 9px 18px;
-            border-radius: 8px;
-            border: none;
-            background: linear-gradient(90deg, #2176ae 85%, #57b8ff 100%);
-            color: #fff;
-            font-weight: 700;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background 0.15s, box-shadow 0.13s, transform 0.13s;
-            box-shadow: 0 1px 5px #2176ae18;
-            margin-top: 10px;
-            width: 100%;
-        }
-        .course-btn:active {
-            transform: scale(0.97);
-        }
-        .course-btn:hover {
-            background: linear-gradient(90deg, #1761b3 65%, #3eaafc 100%);
-            box-shadow: 0 4px 10px #2176ae24;
-            transform: scale(1.02);
-        }
-        .course-ribbon {
-            position: absolute;
-            top: 14px; left: -40px;
-            background: linear-gradient(90deg, #57b8ff 80%, #2176ae 100%);
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.93em;
-            padding: 5px 50px 5px 48px;
-            transform: rotate(-22deg);
-            border-radius: 8px 18px 9px 0;
-            box-shadow: 0 3px 8px #57b8ff2a;
-            letter-spacing: 0.04em;
-        }
-        @media (max-width: 1150px) {
-            .main-wrap { width: 98vw;}
-            .courses-grid { max-width: 99vw;}
-        }
-        @media (max-width: 800px) {
-            .main-wrap { width: 99vw;}
-            .courses-grid { gap: 22px;}
-            .course-card { min-width: 220px; width: 94vw; max-width: 98vw;}
-        }
-        @media (max-width: 600px) {
-            .main-wrap { width: 100vw; padding: 0;}
-            .section-title { font-size: 1.4rem;}
-            .courses-grid { gap: 13px;}
-            .course-card { min-width: 160px; width: 99vw;}
-            .courses-filter-bar { padding: 12px 6px 8px 6px; flex-direction: column; gap: 9px;}
-        }
+        .course-card:active { transform: scale(0.98);}
+        .course-card:focus-within { outline: 2px solid var(--secondary); outline-offset: 2px;}
+        .course-card:hover { box-shadow: 0 10px 30px #57b8ff2e; transform: translateY(-4px) scale(1.012);}
+        .course-card img { width: 100%; max-height: 168px; object-fit: cover; background: #eaf6fa;}
+        .course-card-body { padding: 22px 18px 16px 18px; width: 100%; display: flex; flex-direction: column; align-items: center;}
+        .course-title { font-size: 1.22em; font-weight: 700; color: #1c2f49; margin-bottom: 10px; text-align: center;}
+        .course-meta { font-size: 0.97em; color: #589cd7; margin-bottom: 7px; text-align: center;}
+        .course-desc { font-size: 1em; color: #416084; margin-bottom: 13px; text-align: center;}
+        .course-info-row { display: flex; gap: 15px; margin-bottom: 9px; justify-content: center; color: #6fa3ce; font-size: 0.98em;}
+        .course-chip { background: linear-gradient(90deg, #e9f7ff 75%, #d2edff 100%); color: #2176ae; border-radius: 7px; font-size: 0.97em; font-weight: 600; padding: 2.5px 10px; margin-right: 4px; display: inline-block; letter-spacing: 0.02em;}
+        .course-btn { padding: 9px 18px; border-radius: 8px; border: none; background: linear-gradient(90deg, #2176ae 85%, #57b8ff 100%); color: #fff; font-weight: 700; font-size: 1em; cursor: pointer; transition: background 0.15s, box-shadow 0.13s, transform 0.13s; box-shadow: 0 1px 5px #2176ae18; margin-top: 10px; width: 100%;}
+        .course-btn:active { transform: scale(0.97);}
+        .course-btn:hover { background: linear-gradient(90deg, #1761b3 65%, #3eaafc 100%); box-shadow: 0 4px 10px #2176ae24; transform: scale(1.02);}
+        .course-ribbon { position: absolute; top: 14px; left: -40px; background: linear-gradient(90deg, #57b8ff 80%, #2176ae 100%); color: #fff; font-weight: 600; font-size: 0.93em; padding: 5px 50px 5px 48px; transform: rotate(-22deg); border-radius: 8px 18px 9px 0; box-shadow: 0 3px 8px #57b8ff2a; letter-spacing: 0.04em;}
+        @media (max-width: 1150px) { .main-wrap { width: 98vw;} .courses-grid { max-width: 99vw;}}
+        @media (max-width: 800px) { .main-wrap { width: 99vw;} .courses-grid { gap: 22px;} .course-card { min-width: 220px; width: 94vw; max-width: 98vw;}}
+        @media (max-width: 600px) { .main-wrap { width: 100vw; padding: 0;} .section-title { font-size: 1.4rem;} .courses-grid { gap: 13px;} .course-card { min-width: 160px; width: 99vw;} .courses-filter-bar { padding: 12px 6px 8px 6px; flex-direction: column; gap: 9px;}}
     </style>
 </head>
 <body>
@@ -239,7 +57,7 @@
 <div class="main-wrap">
     <section class="section">
         <div class="section-title"><i class="fa-solid fa-graduation-cap"></i> Danh sách Khóa học</div>
-        <div class="courses-filter-bar" id="coursesFilterBar">
+        <div class="courses-filter-bar">
             <select id="filterTarget">
                 <option value="">Tất cả đối tượng</option>
                 <option value="Học sinh">Học sinh</option>
@@ -247,185 +65,74 @@
                 <option value="Phụ huynh">Phụ huynh</option>
                 <option value="Giáo viên">Giáo viên</option>
             </select>
-            <select id="filterTopic">
-                <option value="">Tất cả chủ đề</option>
-                <option value="Nhận thức về ma túy">Nhận thức về ma túy</option>
-                <option value="Kỹ năng phòng tránh">Kỹ năng phòng tránh</option>
-                <option value="Kỹ năng từ chối">Kỹ năng từ chối</option>
-            </select>
             <input id="searchInput" type="text" placeholder="Tìm kiếm khóa học...">
         </div>
     </section>
     <section class="section">
         <div class="courses-grid" id="coursesGrid">
-            <!-- CARD DATA DYNAMICALLY GENERATED BY JS -->
+            <div class="course-card"
+                 th:each="course : ${courses}"
+                 th:attr="data-target=${course.targetObject}, data-title=${course.name}, data-desc=${course.description}">
+                <span class="course-ribbon" th:if="${course.topic == 'Nhận thức về ma túy'}">Phổ biến</span>
+                <img th:src="${course.image != null && !#strings.isEmpty(course.image) ? course.image : 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80'}"
+                     class="card-img" th:alt="${course.name}" />
+                <div class="course-card-body">
+                    <div class="course-title" th:text="${course.name}"></div>
+                    <div class="course-meta">
+                        Đối tượng:
+                        <span class="course-chip" th:text="${course.targetObject}"></span>
+                        <span th:if="${course.participants != null}">
+                            | <span th:text="${course.participants}"></span> người tham gia
+                        </span>
+                    </div>
+                    <div class="course-desc" th:text="${course.description}"></div>
+                    <div class="course-info-row">
+                        <span th:text="${course.topic}"></span>
+                    </div>
+                    <button class="course-btn">Vào học</button>
+                </div>
+            </div>
         </div>
-        <div id="noCourseMsg" style="display:none; color:#57b8ff;font-weight:500;font-size:1.1em;text-align:center;padding:26px;">Không tìm thấy khóa học nào phù hợp.</div>
+        <div id="noCourseMsg" style="display:none;color:#57b8ff;font-weight:500;font-size:1.1em;text-align:center;padding:26px;">
+            Không tìm thấy khóa học nào phù hợp.
+        </div>
     </section>
 </div>
 <div th:replace="member/footer :: main-footer"></div>
 <script>
-    // Dữ liệu mẫu (bạn có thể thay fetch API về sau)
-    const coursesData = [
-        {
-            id: 1,
-            title: "Nhận thức về ma túy cho học sinh",
-            meta: "Dành cho: Học sinh | 10 bài học",
-            chip: "Học sinh",
-            topic: "Nhận thức về ma túy",
-            desc: "Kiến thức nền tảng, nhận biết dấu hiệu, phòng tránh và ứng phó với nguy cơ.",
-            progress: 85,
-            ribbon: "Phổ biến",
-            img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 2,
-            title: "Kỹ năng từ chối chất gây nghiện",
-            meta: "Dành cho: Sinh viên | 8 bài học",
-            chip: "Sinh viên",
-            topic: "Kỹ năng từ chối",
-            desc: "Rèn luyện kỹ năng giao tiếp, nhận diện tình huống và tự tin nói không với chất kích thích.",
-            progress: 60,
-            ribbon: "",
-            img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 3,
-            title: "Phòng ngừa cho phụ huynh",
-            meta: "Dành cho: Phụ huynh | 7 bài học",
-            chip: "Phụ huynh",
-            topic: "Nhận thức về ma túy",
-            desc: "Giúp cha mẹ nhận diện nguy cơ, bảo vệ và đồng hành cùng con tránh xa ma túy.",
-            progress: 20,
-            ribbon: "",
-            img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 4,
-            title: "Kỹ năng phòng tránh",
-            meta: "Dành cho: Giáo viên | 6 bài học",
-            chip: "Giáo viên",
-            topic: "Kỹ năng phòng tránh",
-            desc: "Hướng dẫn giáo viên phát hiện sớm và xử lý khi học sinh có dấu hiệu sử dụng chất kích thích.",
-            progress: 42,
-            ribbon: "",
-            img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 5,
-            title: "Kỹ năng sống tích cực",
-            meta: "Dành cho: Học sinh | 8 bài học",
-            chip: "Học sinh",
-            topic: "Kỹ năng phòng tránh",
-            desc: "Giúp học sinh hình thành thói quen sống lành mạnh, kiểm soát bản thân trước mọi cám dỗ.",
-            progress: 70,
-            ribbon: "",
-            img: "https://images.unsplash.com/photo-1485841890310-6a055c88698a?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 6,
-            title: "Kết nối gia đình & phòng ngừa",
-            meta: "Dành cho: Phụ huynh | 5 bài học",
-            chip: "Phụ huynh",
-            topic: "Nhận thức về ma túy",
-            desc: "Bí quyết xây dựng mối quan hệ gắn bó giữa cha mẹ và con cái để phòng ngừa hiệu quả.",
-            progress: 40,
-            ribbon: "",
-            img: "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 7,
-            title: "Đồng hành cùng học sinh",
-            meta: "Dành cho: Giáo viên | 6 bài học",
-            chip: "Giáo viên",
-            topic: "Kỹ năng từ chối",
-            desc: "Kỹ năng hỗ trợ, tư vấn và động viên học sinh trước các nguy cơ về ma túy.",
-            progress: 28,
-            ribbon: "",
-            img: "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?auto=format&fit=crop&w=600&q=80"
-        }
-    ];
+document.addEventListener('DOMContentLoaded', function() {
+    const filterTarget = document.getElementById('filterTarget');
+    const searchInput = document.getElementById('searchInput');
+    const coursesGrid = document.getElementById('coursesGrid');
+    const noCourseMsg = document.getElementById('noCourseMsg');
 
-    // Render danh sách khóa học
-    function renderCourses(filterTarget = '', filterTopic = '', keyword = '') {
-        const grid = document.getElementById('coursesGrid');
-        const noMsg = document.getElementById('noCourseMsg');
-        grid.innerHTML = '';
-        let count = 0;
-        coursesData.forEach(course => {
-            let matched = true;
-            if (filterTarget && course.chip !== filterTarget) matched = false;
-            if (filterTopic && course.topic !== filterTopic) matched = false;
-            if (keyword && !course.title.toLowerCase().includes(keyword.toLowerCase()) && !course.desc.toLowerCase().includes(keyword.toLowerCase())) matched = false;
-            if (!matched) return;
-            count++;
+    function doFilter() {
+        const target = filterTarget.value.trim().toLowerCase();
+        const keyword = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+        coursesGrid.querySelectorAll('.course-card').forEach(card => {
+            const cardTarget = (card.getAttribute('data-target') || '').toLowerCase();
+            const cardTitle = (card.getAttribute('data-title') || '').toLowerCase();
+            const cardDesc = (card.getAttribute('data-desc') || '').toLowerCase();
 
-            const card = document.createElement('div');
-            card.className = 'course-card';
-            card.tabIndex = 0;
+            let matchTarget = !target || cardTarget === target;
+            let matchKeyword = !keyword
+                || cardTitle.includes(keyword)
+                || cardDesc.includes(keyword);
 
-            // ribbon (nếu có)
-            if(course.ribbon) {
-                const ribbon = document.createElement('span');
-                ribbon.className = 'course-ribbon';
-                ribbon.textContent = course.ribbon;
-                card.appendChild(ribbon);
+            if (matchTarget && matchKeyword) {
+                card.style.display = '';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
             }
-
-            // ảnh
-            const img = document.createElement('img');
-            img.src = course.img;
-            img.alt = course.title;
-            card.appendChild(img);
-
-            // body
-            const body = document.createElement('div');
-            body.className = 'course-card-body';
-
-            body.innerHTML = `
-                <div class="course-title">${course.title}</div>
-                <div class="course-meta">Dành cho: <span class="course-chip">${course.chip}</span> | ${course.meta.split('|')[1]}</div>
-                <div class="course-desc">${course.desc}</div>
-                <div class="course-progress-bar"><div class="course-progress" style="width:${course.progress}%;"></div></div>
-                <button class="course-btn" tabindex="0">Vào học</button>
-            `;
-            card.appendChild(body);
-
-            // Nút click hiệu ứng
-            card.querySelector('.course-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                this.textContent = "Đang mở...";
-                this.style.background = "linear-gradient(90deg, #21ae66 80%, #57b8ff 100%)";
-                setTimeout(() => {
-                    this.textContent = "Vào học";
-                    this.style.background = "";
-                }, 700);
-            });
-
-            // Card hover mượt hơn
-            card.addEventListener('mousedown', () => card.classList.add('pressed'));
-            card.addEventListener('mouseup', () => card.classList.remove('pressed'));
-            card.addEventListener('mouseleave', () => card.classList.remove('pressed'));
-
-            grid.appendChild(card);
         });
-        noMsg.style.display = count === 0 ? '' : 'none';
+        noCourseMsg.style.display = visibleCount === 0 ? '' : 'none';
     }
 
-    // Sự kiện lọc/tìm kiếm
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterTarget = document.getElementById('filterTarget');
-        const filterTopic = document.getElementById('filterTopic');
-        const searchInput = document.getElementById('searchInput');
-        function doFilter() {
-            renderCourses(filterTarget.value, filterTopic.value, searchInput.value.trim());
-            window.scrollTo({ top: document.querySelector('.main-wrap').offsetTop, behavior: 'smooth' });
-        }
-        filterTarget.addEventListener('change', doFilter);
-        filterTopic.addEventListener('change', doFilter);
-        searchInput.addEventListener('input', doFilter);
-        renderCourses(); // initial
-    });
+    filterTarget.addEventListener('change', doFilter);
+    searchInput.addEventListener('input', doFilter);
+});
 </script>
 </body>
 </html>

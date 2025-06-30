@@ -30,7 +30,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                 redirectURL = "/doctor/dashboard";
                 break;
             } else if (role.equals("member")) {
-                redirectURL = "/member/dashboard";
+                redirectURL = "/dashboard";
                 break;
             }
         }

@@ -1,21 +1,22 @@
 package com.drug.drug.controller;
 
+import com.drug.drug.service.CourseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
 
-    // Trang Dashboard (Trang chủ của member)
-    @GetMapping({"/", "/dashboard"})
-    public String dashboard() {
-        return "member/dashboard";
-    }
+    @Autowired
+    private CourseService courseService;
 
-    // Trang khóa học
-    @GetMapping("/courses")
-    public String courses() {
-        return "member/courses";
+    // Trang Dashboard (Trang chủ của member) - truyền courses vào model
+    @GetMapping({"/", "/dashboard"})
+    public String dashboard(Model model) {
+        model.addAttribute("courses", courseService.getAllCourses());
+        return "member/dashboard";
     }
 
     // Trang làm bài đánh giá (khảo sát trắc nghiệm)

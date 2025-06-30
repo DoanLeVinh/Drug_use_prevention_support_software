@@ -163,7 +163,6 @@
             <i class="fa-solid fa-shield-heart"></i>
             Drug Prevention <span style="color:#ffe066;">Member</span>
         </a>
-
         <!-- Menu điều hướng member -->
         <nav class="nav-menu">
             <a href="/" class="nav-link"
@@ -179,27 +178,23 @@
             <a href="/about" class="nav-link"
                th:classappend="${page=='about'} ? 'active'">Giới thiệu</a>
         </nav>
-
         <!-- Avatar & dropdown info -->
         <div class="avatar-dropdown" tabindex="0">
             <!-- Đã đăng nhập -->
             <img th:if="${session.user != null}"
                  class="avatar-img"
-                 th:src="@{${session.user.avatarUrl}}"
-                 src="https://randomuser.me/api/portraits/men/32.jpg"
+                 th:src="${session.user.avatarUrl != null ? session.user.avatarUrl : 'https://randomuser.me/api/portraits/men/32.jpg'}"
                  alt="avatar"/>
             <!-- Chưa đăng nhập -->
             <div th:unless="${session.user != null}" class="avatar-placeholder">
                 <i class="fa fa-user"></i>
             </div>
-
             <div class="dropdown-content">
                 <!-- Nếu đã đăng nhập -->
                 <div th:if="${session.user != null}">
                     <div class="dropdown-header">
                         <img class="avatar-img"
-                             th:src="@{${session.user.avatarUrl}}"
-                             src="https://randomuser.me/api/portraits/men/32.jpg"
+                             th:src="${session.user.avatarUrl != null ? session.user.avatarUrl : 'https://randomuser.me/api/portraits/men/32.jpg'}"
                              alt="avatar"/>
                         <div>
                             <div class="dropdown-name" th:text="${session.user.fullName}">Nguyễn Văn B</div>
@@ -209,6 +204,9 @@
                     <div class="dropdown-actions">
                         <a class="dropdown-action-btn" href="/profile">
                             <i class="fa fa-user-circle"></i> Trang cá nhân
+                        </a>
+                        <a class="dropdown-action-btn" href="/activity">
+                            <i class="fa fa-history"></i> Lịch sử hoạt động
                         </a>
                         <form th:action="@{/logout}" method="post" style="margin:0;padding:0;">
                             <button class="dropdown-action-btn" type="submit">

@@ -682,30 +682,31 @@ img {
             </div>
         </section>
 
-        <!-- Khóa học đề xuất -->
-        <section class="section">
-            <div class="section-title"><i class="fa-solid fa-graduation-cap"></i> Khóa học nổi bật</div>
-            <div class="card-grid">
-                <div class="card course-card">
-                    <img loading="lazy" class="card-img" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="Khóa học nhận thức ma túy">
-                    <div class="card-title">Nhận thức về ma túy cho học sinh</div>
-                    <div class="card-desc">Kiến thức cơ bản, dấu hiệu nhận biết và kỹ năng phòng ngừa.</div>
-                    <button class="btn">Xem khóa học</button>
-                </div>
-                <div class="card course-card">
-                    <img loading="lazy" class="card-img" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Kỹ năng từ chối">
-                    <div class="card-title">Kỹ năng từ chối chất gây nghiện</div>
-                    <div class="card-desc">Tình huống thực tế, bài tập thực hành giúp rèn luyện kỹ năng từ chối.</div>
-                    <button class="btn">Xem khóa học</button>
-                </div>
-                <div class="card course-card">
-                    <img loading="lazy" class="card-img" src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=600&q=80" alt="Khóa học cho phụ huynh">
-                    <div class="card-title">Phòng ngừa cho phụ huynh</div>
-                    <div class="card-desc">Giúp cha mẹ phát hiện sớm và hỗ trợ con em vượt qua nguy cơ.</div>
-                    <button class="btn">Xem khóa học</button>
-                </div>
-            </div>
-        </section>
+<section class="section">
+    <div class="section-title">
+        <i class="fa-solid fa-graduation-cap"></i> Khóa học nổi bật
+    </div>
+    <div class="card-grid">
+        <div class="card course-card"
+             th:each="course, stat : ${courses}"
+             th:if="${stat.index} < 3">
+            <img loading="lazy" class="card-img"
+                 th:if="${course.image != null and !#strings.isEmpty(course.image)}"
+                 th:src="${course.image}" th:alt="${course.name}" />
+            <img loading="lazy" class="card-img"
+                 th:if="${course.image == null or #strings.isEmpty(course.image)}"
+                 src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80"
+                 th:alt="${course.name}" />
+            <div class="card-title" th:text="${course.name}"></div>
+            <div class="card-desc" th:text="${course.description}"></div>
+            <button class="btn">Xem khóa học</button>
+        </div>
+    </div>
+</section>
+
+
+
+
 
         <!-- Bài test, khảo sát đề xuất -->
         <section class="section">
