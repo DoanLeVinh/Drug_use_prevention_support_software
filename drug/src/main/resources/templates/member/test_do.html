@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Làm bài khảo sát</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2176ae;
+            --primary-light: #e6f2fa;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --text-color: #2d3748;
+            --light-bg: #f7fbfd;
+            --shadow: 0 4px 20px rgba(33, 118, 174, 0.15);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 720px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 40px 30px;
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .quiz-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 32px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .quiz-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .question-block {
+            margin-bottom: 36px;
+            animation: slideUp 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .question-block:nth-child(1) { animation-delay: 0.1s; }
+        .question-block:nth-child(2) { animation-delay: 0.2s; }
+        .question-block:nth-child(3) { animation-delay: 0.3s; }
+        .question-block:nth-child(4) { animation-delay: 0.4s; }
+        .question-block:nth-child(5) { animation-delay: 0.5s; }
+        .question-block:nth-child(6) { animation-delay: 0.6s; }
+        .question-block:nth-child(7) { animation-delay: 0.7s; }
+        .question-block:nth-child(8) { animation-delay: 0.8s; }
+        .question-block:nth-child(9) { animation-delay: 0.9s; }
+        .question-block:nth-child(10) { animation-delay: 1s; }
+        
+        .question-content {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+        
+        .answer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .answer-item {
+            position: relative;
+        }
+        
+        .answer-item label {
+            display: flex;
+            align-items: center;
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 14px 20px;
+            cursor: pointer;
+            border: 1px solid #dbe9f5;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .answer-item label:hover {
+            background: #e6f2fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        
+        .answer-item label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: transparent;
+            transition: var(--transition);
+        }
+        
+        .answer-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .answer-item input[type="radio"] + span {
+            position: relative;
+            padding-left: 32px;
+        }
+        
+        .answer-item input[type="radio"] + span::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #a0b8cc;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .answer-item input[type="radio"]:checked + span::before {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            box-shadow: inset 0 0 0 3px white;
+        }
+        
+        .answer-item input[type="radio"]:focus + span::before {
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .quiz-footer {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 32px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            background: #1b6596;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        #resultBox {
+            display: none;
+            margin-top: 40px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        #resultText {
+            font-size: 1.15em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .result-score {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: var(--light-bg);
+            display: inline-block;
+        }
+        
+        .perfect-score {
+            color: var(--success-color);
+            background: rgba(40, 167, 69, 0.1);
+        }
+        
+        .good-score {
+            color: var(--primary-color);
+        }
+        
+        .average-score {
+            color: var(--warning-color);
+            background: rgba(255, 193, 7, 0.1);
+        }
+        
+        .poor-score {
+            color: var(--danger-color);
+            background: rgba(220, 53, 69, 0.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+            width: 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px auto;
+            }
+            
+            .quiz-title {
+                font-size: 1.7rem;
+                margin-bottom: 25px;
+            }
+            
+            .question-content {
+                font-size: 1.1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="quiz-title">LÀM BÀI KHẢO SÁT</div>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <form id="quizForm">
+        <div th:each="q, idx : ${questions}" class="question-block">
+            <div class="question-content" th:text="${idx.index + 1} + '. ' + ${q.content}"></div>
+            <div class="answer-list">
+                <div th:each="ans : ${q.answers}" class="answer-item">
+                    <label>
+                        <input type="radio"
+                               th:name="'q'+${q.id}"
+                               th:value="${ans.id}"
+                               th:data-correct="${ans.isCorrect ? '1' : '0'}" />
+                        <span th:text="${ans.content}"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="quiz-footer">
+            <button type="button" class="btn pulse" id="submitBtn">
+                <i>✓</i> Hoàn thành
+            </button>
+        </div>
+    </form>
+    
+    <div id="resultBox">
+        <div id="resultText"></div>
+        <div id="resultScore" class="result-score"></div>
+        <div class="action-buttons" id="actionButtons"></div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quizForm = document.getElementById('quizForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const resultBox = document.getElementById('resultBox');
+    const resultText = document.getElementById('resultText');
+    const resultScore = document.getElementById('resultScore');
+    const actionButtons = document.getElementById('actionButtons');
+    const progressBar = document.getElementById('progressBar');
+    
+    // Update progress bar as user answers questions
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', updateProgress);
+    });
+    
+    function updateProgress() {
+        const totalQuestions = document.querySelectorAll('.question-block').length;
+        const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        
+        progressBar.style.width = `${progress}%`;
+        
+        // Change color based on progress
+        if (progress < 30) {
+            progressBar.style.backgroundColor = '#dc3545';
+        } else if (progress < 70) {
+            progressBar.style.backgroundColor = '#ffc107';
+        } else {
+            progressBar.style.backgroundColor = '#28a745';
+        }
+    }
+    
+    submitBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const questionBlocks = document.querySelectorAll('.question-block');
+        let totalQuestions = questionBlocks.length;
+        let answeredQuestions = 0;
+        let correctAnswers = 0;
+        let unansweredQuestions = [];
+        
+        questionBlocks.forEach((block, index) => {
+            const checkedRadio = block.querySelector('input[type="radio"]:checked');
+            
+            if (!checkedRadio) {
+                unansweredQuestions.push(index + 1);
+                // Add visual feedback for unanswered questions
+                block.style.animation = 'pulse 0.5s';
+                setTimeout(() => {
+                    block.style.animation = '';
+                }, 500);
+            } else {
+                answeredQuestions++;
+                if (checkedRadio.getAttribute('data-correct') === '1') {
+                    correctAnswers++;
+                }
+            }
+        });
+        
+        if (unansweredQuestions.length > 0) {
+            // Scroll to first unanswered question
+            const firstUnanswered = unansweredQuestions[0] - 1;
+            questionBlocks[firstUnanswered].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            
+            // Show error message with unanswered question numbers
+            const errorMsg = unansweredQuestions.length === 1 
+                ? `Vui lòng trả lời câu hỏi số ${unansweredQuestions[0]}!`
+                : `Vui lòng trả lời các câu hỏi số: ${unansweredQuestions.join(', ')}!`;
+            
+            showTemporaryMessage(errorMsg, 'error');
+            return;
+        }
+        
+        // Calculate results
+        const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+        showResults(totalQuestions, correctAnswers, percentage);
+    });
+    
+    function showResults(total, correct, percentage) {
+        let msg = "<p>Bạn đã hoàn thành khảo sát!</p>";
+        
+        // Set score display
+        resultScore.textContent = `${correct}/${total} câu đúng (${percentage}%)`;
+        
+        // Add appropriate class based on score
+        if (percentage === 100) {
+            resultScore.classList.add('perfect-score');
+            msg += `<p>🎉 <b>Xuất sắc!</b> Kiến thức của bạn rất tốt về chủ đề này.</p>`;
+        } else if (percentage >= 70) {
+            resultScore.classList.add('good-score');
+            msg += `<p><b>Tốt lắm!</b> Bạn có kiến thức nền khá vững, hãy củng cố thêm nhé!</p>`;
+        } else if (percentage >= 50) {
+            resultScore.classList.add('average-score');
+            msg += `<p><b>Bạn cần học thêm về chủ đề này</b>, nên tham khảo thêm các khóa học bên dưới.</p>`;
+        } else {
+            resultScore.classList.add('poor-score');
+            msg += `<p><b>Bạn còn thiếu kiến thức cơ bản về phòng chống ma túy.</b> Hãy đăng ký học hoặc tư vấn ngay!</p>`;
+        }
+        
+        resultText.innerHTML = msg;
+        
+        // Create action buttons based on results
+        actionButtons.innerHTML = '';
+        
+        if (percentage < 100) {
+            const coursesBtn = document.createElement('a');
+            coursesBtn.href = '/courses';
+            coursesBtn.className = 'btn btn-success';
+            coursesBtn.innerHTML = '<i>📚</i> Tham khảo khóa học';
+            actionButtons.appendChild(coursesBtn);
+        }
+        
+        if (percentage < 80) {
+            const bookingBtn = document.createElement('a');
+            bookingBtn.href = '/booking';
+            bookingBtn.className = 'btn';
+            bookingBtn.innerHTML = '<i>📅</i> Đặt lịch tư vấn';
+            actionButtons.appendChild(bookingBtn);
+        }
+        
+        const retryBtn = document.createElement('button');
+        retryBtn.className = 'btn btn-secondary';
+        retryBtn.innerHTML = '<i>🔄</i> Làm lại';
+        retryBtn.addEventListener('click', function() {
+            quizForm.reset();
+            resultBox.style.display = 'none';
+            progressBar.style.width = '0%';
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        actionButtons.appendChild(retryBtn);
+        
+        // Show result box with animation
+        resultBox.style.display = 'block';
+        resultBox.scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+    
+    function showTemporaryMessage(message, type) {
+        const existingMsg = document.querySelector('.temp-message');
+        if (existingMsg) existingMsg.remove();
+        
+        const msgElement = document.createElement('div');
+        msgElement.className = `temp-message temp-${type}`;
+        msgElement.textContent = message;
+        msgElement.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            background: ${type === 'error' ? '#dc3545' : '#ffc107'};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        `;
+        
+        document.body.appendChild(msgElement);
+        
+        setTimeout(() => {
+            msgElement.style.animation = 'fadeIn 0.3s ease-out reverse';
+            setTimeout(() => {
+                msgElement.remove();
+            }, 300);
+        }, 3000);
+    }
+});
+</script>
+</body>
+</html>

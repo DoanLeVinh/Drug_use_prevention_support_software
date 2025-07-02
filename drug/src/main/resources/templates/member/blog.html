@@ -8,161 +8,60 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #2176ae;
-            --secondary: #57b8ff;
-            --bg: #f7fbfd;
-            --white: #fff;
-            --soft: #eaf4fa;
-            --shadow: 0 4px 32px 0 rgba(33,118,174,0.10);
-        }
-        html, body { margin:0; padding:0; background: var(--bg);}
         body {
-            font-family: 'Inter', Arial, sans-serif;
-            color: #23406e;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
         .news-main-wrap {
-            width: 96vw; max-width: 1460px; margin: 0 auto; padding: 24px 0 70px 0;
-            display: flex; gap: 48px; align-items: flex-start;
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
         .news-content {
-            flex: 2.8;
-            min-width: 0;
+            flex: 3;
+            margin-right: 20px;
         }
         .news-sidebar {
-            flex: 1.2;
-            min-width: 285px;
-            background: #f2f8fc;
-            border-radius: 14px;
-            padding: 28px 22px 22px 22px;
-            box-shadow: 0 3px 18px #2176ae11;
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
         }
-        /* Mục lục thể loại */
-        .news-categories {
-            display: flex; gap: 13px; margin-bottom: 22px; flex-wrap: wrap;
+        .news-categories, .sidebar-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .news-category {
-            background: #eaf4fa;
-            color: var(--primary);
-            font-weight: 600;
-            padding: 6px 18px;
-            border-radius: 99px;
-            font-size: 1em;
-            border: none; outline: none;
+        .news-category, .sidebar-tag {
+            padding: 10px 15px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background .14s, color .14s, box-shadow .14s;
         }
-        .news-category.active, .news-category:hover {
-            background: var(--primary);
+        .news-category.active, .sidebar-tag.active {
+            background-color: #007bff;
             color: #fff;
-            box-shadow: 0 1.5px 9px #2176ae22;
         }
-        /* Tin mới nhất */
-        .featured-news {
-            display: flex; gap: 28px; align-items: center;
-            background: var(--white);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            margin-bottom: 32px;
-            min-height: 230px;
-            overflow: hidden;
-            position: relative;
-        }
-        .featured-news-img {
-            width: 330px; min-width: 150px; object-fit: cover; height: 220px; border-radius: 13px 0 0 13px;
-            box-shadow: 0 2px 9px #2176ae13;
-        }
-        .featured-news-body {
-            flex:1; padding: 0 24px;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-        .featured-news-type {
-            font-size: 1em; color: var(--primary); font-weight: 700; margin-bottom: 5px;
-        }
-        .featured-news-title {
-            font-size: 1.45em; font-weight: 800; color: #153965; margin-bottom: 10px;
-        }
-        .featured-news-summary {
-            font-size: 1.07em; color: #37567c; margin-bottom: 14px;
-        }
-        .featured-news-meta {
-            font-size: 0.99em; color: #5792c5;
-        }
-        .featured-news-link {
-            margin-top: 12px; color: var(--primary); font-weight: 600; text-decoration: underline;
-        }
-        /* Danh sách các bài còn lại */
-        .news-list {
-            display: flex; flex-direction: column; gap: 24px;
-        }
-        .news-list-card {
-            display: flex; gap: 20px; align-items: flex-start;
-            background: var(--white); border-radius: 12px; box-shadow: var(--shadow);
-            transition: box-shadow 0.15s, transform 0.12s;
+        .featured-news, .news-list-card {
+            display: flex;
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 20px;
             cursor: pointer;
-            min-height: 110px;
         }
-        .news-list-card:hover {
-            box-shadow: 0 6px 24px #2176ae20;
-            transform: translateY(-2px) scale(1.012);
+        .featured-news-img, .news-list-img {
+            width: 150px;
+            height: auto;
+            border-radius: 8px 0 0 8px;
         }
-        .news-list-img {
-            width: 110px; height: 90px; object-fit: cover; border-radius: 8px; margin: 14px 0 14px 16px;
-            box-shadow: 0 2px 8px #2176ae14;
+        .featured-news-body, .news-list-body {
+            padding: 15px;
         }
-        .news-list-body { padding: 18px 0 13px 0; flex:1;}
-        .news-list-title {
-            font-size: 1.09em; font-weight: 700; color: #19477b; margin-bottom: 6px;
-        }
-        .news-list-summary {
-            font-size: 0.98em; color: #497294; margin-bottom: 7px;
-        }
-        .news-list-meta {
-            font-size: 0.93em; color: #6ea2c7;
-        }
-        /* Sidebar nhà tài trợ, tag, tìm kiếm */
-        .sidebar-block {
-            margin-bottom: 34px;
-        }
-        .sidebar-title {
-            font-size: 1.13em; font-weight: 700; color: #2176ae; margin-bottom: 13px;
-            letter-spacing: 0.01em;
-        }
-        .sponsor-list {
-            display: flex; gap: 14px; flex-wrap: wrap;
-        }
-        .sponsor-logo {
-            width: 60px; height: 28px; object-fit: contain; background: #fff; border-radius: 7px; padding: 5px 9px;
-            box-shadow: 0 1px 4px #57b8ff18;
-            margin-bottom: 7px;
-        }
-        .sidebar-search {
-            width: 100%; padding: 9px 13px;
-            border-radius: 8px; border: 1px solid #b7d8f5;
-            font-size: 1em;
-            background: #f7fbfd;
-            color: #274060;
-            margin-bottom: 5px;
-        }
-        .sidebar-tags {
-            display: flex; flex-wrap: wrap; gap: 8px;
-        }
-        .sidebar-tag {
-            background: #eaf4fa; color: #2176ae; border-radius: 8px; padding: 5px 13px; font-size: .99em; cursor: pointer;
-        }
-        .sidebar-tag.active, .sidebar-tag:hover {
-            background: var(--primary); color: #fff; box-shadow: 0 1px 6px #2176ae11;
-        }
-        @media (max-width:1024px) {
-            .news-main-wrap { flex-direction: column; gap: 32px;}
-            .news-sidebar { min-width: 0; width: 100%;}
-        }
-        @media (max-width:600px) {
-            .featured-news { flex-direction: column; min-height: unset;}
-            .featured-news-img { width: 100%; height: 150px; border-radius: 13px 13px 0 0;}
-            .news-list-card { flex-direction: column;}
-            .news-list-img { width: 100%; height: 120px; margin: 0;}
-            .news-main-wrap { width: 100vw;}
+        .featured-news-type, .news-list-title {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -171,20 +70,82 @@
     <div class="news-main-wrap">
         <div class="news-content">
             <!-- Mục lục thể loại -->
-            <div class="news-categories" id="categoryList"></div>
+            <div class="news-categories">
+                <button th:classappend="${currentCat == null} ? 'active'" 
+                        class="news-category" 
+                        onclick="window.location.href='/blog'">Tất cả</button>
+                <button th:each="cat : ${categories}"
+                        th:classappend="${currentCat == cat} ? 'active'"
+                        class="news-category" 
+                        th:onclick="'window.location.href=\'/blog?category=' + ${cat} + '\''"
+                        th:text="${cat}"></button>
+            </div>
+            
             <!-- Tin nổi bật nhất -->
-            <div id="featuredNews"></div>
+            <div th:if="${not #lists.isEmpty(posts)}">
+                <div class="featured-news" 
+                     th:onclick="'window.location.href=\'/blog/' + ${posts[0].id} + '\''" 
+                     tabindex="0">
+                    <img class="featured-news-img" th:src="${posts[0].imageUrl}" th:alt="${posts[0].title}">
+                    <div class="featured-news-body">
+                        <div class="featured-news-type" th:text="${posts[0].category}"></div>
+                        <div class="featured-news-title" th:text="${posts[0].title}"></div>
+                        <div class="featured-news-summary" th:text="${posts[0].summary}"></div>
+                        <div class="featured-news-meta">
+                            <i class="fa fa-user"></i> <span th:text="${posts[0].author}"></span> &nbsp; 
+                            <i class="fa fa-calendar"></i> <span th:text="${#dates.format(posts[0].createdAt, 'dd/MM/yyyy')}"></span>
+                        </div>
+                        <div class="featured-news-link">Đọc chi tiết <i class="fa fa-arrow-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Danh sách các tin khác -->
-            <div class="news-list" id="newsList"></div>
+            <div class="news-list">
+                <div th:each="post,iter : ${posts}" 
+                     th:if="${iter.index > 0}"
+                     class="news-list-card" 
+                     th:onclick="'window.location.href=\'/blog/' + ${post.id} + '\''" 
+                     tabindex="0">
+                    <img class="news-list-img" th:src="${post.imageUrl}" th:alt="${post.title}">
+                    <div class="news-list-body">
+                        <div class="news-list-title" th:text="${post.title}"></div>
+                        <div class="news-list-summary" th:text="${post.summary}"></div>
+                        <div class="news-list-meta">
+                            <i class="fa fa-user"></i> <span th:text="${post.author}"></span> &nbsp; 
+                            <i class="fa fa-calendar"></i> <span th:text="${#dates.format(post.createdAt, 'dd/MM/yyyy')}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(posts)}" 
+                     style="padding:34px 0 50px 0;color:#888;text-align:center;font-size:1.16em;">
+                    Không tìm thấy bài viết nào.
+                </div>
+            </div>
         </div>
+        
+        <!-- Sidebar -->
         <div class="news-sidebar">
             <div class="sidebar-block">
                 <div class="sidebar-title"><i class="fa fa-search"></i> Tìm kiếm bài viết</div>
-                <input type="text" class="sidebar-search" id="sidebarSearch" placeholder="Từ khóa...">
+                <form action="/blog" method="get">
+                    <input type="text" class="sidebar-search" name="search" placeholder="Từ khóa..." th:value="${currentSearch}">
+                    <input type="hidden" name="category" th:value="${currentCat}">
+                    <input type="hidden" name="tag" th:value="${currentTag}">
+                </form>
             </div>
             <div class="sidebar-block">
                 <div class="sidebar-title"><i class="fa fa-tags"></i> Tag nổi bật</div>
-                <div class="sidebar-tags" id="sidebarTags"></div>
+                <div class="sidebar-tags">
+                    <div th:classappend="${currentTag == null} ? 'active'" 
+                         class="sidebar-tag" 
+                         onclick="window.location.href='/blog'">Tất cả</div>
+                    <div th:each="tag : ${tags}"
+                         th:classappend="${currentTag == tag} ? 'active'"
+                         class="sidebar-tag" 
+                         th:onclick="'window.location.href=\'/blog?tag=' + ${tag} + '\''"
+                         th:text="${tag}"></div>
+                </div>
             </div>
             <div class="sidebar-block">
                 <div class="sidebar-title"><i class="fa fa-handshake"></i> Nhà tài trợ tiêu biểu</div>
@@ -198,221 +159,5 @@
         </div>
     </div>
     <div th:replace="member/footer :: main-footer"></div>
-    <script>
-        // Dữ liệu bài viết (tối đa 10+ mẫu, các thể loại, tag, nhà tài trợ, v.v.)
-        const BLOGS = [
-            {
-                title: "5 kỹ năng từ chối chất gây nghiện cho học sinh",
-                summary: "Tình huống thực tế, cách xử lý, bài học quý giá từ chuyên gia tâm lý học đường.",
-                img: "https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=600&q=80",
-                type: "Bài viết",
-                tags: ["Kỹ năng", "Học sinh"],
-                date: "2025-06-01",
-                sponsor: "",
-                author: "Nguyễn Thị Mai",
-                link: "#"
-            },
-            {
-                title: "Bản tin UNICEF: Tháng hành động phòng chống ma túy 2025",
-                summary: "Cùng UNICEF Việt Nam phát động các chương trình bảo vệ trẻ em trước hiểm họa ma túy.",
-                img: "https://cdn.pixabay.com/photo/2017/06/01/18/25/silhouette-2366753_1280.jpg",
-                type: "Nhà tài trợ",
-                tags: ["UNICEF", "Bản tin"],
-                date: "2025-05-20",
-                sponsor: "UNICEF",
-                sponsorLogo: "https://upload.wikimedia.org/wikipedia/commons/0/08/Unicef_logo.svg",
-                author: "UNICEF Vietnam",
-                link: "#"
-            },
-            {
-                title: "WHO cảnh báo: Gia tăng nguy cơ nghiện ở học sinh thành thị",
-                summary: "Số liệu mới nhất về tình hình sử dụng ma túy học đường tại các đô thị lớn.",
-                img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80",
-                type: "Tin tức",
-                tags: ["WHO", "Tin tức"],
-                date: "2025-06-10",
-                sponsor: "WHO",
-                sponsorLogo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/World_Health_Organization_Logo.svg",
-                author: "TS. Trần Minh Quân",
-                link: "#"
-            },
-            {
-                title: "Hướng dẫn nhận biết nguy cơ và phòng tránh ma túy",
-                summary: "Chia sẻ kinh nghiệm nhận diện dấu hiệu, kết nối gia đình, nhà trường cùng chuyên gia.",
-                img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80",
-                type: "Bài viết",
-                tags: ["Kinh nghiệm", "Gia đình"],
-                date: "2025-05-22",
-                sponsor: "",
-                author: "Phạm Thị Lan",
-                link: "#"
-            },
-            {
-                title: "Microsoft tài trợ nền tảng giáo dục số cho học sinh Việt",
-                summary: "Ứng dụng công nghệ nâng cao nhận thức phòng chống ma túy ở trường học.",
-                img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=600&q=80",
-                type: "Nhà tài trợ",
-                tags: ["Microsoft", "Giáo dục"],
-                date: "2025-06-18",
-                sponsor: "Microsoft",
-                sponsorLogo: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg",
-                author: "Microsoft Vietnam",
-                link: "#"
-            },
-            {
-                title: "Red Cross trao tặng bằng khen cho dự án cộng đồng",
-                summary: "Ghi nhận những đóng góp xuất sắc vì xã hội không ma túy.",
-                img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80",
-                type: "Báo cáo",
-                tags: ["Báo cáo", "Red Cross"],
-                date: "2025-06-23",
-                sponsor: "Red Cross",
-                sponsorLogo: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Red_Cross_logo.svg",
-                author: "Red Cross",
-                link: "#"
-            },
-            {
-                title: "Vai trò cha mẹ trong phòng chống ma túy",
-                summary: "Phụ huynh cùng đồng hành bảo vệ con em trước cám dỗ, nâng cao kỹ năng giao tiếp trong gia đình.",
-                img: "https://images.unsplash.com/photo-1454023492550-5696f8ff10e1?auto=format&fit=crop&w=600&q=80",
-                type: "Bài viết",
-                tags: ["Gia đình", "Phụ huynh"],
-                date: "2025-05-27",
-                sponsor: "",
-                author: "BS. Lê Thu Hiền",
-                link: "#"
-            },
-            {
-                title: "Sự kiện truyền thông cộng đồng tháng 7",
-                summary: "Hoạt động nâng cao nhận thức, trải nghiệm thực tế về phòng chống ma túy cho thanh thiếu niên.",
-                img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-                type: "Tin tức",
-                tags: ["Sự kiện", "Cộng đồng"],
-                date: "2025-06-15",
-                sponsor: "",
-                author: "Phan Quang Vinh",
-                link: "#"
-            },
-            {
-                title: "Báo cáo chuyên đề: Sáng kiến phòng chống ma túy học đường",
-                summary: "Các mô hình thành công, giải pháp sáng tạo tại các trường học trọng điểm.",
-                img: "https://images.unsplash.com/photo-1485841890310-6a055c88698a?auto=format&fit=crop&w=600&q=80",
-                type: "Báo cáo",
-                tags: ["Báo cáo", "Sáng kiến"],
-                date: "2025-05-29",
-                sponsor: "",
-                author: "Ban dự án",
-                link: "#"
-            },
-            {
-                title: "Bản tin tài trợ: Khởi động dự án 'Trường học an toàn'",
-                summary: "Nhà tài trợ Red Cross đồng hành cùng chương trình phòng ngừa ma túy cho học sinh vùng sâu.",
-                img: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80",
-                type: "Nhà tài trợ",
-                tags: ["Dự án", "Red Cross"],
-                date: "2025-06-26",
-                sponsor: "Red Cross",
-                sponsorLogo: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Red_Cross_logo.svg",
-                author: "Red Cross Vietnam",
-                link: "#"
-            }
-        ];
-        // Lọc unique type/tags
-        function unique(arr) {
-            return [...new Set(arr.flat())];
-        }
-        // Render danh mục category
-        function renderCategories(selected) {
-            const catSet = unique(BLOGS.map(b=>b.type));
-            let html = `<button class="news-category${!selected?' active':''}" data-cat="">Tất cả</button>`;
-            catSet.forEach(c=>{
-                html += `<button class="news-category${selected===c?' active':''}" data-cat="${c}">${c}</button>`;
-            });
-            document.getElementById('categoryList').innerHTML = html;
-        }
-        // Render tags
-        function renderTags(selected) {
-            const tagSet = unique(BLOGS.map(b=>b.tags).filter(Boolean));
-            let html = `<div class="sidebar-tag${!selected?' active':''}" data-tag="">Tất cả</div>`;
-            tagSet.forEach(tag=>{
-                html += `<div class="sidebar-tag${selected===tag?' active':''}" data-tag="${tag}">${tag}</div>`;
-            });
-            document.getElementById('sidebarTags').innerHTML = html;
-        }
-        // Lọc và render bài viết
-        function renderNews(filter={}) {
-            // filter: { cat, tag, search }
-            let list = BLOGS.slice();
-            if(filter.cat) list = list.filter(b=>b.type===filter.cat);
-            if(filter.tag) list = list.filter(b=>b.tags.includes(filter.tag));
-            if(filter.search) {
-                const kw = filter.search.toLowerCase();
-                list = list.filter(b=>(b.title+b.summary).toLowerCase().includes(kw));
-            }
-            // Tin mới nhất là bài đầu tiên (nếu còn), các bài còn lại là danh sách
-            let featured = list.length ? list[0] : null;
-            let other = list.length>1 ? list.slice(1) : [];
-            // Featured
-            document.getElementById('featuredNews').innerHTML = featured ? `
-                <div class="featured-news" onclick="window.open('${featured.link}','_blank')" tabindex="0">
-                    <img class="featured-news-img" src="${featured.img}" alt="${featured.title}">
-                    <div class="featured-news-body">
-                        <div class="featured-news-type">${featured.type}${featured.sponsorLogo ? ` <img src="${featured.sponsorLogo}" style="height:18px;vertical-align:middle;margin-left:4px;">` : ''}</div>
-                        <div class="featured-news-title">${featured.title}</div>
-                        <div class="featured-news-summary">${featured.summary}</div>
-                        <div class="featured-news-meta">
-                            <i class="fa fa-user"></i> ${featured.author} &nbsp; 
-                            <i class="fa fa-calendar"></i> ${featured.date}
-                            ${featured.tags?.map(t=>`<span class="blog-meta-tag">${t}</span>`).join('')}
-                        </div>
-                        <div class="featured-news-link">Đọc chi tiết <i class="fa fa-arrow-right"></i></div>
-                    </div>
-                </div>
-            ` : '';
-            // Danh sách các bài còn lại
-            document.getElementById('newsList').innerHTML = other.length ? other.map(blog=>`
-                <div class="news-list-card" onclick="window.open('${blog.link}','_blank')" tabindex="0">
-                    <img class="news-list-img" src="${blog.img}" alt="${blog.title}">
-                    <div class="news-list-body">
-                        <div class="news-list-title">${blog.title}</div>
-                        <div class="news-list-summary">${blog.summary}</div>
-                        <div class="news-list-meta">
-                            <i class="fa fa-user"></i> ${blog.author} &nbsp; 
-                            <i class="fa fa-calendar"></i> ${blog.date}
-                            ${blog.sponsorLogo ? `<img src="${blog.sponsorLogo}" style="height:16px;vertical-align:middle;margin-left:6px;">` : ''}
-                            ${blog.tags?.map(t=>`<span class="blog-meta-tag">${t}</span>`).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('') : `<div style="padding:34px 0 50px 0;color:#888;text-align:center;font-size:1.16em;">Không tìm thấy bài viết nào.</div>`;
-        }
-        // Khởi tạo
-        let currentCat = "", currentTag = "", currentSearch = "";
-        document.addEventListener('DOMContentLoaded', ()=>{
-            renderCategories(currentCat);
-            renderTags(currentTag);
-            renderNews({cat:currentCat, tag:currentTag, search:currentSearch});
-
-            // Event danh mục
-            document.getElementById('categoryList').onclick = function(e) {
-                if(!e.target.dataset.cat) return;
-                currentCat = e.target.dataset.cat;
-                renderCategories(currentCat);
-                renderNews({cat:currentCat, tag:currentTag, search:currentSearch});
-            };
-            // Event tag
-            document.getElementById('sidebarTags').onclick = function(e) {
-                if(!e.target.dataset.tag) return;
-                currentTag = e.target.dataset.tag;
-                renderTags(currentTag);
-                renderNews({cat:currentCat, tag:currentTag, search:currentSearch});
-            };
-            // Event search
-            document.getElementById('sidebarSearch').oninput = function(e) {
-                currentSearch = e.target.value;
-                renderNews({cat:currentCat, tag:currentTag, search:currentSearch});
-            };
-        });
-    </script>
 </body>
 </html>

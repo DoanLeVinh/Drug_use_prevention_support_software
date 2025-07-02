@@ -236,48 +236,20 @@
             .btn {padding: 12px 13px;}
             .hero-image {max-width: 80px;}
         }
+    .error-message {
+            color: #d81b60;
+            font-size: 0.98em;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-    <!-- Sóng nền động -->
-    <div class="wave-bg">
-        <svg class="wave-layer" id="wave1" viewBox="0 0 1440 520" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-            <path fill="url(#bluewave1)" fill-opacity="0.7"
-                  d="M0,220 Q400,320 900,200 Q1300,110 1440,210 L1440,520 L0,520Z"/>
-            <defs>
-                <linearGradient id="bluewave1" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#a0d8ef"/>
-                    <stop offset="1" stop-color="#4a90e2"/>
-                </linearGradient>
-            </defs>
-        </svg>
-        <svg class="wave-layer" id="wave2" style="top:40px;opacity:.7" viewBox="0 0 1440 420" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-            <path fill="url(#bluewave2)" fill-opacity="0.5"
-                  d="M0,170 Q400,220 900,160 Q1300,120 1440,170 L1440,420 L0,420Z"/>
-            <defs>
-                <linearGradient id="bluewave2" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#eaf6fb"/>
-                    <stop offset="1" stop-color="#67d6ff"/>
-                </linearGradient>
-            </defs>
-        </svg>
-        <svg class="wave-layer" id="wave3" style="top:80px;opacity:.45" viewBox="0 0 1440 340" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-            <path fill="url(#bluewave3)" fill-opacity="0.36"
-                  d="M0,100 Q400,130 900,100 Q1300,120 1440,110 L1440,340 L0,340Z"/>
-            <defs>
-                <linearGradient id="bluewave3" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#eaf6fb"/>
-                    <stop offset="1" stop-color="#a0d8ef"/>
-                </linearGradient>
-            </defs>
-        </svg>
-    </div>
+    <!-- Sóng nền động, giữ nguyên của bạn ... -->
+
     <div class="register-container">
         <div class="register-card">
             <div class="register-hero">
-                <div class="hero-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
+                <div class="hero-icon"><i class="fas fa-shield-alt"></i></div>
                 <h2>Tham gia cộng đồng phòng chống ma túy</h2>
                 <p>Cùng chung tay xây dựng môi trường sống lành mạnh không ma túy</p>
                 <img src="https://cdn-icons-png.flaticon.com/512/3022/3022859.png" alt="Phòng chống ma túy" class="hero-image">
@@ -287,30 +259,9 @@
                     <h1>Tạo tài khoản mới</h1>
                     <p>Điền thông tin để đăng ký tài khoản</p>
                 </div>
-                <form th:action="@{/register}" method="post" autocomplete="off">
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="firstName">Họ</label>
-                            <div class="input-icon">
-                                <i class="fas fa-user"></i>
-                                <input type="text" id="firstName" name="firstName" class="form-control" placeholder="Nhập họ của bạn" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Tên</label>
-                            <div class="input-icon">
-                                <i class="fas fa-user"></i>
-                                <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Nhập tên của bạn" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <div class="input-icon">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="Nhập email của bạn" required>
-                        </div>
-                    </div>
+                <!-- Thêm div hiển thị lỗi -->
+                <div id="errorMsg" class="error-message" style="display:none"></div>
+                <form id="registerForm" th:action="@{/register}" method="post" autocomplete="off">
                     <div class="form-group">
                         <label for="username">Tên đăng nhập</label>
                         <div class="input-icon">
@@ -334,46 +285,58 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="ageGroup">Nhóm tuổi</label>
+                        <label for="email">Email</label>
                         <div class="input-icon">
-                            <i class="fas fa-users"></i>
-                            <select id="ageGroup" name="ageGroup" class="form-control" required>
-                                <option value="" disabled selected>Chọn nhóm tuổi của bạn</option>
-                                <option value="student">Học sinh (12-18 tuổi)</option>
-                                <option value="college">Sinh viên (18-25 tuổi)</option>
-                                <option value="parent">Phụ huynh</option>
-                                <option value="teacher">Giáo viên</option>
-                                <option value="other">Khác</option>
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Nhập email của bạn" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sdt">Số điện thoại</label>
+                        <div class="input-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="text" id="sdt" name="sdt" class="form-control" placeholder="Số điện thoại" required pattern="0[0-9]{9,10}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">Giới tính</label>
+                        <div class="input-icon">
+                            <i class="fas fa-venus-mars"></i>
+                            <select id="sex" name="sex" class="form-control" required>
+                                <option value="" disabled selected>Chọn giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Địa chỉ</label>
+                        <div class="input-icon">
+                            <i class="fas fa-home"></i>
+                            <input type="text" id="address" name="address" class="form-control" placeholder="Địa chỉ">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Ngày sinh</label>
+                        <div class="input-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="date" id="birthday" name="birthday" class="form-control" required>
                         </div>
                     </div>
                     <div class="terms-conditions">
                         <input type="checkbox" id="terms" name="terms" required>
-                        <label for="terms">Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a> của hệ thống</label>
+                        <label for="terms">Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a></label>
                     </div>
                     <button type="submit" class="btn btn-primary">Đăng ký tài khoản</button>
                 </form>
                 <div class="login-link">
                     Đã có tài khoản? <a href="/login">Đăng nhập ngay</a>
                 </div>
-                <div class="social-login">
-                    <div class="login-divider">Hoặc đăng ký bằng</div>
-                    <div class="social-buttons">
-                        <a href="#" class="btn-social btn-facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="btn-social btn-google">
-                            <i class="fab fa-google"></i>
-                        </a>
-                        <a href="#" class="btn-social btn-twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
- 
+    <!-- Sóng nền động, giữ nguyên ... -->
     <script>
         // Show/hide password
         const togglePassword = document.querySelector('#togglePassword');
@@ -383,7 +346,49 @@
             password.setAttribute('type', type);
             this.classList.toggle('fa-eye-slash');
         });
-        // Sóng nền parallax động
+
+        // VALIDATION FRONTEND
+        document.getElementById('registerForm').onsubmit = function(e) {
+            let errorMsg = "";
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const email = document.getElementById('email').value.trim();
+            const sdt = document.getElementById('sdt').value.trim();
+            const birthday = document.getElementById('birthday').value;
+            // Kiểm tra password trùng khớp
+            if (password !== confirmPassword) {
+                errorMsg = "Mật khẩu xác nhận không trùng khớp!";
+            }
+            // Kiểm tra mật khẩu độ dài >= 6 ký tự
+            else if (password.length < 6) {
+                errorMsg = "Mật khẩu phải có ít nhất 6 ký tự!";
+            }
+            // Kiểm tra số điện thoại
+            else if (!/^0[0-9]{9,10}$/.test(sdt)) {
+                errorMsg = "Số điện thoại không hợp lệ!";
+            }
+            // Kiểm tra ngày sinh
+            else if (!birthday) {
+                errorMsg = "Vui lòng nhập ngày sinh!";
+            }
+            // Kiểm tra username/email có ký tự lạ
+            else if (!/^[a-zA-Z0-9_]{4,}$/.test(username)) {
+                errorMsg = "Tên đăng nhập phải trên 4 ký tự, không dấu, không khoảng trắng!";
+            }
+            // Kiểm tra email format cơ bản
+            else if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+                errorMsg = "Email không hợp lệ!";
+            }
+            if (errorMsg) {
+                e.preventDefault();
+                document.getElementById('errorMsg').style.display = "block";
+                document.getElementById('errorMsg').innerText = errorMsg;
+                return false;
+            }
+            // Nếu không có lỗi: sẽ submit về backend
+        };
+        // Parallax sóng nền
         const wave1 = document.getElementById('wave1');
         const wave2 = document.getElementById('wave2');
         const wave3 = document.getElementById('wave3');
@@ -398,7 +403,6 @@
             wave2.style.transform = '';
             wave3.style.transform = '';
         });
-        // Animation khi load trang
         document.addEventListener('DOMContentLoaded', function() {
             const registerCard = document.querySelector('.register-card');
             registerCard.style.opacity = '0';

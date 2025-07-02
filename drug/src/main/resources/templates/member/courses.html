@@ -89,7 +89,7 @@
                     <div class="course-info-row">
                         <span th:text="${course.topic}"></span>
                     </div>
-                    <button class="course-btn">Vào học</button>
+                    <a th:href="@{'/courses/' + ${course.id}}" class="btn">Xem khóa học</a>
                 </div>
             </div>
         </div>

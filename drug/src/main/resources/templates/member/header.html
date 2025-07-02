@@ -53,7 +53,6 @@
             text-decoration: none;
             opacity: 1;
         }
-        /* Avatar & dropdown */
         .avatar-dropdown {
             position: relative;
             display: flex;
@@ -165,18 +164,12 @@
         </a>
         <!-- Menu điều hướng member -->
         <nav class="nav-menu">
-            <a href="/" class="nav-link"
-               th:classappend="${page=='dashboard'} ? 'active'">Trang chủ</a>
-            <a href="/courses" class="nav-link"
-               th:classappend="${page=='courses'} ? 'active'">Khóa học</a>
-            <a href="/assessment" class="nav-link"
-               th:classappend="${page=='assessment'} ? 'active'">Khảo sát</a>
-            <a href="/consultation" class="nav-link"
-               th:classappend="${page=='consultation'} ? 'active'">Đặt lịch tư vấn</a>
-            <a href="/blog" class="nav-link"
-               th:classappend="${page=='blog'} ? 'active'">Blog</a>
-            <a href="/about" class="nav-link"
-               th:classappend="${page=='about'} ? 'active'">Giới thiệu</a>
+            <a href="/" class="nav-link" th:classappend="${page=='dashboard'} ? 'active'">Trang chủ</a>
+            <a href="/courses" class="nav-link" th:classappend="${page=='courses'} ? 'active'">Khóa học</a>
+            <a href="/assessment" class="nav-link" th:classappend="${page=='assessment'} ? 'active'">Khảo sát</a>
+            <a href="/consultation" class="nav-link" th:classappend="${page=='consultation'} ? 'active'">Đặt lịch tư vấn</a>
+            <a href="/blog" class="nav-link" th:classappend="${page=='blog'} ? 'active'">Blog</a>
+            <a href="/about" class="nav-link" th:classappend="${page=='about'} ? 'active'">Giới thiệu</a>
         </nav>
         <!-- Avatar & dropdown info -->
         <div class="avatar-dropdown" tabindex="0">

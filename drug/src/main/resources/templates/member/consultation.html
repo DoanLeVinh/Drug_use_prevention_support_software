@@ -16,221 +16,62 @@
             --soft: #eaf4fa;
             --shadow: 0 6px 28px rgba(33,118,174,0.10);
             --highlight: #21ae66;
+            --error: #e74c3c;
+            --warning: #f39c12;
         }
         body { background: var(--bg); font-family: 'Inter', 'Segoe UI', Arial, sans-serif; margin: 0; color: #24415d;}
-        .main-wrap {
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-            padding: 40px 0 50px 0;
-        }
-        .consult-title {
-            font-size: 2.2rem; font-weight: 800; color: var(--primary); text-align: center; margin: 20px 0 18px 0;
-        }
-        .consult-desc {
-            font-size: 1.12em; color: #355485; background: #eaf6fa; border-radius: 16px; padding: 16px 32px 12px 32px;
-            box-shadow: 0 2px 13px #2176ae13; max-width: 640px; margin: 0 auto 38px auto; text-align: center;
-        }
-        .method-select-row {
-            display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin: 0 0 38px 0;
-        }
-        .method-card {
-            background: var(--white); border-radius: 14px; box-shadow: var(--shadow);
-            padding: 32px 30px 22px 30px; display: flex; flex-direction: column; align-items: center;
-            min-width: 220px; max-width: 290px; cursor: pointer; position: relative;
-            transition: box-shadow 0.15s, transform 0.13s, filter 0.23s;
-            opacity: 0.92; filter: grayscale(25%);
-        }
-        .method-card.selected, .method-card:hover {
-            box-shadow: 0 9px 28px #2176ae2a; transform: scale(1.025) translateY(-2px);
-            border: 2.3px solid var(--primary); filter: grayscale(0%); opacity: 1;
-        }
-        .method-icon {
-            font-size: 2.2rem; margin-bottom: 9px; color: var(--primary);
-        }
-        .method-title {
-            font-size: 1.18em; font-weight: 700; margin-bottom: 7px;
-        }
-        .method-desc {
-            font-size: 1em; color: #426897; text-align: center; margin-bottom: 8px; opacity: 0.93;
-        }
-        .form-frame {
-            margin: 0 auto; background: var(--white); border-radius: 15px; box-shadow: var(--shadow);
-            padding: 34px 32px 30px 32px; width: 100%; max-width: 480px;
-            display: flex; flex-direction: column; align-items: center;
-            animation: fadeInForm 0.6s;
-        }
-        @keyframes fadeInForm {
-            from { opacity: 0; transform: translateY(30px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        .form-frame label {
-            display: block; font-weight: 600; margin: 14px 0 6px 0; color: #2e527d; font-size: 1.05em;
-        }
-        .form-frame select, .form-frame input, .form-frame textarea {
-            width: 100%; padding: 9px 13px; border-radius: 8px; border: 1px solid #b7d8f5;
-            font-size: 1em; background: #f4fbff; color: #274060; margin-bottom: 5px;
-        }
+        .main-wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 0 50px 0;}
+        .consult-title { font-size: 2.2rem; font-weight: 800; color: var(--primary); text-align: center; margin: 20px 0 18px 0;}
+        .consult-desc { font-size: 1.12em; color: #355485; background: #eaf6fa; border-radius: 16px; padding: 16px 32px 12px 32px; box-shadow: 0 2px 13px #2176ae13; max-width: 640px; margin: 0 auto 38px auto; text-align: center;}
+        .method-select-row { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin: 0 0 38px 0;}
+        .method-card { background: var(--white); border-radius: 14px; box-shadow: var(--shadow); padding: 32px 30px 22px 30px; display: flex; flex-direction: column; align-items: center; min-width: 220px; max-width: 290px; cursor: pointer; position: relative; transition: box-shadow 0.15s, transform 0.13s, filter 0.23s; opacity: 0.92; filter: grayscale(25%); border: 2.3px solid transparent;}
+        .method-card.selected, .method-card:hover { box-shadow: 0 9px 28px #2176ae2a; transform: scale(1.025) translateY(-2px); border: 2.3px solid var(--primary); filter: grayscale(0%); opacity: 1; background: linear-gradient(106deg, #e8f4fb 68%, #f6faff 100%);}
+        .method-icon { font-size: 2.2rem; margin-bottom: 9px; color: var(--primary);}
+        .method-title { font-size: 1.18em; font-weight: 700; margin-bottom: 7px;}
+        .method-desc { font-size: 1em; color: #426897; text-align: center; margin-bottom: 8px; opacity: 0.93;}
+        .form-frame { margin: 0 auto; background: var(--white); border-radius: 15px; box-shadow: var(--shadow); padding: 34px 32px 30px 32px; width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center; animation: fadeInForm 0.6s;}
+        @keyframes fadeInForm { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);}}
+        .form-frame label { display: block; font-weight: 600; margin: 14px 0 6px 0; color: #2e527d; font-size: 1.05em; width: 100%;}
+        .form-frame select, .form-frame input, .form-frame textarea { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #b7d8f5; font-size: 1em; background: #f4fbff; color: #274060; margin-bottom: 5px; transition: border-color 0.2s, box-shadow 0.2s;}
+        .form-frame select:focus, .form-frame input:focus, .form-frame textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(33, 118, 174, 0.2); outline: none;}
         .form-frame textarea { resize: vertical; min-height: 58px; max-height: 130px;}
-        .form-actions {
-            width: 100%; display: flex; gap: 14px; margin-top: 28px; justify-content: center;
-        }
-        .consult-btn, .cancel-btn {
-            flex: 1 1 0; padding: 12px 0; border-radius: 8px; border: none; font-weight: 700;
-            font-size: 1.06em; cursor: pointer; box-shadow: 0 1px 9px #2176ae16;
-            transition: background 0.14s, box-shadow 0.13s, transform 0.13s;
-        }
-        .consult-btn {
-            background: linear-gradient(90deg, #2176ae 85%, #57b8ff 100%); color: #fff;
-        }
+        .form-actions { width: 100%; display: flex; gap: 14px; margin-top: 28px; justify-content: center;}
+        .consult-btn, .cancel-btn { flex: 1 1 0; padding: 12px 0; border-radius: 8px; border: none; font-weight: 700; font-size: 1.06em; cursor: pointer; box-shadow: 0 1px 9px #2176ae16; transition: background 0.14s, box-shadow 0.13s, transform 0.13s;}
+        .consult-btn { background: linear-gradient(90deg, #2176ae 85%, #57b8ff 100%); color: #fff;}
         .consult-btn:active { transform: scale(0.97);}
         .consult-btn:hover { background: linear-gradient(90deg, #21ae66 80%, #57b8ff 100%);}
-        .cancel-btn {
-            background: #eaf4fa; color: #b22626;
-            border: 1.5px solid #e1c9c9; font-weight: 700;
-        }
+        .cancel-btn { background: #eaf4fa; color: #b22626; border: 1.5px solid #e1c9c9; font-weight: 700;}
         .cancel-btn:hover { background: #fbeeee; color: #d41c1c;}
-        /* Modal xác nhận, thành công */
-        .modal-backdrop {
-            position: fixed; z-index: 1100; top:0;left:0;right:0;bottom:0; background: rgba(33,118,174,0.13);
-            display: none; align-items: center; justify-content: center;
-        }
+        .hour-list { display: flex; flex-wrap: wrap; gap: 9px; margin: 7px 0 6px 0; width: 100%;}
+        .hour-btn { background: #f4fbff; border: 1.6px solid #b7d8f5; border-radius: 7px; padding: 8px 17px; font-size: 1.02em; font-weight: 600; color: var(--primary); cursor: pointer; transition: background 0.12s, border 0.12s, color 0.12s;}
+        .hour-btn.selected, .hour-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary);}
+        .hour-btn.disabled { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; color: #999; border-color: #ddd;}
+        .error-msg { color: var(--error); font-size: 0.9em; margin-top: -5px; margin-bottom: 10px; width: 100%;}
+        .required-field::after { content: " *"; color: var(--error);}
+        @media (max-width: 900px) { .main-wrap { padding: 12px 0;} .method-select-row { gap: 18px;} }
+        @media (max-width: 650px) { .form-frame, .modal-box { padding: 16px 6vw;} .method-card { min-width: 98vw; max-width: 99vw;} }
+        .modal-backdrop { position: fixed; z-index: 1100; top:0;left:0;right:0;bottom:0; background: rgba(33,118,174,0.13); display: none; align-items: center; justify-content: center; backdrop-filter: blur(3px);}
         .modal-backdrop.show { display: flex;}
-        .modal-box {
-            background: #fff; border-radius: 15px; box-shadow: 0 8px 36px #2176ae36;
-            padding: 36px 32px 26px 32px; min-width: 310px; max-width: 95vw; text-align: center;
-            animation: fadeInForm 0.5s;
-        }
+        .modal-box { background: #fff; border-radius: 15px; box-shadow: 0 8px 36px #2176ae36; padding: 36px 32px 26px 32px; min-width: 310px; max-width: 95vw; text-align: center; animation: fadeInForm 0.5s;}
         .modal-box h2 { color: var(--primary); font-weight: 700; font-size: 1.28em;}
         .modal-box .success-icon { font-size: 3.3rem; color: var(--highlight); margin: 12px 0 7px 0;}
-        .modal-actions {
-            display: flex; gap: 18px; justify-content: center; margin-top: 22px;
-        }
-        .modal-btn {
-            padding: 11px 20px; border-radius: 8px; font-weight: 600; font-size: 1em;
-            border: none; cursor: pointer; box-shadow: 0 1px 5px #2176ae19; background: var(--primary); color: #fff;
-            transition: background 0.13s, color 0.13s, transform 0.13s;
-        }
+        .modal-actions { display: flex; gap: 18px; justify-content: center; margin-top: 22px;}
+        .modal-btn { padding: 11px 20px; border-radius: 8px; font-weight: 600; font-size: 1em; border: none; cursor: pointer; box-shadow: 0 1px 5px #2176ae19; background: var(--primary); color: #fff; transition: background 0.13s, color 0.13s, transform 0.13s;}
         .modal-btn.cancel { background: #eaf4fa; color: #c42525; border: 1.2px solid #e0b5b5;}
         .modal-btn:hover { background: var(--secondary);}
         .modal-btn.cancel:hover { background: #fce5e5; color: #e12a2a;}
         .success-msg { color: #21ae66; text-align: center; font-weight: 700; margin: 12px 0 0 0; font-size: 1.09em;}
-        /* Select giờ đẹp */
-        .hour-list {
-            display: flex; flex-wrap: wrap; gap: 9px; margin: 7px 0 6px 0;
-        }
-        .hour-btn {
-            background: #f4fbff; border: 1.6px solid #b7d8f5; border-radius: 7px;
-            padding: 8px 17px; font-size: 1.02em; font-weight: 600; color: var(--primary);
-            cursor: pointer; transition: background 0.12s, border 0.12s, color 0.12s;
-        }
-        .hour-btn.selected, .hour-btn:hover {
-            background: var(--primary); color: #fff; border-color: var(--primary);
-        }
-        /* Responsive */
-        @media (max-width: 900px) {
-            .main-wrap { padding: 12px 0;}
-            .method-select-row { gap: 18px;}
-        }
-        @media (max-width: 650px) {
-            .form-frame, .modal-box { padding: 16px 6vw;}
-            .method-card { min-width: 98vw; max-width: 99vw;}
-        }
-        .method-card {
-    /* ... giữ lại các style gốc ... */
-    background: var(--white);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    padding: 32px 30px 22px 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 220px;
-    max-width: 290px;
-    cursor: pointer;
-    position: relative;
-    transition: box-shadow 0.15s, transform 0.13s, border 0.23s, background 0.25s, filter 0.23s;
-    opacity: 0.93;
-    filter: grayscale(25%);
-    border: 2.3px solid transparent;
-}
-.method-card.selected, .method-card:hover, .method-card:focus-within {
-    box-shadow: 0 9px 28px #2176ae2a;
-    transform: scale(1.035) translateY(-2px);
-    border: 2.3px solid var(--primary);
-    filter: grayscale(0%);
-    opacity: 1;
-    background: linear-gradient(106deg, #e8f4fb 68%, #f6faff 100%);
-}
-.method-card[data-method="hotline"].selected .method-icon,
-.method-card[data-method="hotline"]:hover .method-icon,
-.method-card[data-method="social"].selected .method-icon,
-.method-card[data-method="social"]:hover .method-icon {
-    color: #21ae66; /* Xanh lá nổi bật hotline, có thể chỉnh màu nếu muốn */
-    text-shadow: 0 3px 9px #21ae6632;
-}
-.method-quick-contact {
-    margin-top: 14px;
-    width: 100%;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.24s cubic-bezier(.33,1.12,.7,.93);
-    animation: none;
-}
-.method-card.selected .method-quick-contact,
-.method-card:hover .method-quick-contact {
-    display: flex !important;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 9px 18px;
-    opacity: 1;
-    animation: fadeInQC 0.36s;
-}
-@keyframes fadeInQC {
-    from { opacity: 0; transform: translateY(11px);}
-    to   { opacity: 1; transform: translateY(0);}
-}
-/* Tô viền hoặc bóng khi quick-contact hiện */
-.method-card.selected,
-.method-card:hover {
-    z-index: 3;
-}
-
-/* Nút quick contact */
-.method-quick-contact a, .method-quick-contact button {
-    background: #eaf4fa;
-    color: #2176ae;
-    border: none;
-    border-radius: 8px;
-    padding: 7px 18px;
-    margin: 6px 4px 0 4px;
-    font-weight: 600;
-    font-size: 1.05em;
-    text-decoration: none;
-    box-shadow: 0 1px 5px #2176ae18;
-    cursor: pointer;
-    transition: background 0.15s, color 0.13s, transform 0.13s;
-    outline: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-}
-.method-quick-contact a:hover,
-.method-quick-contact button:hover,
-.method-quick-contact a:focus,
-.method-quick-contact button:focus {
-    background: var(--primary);
-    color: #fff;
-    transform: translateY(-1px) scale(1.06);
-}
-
+        .quick-contact-container { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; width: 100%;}
+        .quick-contact-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 15px; border-radius: 8px; background: var(--soft); color: var(--primary); text-decoration: none; font-weight: 600; transition: all 0.2s; border: 1px solid #b7d8f5;}
+        .quick-contact-btn:hover { background: var(--primary); color: white;}
+        .quick-contact-btn i { font-size: 1.1em;}
     </style>
 </head>
 <body>
 <div th:replace="member/header :: main-header"></div>
 <div class="main-wrap">
     <div class="consult-title"><i class="fa-solid fa-headset"></i> Đặt lịch tư vấn</div>
-    <div class="consult-desc">
-        Chọn hình thức tư vấn phù hợp: Online (qua Zoom/Meet) hoặc trực tiếp tại văn phòng. Các khung giờ được cập nhật realtime theo chuyên gia bạn chọn!
-    </div>
+    <div class="consult-desc">Chọn hình thức tư vấn phù hợp: Online (qua Zoom/Meet) hoặc trực tiếp tại văn phòng. Các khung giờ được cập nhật realtime theo chuyên gia bạn chọn!</div>
     <div class="method-select-row" id="methodRow">
         <div class="method-card" data-method="online">
             <div class="method-icon"><i class="fa-solid fa-laptop-medical"></i></div>
@@ -242,241 +83,190 @@
             <div class="method-title">Tư vấn tại văn phòng</div>
             <div class="method-desc">Đến phòng tư vấn chuyên nghiệp, không gian riêng tư, chuyên gia tận tâm hỗ trợ.</div>
         </div>
-        <!-- Hotline -->
         <div class="method-card" data-method="hotline">
             <div class="method-icon"><i class="fa-solid fa-phone-volume"></i></div>
             <div class="method-title">Hotline 24/7</div>
             <div class="method-desc">Liên hệ tư vấn gấp với bác sĩ qua số tổng đài.</div>
-            <div class="method-quick-contact" style="display:none;">
-                <button onclick="copyHotline(event)" type="button"><i class="fa fa-copy"></i> Sao chép số</button>
-                <a href="tel:18001111"><i class="fa fa-phone"></i> Gọi ngay 1800 1111</a>
+            <div class="quick-contact-container" style="display:none;">
+                <button type="button" class="quick-contact-btn" onclick="copyHotline(event)">
+                    <i class="fa fa-copy"></i> Sao chép số
+                </button>
+                <a href="tel:18001111" class="quick-contact-btn">
+                    <i class="fa fa-phone"></i> Gọi ngay 1800 1111
+                </a>
             </div>
         </div>
-        <!-- Social -->
         <div class="method-card" data-method="social">
             <div class="method-icon"><i class="fa-brands fa-facebook-messenger"></i></div>
             <div class="method-title">Mạng xã hội</div>
             <div class="method-desc">Nhắn tin ngay cho tư vấn viên qua Facebook, Zalo, Telegram, Email.</div>
-            <div class="method-quick-contact" style="display:none;">
-                <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
-                <a href="https://zalo.me/" target="_blank"><i class="fa-brands fa-facebook-messenger"></i> Zalo</a>
-                <a href="https://t.me/" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
-                <a href="mailto:info@drugprevention.vn"><i class="fa fa-envelope"></i> Email</a>
+            <div class="quick-contact-container" style="display:none;">
+                <a href="https://facebook.com/" target="_blank" class="quick-contact-btn">
+                    <i class="fab fa-facebook"></i> Facebook
+                </a>
+                <a href="https://zalo.me/" target="_blank" class="quick-contact-btn">
+                    <i class="fa-brands fa-facebook-messenger"></i> Zalo
+                </a>
+                <a href="https://t.me/" target="_blank" class="quick-contact-btn">
+                    <i class="fab fa-telegram"></i> Telegram
+                </a>
+                <a href="mailto:info@drugprevention.vn" class="quick-contact-btn">
+                    <i class="fa fa-envelope"></i> Email
+                </a>
             </div>
         </div>
     </div>
-    </div>
-    
+
     <!-- Form đặt lịch -->
-    <form class="form-frame" id="consultForm" autocomplete="off" style="display:none;">
-        <input type="hidden" id="method" name="method">
-        <label for="fullname">Họ tên <span style="color:#e74c3c">*</span></label>
-        <input type="text" id="fullname" name="fullname" required maxlength="80" placeholder="Nhập họ tên">
-        <label for="phone">Số điện thoại <span style="color:#e74c3c">*</span></label>
-        <input type="tel" id="phone" name="phone" required maxlength="20" pattern="[0-9\+\-\s]{9,20}" placeholder="Nhập số điện thoại">
-        <label for="email">Email <span style="color:#e74c3c">*</span></label>
-        <input type="email" id="email" name="email" required maxlength="60" placeholder="Email nhận xác nhận">
-        <label for="service">Chọn dịch vụ tư vấn</label>
-        <select id="service" name="service" required>
+    <form class="form-frame" id="consultForm" th:action="@{/consultation}" method="post" th:object="${booking}" autocomplete="off" style="display:none;">
+        <input type="hidden" id="consultation_type" name="consultation_type" th:field="*{consultationType}">
+        <label for="fullname" class="required-field">Họ tên</label>
+        <input type="text" id="fullname" name="fullname" th:field="*{fullname}" required maxlength="100" placeholder="Nhập họ tên">
+        <label for="phone" class="required-field">Số điện thoại</label>
+        <input type="tel" id="phone" name="phone" th:field="*{phone}" required maxlength="20" pattern="[0-9\+\-\s]{9,20}" placeholder="Nhập số điện thoại">
+        <label for="email" class="required-field">Email</label>
+        <input type="email" id="email" name="email" th:field="*{email}" required maxlength="100" placeholder="Email nhận xác nhận">
+        <label for="service" class="required-field">Chọn dịch vụ tư vấn</label>
+        <select id="service" name="service" th:field="*{service}" required>
             <option value="" disabled selected>-- Chọn dịch vụ --</option>
-            <option>Tham vấn tâm lý học đường</option>
-            <option>Giải đáp, phòng ngừa sử dụng ma túy</option>
-            <option>Hỗ trợ phụ huynh - trẻ vị thành niên</option>
-            <option>Phục hồi & cai nghiện</option>
+            <option value="Tham vấn tâm lý học đường">Tham vấn tâm lý học đường</option>
+            <option value="Giải đáp, phòng ngừa sử dụng ma túy">Giải đáp, phòng ngừa sử dụng ma túy</option>
+            <option value="Hỗ trợ phụ huynh - trẻ vị thành niên">Hỗ trợ phụ huynh - trẻ vị thành niên</option>
+            <option value="Phục hồi & cai nghiện">Phục hồi & cai nghiện</option>
         </select>
-        <label for="consultant">Chọn chuyên gia tư vấn</label>
-        <select id="consultant" name="consultant" required>
+        <label for="consultant" class="required-field">Chọn chuyên gia tư vấn</label>
+        <select id="consultant" name="consultant" th:field="*{consultant}" required>
             <option value="" disabled selected>-- Chọn chuyên gia --</option>
             <option value="hung">BS. Nguyễn Văn Hùng - Tâm lý, Cai nghiện</option>
             <option value="lan">Phạm Thị Lan - Trẻ vị thành niên</option>
             <option value="quan">TS. Trần Minh Quân - Gia đình, Xã hội</option>
             <option value="hien">BS. Lê Thu Hiền - Học đường</option>
         </select>
-        <label for="date">Chọn ngày</label>
-        <input type="date" id="date" name="date" required min="">
-        <label>Chọn giờ</label>
+        <label for="booking_date" class="required-field">Chọn ngày</label>
+        <input type="date" id="booking_date" name="booking_date" th:field="*{bookingDate}" required min="">
+        <label class="required-field">Chọn giờ</label>
+        <input type="hidden" id="booking_time" name="booking_time" th:field="*{bookingTime}">
         <div class="hour-list" id="hourList"></div>
         <label for="note">Mô tả tình trạng (tùy chọn)</label>
-        <textarea id="note" name="note" placeholder="Bạn muốn tư vấn về điều gì?"></textarea>
+        <textarea id="note" name="note" th:field="*{note}" placeholder="Bạn muốn tư vấn về điều gì?"></textarea>
         <div class="form-actions">
             <button type="button" class="cancel-btn" onclick="cancelBooking()">Hủy</button>
-            <button type="button" class="consult-btn" onclick="openConfirmModal()">Đặt lịch</button>
+            <button type="submit" class="consult-btn" id="submitBtn">
+                <span id="submitText">Đặt lịch</span>
+            </button>
         </div>
+        <div th:if="${success}" class="success-msg" th:text="${success}"></div>
+        <div th:if="${error}" class="error-msg" th:text="${error}"></div>
     </form>
 </div>
-
-<!-- Modal xác nhận -->
-<div class="modal-backdrop" id="modalConfirm">
-    <div class="modal-box">
-        <h2>Xác nhận đặt lịch?</h2>
-        <div>Thông tin bạn nhập sẽ được gửi đến chuyên gia. Bạn chắc chắn muốn đặt lịch tư vấn này?</div>
-        <div class="modal-actions">
-            <button class="modal-btn cancel" onclick="closeConfirmModal()">Hủy</button>
-            <button class="modal-btn" onclick="successBooking()">Đồng ý</button>
-        </div>
-    </div>
-</div>
-<!-- Modal thành công -->
-<div class="modal-backdrop" id="modalSuccess">
-    <div class="modal-box">
-        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
-        <h2>Đặt lịch thành công!</h2>
-        <div>Cảm ơn bạn đã tin tưởng hệ thống.<br>Bạn sẽ nhận được email xác nhận lịch tư vấn.</div>
-        <div class="modal-actions">
-            <a class="modal-btn" href="/" style="text-decoration:none;">Về trang chủ</a>
-            <button class="modal-btn cancel" onclick="closeSuccessModal()">Tiếp tục đặt lịch</button>
-        </div>
-    </div>
-</div>
-<div th:replace="member/footer :: main-footer"></div>
 <script>
-    // Giả lập dữ liệu giờ trống
-    const doctorAvailableHours = {
-        hung: { '2025-06-30': ['08:30', '09:30', '14:00', '15:00'], '2025-07-01': ['08:30', '10:00', '16:00'] },
-        lan:  { '2025-06-30': ['09:00', '11:00', '16:00'],           '2025-07-01': ['10:00', '13:30', '15:00'] },
-        quan: { '2025-06-30': ['08:30', '13:00'],                     '2025-07-01': ['09:00', '11:00', '15:30'] },
-        hien: { '2025-06-30': ['08:00', '09:00', '14:30'],            '2025-07-01': ['08:00', '10:00', '14:30'] }
-    };
-    // Chọn ngày min là ngày hôm nay
-    document.addEventListener('DOMContentLoaded', function() {
-        const methodCards = document.querySelectorAll('.method-card');
-        const consultForm = document.getElementById('consultForm');
-        const methodInput = document.getElementById('method');
-        const consultant = document.getElementById('consultant');
-        const dateInput = document.getElementById('date');
-        const hourList = document.getElementById('hourList');
-        let selectedHour = '';
-
-        // Method chọn
-        methodCards.forEach(card => {
-            card.onclick = function() {
-                methodCards.forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-                consultForm.style.display = 'flex';
-                methodInput.value = card.dataset.method;
-                consultForm.reset();
-                // Set min date là hôm nay
-                let today = new Date();
-                let yyyy = today.getFullYear(), mm = String(today.getMonth()+1).padStart(2, '0'), dd = String(today.getDate()).padStart(2, '0');
-                dateInput.min = `${yyyy}-${mm}-${dd}`;
-                dateInput.value = dateInput.min;
-                hourList.innerHTML = '';
-                selectedHour = '';
-            }
-        });
-
-        // Khi chọn bác sĩ hoặc ngày => cập nhật giờ trống
-        consultant.onchange = dateInput.onchange = function() {
-            hourList.innerHTML = '';
-            selectedHour = '';
-            let doctor = consultant.value;
-            let date = dateInput.value;
-            if(!doctor || !date) return;
-            let hours = (doctorAvailableHours[doctor] && doctorAvailableHours[doctor][date]) || [];
-            if(hours.length === 0) {
-                hourList.innerHTML = '<span style="color:#e74c3c">Không có giờ trống. Chọn ngày khác.</span>';
-                return;
-            }
-            hours.forEach(h => {
-                let btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'hour-btn';
-                btn.textContent = h;
-                btn.onclick = function() {
-                    hourList.querySelectorAll('.hour-btn').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected');
-                    selectedHour = h;
-                };
-                hourList.appendChild(btn);
-            });
-        };
-
-        // Đóng form
-        window.cancelBooking = function() {
-            consultForm.style.display = 'none';
-            methodCards.forEach(c => c.classList.remove('selected'));
-        };
-
-        // Mở modal xác nhận
-        window.openConfirmModal = function() {
-            if(!consultForm.checkValidity()) { consultForm.reportValidity(); return; }
-            if(!selectedHour) { alert('Vui lòng chọn giờ trống!'); return; }
-            document.getElementById('modalConfirm').classList.add('show');
-        };
-        window.closeConfirmModal = function() {
-            document.getElementById('modalConfirm').classList.remove('show');
-        };
-        // Thành công
-        window.successBooking = function() {
-            document.getElementById('modalConfirm').classList.remove('show');
-            document.getElementById('modalSuccess').classList.add('show');
-        };
-        window.closeSuccessModal = function() {
-            document.getElementById('modalSuccess').classList.remove('show');
-            consultForm.reset();
-            consultForm.style.display = 'none';
-            methodCards.forEach(c => c.classList.remove('selected'));
-        };
-    });
-    // Copy hotline & hiệu ứng quick contact cho Hotline và Social
-function copyHotline(e) {
-    e.preventDefault();
-    navigator.clipboard.writeText('18001111');
-    e.target.textContent = "Đã sao chép!";
-    setTimeout(() => { e.target.innerHTML = '<i class="fa fa-copy"></i> Sao chép số'; }, 1600);
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-    let methodCards = document.querySelectorAll('.method-card');
-    let consultForm = document.getElementById('consultForm');
-    let methodInput = document.getElementById('method');
-
-    methodCards.forEach(card => {
-        card.classList.remove('selected');
-        let qcontact = card.querySelector('.method-quick-contact');
-        if (qcontact) qcontact.style.display = 'none';
-    });
-    consultForm.style.display = 'none';
-
-    methodCards.forEach(card => {
-        card.onclick = function() {
-            // Reset trạng thái các card
-            methodCards.forEach(c => {
-                c.classList.remove('selected');
-                let qcontact = c.querySelector('.method-quick-contact');
-                if (qcontact) qcontact.style.display = 'none';
-            });
-            card.classList.add('selected');
-            let selected = card.dataset.method;
-            // Nếu hotline/social: chỉ hiện quick-contact, ẩn form
-            if (selected === 'hotline' || selected === 'social') {
-                consultForm.style.display = 'none';
-                let qcontact = card.querySelector('.method-quick-contact');
-                if (qcontact) {
-                    qcontact.style.display = 'block';
-                    // Auto focus vào hotline copy hoặc đầu link
-                    let firstBtn = qcontact.querySelector('button, a');
-                    if (firstBtn) firstBtn.focus();
-                }
-            } else {
-                // Online/offline: hiện form
-                methodInput.value = selected;
-                consultForm.style.display = 'flex';
-                if (document.getElementById('datetime')) {
-                    let now = new Date();
-                    now.setHours(now.getHours() + 2);
-                    let min = now.toISOString().slice(0,16);
-                    document.getElementById('datetime').min = min;
-                    document.getElementById('datetime').value = min;
-                }
-                document.getElementById('successMsg').style.display = 'none';
-            }
+    // Dữ liệu giờ trống
+    const doctorAvailableHours = {
+        hung: { 
+            '2025-06-30': ['08:30', '09:30', '14:00', '15:00'], 
+            '2025-07-01': ['08:30', '10:00', '16:00'],
+            '2025-07-02': ['09:00', '11:00', '14:30'],
+            '2025-07-03': ['10:00', '13:00', '15:30']
+        },
+        lan:  { 
+            '2025-06-30': ['09:00', '11:00', '16:00'],           
+            '2025-07-01': ['10:00', '13:30', '15:00'],
+            '2025-07-02': ['08:30', '12:00', '16:30'],
+            '2025-07-03': ['09:30', '14:00']
+        },
+        quan: { 
+            '2025-06-30': ['08:30', '13:00'],                    
+            '2025-07-01': ['09:00', '11:00', '15:30'],
+            '2025-07-02': ['10:30', '14:00', '16:00'],
+            '2025-07-03': ['08:00', '12:30']
+        },
+        hien: { 
+            '2025-06-30': ['08:00', '09:00', '14:30'],            
+            '2025-07-01': ['08:00', '10:00', '14:30'],
+            '2025-07-02': ['09:00', '11:30', '15:00'],
+            '2025-07-03': ['10:00', '13:30']
         }
+    };
+
+    const methodCards = document.querySelectorAll('.method-card');
+    const consultForm = document.getElementById('consultForm');
+    const consultationTypeInput = document.getElementById('consultation_type');
+    const consultantSelect = document.getElementById('consultant');
+    const dateInput = document.getElementById('booking_date');
+    const hourList = document.getElementById('hourList');
+    const bookingTimeInput = document.getElementById('booking_time');
+    let selectedMethod = '';
+    let selectedHour = '';
+
+    function initMinDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        dateInput.min = `${yyyy}-${mm}-${dd}`;
+        dateInput.value = dateInput.min;
+    }
+
+    function handleMethodSelection(card) {
+        methodCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedMethod = card.dataset.method;
+        consultationTypeInput.value = selectedMethod;
+
+        if (['online', 'offline'].includes(selectedMethod)) {
+            consultForm.style.display = 'flex';
+            initMinDate();
+            updateAvailableHours();
+        } else {
+            consultForm.style.display = 'none';
+        }
+    }
+
+    function updateAvailableHours() {
+        hourList.innerHTML = '';
+        selectedHour = '';
+        bookingTimeInput.value = '';
+        const doctor = consultantSelect.value;
+        const date = dateInput.value;
+        if (!doctor || !date) {
+            hourList.innerHTML = '<span style="color:var(--warning)">Vui lòng chọn chuyên gia và ngày</span>';
+            return;
+        }
+        const hours = (doctorAvailableHours[doctor] && doctorAvailableHours[doctor][date]) || [];
+        if (hours.length === 0) {
+            hourList.innerHTML = '<span style="color:var(--error)">Không có giờ trống. Vui lòng chọn ngày khác.</span>';
+            return;
+        }
+        hours.forEach(hour => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'hour-btn';
+            btn.textContent = hour;
+            btn.onclick = function() {
+                document.querySelectorAll('.hour-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedHour = hour;
+                bookingTimeInput.value = hour;
+            };
+            hourList.appendChild(btn);
+        });
+    }
+
+    methodCards.forEach(card => {
+        card.addEventListener('click', () => handleMethodSelection(card));
     });
 
-    // Gửi form demo (bạn đã có rồi, có thể dùng lại)
-});
+    consultantSelect.addEventListener('change', updateAvailableHours);
+    dateInput.addEventListener('change', updateAvailableHours);
 
+    window.cancelBooking = function() {
+        consultForm.style.display = 'none';
+        methodCards.forEach(c => c.classList.remove('selected'));
+    };
+
+    initMinDate();
+});
 </script>
 </body>
 </html>
