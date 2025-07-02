@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BlogPostService {
@@ -14,24 +13,7 @@ public class BlogPostService {
     @Autowired
     private BlogPostRepository blogPostRepository;
 
-    public List<BlogPost> getAllPosts() {
+    public List<BlogPost> getAllBlogPosts() {
         return blogPostRepository.findAll();
-    }
-
-    public BlogPost getPostById(Long id) {
-        Optional<BlogPost> post = blogPostRepository.findById(id);
-        return post.orElse(null);
-    }
-
-    public List<BlogPost> getPostsByCategory(String category) {
-        return blogPostRepository.findByCategory(category);
-    }
-
-    public List<BlogPost> getPostsByTag(String tag) {
-        return blogPostRepository.findByAudience(tag);
-    }
-
-    public List<BlogPost> searchPosts(String keyword) {
-        return blogPostRepository.searchPosts(keyword);
     }
 }

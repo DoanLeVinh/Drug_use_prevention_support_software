@@ -1,163 +1,424 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Tin tức & Blog | Drug Prevention Support System</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Font Awesome & Google Fonts -->
+    <title>Blog Phòng chống Ma túy</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .news-main-wrap {
-            display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .news-content {
-            flex: 3;
-            margin-right: 20px;
-        }
-        .news-sidebar {
-            flex: 1;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .news-categories, .sidebar-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .news-category, .sidebar-tag {
-            padding: 10px 15px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .news-category.active, .sidebar-tag.active {
-            background-color: #007bff;
-            color: #fff;
-        }
-        .featured-news, .news-list-card {
-            display: flex;
-            background-color: #fff;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-        .featured-news-img, .news-list-img {
-            width: 150px;
-            height: auto;
-            border-radius: 8px 0 0 8px;
-        }
-        .featured-news-body, .news-list-body {
-            padding: 15px;
-        }
-        .featured-news-type, .news-list-title {
-            font-weight: bold;
-        }
-    </style>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/blog.css}">
 </head>
 <body>
-    <div th:replace="member/header :: main-header"></div>
-    <div class="news-main-wrap">
-        <div class="news-content">
-            <!-- Mục lục thể loại -->
-            <div class="news-categories">
-                <button th:classappend="${currentCat == null} ? 'active'" 
-                        class="news-category" 
-                        onclick="window.location.href='/blog'">Tất cả</button>
-                <button th:each="cat : ${categories}"
-                        th:classappend="${currentCat == cat} ? 'active'"
-                        class="news-category" 
-                        th:onclick="'window.location.href=\'/blog?category=' + ${cat} + '\''"
-                        th:text="${cat}"></button>
-            </div>
-            
-            <!-- Tin nổi bật nhất -->
-            <div th:if="${not #lists.isEmpty(posts)}">
-                <div class="featured-news" 
-                     th:onclick="'window.location.href=\'/blog/' + ${posts[0].id} + '\''" 
-                     tabindex="0">
-                    <img class="featured-news-img" th:src="${posts[0].imageUrl}" th:alt="${posts[0].title}">
-                    <div class="featured-news-body">
-                        <div class="featured-news-type" th:text="${posts[0].category}"></div>
-                        <div class="featured-news-title" th:text="${posts[0].title}"></div>
-                        <div class="featured-news-summary" th:text="${posts[0].summary}"></div>
-                        <div class="featured-news-meta">
-                            <i class="fa fa-user"></i> <span th:text="${posts[0].author}"></span> &nbsp; 
-                            <i class="fa fa-calendar"></i> <span th:text="${#dates.format(posts[0].createdAt, 'dd/MM/yyyy')}"></span>
-                        </div>
-                        <div class="featured-news-link">Đọc chi tiết <i class="fa fa-arrow-right"></i></div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Phòng Chống Ma Túy</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/blog}">Blog</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Tìm kiếm...">
+                        <button class="btn btn-light" type="button" id="searchButton">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Danh sách các tin khác -->
-            <div class="news-list">
-                <div th:each="post,iter : ${posts}" 
-                     th:if="${iter.index > 0}"
-                     class="news-list-card" 
-                     th:onclick="'window.location.href=\'/blog/' + ${post.id} + '\''" 
-                     tabindex="0">
-                    <img class="news-list-img" th:src="${post.imageUrl}" th:alt="${post.title}">
-                    <div class="news-list-body">
-                        <div class="news-list-title" th:text="${post.title}"></div>
-                        <div class="news-list-summary" th:text="${post.summary}"></div>
-                        <div class="news-list-meta">
-                            <i class="fa fa-user"></i> <span th:text="${post.author}"></span> &nbsp; 
-                            <i class="fa fa-calendar"></i> <span th:text="${#dates.format(post.createdAt, 'dd/MM/yyyy')}"></span>
-                        </div>
-                    </div>
-                </div>
-                <div th:if="${#lists.isEmpty(posts)}" 
-                     style="padding:34px 0 50px 0;color:#888;text-align:center;font-size:1.16em;">
-                    Không tìm thấy bài viết nào.
                 </div>
             </div>
         </div>
-        
-        <!-- Sidebar -->
-        <div class="news-sidebar">
-            <div class="sidebar-block">
-                <div class="sidebar-title"><i class="fa fa-search"></i> Tìm kiếm bài viết</div>
-                <form action="/blog" method="get">
-                    <input type="text" class="sidebar-search" name="search" placeholder="Từ khóa..." th:value="${currentSearch}">
-                    <input type="hidden" name="category" th:value="${currentCat}">
-                    <input type="hidden" name="tag" th:value="${currentTag}">
-                </form>
-            </div>
-            <div class="sidebar-block">
-                <div class="sidebar-title"><i class="fa fa-tags"></i> Tag nổi bật</div>
-                <div class="sidebar-tags">
-                    <div th:classappend="${currentTag == null} ? 'active'" 
-                         class="sidebar-tag" 
-                         onclick="window.location.href='/blog'">Tất cả</div>
-                    <div th:each="tag : ${tags}"
-                         th:classappend="${currentTag == tag} ? 'active'"
-                         class="sidebar-tag" 
-                         th:onclick="'window.location.href=\'/blog?tag=' + ${tag} + '\''"
-                         th:text="${tag}"></div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Filter Section -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Lọc bài viết</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="categoryFilter" class="form-label">Danh mục</label>
+                                <select class="form-select" id="categoryFilter">
+                                    <option value="">Tất cả</option>
+                                    <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="audienceFilter" class="form-label">Đối tượng</label>
+                                <select class="form-select" id="audienceFilter">
+                                    <option value="">Tất cả</option>
+                                    <option th:each="audience : ${audiences}" th:value="${audience}" th:text="${audience}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Blog Posts -->
+                <h3 class="pb-4 mb-4 border-bottom text-primary">
+                    <i class="fas fa-newspaper me-2"></i>Bài viết mới nhất
+                </h3>
+
+                <div id="blogPostsContainer">
+                    <div th:each="post : ${blogPosts}" class="blog-post card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-info text-dark" th:text="${post.category}">Danh mục</span>
+                                <small class="text-muted" th:text="${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm')}">Ngày đăng</small>
+                            </div>
+                            
+                            <h2 class="blog-post-title card-title" th:text="${post.title}">Tiêu đề bài viết</h2>
+                            
+                            <div th:if="${post.imageUrl}" class="text-center mb-3">
+                                <img th:src="${post.imageUrl}" alt="Hình ảnh bài viết" class="img-fluid rounded">
+                            </div>
+                            
+                            <p class="card-text" th:text="${post.summary}">Tóm tắt nội dung bài viết</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a th:href="@{/blog/post/{id}(id=${post.id})}" class="btn btn-primary">
+                                    <i class="fas fa-book-reader me-1"></i> Đọc tiếp
+                                </a>
+                                <small class="text-muted">
+                                    <i class="fas fa-user me-1"></i>
+                                    <span th:text="${post.author}">Tác giả</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Trước</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Tiếp</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <div class="sidebar-block">
-                <div class="sidebar-title"><i class="fa fa-handshake"></i> Nhà tài trợ tiêu biểu</div>
-                <div class="sponsor-list">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Unicef_logo.svg" class="sponsor-logo" alt="UNICEF">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/World_Health_Organization_Logo.svg" class="sponsor-logo" alt="WHO">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" class="sponsor-logo" alt="Microsoft">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Red_Cross_logo.svg" class="sponsor-logo" alt="Red Cross">
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- About Card -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-info-circle me-2"></i>Về chúng tôi</h5>
+                        <p class="card-text">Chuyên trang cung cấp thông tin, kiến thức về phòng chống ma túy và các chất gây nghiện.</p>
+                        <a href="#" class="btn btn-outline-primary">Tìm hiểu thêm</a>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-folder me-2"></i>Danh mục</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a th:each="category : ${categories}" href="#" class="badge bg-light text-dark text-decoration-none" th:text="${category}">Danh mục</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Posts -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-fire me-2"></i>Bài viết nổi bật</h5>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Tác hại của ma túy đá</h6>
+                                    <small>3 ngày trước</small>
+                                </div>
+                                <small class="text-muted">Phòng ngừa</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Cách nhận biết người nghiện</h6>
+                                    <small>1 tuần trước</small>
+                                </div>
+                                <small class="text-muted">Nhận biết</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscribe -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-envelope me-2"></i>Đăng ký nhận tin</h5>
+                        <p>Nhận thông tin mới nhất qua email</p>
+                        <form>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" placeholder="Email của bạn">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div th:replace="member/footer :: main-footer"></div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Phòng Chống Ma Túy</h5>
+                    <p>Chung tay đẩy lùi ma túy - Vì một cộng đồng khỏe mạnh.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Trang chủ</a></li>
+                        <li><a href="#" class="text-white">Blog</a></li>
+                        <li><a href="#" class="text-white">Tài liệu</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Liên hệ</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone me-2"></i> 0123 456 789</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@phongchongmatuy.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 Phòng Chống Ma Túy. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <style> 
+      /* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    padding-top: 56px; /* Adjust for navbar */
+}
+
+/* Blog Post Styles */
+.blog-post {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.blog-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.blog-post-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.blog-post-title:hover {
+    color: #3498db;
+    text-decoration: none;
+}
+
+/* Sidebar */
+.sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 30px;
+}
+
+/* Navbar Styles */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    border-radius: 10px;
+}
+
+.card-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Badge Styles */
+.badge {
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #2c3e50 !important;
+}
+
+footer a {
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #3498db !important;
+    text-decoration: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .blog-post {
+        margin-bottom: 2rem;
+    }
+    
+    .sidebar {
+        margin-top: 3rem;
+    }
+}
+
+/* Animation for filter */
+.filter-active {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Back-to-top button */
+#backToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    font-size: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: opacity 0.3s ease;
+}
+
+#backToTop:hover {
+    background-color: #2980b9;
+}
+
+    </style>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const blogPosts = document.querySelectorAll('.blog-post');
+    
+    function filterPosts() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase();
+        const audienceFilter = document.getElementById('audienceFilter').value.toLowerCase();
+        
+        blogPosts.forEach(post => {
+            const title = post.querySelector('.blog-post-title').textContent.toLowerCase();
+            const category = post.querySelector('.badge').textContent.toLowerCase();
+            const audience = post.querySelectorAll('small.text-muted')[1].textContent.toLowerCase();
+            
+            const matchesSearch = title.includes(searchTerm);
+            const matchesCategory = categoryFilter === '' || category === categoryFilter;
+            const matchesAudience = audienceFilter === '' || audience.includes(audienceFilter);
+            
+            if (matchesSearch && matchesCategory && matchesAudience) {
+                post.style.display = 'block';
+                post.classList.add('filter-active');
+                setTimeout(() => post.classList.remove('filter-active'), 1500);
+            } else {
+                post.style.display = 'none';
+            }
+        });
+    }
+    
+    searchButton.addEventListener('click', filterPosts);
+    searchInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            filterPosts();
+        }
+    });
+    
+    document.getElementById('categoryFilter').addEventListener('change', filterPosts);
+    document.getElementById('audienceFilter').addEventListener('change', filterPosts);
+    
+    // Sticky Sidebar
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarOffset = sidebar.offsetTop;
+
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > sidebarOffset) {
+            sidebar.classList.add('fixed');
+        } else {
+            sidebar.classList.remove('fixed');
+        }
+    });
+
+    // Back to top button
+    const backToTopButton = document.createElement('button');
+    backToTopButton.id = 'backToTop';
+    backToTopButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    document.body.appendChild(backToTopButton);
+
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTopButton.style.display = 'block';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    });
+
+    backToTopButton.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+});
+
+    </script>
 </body>
 </html>
