@@ -156,41 +156,42 @@
             .dropdown-content { min-width: 120px; }
         }
     </style>
-    <div class="main-header-inner">
-        <!-- Logo/Brand -->
+      <div class="main-header-inner">
         <a href="/" class="brand-logo">
             <i class="fa-solid fa-shield-heart"></i>
             Drug Prevention <span style="color:#ffe066;">Member</span>
         </a>
-        <!-- Menu điều hướng member -->
         <nav class="nav-menu">
-            <a href="/" class="nav-link" th:classappend="${page=='dashboard'} ? 'active'">Trang chủ</a>
-            <a href="/courses" class="nav-link" th:classappend="${page=='courses'} ? 'active'">Khóa học</a>
-            <a href="/assessment" class="nav-link" th:classappend="${page=='assessment'} ? 'active'">Khảo sát</a>
-            <a href="/consultation" class="nav-link" th:classappend="${page=='consultation'} ? 'active'">Đặt lịch tư vấn</a>
-            <a href="/blog" class="nav-link" th:classappend="${page=='blog'} ? 'active'">Blog</a>
-            <a href="/about" class="nav-link" th:classappend="${page=='about'} ? 'active'">Giới thiệu</a>
+            <a href="/" class="nav-link">Trang chủ</a>
+            <a href="/courses" class="nav-link">Khóa học</a>
+            <a href="/assessment" class="nav-link">Khảo sát</a>
+            <a href="/consultation" class="nav-link">Đặt lịch tư vấn</a>
+            <a href="/blog" class="nav-link">Blog</a>
+            <a href="/about" class="nav-link">Giới thiệu</a>
         </nav>
-        <!-- Avatar & dropdown info -->
         <div class="avatar-dropdown" tabindex="0">
             <!-- Đã đăng nhập -->
-            <img th:if="${session.user != null}"
-                 class="avatar-img"
-                 th:src="${session.user.avatarUrl != null ? session.user.avatarUrl : 'https://randomuser.me/api/portraits/men/32.jpg'}"
-                 alt="avatar"/>
+            <th:block th:if="${session.user != null}">
+                <img class="avatar-img"
+                     th:src="${session.user.avatar != null and session.user.avatar != '' ? session.user.avatar : 'https://randomuser.me/api/portraits/men/32.jpg'}"
+                     alt="avatar"/>
+            </th:block>
             <!-- Chưa đăng nhập -->
-            <div th:unless="${session.user != null}" class="avatar-placeholder">
-                <i class="fa fa-user"></i>
-            </div>
+            <th:block th:unless="${session.user != null}">
+                <div class="avatar-placeholder">
+                    <i class="fa fa-user"></i>
+                </div>
+            </th:block>
             <div class="dropdown-content">
                 <!-- Nếu đã đăng nhập -->
-                <div th:if="${session.user != null}">
+                <th:block th:if="${session.user != null}">
                     <div class="dropdown-header">
                         <img class="avatar-img"
-                             th:src="${session.user.avatarUrl != null ? session.user.avatarUrl : 'https://randomuser.me/api/portraits/men/32.jpg'}"
+                             th:src="${session.user.avatar != null and session.user.avatar != '' ? session.user.avatar : 'https://randomuser.me/api/portraits/men/32.jpg'}"
                              alt="avatar"/>
                         <div>
-                            <div class="dropdown-name" th:text="${session.user.fullName}">Nguyễn Văn B</div>
+                            <div class="dropdown-name"
+                                 th:text="${session.user.username}">Tên đăng nhập</div>
                         </div>
                     </div>
                     <div class="dropdown-email" th:text="${session.user.email}">member@email.com</div>
@@ -207,9 +208,9 @@
                             </button>
                         </form>
                     </div>
-                </div>
+                </th:block>
                 <!-- Nếu chưa đăng nhập -->
-                <div th:unless="${session.user != null}" style="min-width:110px;">
+                <th:block th:unless="${session.user != null}">
                     <div class="dropdown-header" style="justify-content: center;">
                         <div class="avatar-placeholder" style="width:36px;height:36px;">
                             <i class="fa fa-user"></i>
@@ -220,7 +221,7 @@
                             <i class="fa fa-sign-in-alt"></i> Đăng nhập
                         </a>
                     </div>
-                </div>
+                </th:block>
             </div>
         </div>
     </div>

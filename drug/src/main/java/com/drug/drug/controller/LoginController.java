@@ -2,12 +2,13 @@ package com.drug.drug.controller;
 
 import com.drug.drug.entity.User;
 import com.drug.drug.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // Nếu dùng BCrypt, cần dependency spring-boot-starter-security
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 
 @Controller
@@ -16,11 +17,10 @@ public class LoginController {
     @Autowired
     private UserRepository userRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     // Trang đăng nhập
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model, @RequestParam(value = "error", required = false) String error) {
+        if (error != null) model.addAttribute("error", "Sai tài khoản hoặc mật khẩu!");
         return "login";
     }
 
@@ -32,7 +32,7 @@ public class LoginController {
         return "register";
     }
 
-    // Xử lý đăng ký (POST)
+    // Xử lý đăng ký (POST) - Plain text password
     @PostMapping("/register")
     public String doRegister(
             @RequestParam String username,
@@ -59,10 +59,10 @@ public class LoginController {
             return "register";
         }
 
-        // Tạo user mới
+        // Lưu plain text password
         User user = new User();
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password)); // Mã hóa mật khẩu
+        user.setPassword(password); // <<<< LƯU DẠNG THƯỜNG
         user.setEmail(email);
         user.setSdt(sdt);
         user.setSex(sex);
@@ -82,5 +82,26 @@ public class LoginController {
     @GetMapping("/forgot-password")
     public String forgotPassword() {
         return "forgot-password";
+    }
+
+    // Được gọi sau đăng nhập thành công (Spring Security cấu hình)
+    // TỰ ĐỘNG set user vào session để header giao diện biết ai đã login
+    @GetMapping("/login-success")
+    public String loginSuccess(HttpSession session, Principal principal) {
+        if (principal != null) {
+            // Nếu repository trả về Optional<User>
+            User user = userRepository.findByUsername(principal.getName()).orElse(null);
+            if (user != null) {
+                session.setAttribute("user", user); // Header lấy ${session.user} để hiển thị
+            }
+        }
+        return "redirect:/";
+    }
+
+    // Đăng xuất thủ công (nếu muốn xoá session user)
+    @PostMapping("/logout-custom")
+    public String logoutCustom(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 }

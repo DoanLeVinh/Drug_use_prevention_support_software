@@ -20,6 +20,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // Không mã hóa, dùng plain text password
         return NoOpPasswordEncoder.getInstance();
     }
 
@@ -36,7 +37,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .successHandler(customLoginSuccessHandler) // <-- Sử dụng successHandler tự custom
+                .successHandler(customLoginSuccessHandler)
                 .permitAll()
             )
             .logout(logout -> logout
