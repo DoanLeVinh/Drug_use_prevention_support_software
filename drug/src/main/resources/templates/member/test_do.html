@@ -334,7 +334,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" th:attr="data-test-id=${testId}">
     <div class="quiz-title">LÀM BÀI KHẢO SÁT</div>
     
     <div class="progress-container">
@@ -379,12 +379,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultScore = document.getElementById('resultScore');
     const actionButtons = document.getElementById('actionButtons');
     const progressBar = document.getElementById('progressBar');
-    
+    // Lưu thời gian bắt đầu làm bài (ISO string)
+    let startedAt = new Date().toISOString();
+    let submitLocked = false;
+
+    // Lấy testId từ attribute của container
+    const testId = document.querySelector('.container').getAttribute('data-test-id');
+
     // Update progress bar as user answers questions
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
         radio.addEventListener('change', updateProgress);
     });
-    
+
     function updateProgress() {
         const totalQuestions = document.querySelectorAll('.question-block').length;
         const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
@@ -404,7 +410,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     submitBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        
+
+        if (submitLocked) return; // Ngăn submit nhiều lần
+
         const questionBlocks = document.querySelectorAll('.question-block');
         let totalQuestions = questionBlocks.length;
         let answeredQuestions = 0;
@@ -413,7 +421,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         questionBlocks.forEach((block, index) => {
             const checkedRadio = block.querySelector('input[type="radio"]:checked');
-            
             if (!checkedRadio) {
                 unansweredQuestions.push(index + 1);
                 // Add visual feedback for unanswered questions
@@ -448,7 +455,37 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Calculate results
         const percentage = Math.round((correctAnswers / totalQuestions) * 100);
-        showResults(totalQuestions, correctAnswers, percentage);
+
+        // Gửi kết quả về backend (lưu vào DB)
+        const duration = Math.round((Date.now() - Date.parse(startedAt)) / 1000); // tính thời gian làm bài (giây)
+        const data = {
+            score: percentage,
+            totalQuestions: totalQuestions,
+            correctAnswers: correctAnswers,
+            startedAt: startedAt,
+            duration: duration
+        };
+
+        submitLocked = true; // Lock không cho submit nhiều lần
+
+        fetch(`/tests/${testId}/submit`, {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        })
+        .then(r => r.text())
+        .then(res => {
+            submitLocked = false;
+            if (res.trim() === "success") {
+                showResults(totalQuestions, correctAnswers, percentage);
+            } else {
+                showTemporaryMessage("Có lỗi khi lưu kết quả. Vui lòng thử lại.", "error");
+            }
+        })
+        .catch(e => {
+            submitLocked = false;
+            showTemporaryMessage("Có lỗi khi gửi dữ liệu!", "error");
+        });
     });
     
     function showResults(total, correct, percentage) {
@@ -457,6 +494,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Set score display
         resultScore.textContent = `${correct}/${total} câu đúng (${percentage}%)`;
         
+        // Reset class trước khi thêm mới
+        resultScore.className = 'result-score';
+
         // Add appropriate class based on score
         if (percentage === 100) {
             resultScore.classList.add('perfect-score');

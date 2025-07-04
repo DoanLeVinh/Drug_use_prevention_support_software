@@ -2,7 +2,6 @@ package com.drug.drug.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,61 +11,36 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId;
-
-    @Column(nullable = false, length = 100)
-    private String fullname;
-
-    @Column(nullable = false, length = 20)
-    private String phone;
-
-    @Column(nullable = false, length = 100)
-    private String email;
-
-    @Column(nullable = false, length = 100)
-    private String service;
-
-    @Column(nullable = false, length = 100)
-    private String consultant;
-
-    @Column(name = "booking_date", nullable = false)
     private LocalDate bookingDate;
 
-    @Column(name = "booking_time", nullable = false, length = 10)
     private String bookingTime;
 
-    @Column(name = "consultation_type", nullable = false, length = 20)
+    private String consultant;
+
     private String consultationType;
 
-    @Column(length = 400)
-    private String note;
-
-    @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
-    // Getters and Setters
+    private String email;
+
+    private String fullname;
+
+    private String note;
+
+    private String phone;
+
+    private String service;
+
+    private String status;  // Trạng thái đặt lịch
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user; // Đây là đối tượng User, KHÔNG phải Long userId
+
+    // --- Getter & Setter ---
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-
-    public String getFullname() { return fullname; }
-    public void setFullname(String fullname) { this.fullname = fullname; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getService() { return service; }
-    public void setService(String service) { this.service = service; }
-
-    public String getConsultant() { return consultant; }
-    public void setConsultant(String consultant) { this.consultant = consultant; }
 
     public LocalDate getBookingDate() { return bookingDate; }
     public void setBookingDate(LocalDate bookingDate) { this.bookingDate = bookingDate; }
@@ -74,12 +48,41 @@ public class Booking {
     public String getBookingTime() { return bookingTime; }
     public void setBookingTime(String bookingTime) { this.bookingTime = bookingTime; }
 
+    public String getConsultant() { return consultant; }
+    public void setConsultant(String consultant) { this.consultant = consultant; }
+
     public String getConsultationType() { return consultationType; }
     public void setConsultationType(String consultationType) { this.consultationType = consultationType; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getFullname() { return fullname; }
+    public void setFullname(String fullname) { this.fullname = fullname; }
 
     public String getNote() { return note; }
     public void setNote(String note) { this.note = note; }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getService() { return service; }
+    public void setService(String service) { this.service = service; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "Chờ xác nhận";
+        }
+    }
 }

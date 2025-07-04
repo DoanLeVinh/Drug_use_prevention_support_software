@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
     <style>
-        /* ...TOÀN BỘ CSS của bạn giữ nguyên ở đây... */
         :root {
             --primary: #2176ae;
             --secondary: #57b8ff;
@@ -89,7 +88,13 @@
                     <div class="course-info-row">
                         <span th:text="${course.topic}"></span>
                     </div>
-                    <a th:href="@{'/courses/' + ${course.id}}" class="btn">Xem khóa học</a>
+                    <!-- Nút Bắt đầu học -->
+                    <button type="button"
+                            class="course-btn"
+                            th:attr="data-id=${course.id}, data-name=${course.name}"
+                            onclick="confirmStartCourse(this)">
+                        Bắt đầu học
+                    </button>
                 </div>
             </div>
         </div>
@@ -99,7 +104,53 @@
     </section>
 </div>
 <div th:replace="member/footer :: main-footer"></div>
+
+<!-- Modal xác nhận bắt đầu học -->
+<div id="startCourseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(44,68,98,0.22); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:13px; max-width:370px; margin:0 auto; padding:28px 24px; box-shadow:0 8px 30px #2176ae15; text-align:center;">
+        <div style="font-weight:700; font-size:1.15em; margin-bottom:14px;">
+            Bạn có chắc chắn muốn bắt đầu học khóa: <span id="modalCourseName" style="color:#2176ae"></span>?
+        </div>
+        <div style="display:flex; gap:17px; justify-content:center;">
+            <button onclick="closeModal()" style="background:#eee;color:#666;border:none;padding:7px 18px;border-radius:7px;font-weight:600;cursor:pointer;">Hủy</button>
+            <button id="confirmStartBtn" onclick="startCourse()" style="background:#2176ae;color:#fff;border:none;padding:7px 18px;border-radius:7px;font-weight:600;cursor:pointer;">Xác nhận</button>
+        </div>
+    </div>
+</div>
+
 <script>
+let selectedCourseId = null;
+
+function confirmStartCourse(btn) {
+    selectedCourseId = btn.getAttribute('data-id');
+    const name = btn.getAttribute('data-name');
+    document.getElementById('modalCourseName').innerText = name;
+    document.getElementById('startCourseModal').style.display = 'flex';
+}
+function closeModal() {
+    document.getElementById('startCourseModal').style.display = 'none';
+    selectedCourseId = null;
+}
+function startCourse() {
+    if (!selectedCourseId) return;
+    fetch('/courses/' + selectedCourseId + '/start', {
+        method: 'POST'
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = '/courses/' + selectedCourseId;
+        } else {
+            alert('Có lỗi xảy ra, vui lòng thử lại!');
+            closeModal();
+        }
+    })
+    .catch(err => {
+        alert('Có lỗi xảy ra, vui lòng thử lại!');
+        closeModal();
+    });
+}
+
+// Các script filter giữ nguyên như cũ
 document.addEventListener('DOMContentLoaded', function() {
     const filterTarget = document.getElementById('filterTarget');
     const searchInput = document.getElementById('searchInput');

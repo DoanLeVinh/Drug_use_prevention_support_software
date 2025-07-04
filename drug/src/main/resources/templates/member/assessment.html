@@ -260,13 +260,10 @@
     <section class="section">
         <div class="survey-grid" id="surveyGrid">
             <div class="survey-card"
-     th:each="test : ${tests}"
-     th:attr="data-id=${test.id},data-type=${test.type},data-topic=${test.topic},data-title=${test.name},data-desc=${test.description}">
-
-                <!-- Ribbon nếu muốn -->
+                th:each="test : ${tests}"
+                th:attr="data-id=${test.id},data-type=${test.type},data-topic=${test.topic},data-title=${test.name},data-desc=${test.description}">
                 <span class="survey-ribbon" th:if="${test.type == 'Trắc nghiệm' || test.type == 'Đánh giá mức độ'}"
                       th:text="${test.type == 'Trắc nghiệm' ? 'Hot' : (test.type == 'Đánh giá mức độ' ? 'Mới' : '')}"></span>
-                <!-- Ảnh mô tả -->
                 <img class="survey-card-img" th:src="${test.image}" th:alt="${test.name}"/>
                 <div class="survey-card-body">
                     <div class="survey-title" th:text="${test.name}"></div>
@@ -291,6 +288,7 @@
         </div>
     </section>
 </div>
+
 <!-- Modal xác nhận -->
 <div id="surveyConfirmModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); align-items:center; justify-content:center;">
     <div style="background:#fff; border-radius:14px; box-shadow:0 8px 32px #2176ae33; padding:36px 26px; min-width:320px; max-width:95vw; text-align:center;">
@@ -303,7 +301,6 @@
 
 <div th:replace="member/footer :: main-footer"></div>
 <script>
-    // --- Lọc và tìm kiếm hoàn toàn trên giao diện (JS, không động tới backend) ---
     document.addEventListener('DOMContentLoaded', function() {
         const cards = Array.from(document.querySelectorAll('.survey-card'));
         const filterType = document.getElementById('filterType');
@@ -333,42 +330,45 @@
         filterType.addEventListener('change', doFilter);
         filterTopic.addEventListener('change', doFilter);
         searchInput.addEventListener('input', doFilter);
-          // Bắt popup xác nhận
-    const modal = document.getElementById('surveyConfirmModal');
-    const confirmOk = document.getElementById('surveyConfirmOk');
-    const confirmCancel = document.getElementById('surveyConfirmCancel');
-    const confirmTitle = document.getElementById('surveyConfirmTitle');
-    let nextSurveyUrl = "#";
 
-    // Lặp tất cả nút "Bắt đầu"
-    document.querySelectorAll('.survey-btn').forEach(function(btn, idx) {
-        btn.addEventListener('click', function(e) {
-            // Lấy id hoặc tên test để chuyển tiếp
-            const card = btn.closest('.survey-card');
-            const testName = card.getAttribute('data-title');
-            // Giả sử có trường id test (nên render hidden, hoặc render data-id ở survey-card)
-            // Ở đây sẽ ví dụ data-id:
-            const testId = card.getAttribute('data-id') || ""; // bạn cần bổ sung th:attr="data-id=${test.id}" vào survey-card
+        // Modal xác nhận bắt đầu khảo sát
+        const modal = document.getElementById('surveyConfirmModal');
+        const confirmOk = document.getElementById('surveyConfirmOk');
+        const confirmCancel = document.getElementById('surveyConfirmCancel');
+        const confirmTitle = document.getElementById('surveyConfirmTitle');
+        let selectedTestId = null;
+        let nextSurveyUrl = "#";
 
-            // Tạo url tới trang làm bài khảo sát (bạn tự xử lý route backend)
-            nextSurveyUrl = "/tests/" + testId + "/do"; // ví dụ
-            confirmTitle.textContent = testName;
-            modal.style.display = "flex";
+        document.querySelectorAll('.survey-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const card = btn.closest('.survey-card');
+                const testName = card.getAttribute('data-title');
+                selectedTestId = card.getAttribute('data-id');
+                confirmTitle.textContent = testName;
+                modal.style.display = "flex";
+            });
         });
-    });
 
-    confirmOk.onclick = function() {
-        modal.style.display = "none";
-        window.location.href = nextSurveyUrl;
-    }
-    confirmCancel.onclick = function() {
-        modal.style.display = "none";
-        nextSurveyUrl = "#";
-    }
-    // Đóng popup khi bấm ngoài modal
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) modal.style.display = "none";
-    });
+        confirmOk.onclick = function() {
+            if (!selectedTestId) return;
+            // Gọi API lưu lịch sử bắt đầu
+            fetch('/tests/' + selectedTestId + '/start', { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/tests/' + selectedTestId + '/do';
+                } else {
+                    alert('Có lỗi xảy ra khi bắt đầu khảo sát!');
+                    modal.style.display = "none";
+                }
+            });
+        }
+        confirmCancel.onclick = function() {
+            modal.style.display = "none";
+            selectedTestId = null;
+        }
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) modal.style.display = "none";
+        });
     });
 </script>
 </body>
