@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý đáp án</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Đáp án cho câu hỏi: <span th:text="${question.content}"></span></h1>
+    
+    <a th:href="@{/staff/questions/{questionId}/answers/new(questionId=${question.id})}" 
+       class="btn btn-primary mb-3">Thêm đáp án mới</a>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nội dung</th>
+                <th>Đáp án đúng</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="answer, iter : ${answers}">
+                <td th:text="${iter.index + 1}"></td>
+                <td th:text="${answer.content}"></td>
+                <td>
+                    <span th:if="${answer.isCorrect}" class="badge bg-success">Đúng</span>
+                    <span th:unless="${answer.isCorrect}" class="badge bg-secondary">Sai</span>
+                </td>
+                <td>
+                    <a th:href="@{/staff/answers/edit/{id}(id=${answer.id})}" 
+                       class="btn btn-sm btn-warning">Sửa</a>
+                    <a th:href="@{/staff/answers/delete/{id}(id=${answer.id})}" 
+                       class="btn btn-sm btn-danger" 
+                       onclick="return confirm('Xóa đáp án này?')">Xóa</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <a th:href="@{/staff/tests/{testId}/questions(testId=${question.testId})}" 
+       class="btn btn-secondary">Quay lại câu hỏi</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Lịch sử hoạt động | Thành viên</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Xem lại toàn bộ lịch sử hoạt động cá nhân: đặt lịch, làm bài kiểm tra, hoàn thành khóa học... dành cho thành viên hệ thống hỗ trợ phòng chống ma túy.">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2a6ebd;
+            --secondary: #45aaf2;
+            --border-radius: 12px;
+            --shadow: 0 3px 14px rgba(42,110,189,0.11);
+        }
+        body {
+            font-family: 'Inter', Arial, Helvetica, sans-serif;
+            background: #f8fbff;
+            margin: 0; padding: 0;
+        }
+        .container {
+        
+            max-width: 1300px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 28px 15px 33px 15px;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 2.1em;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 22px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        h1 .fa-history {
+            color: var(--secondary);
+            font-size: 1.1em;
+        }
+        .search-filter-row {
+            display: flex;
+            gap: 17px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+            align-items: center;
+        }
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .search-box input[type="text"] {
+            width: 100%;
+            border: 1.5px solid #dde6f3;
+            padding: 10px 33px 10px 13px;
+            border-radius: 8px;
+            font-size: 1.02em;
+            transition: border 0.14s;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px #45aaf240;
+        }
+        .search-box .fa-search {
+            position: absolute;
+            right: 12px; color: #b2c7e8;
+            font-size: 1em;
+        }
+        .filter-box {
+            min-width: 165px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-box label {
+            font-size: 1em;
+            color: #425a9b;
+            font-weight: 500;
+        }
+        .filter-box select {
+            padding: 7px 18px 7px 7px;
+            border-radius: 8px;
+            border: 1.5px solid #dde6f3;
+            background: #f8fbff;
+            font-size: 1.01em;
+            color: #2a6ebd;
+            font-weight: 600;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #f9fbfd;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 5px #0001;
+        }
+        th, td {
+            padding: 13px 12px;
+            text-align: left;
+        }
+        th {
+            background: #e9f3fb;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.06em;
+            border-bottom: 2px solid #e1ecf7;
+        }
+        td {
+            font-size: 1.02em;
+            border-bottom: 1px solid #edf3f8;
+            background: #fff;
+            vertical-align: top;
+            transition: background 0.18s;
+        }
+        tr:hover td {
+            background: #f4f9ff;
+        }
+        .activity-type {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .activity-type .fa {
+            font-size: 1.07em;
+            color: #45aaf2;
+        }
+        .activity-desc {
+            line-height: 1.56;
+        }
+        .activity-desc strong {
+            color: var(--primary);
+        }
+        @media (max-width: 700px) {
+            .container { padding: 12px 8px 15px 8px; }
+            h1 { font-size: 1.1em; gap: 7px; }
+            .search-filter-row { flex-direction: column; gap: 11px; }
+            table, th, td { font-size: 0.97em; }
+            th, td { padding: 7px 6px; }
+            .filter-box { min-width: 90px; }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="member/header :: main-header"></div>
+<div class="container">
+    <h1><i class="fa fa-history"></i> Lịch sử hoạt động cá nhân</h1>
+    <div class="search-filter-row">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm hoạt động, chi tiết...">
+            <i class="fa fa-search"></i>
+        </div>
+        <div class="filter-box">
+            <label for="typeFilter">Lọc theo:</label>
+            <select id="typeFilter">
+                <option value="">Tất cả</option>
+                <option value="Đặt lịch tư vấn">Đặt lịch tư vấn</option>
+                <option value="Làm bài kiểm tra">Làm bài kiểm tra</option>
+                <option value="Khóa học đã hoàn thành">Khóa học đã hoàn thành</option>
+            </select>
+        </div>
+    </div>
+    <table id="historyTable" aria-label="Lịch sử hoạt động thành viên">
+        <thead>
+        <tr>
+            <th>Thời gian</th>
+            <th>Loại hoạt động</th>
+            <th>Chi tiết</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row : ${history}">
+            <td th:text="${row['time']}">01/01/2024 12:00</td>
+            <td>
+                <span class="activity-type">
+                    <i th:classappend="|fa ${row['type'] == 'Đặt lịch tư vấn' ? 'fa-calendar-check'
+                                            : (row['type'] == 'Làm bài kiểm tra' ? 'fa-clipboard-question'
+                                            : (row['type'] == 'Khóa học đã hoàn thành' ? 'fa-graduation-cap'
+                                            : 'fa-circle-info'))}|"></i>
+                    <span th:text="${row['type']}">Loại hoạt động</span>
+                </span>
+            </td>
+            <td>
+                <span class="activity-desc" th:utext="${#strings.replace(row['description'],'|', '<br>')}"></span>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(history)}" class="no-data-row">
+            <td colspan="3" style="color: #888; text-align:center;">
+                Bạn chưa có lịch sử hoạt động nào.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+    <div th:replace="member/footer :: main-footer"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const typeFilter = document.getElementById('typeFilter');
+        const table = document.getElementById('historyTable');
+        const rows = table.querySelectorAll('tbody tr:not(.no-data-row)');
+        const noDataRow = table.querySelector('tr.no-data-row');
+
+        function normalize(str) {
+            return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function filterTable() {
+            let keyword = normalize(searchInput.value.trim());
+            let type = typeFilter.value;
+            let anyVisible = false;
+            rows.forEach(function(row) {
+                let cols = row.querySelectorAll('td');
+                let typeText = normalize(cols[1].innerText);
+                let allText = normalize(row.innerText);
+                let typeMatch = !type || typeText.includes(normalize(type));
+                let keywordMatch = !keyword || allText.includes(keyword);
+                let show = typeMatch && keywordMatch;
+                row.style.display = show ? "" : "none";
+                if (show) anyVisible = true;
+            });
+            if (noDataRow) {
+                noDataRow.style.display = anyVisible ? "none" : "";
+            }
+        }
+        searchInput.addEventListener('input', filterTable);
+        typeFilter.addEventListener('change', filterTable);
+    });
+</script>
+</body>
+</html>

@@ -196,12 +196,12 @@
                     </div>
                     <div class="dropdown-email" th:text="${session.user.email}">member@email.com</div>
                     <div class="dropdown-actions">
-                        <a class="dropdown-action-btn" href="/profile">
-                            <i class="fa fa-user-circle"></i> Trang cá nhân
-                        </a>
-                        <a class="dropdown-action-btn" href="/activity">
-                            <i class="fa fa-history"></i> Lịch sử hoạt động
-                        </a>
+                        <a class="dropdown-action-btn" th:href="@{/profile}">
+    <i class="fa fa-user-circle"></i> Trang cá nhân
+</a>
+<a class="dropdown-action-btn" th:href="@{/history}">
+    <i class="fa fa-history"></i> Lịch sử hoạt động
+</a>
                         <form th:action="@{/logout}" method="post" style="margin:0;padding:0;">
                             <button class="dropdown-action-btn" type="submit">
                                 <i class="fa fa-sign-out-alt"></i> Đăng xuất

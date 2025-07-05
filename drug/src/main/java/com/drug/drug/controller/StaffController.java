@@ -1,17 +1,46 @@
 package com.drug.drug.controller;
 
+import com.drug.drug.entity.Booking;
+import com.drug.drug.service.BookingService;
+import com.drug.drug.model.SurveyForm;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model; // BỔ SUNG import này!
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import com.drug.drug.model.SurveyForm; // BỔ SUNG import này!
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/staff")
 public class StaffController {
 
+    private final BookingService bookingService;
+
+    public StaffController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
+
+    @GetMapping("/appointments")
+    public String appointments(Model model) {
+        List<Booking> appointments = bookingService.getAllBookings();
+        model.addAttribute("appointments", appointments);
+        return "staff/appointments";
+    }
+
+    @PostMapping("/appointments/{id}/update-status")
+    public String updateStatus(@PathVariable Long id, 
+                             @RequestParam String status,
+                             RedirectAttributes redirectAttributes) {
+        Booking updatedBooking = bookingService.updateBookingStatus(id, status);
+        if (updatedBooking != null) {
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật trạng thái thành công!");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy booking!");
+        }
+        return "redirect:/staff/appointments";
+    }
+
+    // Các phương thức khác giữ nguyên
     @GetMapping("/dashboard")
     public String dashboard() {
         return "staff/dashboard";
@@ -20,11 +49,6 @@ public class StaffController {
     @GetMapping("/user-management")
     public String userManagement() {
         return "staff/user-management";
-    }
-
-    @GetMapping("/appointments")
-    public String appointments() {
-        return "staff/appointments";
     }
 
     @GetMapping("/courses")
@@ -39,15 +63,13 @@ public class StaffController {
 
     @GetMapping("/surveys")
     public String surveys(Model model) {
-        // Lấy dữ liệu cho trang surveys (nếu có)
         model.addAttribute("newSurvey", new SurveyForm());
         return "staff/surveys";
     }
 
     @PostMapping("/surveys")
     public String createSurvey(@ModelAttribute("newSurvey") SurveyForm surveyForm, Model model) {
-        // (Bạn có thể validate, lưu vào DB, etc.)
-        // Sau khi lưu, có thể redirect về trang danh sách khảo sát
+        System.out.println(">>> Creating new survey: " + surveyForm);
         return "redirect:/staff/surveys";
     }
 

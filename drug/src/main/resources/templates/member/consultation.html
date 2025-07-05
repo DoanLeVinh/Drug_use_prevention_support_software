@@ -360,34 +360,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Dữ liệu giờ trống
-    const doctorAvailableHours = {
-        hung: { 
-            '2023-11-01': ['08:30', '09:30', '14:00', '15:00'], 
-            '2023-11-02': ['08:30', '10:00', '16:00'],
-            '2023-11-03': ['09:00', '11:00', '14:30'],
-            '2023-11-04': ['10:00', '13:00', '15:30']
-        },
-        lan:  { 
-            '2023-11-01': ['09:00', '11:00', '16:00'],           
-            '2023-11-02': ['10:00', '13:30', '15:00'],
-            '2023-11-03': ['08:30', '12:00', '16:30'],
-            '2023-11-04': ['09:30', '14:00']
-        },
-        quan: { 
-            '2023-11-01': ['08:30', '13:00'],                    
-            '2023-11-02': ['09:00', '11:00', '15:30'],
-            '2023-11-03': ['10:30', '14:00', '16:00'],
-            '2023-11-04': ['08:00', '12:30']
-        },
-        hien: { 
-            '2023-11-01': ['08:00', '09:00', '14:30'],            
-            '2023-11-02': ['08:00', '10:00', '14:30'],
-            '2023-11-03': ['09:00', '11:30', '15:00'],
-            '2023-11-04': ['10:00', '13:30']
-        }
-    };
-
     const methodCards = document.querySelectorAll('.method-card');
     const consultForm = document.getElementById('consultForm');
     const consultationTypeInput = document.getElementById('consultation_type');
@@ -401,6 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedMethod = '';
     let selectedHour = '';
 
+    // Khởi tạo ngày tối thiểu là ngày hiện tại
     function initMinDate() {
         const today = new Date();
         const yyyy = today.getFullYear();
@@ -410,44 +383,49 @@ document.addEventListener('DOMContentLoaded', function() {
         dateInput.value = dateInput.min;
     }
 
+    // Hiển thị form đặt lịch
     function showBookingForm() {
         formContainer.style.display = 'block';
         overlay.style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
 
+    // Đóng form đặt lịch
     function closeBookingForm() {
         formContainer.style.display = 'none';
         overlay.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 
+    // Hiển thị modal thành công
     function showSuccessModal() {
         closeBookingForm();
         successModal.classList.add('show');
         overlay.style.display = 'block';
     }
 
+    // Ẩn modal thành công
     function hideSuccessModal() {
         successModal.classList.remove('show');
         overlay.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 
+    // Điều hướng về trang chủ
     function goToHomePage() {
         window.location.href = '/';
     }
 
+    // Tiếp tục đặt lịch mới
     function continueBooking() {
         hideSuccessModal();
-        // Reset form
         consultForm.reset();
         initMinDate();
         hourList.innerHTML = '<div class="no-slots-available">Vui lòng chọn chuyên gia và ngày</div>';
-        // Show form again
         showBookingForm();
     }
 
+    // Xử lý khi chọn phương thức tư vấn
     function handleMethodSelection(card) {
         methodCards.forEach(c => {
             c.classList.remove('selected');
@@ -459,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedMethod = card.dataset.method;
         consultationTypeInput.value = selectedMethod;
 
-        // Show quick contact options for hotline/social methods
+        // Hiển thị quick contact cho hotline/social
         const quickContact = card.querySelector('.quick-contact-container');
         if (quickContact) quickContact.style.display = 'flex';
 
@@ -472,6 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Cập nhật giờ trống từ API
     function updateAvailableHours() {
         hourList.innerHTML = '';
         selectedHour = '';
@@ -484,64 +463,98 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        const hours = (doctorAvailableHours[doctor] && doctorAvailableHours[doctor][date]) || [];
+        // Gọi API để lấy giờ trống thực tế từ server
+        fetch(`/api/available-hours?doctor=${doctor}&date=${date}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi lấy giờ trống');
+                }
+                return response.json();
+            })
+            .then(hours => {
+                if (hours.length === 0) {
+                    hourList.innerHTML = '<div class="no-slots-available">Không có giờ trống. Vui lòng chọn ngày khác.</div>';
+                    return;
+                }
+                
+                hours.forEach(hour => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'hour-btn';
+                    btn.textContent = hour;
+                    btn.onclick = function() {
+                        document.querySelectorAll('.hour-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        selectedHour = hour;
+                        bookingTimeInput.value = hour;
+                    };
+                    hourList.appendChild(btn);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                hourList.innerHTML = `<div class="no-slots-available">${error.message}</div>`;
+            });
+    }
+
+    // Xử lý submit form bằng AJAX
+    function handleFormSubmit(e) {
+        e.preventDefault();
         
-        if (hours.length === 0) {
-            hourList.innerHTML = '<div class="no-slots-available">Không có giờ trống. Vui lòng chọn ngày khác.</div>';
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        submitText.textContent = 'Đang xử lý...';
+        submitBtn.disabled = true;
+        
+        // Kiểm tra xem đã chọn giờ chưa
+        if (!bookingTimeInput.value) {
+            alert('Vui lòng chọn giờ tư vấn');
+            submitText.textContent = 'Đặt lịch';
+            submitBtn.disabled = false;
             return;
         }
         
-        hours.forEach(hour => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'hour-btn';
-            btn.textContent = hour;
-            btn.onclick = function() {
-                document.querySelectorAll('.hour-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-                selectedHour = hour;
-                bookingTimeInput.value = hour;
-            };
-            hourList.appendChild(btn);
+        // Gửi dữ liệu bằng AJAX
+        fetch(consultForm.action, {
+            method: consultForm.method,
+            body: new FormData(consultForm),
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Lỗi khi gửi dữ liệu');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                showSuccessModal();
+            } else {
+                alert('Đặt lịch thất bại: ' + (data.message || 'Vui lòng thử lại sau'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra: ' + error.message);
+        })
+        .finally(() => {
+            submitText.textContent = 'Đặt lịch';
+            submitBtn.disabled = false;
         });
     }
 
+    // Gắn sự kiện
     methodCards.forEach(card => {
         card.addEventListener('click', () => handleMethodSelection(card));
     });
 
     consultantSelect.addEventListener('change', updateAvailableHours);
     dateInput.addEventListener('change', updateAvailableHours);
+    consultForm.addEventListener('submit', handleFormSubmit);
 
-    // Handle form submission
-    consultForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Here you would normally submit the form to the server
-        // For demo purposes, we'll just show the success modal
-        showSuccessModal();
-        
-        // In a real application, you would use AJAX to submit the form
-        // and show the success modal only after successful submission
-        /*
-        fetch(this.action, {
-            method: this.method,
-            body: new FormData(this)
-        })
-        .then(response => {
-            if (response.ok) {
-                showSuccessModal();
-            } else {
-                // Handle error
-            }
-        })
-        .catch(error => {
-            // Handle error
-        });
-        */
-    });
-
-    // Initialize form
+    // Khởi tạo form
     initMinDate();
     
     // Copy hotline function

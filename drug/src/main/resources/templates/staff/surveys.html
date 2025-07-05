@@ -2,533 +2,68 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý khảo sát | Drug Use Prevention Support System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ICON -->
+    <title>Lịch sử làm bài khảo sát</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background: #f6fbff;
-            color: #233044;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-        }
-        .main-header { margin-bottom: 0; }
-        .survey-container {
-            width: 100vw;
-            min-height: calc(100vh - 60px);
-            padding: 0 36px 36px 36px;
-            box-sizing: border-box;
-        }
-        .page-title {
-            font-size: 1.28rem;
-            font-weight: 600;
-            margin: 32px 0 18px 0;
-            color: #2176ae;
-            letter-spacing: 0.01em;
-        }
-        .filter-bar {
-            background: #f2f8fd;
-            border-radius: 12px;
-            padding: 18px 18px;
-            margin-bottom: 28px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            box-sizing: border-box;
-        }
-        .filter-group {
-            display: flex;
-            gap: 17px;
-            flex-wrap: wrap;
-        }
-        .filter-item label {
-            font-size: 0.98em;
-            color: #336699;
-            margin-bottom: 3px;
-            display: block;
-        }
-        .filter-item input,
-        .filter-item select {
-            padding: 7px 11px;
-            border: 1px solid #e3eaf2;
-            border-radius: 7px;
-            font-size: 1em;
-            min-width: 130px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-        }
-        .btn {
-            padding: 9px 19px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: 0.17s;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            font-weight: 500;
-        }
-        .btn-primary {
-            background: #2176ae;
-            color: #fff;
-        }
-        .btn-primary:hover {
-            background: #57b8ff;
-        }
-        .btn-outline {
-            background: #fff;
-            color: #2176ae;
-            border: 1.5px solid #2176ae;
-        }
-        .btn-outline:hover {
-            background: #f6fbff;
-        }
-        .table-responsive {
-            overflow-x: auto;
-            width: 100%;
-        }
-        .survey-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            border-radius: 13px;
-            box-shadow: 0 1px 7px #d0e8fd33;
-            overflow: hidden;
-        }
-        .survey-table th, .survey-table td {
-            padding: 11px 16px;
-            font-size: 1em;
-        }
-        .survey-table th {
-            background: #eaf3fa;
-            text-align: left;
-            color: #255c88;
-            text-transform: uppercase;
-            font-weight: 600;
-            border-bottom: 2px solid #e3eaf2;
-        }
-        .survey-table td {
-            border-bottom: 1px solid #f3f3f3;
-            color: #232e33;
-        }
-        .survey-table tr:hover td {
-            background: #f8fcfe;
-        }
-        .badge {
-            display: inline-block;
-            padding: 4px 13px;
-            border-radius: 7px;
-            font-size: 0.95em;
-            font-weight: 500;
-        }
-        .badge-active {
-            background: #eafaf1;
-            color: #21ae66;
-        }
-        .badge-inactive {
-            background: #f8dddd;
-            color: #e74c3c;
-        }
-        .badge-public {
-            background: #e9f7fe;
-            color: #2176ae;
-        }
-        .badge-private {
-            background: #fffbe2;
-            color: #fbc02d;
-        }
-        .action-cell {
-            display: flex;
-            gap: 8px;
-        }
-        .action-btn {
-            width: 31px;
-            height: 31px;
-            border: none;
-            background: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.08em;
-            transition: 0.17s;
-        }
-        .action-btn:hover {
-            background: #eaf2fb;
-        }
-        .action-btn.edit { color: #2176ae; }
-        .action-btn.delete { color: #e74c3c; }
-        .action-btn.view { color: #21ae66; }
-        .action-btn.result { color: #fbc02d;}
-        /* Modal & Form khảo sát động */
-        #addSurveyModal .modal-content {
-            background: #fff;
-            border-radius: 14px;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 0 2px 16px #2176ae2a;
-            padding: 30px 30px 18px 30px;
-            position: relative;
-            animation: modalIn 0.18s;
-        }
-        @keyframes modalIn { from {opacity: 0; transform: translateY(22px);} to {opacity: 1; transform: none;} }
-
-        #addSurveyModal .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-        #addSurveyModal .modal-close {
-            border: none;
-            background: none;
-            font-size: 1.7rem;
-            color: #bbb;
-            cursor: pointer;
-            margin-left: 8px;
-            transition: 0.18s;
-        }
-        #addSurveyModal .modal-close:hover { color: #e74c3c; }
-
-        #addSurveyModal form .form-group {
-            margin-bottom: 15px;
-        }
-        #addSurveyModal form label {
-            font-size: 1.01em;
-            font-weight: 500;
-            color: #2560a7;
-            margin-bottom: 5px;
-            display: block;
-        }
-        #addSurveyModal form input, 
-        #addSurveyModal form select, 
-        #addSurveyModal form textarea {
-            width: 100%;
-            padding: 8px 13px;
-            border-radius: 7px;
-            border: 1.5px solid #e3eaf2;
-            font-size: 1em;
-            transition: border 0.14s;
-            outline: none;
-            background: #f8fafc;
-        }
-        #addSurveyModal form input:focus, 
-        #addSurveyModal form select:focus,
-        #addSurveyModal form textarea:focus {
-            border: 1.5px solid #2176ae;
-            background: #fff;
-        }
-        #addSurveyModal .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 13px;
-            margin-top: 10px;
-        }
-        #addSurveyModal .question-list {
-            margin-bottom: 14px;
-        }
-        #addSurveyModal .question-block {
-            background: #f5fafd;
-            border-radius: 8px;
-            padding: 11px 13px 8px 13px;
-            margin-bottom: 13px;
-            position: relative;
-            border: 1px solid #eaf2fb;
-        }
-        #addSurveyModal .remove-question {
-            position: absolute;
-            right: 10px;
-            top: 9px;
-            background: none;
-            border: none;
-            color: #e74c3c;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: 0.16s;
-        }
-        #addSurveyModal .remove-question:hover { color: #c0392b; }
-        #addSurveyModal .add-question-btn {
-            background: #fff;
-            color: #2176ae;
-            border: 1.5px dashed #2176ae;
-            padding: 7px 20px;
-            border-radius: 7px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 3px;
-            transition: background 0.16s, color 0.16s;
-        }
-        #addSurveyModal .add-question-btn:hover {
-            background: #eaf4fa;
-            color: #ff7043;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0; top: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(33, 118, 174, 0.13);
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.show { display: flex; }
-        @media (max-width: 900px) {
-            .survey-container { padding-left: 2vw; padding-right: 2vw; }
-        }
-        @media (max-width: 700px) {
-            .survey-container { padding: 0 1vw 30px 1vw;}
-            .filter-bar { flex-direction: column; gap: 12px;}
-        }
-        #addSurveyModal .modal-content {
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; background: #f6fbff;}
+        .container { max-width: 1200px; margin: 40px auto; background: #fff; border-radius: 13px; box-shadow: 0 2px 16px #d0e8fd22; padding: 30px; }
+        h2 { color: #2176ae; margin-bottom: 22px;}
+        .result-table { width: 100%; border-collapse: collapse; margin-top: 14px; background: #fff;}
+        .result-table th, .result-table td { padding: 12px 15px; font-size: 1em; }
+        .result-table th { background: #eaf3fa; color: #255c88; font-weight: 600; text-transform: uppercase; border-bottom: 2px solid #e3eaf2;}
+        .result-table td { border-bottom: 1px solid #f3f3f3;}
+        .action-btn { background: #2176ae; color: #fff; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer;}
+        .action-btn:hover { background: #1765a0; }
     </style>
 </head>
 <body>
-
-<!-- HEADER -->
 <div th:replace="staff/header :: main-header"></div>
 
-<div class="survey-container">
-
-    <div class="page-title">Quản lý bài test/khảo sát</div>
-
-    <!-- FILTER BAR -->
-    <form class="filter-bar" method="get" th:action="@{/staff/surveys}">
-        <div class="filter-group">
-            <div class="filter-item">
-                <label for="search">Tìm kiếm</label>
-                <input type="text" id="search" name="q"
-                       th:value="${q}" placeholder="Tên bài khảo sát...">
-            </div>
-            <div class="filter-item">
-                <label for="status">Trạng thái</label>
-                <select id="status" name="status">
-                    <option value="">Tất cả</option>
-                    <option value="active" th:selected="${status=='active'}">Đang mở</option>
-                    <option value="inactive" th:selected="${status=='inactive'}">Đã đóng</option>
-                </select>
-            </div>
-            <div class="filter-item">
-                <label for="type">Loại khảo sát</label>
-                <select id="type" name="type">
-                    <option value="">Tất cả</option>
-                    <option value="ASSIST" th:selected="${type=='ASSIST'}">ASSIST</option>
-                    <option value="CRAFFT" th:selected="${type=='CRAFFT'}">CRAFFT</option>
-                    <option value="quiz" th:selected="${type=='quiz'}">Trắc nghiệm</option>
-                    <option value="custom" th:selected="${type=='custom'}">Tùy chỉnh</option>
-                </select>
-            </div>
-        </div>
-        <div class="action-buttons">
-            <button class="btn btn-outline" type="submit">
-                <i class="fa fa-filter"></i> Lọc
-            </button>
-            <button class="btn btn-primary" type="button" id="openAddSurvey">
-                <i class="fa fa-plus"></i> Thêm khảo sát
-            </button>
-        </div>
-    </form>
-
-    <!-- TABLE KHẢO SÁT -->
-    <div class="table-responsive">
-        <table class="survey-table">
+<div class="container">
+    <h2>Lịch sử làm bài khảo sát</h2>
+    <div style="overflow-x: auto;">
+        <table class="result-table">
             <thead>
-            <tr>
-                <th>Mã</th>
-                <th>Tên khảo sát</th>
-                <th>Loại</th>
-                <th>Trạng thái</th>
-                <th>Lượt làm</th>
-                <th>Thời gian tạo</th>
-                <th>Hiển thị</th>
-                <th>Hành động</th>
-            </tr>
+                <tr>
+                    <th>Mã</th>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Tên khảo sát</th>
+                    <th>Điểm</th>
+                    <th>Số câu đúng</th>
+                    <th>Tổng số câu</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày nộp</th>
+                    <th>Thời gian làm (phút)</th>
+                    <th>Chi tiết</th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="survey : ${surveys}">
-                <td th:text="${survey.code}">SURV001</td>
-                <td th:text="${survey.name}">Bài test ASSIST</td>
+            <tr th:each="row : ${testResults}">
+                <td th:text="${row[0]}"></td>
+                <td th:text="${row[1]}"></td>
+                <td th:text="${row[2]}"></td>
+                <td th:text="${row[3]}"></td>
+                <td th:text="${row[4]}"></td>
+                <td th:text="${row[6]}"></td>
+                <td th:text="${row[5]}"></td>
+                <td th:text="${#dates.format(row[7], 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${#dates.format(row[8], 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${row[9]}"></td>
                 <td>
-                    <span th:switch="${survey.type}" class="badge">
-                        <span th:case="'ASSIST'" class="badge-public">ASSIST</span>
-                        <span th:case="'CRAFFT'" class="badge-private">CRAFFT</span>
-                        <span th:case="'quiz'" class="badge-public">Trắc nghiệm</span>
-                        <span th:case="*">Tùy chỉnh</span>
-                    </span>
-                </td>
-                <td>
-                    <span th:if="${survey.active}" class="badge badge-active">Đang mở</span>
-                    <span th:unless="${survey.active}" class="badge badge-inactive">Đã đóng</span>
-                </td>
-                <td th:text="${survey.doCount}">56</td>
-                <td th:text="${#dates.format(survey.createdAt, 'dd/MM/yyyy')}">01/07/2024</td>
-                <td>
-                    <span th:if="${survey.publicDisplay}" class="badge badge-public">Công khai</span>
-                    <span th:unless="${survey.publicDisplay}" class="badge badge-private">Ẩn</span>
-                </td>
-                <td>
-                    <div class="action-cell">
-                        <button class="action-btn view" type="button"
-                                th:attr="data-id=${survey.id}" title="Xem chi tiết">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="action-btn edit" type="button"
-                                th:attr="data-id=${survey.id}" title="Chỉnh sửa">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button class="action-btn result" type="button"
-                                th:attr="data-id=${survey.id}" title="Xem kết quả">
-                            <i class="fa fa-bar-chart"></i>
-                        </button>
-                        <button class="action-btn delete" type="button"
-                                th:attr="data-id=${survey.id}" title="Xóa khảo sát">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </div>
+                    <a th:href="@{'/staff/test-results/' + ${row[0]}}" class="action-btn">
+                        Xem chi tiết
+                    </a>
                 </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(surveys)}">
-                <td colspan="8" style="text-align:center;color:#bbb;padding:24px 0;">
-                    Không có khảo sát nào phù hợp.
+            <tr th:if="${#lists.isEmpty(testResults)}">
+                <td colspan="11" style="text-align:center;color:#bbb;padding:24px 0;">
+                    Không có kết quả nào phù hợp.
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-
-    <!-- MODAL THÊM KHẢO SÁT (ẩn/hiện bằng JS, động) -->
-    <div id="addSurveyModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span style="font-size:1.08em;font-weight:600;">
-                    Thêm bài test/khảo sát mới
-                </span>
-                <button class="modal-close" type="button"
-                        onclick="document.getElementById('addSurveyModal').classList.remove('show')">
-                    &times;
-                </button>
-            </div>
-            <form id="surveyForm" th:action="@{/staff/surveys}" method="post" th:object="${newSurvey}">
-                <div class="form-group">
-                    <label for="add-name">Tên khảo sát</label>
-                    <input id="add-name" name="name" type="text" required>
-                </div>
-                <div class="form-group">
-                    <label for="add-type">Loại khảo sát</label>
-                    <select id="add-type" name="type" required>
-                        <option value="ASSIST">ASSIST (chuẩn hóa)</option>
-                        <option value="CRAFFT">CRAFFT</option>
-                        <option value="quiz">Trắc nghiệm</option>
-                        <option value="custom">Tùy chỉnh</option>
-                    </select>
-                </div>
-                <!-- Vùng này sẽ hiện khi chọn "Trắc nghiệm" -->
-                <div id="quiz-questions-block" style="display:none;">
-                    <label style="font-size:1em;font-weight:500;color:#2176ae;margin-bottom:5px;display:block;">
-                        Danh sách câu hỏi trắc nghiệm
-                    </label>
-                    <div class="question-list" id="questionList"></div>
-                    <button type="button" class="add-question-btn" onclick="addQuestion()">
-                        <i class="fa fa-plus"></i> Thêm câu hỏi
-                    </button>
-                </div>
-                <div class="form-group">
-                    <label for="add-status">Trạng thái</label>
-                    <select id="add-status" name="active" required>
-                        <option value="true">Đang mở</option>
-                        <option value="false">Đã đóng</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="add-display">Hiển thị</label>
-                    <select id="add-display" name="publicDisplay" required>
-                        <option value="true">Công khai</option>
-                        <option value="false">Ẩn</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline"
-                            onclick="document.getElementById('addSurveyModal').classList.remove('show')">
-                        Hủy bỏ
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Lưu khảo sát
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
 </div>
-
-<!-- SCRIPT modal và động form -->
-<script>
-    // Mở modal
-    document.getElementById('openAddSurvey').onclick = function() {
-        document.getElementById('addSurveyModal').classList.add('show');
-    };
-    // Đóng modal bằng ESC
-    window.addEventListener('keydown', function(e){
-        if (e.key === "Escape") {
-            document.getElementById('addSurveyModal').classList.remove('show');
-        }
-    });
-    // Hiện/ẩn form câu hỏi trắc nghiệm khi chọn loại
-    document.getElementById('add-type').onchange = function () {
-        const quizBlock = document.getElementById('quiz-questions-block');
-        if (this.value === 'quiz') {
-            quizBlock.style.display = '';
-        } else {
-            quizBlock.style.display = 'none';
-            document.getElementById('questionList').innerHTML = '';
-            questionIndex = 0;
-        }
-    };
-    // Thêm câu hỏi động cho trắc nghiệm
-    let questionIndex = 0;
-    function addQuestion() {
-        const questionList = document.getElementById('questionList');
-        questionIndex++;
-        const qBlock = document.createElement('div');
-        qBlock.className = 'question-block';
-        qBlock.innerHTML = `
-            <button type="button" class="remove-question" onclick="this.parentElement.remove()">
-                <i class="fa fa-times"></i>
-            </button>
-            <div style="margin-bottom:9px;">
-                <label style="font-weight:500;">Câu hỏi</label>
-                <input name="questions[${questionIndex}].content" type="text" required placeholder="Nội dung câu hỏi">
-            </div>
-            <div>
-                <label style="font-weight:500;">Các đáp án</label>
-                <input name="questions[${questionIndex}].optionA" type="text" required placeholder="Đáp án A">
-                <input name="questions[${questionIndex}].optionB" type="text" required placeholder="Đáp án B">
-                <input name="questions[${questionIndex}].optionC" type="text" placeholder="Đáp án C">
-                <input name="questions[${questionIndex}].optionD" type="text" placeholder="Đáp án D">
-            </div>
-            <div style="margin-top:8px;">
-                <label style="font-weight:500;">Đáp án đúng</label>
-                <select name="questions[${questionIndex}].correctAnswer" required>
-                    <option value="">Chọn đáp án</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                </select>
-            </div>
-        `;
-        questionList.appendChild(qBlock);
-    }
-</script>
 </body>
 </html>

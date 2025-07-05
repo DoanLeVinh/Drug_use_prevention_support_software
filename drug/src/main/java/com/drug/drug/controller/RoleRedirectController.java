@@ -13,19 +13,22 @@ public class RoleRedirectController {
 
     @GetMapping("/role-redirect")
     public void redirectBasedOnRole(Authentication authentication, HttpServletResponse response) throws IOException {
-        if (authentication == null) {
-            response.sendRedirect("/login");
+        if (authentication == null || !authentication.isAuthenticated()) {
+            response.sendRedirect("/login?redirect=/role-redirect");
             return;
         }
+
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            response.sendRedirect("/admin");
+            response.sendRedirect("/admin/dashboard");
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STAFF"))) {
-            response.sendRedirect("/staff");
+            response.sendRedirect("/staff/dashboard");
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_DOCTOR"))) {
-            response.sendRedirect("/doctor");
+            response.sendRedirect("/doctor/dashboard");
+        } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MEMBER"))) {
+            response.sendRedirect("/member/dashboard");
         } else {
-            // Mặc định: member hoặc role khác về dashboard
-            response.sendRedirect("/dashboard");
+            // Xử lý các role không xác định
+            response.sendRedirect("/access-denied");
         }
     }
 }

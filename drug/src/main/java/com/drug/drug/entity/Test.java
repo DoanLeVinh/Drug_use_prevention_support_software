@@ -94,7 +94,5 @@ public class Test {
         this.createdAt = createdAt;
     }
 
-    // Getter & Setter đầy đủ ở đây
-    // ... (bạn có thể tự sinh bằng IDE)
     
 }
