@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý chương trình truyền thông | Drug Use Prevention Support System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background: #f6fbff;
+            color: #233044;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+        .main-header {
+            margin-bottom: 0;
+        }
+        .event-container {
+            width: 100vw;
+            min-height: calc(100vh - 60px);
+            padding: 0 36px 36px 36px;
+            box-sizing: border-box;
+        }
+        .page-title {
+            font-size: 1.28rem;
+            font-weight: 600;
+            margin: 32px 0 18px 0;
+            color: #2176ae;
+            letter-spacing: 0.01em;
+        }
+        .event-actions {
+            display: flex;
+            gap: 13px;
+            margin-bottom: 23px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .btn {
+            padding: 9px 19px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: 0.17s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #2176ae;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #57b8ff;
+        }
+        .btn-outline {
+            background: #fff;
+            color: #2176ae;
+            border: 1.5px solid #2176ae;
+        }
+        .btn-outline:hover {
+            background: #f6fbff;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+        }
+        .event-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 1px 7px #d0e8fd33;
+            overflow: hidden;
+        }
+        .event-table th,
+        .event-table td {
+            padding: 12px 16px;
+            font-size: 1em;
+        }
+        .event-table th {
+            background: #eaf3fa;
+            text-align: left;
+            color: #255c88;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-bottom: 2px solid #e3eaf2;
+        }
+        .event-table td {
+            border-bottom: 1px solid #f3f3f3;
+            color: #232e33;
+            vertical-align: top;
+        }
+        .event-table tr:hover td {
+            background: #f8fcfe;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 13px;
+            border-radius: 7px;
+            font-size: 0.92em;
+            font-weight: 600;
+        }
+        .badge-ongoing {
+            background: #eafaf1;
+            color: #21ae66;
+        }
+        .badge-upcoming {
+            background: #fffbe2;
+            color: #fbc02d;
+        }
+        .badge-completed {
+            background: #e9f7fe;
+            color: #2176ae;
+        }
+        .badge-cancelled {
+            background: #f8dddd;
+            color: #e74c3c;
+        }
+        .action-cell {
+            display: flex;
+            gap: 7px;
+        }
+        .action-btn {
+            width: 33px;
+            height: 33px;
+            border: none;
+            background: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: 0.17s;
+        }
+        .action-btn:hover {
+            background: #eaf2fb;
+        }
+        .action-btn.edit {
+            color: #2176ae;
+        }
+        .action-btn.delete {
+            color: #e74c3c;
+        }
+        .action-btn.view {
+            color: #21ae66;
+        }
+        .action-btn.stat {
+            color: #fbc02d;
+        }
+        .event-cover {
+            width: 70px;
+            height: 44px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1.5px solid #eaeaea;
+            box-shadow: 0 1px 5px #c2e2fd26;
+        }
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(33, 118, 174, 0.15);
+            align-items: center;
+            justify-content: center;
+            animation: modal-fade-in 0.18s;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 430px;
+            box-shadow: 0 2px 16px #2176ae2a;
+            padding: 27px 30px 18px 30px;
+            position: relative;
+            animation: modalIn 0.2s;
+        }
+        .modal-close {
+            position: absolute;
+            right: 18px;
+            top: 10px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.4em;
+            cursor: pointer;
+        }
+        .modal-close:hover {
+            color: #e74c3c;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(22px);}
+            to   { opacity: 1; transform: translateY(0);}
+        }
+        @keyframes modal-fade-in {
+            from { opacity: 0;}
+            to { opacity: 1;}
+        }
+        .modal-title {
+            font-size: 1.13em;
+            font-weight: 600;
+            color: #2176ae;
+            margin-bottom: 17px;
+        }
+        .modal-action-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+        @media (max-width: 900px) {
+            .event-container {
+                padding-left: 2vw;
+                padding-right: 2vw;
+            }
+        }
+        @media (max-width: 700px) {
+            .event-container {
+                padding: 0 1vw 30px 1vw;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header kế thừa -->
+<div th:replace="staff/header :: main-header"></div>
+
+<div class="event-container">
+
+    <div class="page-title">
+        Quản lý chương trình truyền thông
+    </div>
+
+    <div class="event-actions">
+        <button class="btn btn-primary" type="button">
+            <i class="fa fa-plus"></i>
+            Thêm chương trình mới
+        </button>
+        <button class="btn btn-outline" type="button">
+            <i class="fa fa-filter"></i>
+            Lọc sự kiện
+        </button>
+        <input type="text"
+               style="padding:7px 14px; border-radius:7px; border:1.3px solid #e3eaf2;"
+               placeholder="Tìm kiếm chương trình...">
+    </div>
+
+    <div class="table-responsive">
+        <table class="event-table">
+            <thead>
+                <tr>
+                    <th>Ảnh</th>
+                    <th>Tên chương trình</th>
+                    <th>Thời gian</th>
+                    <th>Địa điểm</th>
+                    <th>Trạng thái</th>
+                    <th>Lượt tham gia</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dữ liệu mẫu, khi làm thật sẽ lặp bằng Thymeleaf th:each -->
+                <tr>
+                    <td>
+                        <img class="event-cover"
+                             src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80"
+                             alt="event1">
+                    </td>
+                    <td>
+                        <strong>Hội thảo: Phòng ngừa ma túy học đường</strong>
+                        <div style="font-size:0.96em; color:#555; margin-top:4px;">
+                            Tổ chức bởi: Đoàn Thanh niên TP.HCM
+                        </div>
+                    </td>
+                    <td>
+                        15/07/2025<br>
+                        <span style="font-size:0.93em; color:#888;">08:00 - 11:00</span>
+                    </td>
+                    <td>
+                        Trường THPT Lê Quý Đôn, Quận 3
+                    </td>
+                    <td>
+                        <span class="badge badge-upcoming">Sắp diễn ra</span>
+                    </td>
+                    <td>
+                        380
+                    </td>
+                    <td>
+                        <div class="action-cell">
+                            <button class="action-btn view" title="Xem chi tiết">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button class="action-btn edit" title="Chỉnh sửa">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="action-btn stat" title="Thống kê">
+                                <i class="fa fa-bar-chart"></i>
+                            </button>
+                            <button class="action-btn delete" title="Hủy chương trình">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img class="event-cover"
+                             src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+                             alt="event2">
+                    </td>
+                    <td>
+                        <strong>Ngày hội nâng cao nhận thức cộng đồng</strong>
+                        <div style="font-size:0.96em; color:#555; margin-top:4px;">
+                            Tổ chức bởi: Hội Phụ huynh Việt Nam
+                        </div>
+                    </td>
+                    <td>
+                        05/08/2025<br>
+                        <span style="font-size:0.93em; color:#888;">07:00 - 12:00</span>
+                    </td>
+                    <td>
+                        Công viên Tao Đàn, Quận 1
+                    </td>
+                    <td>
+                        <span class="badge badge-ongoing">Đang diễn ra</span>
+                    </td>
+                    <td>
+                        545
+                    </td>
+                    <td>
+                        <div class="action-cell">
+                            <button class="action-btn view" title="Xem chi tiết">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button class="action-btn edit" title="Chỉnh sửa">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="action-btn stat" title="Thống kê">
+                                <i class="fa fa-bar-chart"></i>
+                            </button>
+                            <button class="action-btn delete" title="Hủy chương trình">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img class="event-cover"
+                             src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80"
+                             alt="event3">
+                    </td>
+                    <td>
+                        <strong>Workshop: Vai trò của gia đình</strong>
+                        <div style="font-size:0.96em; color:#555; margin-top:4px;">
+                            Tổ chức bởi: Trung tâm CTXH Quận 10
+                        </div>
+                    </td>
+                    <td>
+                        22/06/2025<br>
+                        <span style="font-size:0.93em; color:#888;">13:30 - 16:30</span>
+                    </td>
+                    <td>
+                        Nhà Văn hóa Quận 10
+                    </td>
+                    <td>
+                        <span class="badge badge-completed">Đã kết thúc</span>
+                    </td>
+                    <td>
+                        312
+                    </td>
+                    <td>
+                        <div class="action-cell">
+                            <button class="action-btn view" title="Xem chi tiết">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button class="action-btn edit" title="Chỉnh sửa">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="action-btn stat" title="Thống kê">
+                                <i class="fa fa-bar-chart"></i>
+                            </button>
+                            <button class="action-btn delete" title="Hủy chương trình">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img class="event-cover"
+                             src="https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&w=400&q=80"
+                             alt="event4">
+                    </td>
+                    <td>
+                        <strong>Talkshow: Cùng con lớn lên an toàn</strong>
+                        <div style="font-size:0.96em; color:#555; margin-top:4px;">
+                            Tổ chức bởi: CLB Giáo viên chủ nhiệm
+                        </div>
+                    </td>
+                    <td>
+                        12/06/2025<br>
+                        <span style="font-size:0.93em; color:#888;">18:00 - 20:00</span>
+                    </td>
+                    <td>
+                        Nhà thiếu nhi Thành phố
+                    </td>
+                    <td>
+                        <span class="badge badge-cancelled">Đã hủy</span>
+                    </td>
+                    <td>
+                        89
+                    </td>
+                    <td>
+                        <div class="action-cell">
+                            <button class="action-btn view" title="Xem chi tiết">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button class="action-btn edit" title="Chỉnh sửa">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="action-btn stat" title="Thống kê">
+                                <i class="fa fa-bar-chart"></i>
+                            </button>
+                            <button class="action-btn delete" title="Hủy chương trình">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal: chi tiết & xác nhận xóa -->
+<div id="eventDetailModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('eventDetailModal')">&times;</button>
+        <div class="modal-title" id="event-modal-title">Thông tin chương trình</div>
+        <div id="event-modal-body"></div>
+        <div class="modal-action-btns">
+            <button class="btn btn-outline" onclick="closeModal('eventDetailModal')">Đóng</button>
+        </div>
+    </div>
+</div>
+<div id="confirmDeleteModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('confirmDeleteModal')">&times;</button>
+        <div class="modal-title" style="color:#e74c3c;">
+            Xác nhận hủy chương trình?
+        </div>
+        <div id="delete-modal-body" style="margin-bottom:18px;">
+            Bạn chắc chắn muốn hủy chương trình này? Thao tác này không thể hoàn tác!
+        </div>
+        <div class="modal-action-btns">
+            <button class="btn btn-outline" onclick="closeModal('confirmDeleteModal')">Hủy</button>
+            <button class="btn btn-primary" style="background:#e74c3c;border:none;"
+                    id="btn-delete-confirm">Xác nhận xóa</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dummy data cho giao diện (demo, khi làm thật dùng Thymeleaf render)
+    const eventList = [
+        {
+            id: 1,
+            name: "Hội thảo: Phòng ngừa ma túy học đường",
+            org: "Đoàn Thanh niên TP.HCM",
+            time: "15/07/2025 08:00 - 11:00",
+            place: "Trường THPT Lê Quý Đôn, Quận 3",
+            status: "Sắp diễn ra",
+            cover: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
+            join: 380
+        },
+        {
+            id: 2,
+            name: "Ngày hội nâng cao nhận thức cộng đồng",
+            org: "Hội Phụ huynh Việt Nam",
+            time: "05/08/2025 07:00 - 12:00",
+            place: "Công viên Tao Đàn, Quận 1",
+            status: "Đang diễn ra",
+            cover: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+            join: 545
+        },
+        {
+            id: 3,
+            name: "Workshop: Vai trò của gia đình",
+            org: "Trung tâm CTXH Quận 10",
+            time: "22/06/2025 13:30 - 16:30",
+            place: "Nhà Văn hóa Quận 10",
+            status: "Đã kết thúc",
+            cover: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+            join: 312
+        },
+        {
+            id: 4,
+            name: "Talkshow: Cùng con lớn lên an toàn",
+            org: "CLB Giáo viên chủ nhiệm",
+            time: "12/06/2025 18:00 - 20:00",
+            place: "Nhà thiếu nhi Thành phố",
+            status: "Đã hủy",
+            cover: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&w=400&q=80",
+            join: 89
+        }
+    ];
+
+    // Show modal chi tiết chương trình
+    document.querySelectorAll('.action-btn.view').forEach((btn, i) => {
+        btn.onclick = function () {
+            const e = eventList[i];
+            showEventDetail(e);
+        }
+    });
+
+    // Show modal xác nhận xóa
+    document.querySelectorAll('.action-btn.delete').forEach((btn, i) => {
+        btn.onclick = function () {
+            const e = eventList[i];
+            showConfirmDelete(e);
+        }
+    });
+
+    // Hiệu ứng search tên chương trình
+    document.querySelector('.event-actions input[type="text"]').onkeyup = function () {
+        const keyword = this.value.trim().toLowerCase();
+        document.querySelectorAll('.event-table tbody tr').forEach((tr, idx) => {
+            if (keyword === "") {
+                tr.style.display = "";
+                return;
+            }
+            const name = eventList[idx].name.toLowerCase();
+            tr.style.display = name.includes(keyword) ? "" : "none";
+        });
+    };
+
+    // Đóng modal khi nhấn ESC
+    window.addEventListener('keydown', function (e) {
+        if (e.key === "Escape") {
+            closeModal('eventDetailModal');
+            closeModal('confirmDeleteModal');
+        }
+    });
+
+    // Xem chi tiết
+    function showEventDetail(event) {
+        document.getElementById('event-modal-title').innerText = "Thông tin chương trình";
+        document.getElementById('event-modal-body').innerHTML = `
+            <img src="${event.cover}" style="width:90px;height:56px;object-fit:cover;border-radius:7px;box-shadow:0 1px 8px #e0e7ef44;margin-bottom:14px;">
+            <div style="font-size:1.09em;font-weight:600;margin-bottom:7px;">${event.name}</div>
+            <div style="margin-bottom:4px;"><i class="fa fa-users"></i> <b>Tổ chức:</b> ${event.org}</div>
+            <div style="margin-bottom:4px;"><i class="fa fa-calendar"></i> <b>Thời gian:</b> ${event.time}</div>
+            <div style="margin-bottom:4px;"><i class="fa fa-map-marker-alt"></i> <b>Địa điểm:</b> ${event.place}</div>
+            <div style="margin-bottom:4px;"><i class="fa fa-bolt"></i> <b>Trạng thái:</b> ${event.status}</div>
+            <div><i class="fa fa-users"></i> <b>Tham gia:</b> ${event.join}</div>
+        `;
+        openModal('eventDetailModal');
+    }
+
+    // Hiện modal xác nhận xóa
+    function showConfirmDelete(event) {
+        document.getElementById('delete-modal-body').innerHTML =
+            `Bạn chắc chắn muốn hủy chương trình <b>${event.name}</b>? Thao tác này không thể hoàn tác!`;
+        document.getElementById('btn-delete-confirm').onclick = function () {
+            closeModal('confirmDeleteModal');
+            alert("Đã hủy chương trình (demo)!");
+        };
+        openModal('confirmDeleteModal');
+    }
+
+    // Mở/đóng modal chung
+    function openModal(id) {
+        document.getElementById(id).classList.add('show');
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('show');
+    }
+
+    // Có thể mở modal Thêm mới nếu bạn muốn (demo)
+    document.querySelector('.btn.btn-primary').onclick = function () {
+        alert('Tính năng Thêm mới sẽ được triển khai sau!');
+    };
+    // Filter nâng cao
+    document.querySelector('.btn.btn-outline').onclick = function () {
+        alert('Tính năng Lọc nâng cao sẽ được triển khai sau!');
+    };
+    // Thống kê từng chương trình
+    document.querySelectorAll('.action-btn.stat').forEach((btn, i) => {
+        btn.onclick = function () {
+            alert(`Thống kê chương trình: ${eventList[i].name} (Demo)`);
+        }
+    });
+    // Sửa chương trình
+    document.querySelectorAll('.action-btn.edit').forEach((btn, i) => {
+        btn.onclick = function () {
+            alert(`Tính năng Chỉnh sửa "${eventList[i].name}" sẽ cập nhật sau!`);
+        }
+    });
+</script>
+</body>
+</html>

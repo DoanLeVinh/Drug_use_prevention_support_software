@@ -1,0 +1,281 @@
+<!-- member/footer.html -->
+<footer class="main-footer" th:fragment="main-footer">
+    <style>
+        .main-footer {
+            background: linear-gradient(90deg, #2176ae 75%, #57b8ff 100%);
+            color: #eaf6ff;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin-top: 50px;
+            box-shadow: 0 -3px 24px #2176ae19;
+            position: relative;
+            overflow: hidden;
+        }
+        .footer-waves {
+            width: 100%;
+            height: 98px;
+            position: absolute;
+            left: 0;
+            top: -1px;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.96;
+        }
+        /* Nền động phía sau */
+        .footer-bg-lights {
+            position: absolute;
+            left: 0; top: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .footer-bg-lights span {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(28px);
+            opacity: 0.18;
+            animation: footerGlow 9s infinite alternate cubic-bezier(.52,0,.5,1);
+        }
+        .footer-bg-lights span:nth-child(1) {
+            background: #21f2ff; width: 160px; height: 160px; left: 6vw; top: 30px; animation-delay: 0s;
+        }
+        .footer-bg-lights span:nth-child(2) {
+            background: #ffffff; width: 110px; height: 110px; left: 64vw; top: 60px; animation-delay: 2.2s;
+        }
+        .footer-bg-lights span:nth-child(3) {
+            background: #2176ae; width: 120px; height: 120px; left: 80vw; top: 22px; animation-delay: 4s;
+            opacity: 0.13;
+        }
+        @keyframes footerGlow {
+            to { filter: blur(44px); opacity: 0.36; transform: scale(1.22) translateY(-22px);}
+        }
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 48px 24px 0 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 38px 26px;
+            position: relative;
+            z-index: 2;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #eaf6ff 40%, #78e7fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .footer-logo {
+            font-size: 2em;
+            color: #00e2fa;
+            text-shadow: 0 3px 14px #00e2fa44;
+            animation: logoPulse 2.8s infinite;
+        }
+        @keyframes logoPulse {
+            0%,100% { filter: brightness(1);}
+            40% { filter: brightness(1.28) drop-shadow(0 0 12px #00e2fa);}
+        }
+        .footer-desc {
+            color: #e3e9f0;
+            font-size: 1.07em;
+            max-width: 350px;
+            margin-bottom: 17px;
+            opacity: 0.87;
+            line-height: 1.5;
+        }
+        .footer-social {
+            display: flex;
+            gap: 16px;
+            margin: 13px 0 14px 0;
+        }
+        .footer-social a {
+            color: #eaf6ff;
+            font-size: 1.38em;
+            background: rgba(87,184,255,0.12);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.22s, color 0.22s, box-shadow 0.22s, transform 0.21s;
+            text-decoration: none;
+            box-shadow: 0 2px 12px #57b8ff1f;
+            position: relative;
+        }
+        .footer-social a::before {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            left: -4px; top: -4px; right: -4px; bottom: -4px;
+            background: radial-gradient(circle, #57b8ff 0%, transparent 85%);
+            opacity: 0; transition: opacity 0.17s;
+            z-index: 0;
+        }
+        .footer-social a:hover {
+            background: #fff;
+            color: #2176ae;
+            box-shadow: 0 4px 18px #57b8ff55;
+            transform: scale(1.18) rotate(-8deg);
+            z-index: 2;
+        }
+        .footer-social a:hover::before { opacity: 0.15;}
+        .footer-link-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 140px;
+        }
+        .footer-link-title {
+            font-weight: 700;
+            font-size: 1.09em;
+            margin-bottom: 4px;
+            color: #fff;
+            letter-spacing: 0.02em;
+        }
+        .footer-link {
+            color: #eaf6ff;
+            text-decoration: none;
+            font-size: 0.98em;
+            opacity: 0.93;
+            transition: color 0.16s, text-decoration 0.13s, text-shadow 0.14s;
+            font-weight: 500;
+        }
+        .footer-link:hover {
+            color: #00e2fa;
+            text-shadow: 0 2px 8px #00e2fa33;
+            text-decoration: underline;
+        }
+        .footer-contact {
+            margin-bottom: 11px;
+            color: #e6f4ff;
+            font-size: 1.01em;
+        }
+        .footer-contact b {
+            font-weight: 600;
+            margin-right: 7px;
+        }
+        .footer-contact a {
+            color: #00e2fa;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .footer-contact a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+        .footer-bottom {
+            margin-top: 39px;
+            text-align: center;
+            font-size: 1.01em;
+            color: #e6eefa;
+            letter-spacing: 0.02em;
+            opacity: 0.87;
+            z-index: 3;
+            position: relative;
+        }
+        @media (max-width: 850px) {
+            .footer-inner { flex-direction: column; gap: 25px;}
+            .footer-brand { font-size: 1.1rem;}
+            .footer-link-group { min-width: 100px; }
+        }
+        .main-footer {
+            opacity: 0;
+            transform: translateY(40px);
+            animation: footerIn 1s 0.14s cubic-bezier(.42,0,.41,1) forwards;
+        }
+        @keyframes footerIn {
+            to { opacity: 1; transform: translateY(0);}
+        }
+    </style>
+    <!-- Nền động ánh sáng -->
+    <div class="footer-bg-lights">
+        <span></span><span></span><span></span>
+    </div>
+    <!-- Sóng SVG động -->
+    <div class="footer-waves">
+        <svg viewBox="0 0 1440 98" preserveAspectRatio="none" style="width:100%;height:100%;">
+            <defs>
+                <linearGradient id="waveGradient1" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#57b8ff" />
+                    <stop offset="75%" stop-color="#2176ae" />
+                </linearGradient>
+                <linearGradient id="waveGradient2" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#eaf6ff" stop-opacity="0.24" />
+                    <stop offset="100%" stop-color="#2176ae" stop-opacity="0.08" />
+                </linearGradient>
+            </defs>
+            <path id="wave1"
+                d="M0,38 Q320,8 800,38 Q1200,68 1440,38 L1440,98 L0,98 Z"
+                fill="url(#waveGradient1)">
+                <animate attributeName="d"
+                         dur="7s"
+                         repeatCount="indefinite"
+                         values="
+                            M0,38 Q320,8 800,38 Q1200,68 1440,38 L1440,98 L0,98 Z;
+                            M0,52 Q320,52 800,18 Q1200,52 1440,48 L1440,98 L0,98 Z;
+                            M0,38 Q320,8 800,38 Q1200,68 1440,38 L1440,98 L0,98 Z
+                         "/>
+            </path>
+            <path id="wave2"
+                d="M0,54 Q380,80 900,40 Q1300,10 1440,48 L1440,98 L0,98 Z"
+                fill="url(#waveGradient2)">
+                <animate attributeName="d"
+                         dur="9s"
+                         repeatCount="indefinite"
+                         values="
+                            M0,54 Q380,80 900,40 Q1300,10 1440,48 L1440,98 L0,98 Z;
+                            M0,54 Q400,42 850,90 Q1220,38 1440,68 L1440,98 L0,98 Z;
+                            M0,54 Q380,80 900,40 Q1300,10 1440,48 L1440,98 L0,98 Z
+                         "/>
+            </path>
+        </svg>
+    </div>
+    <div class="footer-inner">
+        <div>
+            <div class="footer-brand">
+                <span class="footer-logo"><i class="fa-solid fa-shield-heart"></i></span>
+                Drug Prevention
+            </div>
+            <div class="footer-desc">
+                Nền tảng cộng đồng phòng ngừa sử dụng ma túy, kết nối tri thức, kỹ năng và sự đồng hành của chuyên gia, tổ chức, bác sĩ giàu tâm huyết vì thế hệ trẻ Việt Nam.
+            </div>
+            <div class="footer-social">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" title="Tiktok"><i class="fab fa-tiktok"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="footer-link-group">
+            <div class="footer-link-title">Điều hướng</div>
+            <a href="/" class="footer-link">Trang chủ</a>
+            <a href="/courses" class="footer-link">Khóa học</a>
+            <a href="/assessment" class="footer-link">Khảo sát</a>
+            <a href="/consultation" class="footer-link">Tư vấn</a>
+            <a href="/blog" class="footer-link">Blog - Tin tức</a>
+        </div>
+        <div class="footer-link-group">
+            <div class="footer-link-title">Về hệ thống</div>
+            <a href="/about" class="footer-link">Giới thiệu</a>
+            <a href="#" class="footer-link">Nhà tài trợ</a>
+            <a href="#" class="footer-link">Đội ngũ chuyên gia</a>
+            <a href="#" class="footer-link">Bảo mật & Điều khoản</a>
+        </div>
+        <div>
+            <div class="footer-contact"><b>Hotline:</b> <a href="tel:18001111">1800 1111</a></div>
+            <div class="footer-contact"><b>Email:</b> <a href="mailto:info@drugprevention.vn">info@drugprevention.vn</a></div>
+            <div class="footer-contact"><b>Địa chỉ:</b> 96 Đinh Tiên Hoàng, Q.1, TP.HCM</div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        © 2025 Drug Prevention Support System. All rights reserved.
+    </div>
+</footer>

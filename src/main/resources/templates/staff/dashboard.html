@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Staff | Drug Use Prevention Support System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ICON & CHARTJS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: #f6fbff;
+            color: #233044;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+        .main-header { margin-bottom: 0; }
+        .dashboard-container {
+            width: 100vw;
+            min-height: calc(100vh - 60px);
+            padding: 0 36px 36px 36px;
+            box-sizing: border-box;
+        }
+        .dashboard-title {
+            font-size: 1.33rem;
+            font-weight: 600;
+            margin: 32px 0 18px 0;
+            color: #2176ae;
+            letter-spacing: 0.01em;
+        }
+        .stats-row {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            flex: 1 1 180px;
+            min-width: 180px;
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 2px 8px #b7d7ef1a;
+            padding: 19px 23px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            margin-bottom: 0;
+        }
+        .stat-title {
+            font-size: 1em;
+            color: #2560a7;
+            font-weight: 500;
+            margin-bottom: 7px;
+            opacity: 0.85;
+            letter-spacing: 0.01em;
+        }
+        .stat-value {
+            font-size: 2.1em;
+            font-weight: 600;
+            color: #2176ae;
+        }
+        .stat-icon {
+            position: absolute;
+            top: 20px; right: 24px;
+            font-size: 2.1em;
+            opacity: 0.12;
+        }
+        .stat-label {
+            margin-top: 3px;
+            font-size: 0.98em;
+            color: #8ea3bb;
+            font-weight: 400;
+        }
+        /* Chart Card */
+        .chart-row {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+        }
+        .chart-card {
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 2px 8px #b7d7ef1a;
+            padding: 20px 26px 16px 26px;
+            flex: 1 1 330px;
+            min-width: 300px;
+        }
+        .chart-title {
+            font-size: 1.09em;
+            color: #2176ae;
+            font-weight: 600;
+            margin-bottom: 14px;
+            margin-top: 0;
+        }
+        /* Recent list */
+        .recent-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            margin-top: 18px;
+            border-radius: 11px;
+            overflow: hidden;
+            box-shadow: 0 1px 7px #d0e8fd33;
+        }
+        .recent-table th, .recent-table td {
+            padding: 11px 14px;
+            font-size: 0.99em;
+        }
+        .recent-table th {
+            background: #eaf3fa;
+            text-align: left;
+            color: #255c88;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-bottom: 2px solid #e3eaf2;
+        }
+        .recent-table td {
+            border-bottom: 1px solid #f3f3f3;
+            color: #232e33;
+        }
+        .recent-table tr:hover td {
+            background: #f8fcfe;
+        }
+        .user-avatar {
+            width: 27px;
+            height: 27px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 7px;
+            vertical-align: middle;
+            border: 1.5px solid #2176ae;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 11px;
+            border-radius: 6px;
+            font-size: 0.94em;
+            font-weight: 500;
+        }
+        .badge-success {
+            background: #eafaf1;
+            color: #21ae66;
+        }
+        .badge-warning {
+            background: #fffbe2;
+            color: #fbc02d;
+        }
+        .badge-info {
+            background: #e9f7fe;
+            color: #2176ae;
+        }
+        .badge-cancelled {
+            background: #f8dddd;
+            color: #e74c3c;
+        }
+        @media (max-width: 950px) {
+            .dashboard-container { padding-left: 2vw; padding-right: 2vw; }
+            .stats-row, .chart-row { flex-direction: column; gap: 14px;}
+        }
+        @media (max-width: 700px) {
+            .dashboard-title { font-size: 1.08rem; }
+            .stat-value { font-size: 1.25em; }
+            .dashboard-container { padding: 0 1vw 30px 1vw;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div th:replace="staff/header :: main-header"></div>
+
+<!-- DASHBOARD CONTENT -->
+<div class="dashboard-container">
+
+    <div class="dashboard-title">Dashboard nhân viên hỗ trợ phòng ngừa ma túy</div>
+
+    <!-- STATISTIC CARDS -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="stat-title">Lịch hẹn hôm nay</span>
+            <span class="stat-value" th:text="${todayCount}">6</span>
+            <span class="stat-label">Tổng số lịch hẹn hôm nay</span>
+            <span class="stat-icon"><i class="fa-solid fa-calendar-day"></i></span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-title">Tổng lịch hẹn</span>
+            <span class="stat-value" th:text="${totalAppointmentCount}">120</span>
+            <span class="stat-label">Từ trước đến nay</span>
+            <span class="stat-icon"><i class="fa-solid fa-calendar-check"></i></span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-title">Chuyên viên</span>
+            <span class="stat-value" th:text="${consultantCount}">8</span>
+            <span class="stat-label">Số lượng chuyên viên</span>
+            <span class="stat-icon"><i class="fa-solid fa-user-md"></i></span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-title">Người dùng</span>
+            <span class="stat-value" th:text="${userCount}">340</span>
+            <span class="stat-label">Người đặt lịch</span>
+            <span class="stat-icon"><i class="fa-solid fa-users"></i></span>
+        </div>
+    </div>
+
+    <!-- BIỂU ĐỒ -->
+    <div class="chart-row">
+        <div class="chart-card">
+            <div class="chart-title">Biểu đồ lịch hẹn theo trạng thái</div>
+            <canvas id="appointmentStatusChart" height="112"></canvas>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Lịch hẹn từng tháng</div>
+            <canvas id="appointmentMonthChart" height="112"></canvas>
+        </div>
+    </div>
+
+    <!-- DANH SÁCH LỊCH HẸN GẦN ĐÂY -->
+    <div class="section-title">Lịch hẹn gần đây</div>
+    <div class="table-responsive">
+        <table class="recent-table">
+            <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Người đặt</th>
+                <th>Chuyên viên</th>
+                <th>Thời gian</th>
+                <th>Hình thức</th>
+                <th>Trạng thái</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="appointment : ${recentAppointments}">
+                <td th:text="${appointment.code}">APT001</td>
+                <td>
+                    <img th:src="@{${appointment.user.avatarUrl}}"
+                         src="https://randomuser.me/api/portraits/men/32.jpg"
+                         class="user-avatar"
+                         th:if="${appointment.user.avatarUrl}">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg"
+                         class="user-avatar"
+                         th:unless="${appointment.user.avatarUrl}">
+                    <span th:text="${appointment.user.fullName}">Nguyễn Văn A</span>
+                </td>
+                <td th:text="${appointment.consultant.fullName}">Trần Thị B</td>
+                <td th:text="${appointment.time} + ' - ' + ${appointment.date}">10:00 - 15/07/2023</td>
+                <td th:text="${appointment.type == 'online' ? 'Trực tuyến' : 'Trực tiếp'}">Trực tiếp</td>
+                <td>
+                    <span th:switch="${appointment.status}" class="badge">
+                        <span th:case="'pending'" class="badge-warning">Chờ xác nhận</span>
+                        <span th:case="'confirmed'" class="badge-success">Đã xác nhận</span>
+                        <span th:case="'completed'" class="badge-info">Hoàn thành</span>
+                        <span th:case="'cancelled'" class="badge-cancelled">Đã hủy</span>
+                    </span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(recentAppointments)}">
+                <td colspan="6" style="text-align:center;color:#bbb;padding:18px 0;">
+                    Không có lịch hẹn gần đây.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- CHARTJS DUMMY DATA (có thể lấy từ backend và render JS, hoặc Thymeleaf in thẳng JS variable) -->
+<script>
+    // Biểu đồ trạng thái
+    const statusChart = document.getElementById('appointmentStatusChart').getContext('2d');
+    new Chart(statusChart, {
+        type: 'doughnut',
+        data: {
+            labels: ['Chờ xác nhận', 'Đã xác nhận', 'Hoàn thành', 'Đã hủy'],
+            datasets: [{
+                data: [
+                    /*[[${pendingCount}]], [[${confirmedCount}]], [[${completedCount}]], [[${cancelledCount}]]*/
+                    10, 45, 56, 9 // demo
+                ],
+                backgroundColor: ['#fbc02d', '#21ae66', '#2176ae', '#e74c3c'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            cutout: '68%',
+            plugins: {
+                legend: {display: true, position: 'bottom'}
+            }
+        }
+    });
+
+    // Biểu đồ lịch hẹn từng tháng
+    const monthChart = document.getElementById('appointmentMonthChart').getContext('2d');
+    new Chart(monthChart, {
+        type: 'bar',
+        data: {
+            labels: [
+                'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'
+            ],
+            datasets: [{
+                label: 'Lịch hẹn',
+                data: [
+                    /*[[${countMonth1}]], [[${countMonth2}]], ...*/
+                    8, 10, 19, 15, 21, 29, 33, 40, 30, 16, 12, 7 // demo
+                ],
+                backgroundColor: '#2176ae',
+                borderRadius: 6,
+                maxBarThickness: 22
+            }]
+        },
+        options: {
+            plugins: {legend: {display: false}},
+            scales: {y: {beginAtZero: true, ticks: {stepSize: 5}}}
+        }
+    });
+</script>
+
+</body>
+</html>

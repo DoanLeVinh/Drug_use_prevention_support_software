@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Chi tiết khóa học: ' + ${course.name}">Chi tiết khóa học</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #eef2ff;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --bg: #f8f9fa;
+            --white: #ffffff;
+            --gray-light: #f1f3f5;
+            --gray-medium: #dee2e6;
+            --gray-dark: #495057;
+            --dark: #212529;
+            --success: #4bb543;
+            --warning: #fca311;
+            --danger: #ef233c;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+        }
+        .main-content {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .course-hero {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            align-items: center;
+        }
+        .course-hero__content {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.15fr 2fr;
+            gap: 2.5rem;
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            align-items: stretch;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .course-hero__image {
+            min-width: 280px;
+            max-width: 360px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: var(--primary-light);
+        }
+        .course-hero__image img {
+            width: 90%;
+            height: 210px;
+            object-fit: cover;
+            border-radius: 1rem;
+            margin: 30px 0 15px 0;
+        }
+        .course-hero__badge {
+            position: absolute;
+            top: 1.2rem;
+            left: 1.2rem;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 0.6rem;
+            font-weight: 600;
+            font-size: 0.96rem;
+            box-shadow: var(--shadow-sm);
+            z-index: 2;
+        }
+        .course-hero__details {
+            padding: 2rem 2rem 2rem 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .course-hero__title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        /* Các phần khác giữ nguyên */
+        .course-content {
+            width: 100%;
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: 2.4fr 1fr;
+            gap: 2.5rem;
+            align-items: flex-start;
+        }
+        .course-main {
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            animation: fadeIn 0.8s ease-out;
+            min-width: 0;
+        }
+        .video-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .video-card {
+            border-radius: 0.8rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            background: var(--white);
+            width: 360px;
+            min-width: 270px;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0.5rem;
+        }
+        .video-card__container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        .video-card__container iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
+        /* Responsive cho màn hình nhỏ hơn */
+        @media (max-width: 992px) {
+            .container { padding: 0 0.5rem; }
+            .course-hero__content, .course-content { grid-template-columns: 1fr; }
+            .course-hero__image { margin: 0 auto; }
+            .course-content { gap: 1.2rem; }
+        }
+        @media (max-width: 600px) {
+            .course-hero__title { font-size: 1.3rem; }
+            .course-main { padding: 1rem; }
+            .video-gallery { gap: 1rem;}
+            .video-card { width: 99%; min-width: 180px;}
+        }
+    </style>
+</head>
+<body>
+<div th:replace="member/header :: main-header"></div>
+
+<main class="main-content">
+    <div class="container">
+        <!-- Course Hero Section -->
+        <section class="course-hero">
+            <div class="course-hero__breadcrumb" style="width:100%;max-width:1160px;margin:0 auto;">
+                <a href="/">Trang chủ</a> / <a href="/courses">Khóa học</a> / <span th:text="${course.name}"></span>
+            </div>
+            <div class="course-hero__content">
+                <div class="course-hero__image">
+                    <span class="course-hero__badge">BEST SELLER</span>
+                    <img th:src="${course.image != null && !#strings.isEmpty(course.image) ? course.image : 'https://images.unsplash.com/photo-1542621334-a254cf47733d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'}"
+                         th:alt="${course.name}" />
+                </div>
+                <div class="course-hero__details">
+                    <h1 class="course-hero__title" th:text="${course.name}"></h1>
+                    <div class="course-hero__instructor">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor" class="course-hero__instructor-avatar">
+                        <span class="course-hero__instructor-name">Giảng viên: Nguyễn Văn A</span>
+                    </div>
+                    <div class="course-hero__description" th:text="${course.description}"></div>
+                    <div class="course-hero__meta">
+                        <div class="course-hero__meta-item">
+                            <i class="fas fa-users"></i>
+                            <span th:text="${course.participants != null ? course.participants + ' học viên' : 'N/A'}"></span>
+                        </div>
+                        <div class="course-hero__meta-item">
+                            <i class="fas fa-star"></i>
+                            <span>4.8 (128 đánh giá)</span>
+                        </div>
+                        <div class="course-hero__meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>12 giờ nội dung</span>
+                        </div>
+                        <div class="course-hero__meta-item">
+                            <i class="fas fa-layer-group"></i>
+                            <span th:text="${course.topic}"></span>
+                        </div>
+                    </div>
+                    <div class="course-hero__actions">
+                        <a href="#" class="btn btn--primary">
+                            <i class="fas fa-play-circle"></i> Bắt đầu học
+                        </a>
+                        <a href="#" class="btn btn--secondary">
+                            <i class="fas fa-heart"></i> Yêu thích
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Course Tabs -->
+        <div class="course-tabs" style="margin:0 auto;width:100%;max-width:1160px;">
+            <div class="course-tab active">Nội dung khóa học</div>
+            <div class="course-tab">Đánh giá</div>
+            <div class="course-tab">Thảo luận</div>
+            <div class="course-tab">Tài nguyên</div>
+        </div>
+        <!-- Main + Sidebar -->
+        <div class="course-content">
+            <div class="course-main">
+                <!-- ... phần content về khóa học như của bạn ... -->
+                <!-- Video Section -->
+                <section class="video-section" style="margin-top: 2rem;" th:if="${course.video1 != null || course.video2 != null || course.video3 != null}">
+                    <h2 class="section-title">
+                        <i class="fas fa-play-circle"></i> Video giới thiệu
+                    </h2>
+                    <div class="video-gallery">
+                        <!-- Video 1 -->
+                        <div class="video-card" th:if="${course.video1 != null && !#strings.isEmpty(course.video1)}">
+                            <div class="video-card__container">
+                                <th:block th:if="${#strings.contains(course.video1, '/embed/')}">
+                                    <iframe th:src="${course.video1}"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
+                                </th:block>
+                                <th:block th:unless="${#strings.contains(course.video1, '/embed/')}">
+                                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: var(--danger); flex-direction: column; padding: 1rem;">
+                                        <i class="fas fa-exclamation-triangle fa-2x" style="margin-bottom: 1rem;"></i>
+                                        <p style="text-align: center;">Link video không đúng dạng nhúng (embed)</p>
+                                        <a th:href="${course.video1}" target="_blank" class="btn btn--outline" style="margin-top: 1rem;">
+                                            <i class="fas fa-external-link-alt"></i> Mở video
+                                        </a>
+                                    </div>
+                                </th:block>
+                            </div>
+                            <div class="video-card__info">
+                                <h3 class="video-card__title">Giới thiệu khóa học</h3>
+                            </div>
+                        </div>
+                        <!-- Video 2 -->
+                        <div class="video-card" th:if="${course.video2 != null && !#strings.isEmpty(course.video2)}">
+                            <div class="video-card__container">
+                                <th:block th:if="${#strings.contains(course.video2, '/embed/')}">
+                                    <iframe th:src="${course.video2}"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
+                                </th:block>
+                                <th:block th:unless="${#strings.contains(course.video2, '/embed/')}">
+                                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: var(--danger); flex-direction: column; padding: 1rem;">
+                                        <i class="fas fa-exclamation-triangle fa-2x" style="margin-bottom: 1rem;"></i>
+                                        <p style="text-align: center;">Link video không đúng dạng nhúng (embed)</p>
+                                        <a th:href="${course.video2}" target="_blank" class="btn btn--outline" style="margin-top: 1rem;">
+                                            <i class="fas fa-external-link-alt"></i> Mở video
+                                        </a>
+                                    </div>
+                                </th:block>
+                            </div>
+                            <div class="video-card__info">
+                                <h3 class="video-card__title">Nội dung chính</h3>
+                            </div>
+                        </div>
+                        <!-- Video 3 -->
+                        <div class="video-card" th:if="${course.video3 != null && !#strings.isEmpty(course.video3)}">
+                            <div class="video-card__container">
+                                <th:block th:if="${#strings.contains(course.video3, '/embed/')}">
+                                    <iframe th:src="${course.video3}"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
+                                </th:block>
+                                <th:block th:unless="${#strings.contains(course.video3, '/embed/')}">
+                                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: var(--danger); flex-direction: column; padding: 1rem;">
+                                        <i class="fas fa-exclamation-triangle fa-2x" style="margin-bottom: 1rem;"></i>
+                                        <p style="text-align: center;">Link video không đúng dạng nhúng (embed)</p>
+                                        <a th:href="${course.video3}" target="_blank" class="btn btn--outline" style="margin-top: 1rem;">
+                                            <i class="fas fa-external-link-alt"></i> Mở video
+                                        </a>
+                                    </div>
+                                </th:block>
+                            </div>
+                            <div class="video-card__info">
+                                <h3 class="video-card__title">Bài tập thực hành</h3>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- ... Các section còn lại giữ nguyên ... -->
+            </div>
+            <!-- Sidebar giữ nguyên -->
+            <div class="course-sidebar">
+                <!-- Các sidebar-card giữ nguyên -->
+            </div>
+        </div>
+        <!-- Related Courses giữ nguyên -->
+    </div>
+</main>
+<div th:replace="member/footer :: main-footer"></div>
+<!-- JS giữ nguyên -->
+<script>
+       // Simple JavaScript for interactive elements
+    document.addEventListener('DOMContentLoaded', function() {
+        // Module accordion functionality
+        const moduleHeaders = document.querySelectorAll('.course-tabs .course-tab');
+        moduleHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                // Remove active class from all tabs
+                moduleHeaders.forEach(h => h.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+            });
+        });
+        
+        // Curriculum accordion functionality
+        const curriculumHeaders = document.querySelectorAll('.course-main [style*="background: var(--primary-light)"]');
+        curriculumHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('.fa-chevron-down');
+                
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+        
+        // Tooltip initialization
+        const tooltips = document.querySelectorAll('.tooltip');
+        tooltips.forEach(tooltip => {
+            tooltip.addEventListener('mouseenter', function() {
+                this.querySelector('.tooltip-text').style.opacity = '1';
+                this.querySelector('.tooltip-text').style.visibility = 'visible';
+            });
+            
+            tooltip.addEventListener('mouseleave', function() {
+                this.querySelector('.tooltip-text').style.opacity = '0';
+                this.querySelector('.tooltip-text').style.visibility = 'hidden';
+            });
+        });
+    });
+</script>
+</body>
+</html>

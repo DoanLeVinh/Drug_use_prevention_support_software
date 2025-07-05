@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản lý bác sĩ | Admin Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --admin-header-bg: linear-gradient(120deg, #12213a 80%, #2176ae 100%);
+            --admin-header-text: #fff;
+            --admin-header-active: #21ae66;
+            --admin-header-shadow: 0 3px 18px rgba(33,118,174,0.15);
+            --admin-badge-bg: #21ae66cc;
+        }
+        body {
+            background: #f7fbfd;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            color: #183a55;
+            min-width: 0;
+            overflow-x: hidden;
+        }
+        .main-admin-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 38px 2vw 60px 2vw;
+            width: 100%;
+        }
+        .admin-section-title {
+            color: #2176ae;
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 32px;
+            letter-spacing: 0.01em;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .doctor-actions-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .doctor-actions-row .search-box {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .search-input {
+            padding: 11px 17px;
+            border-radius: 8px;
+            border: 1.5px solid #2176ae77;
+            font-size: 1em;
+            outline: none;
+            min-width: 210px;
+            background: #fff;
+            color: #183a55;
+            box-shadow: 0 2px 9px #2176ae10;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: #2176ae; }
+        .filter-select {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1.5px solid #2176ae77;
+            font-size: 1em;
+            outline: none;
+            background: #fff;
+            color: #2176ae;
+        }
+        .add-doctor-btn {
+            background: var(--admin-header-active);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.05em;
+            padding: 12px 28px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #21ae6618;
+            transition: background 0.15s, transform 0.13s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .add-doctor-btn:hover {
+            background: #12213a;
+            transform: translateY(-2px) scale(1.03);
+        }
+        .doctor-table-wrap {
+            width: 100%;
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 4px 18px #2176ae0d;
+            overflow-x: auto;
+        }
+        table.doctor-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+        table.doctor-table th,
+        table.doctor-table td {
+            padding: 18px 17px;
+            text-align: left;
+            border-bottom: 1px solid #eaf4fa;
+            font-size: 1.02em;
+            white-space: nowrap;
+        }
+        table.doctor-table th {
+            background: #e1f0fa;
+            color: #2176ae;
+            font-size: 1.02em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        table.doctor-table tr:hover {
+            background: #f7fbfd;
+        }
+        .doctor-status {
+            padding: 7px 16px;
+            border-radius: 16px;
+            font-size: 0.97em;
+            font-weight: 600;
+            display: inline-block;
+            background: #e8f7ef;
+            color: #21ae66;
+        }
+        .doctor-status.inactive {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+        .doctor-status.busy {
+            background: #fffbe5;
+            color: #f39c12;
+        }
+        .doctor-action-btn {
+            border: none;
+            background: #e1f0fa;
+            color: #2176ae;
+            border-radius: 8px;
+            padding: 9px 16px;
+            margin: 0 2px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.98em;
+            transition: background 0.12s, color 0.12s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .doctor-action-btn:hover, .doctor-action-btn.active {
+            background: var(--admin-header-active);
+            color: #fff;
+        }
+        .doctor-action-btn.delete {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+        .doctor-action-btn.delete:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        /* Modal */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(18,33,58,0.26);
+            z-index: 1200;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+        .modal-bg.active { display: flex; }
+        .modal-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 28px #2176ae2b;
+            padding: 2.1rem 2.2rem;
+            max-width: 480px;
+            width: 98vw;
+            animation: fadeInModal 0.16s;
+        }
+        @keyframes fadeInModal {
+            from { opacity:0; transform: translateY(24px);}
+            to { opacity:1; transform: translateY(0);}
+        }
+        .modal-title {
+            color: #2176ae;
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 19px;
+        }
+        .modal-row { margin-bottom: 13px; }
+        .modal-label { font-weight: 600; color: #183a55; }
+        .modal-value { color: #555; margin-left: 9px; }
+        .modal-actions {
+            margin-top: 17px;
+            text-align: right;
+            display: flex;
+            gap: 9px;
+            justify-content: flex-end;
+        }
+        .modal-close, .modal-save {
+            border: none;
+            background: #f0f8ff;
+            color: #12213a;
+            font-size: 1.08em;
+            padding: 8px 22px;
+            border-radius: 7px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal-save {
+            background: var(--admin-header-active);
+            color: #fff;
+        }
+        .modal-close:hover {
+            background: #2176ae;
+            color: #fff;
+        }
+        .modal-save:hover {
+            background: #12213a;
+            color: #fff;
+        }
+        .item-list {
+            margin: 7px 0 5px 0;
+            padding-left: 1.3em;
+            color: #2176ae;
+            font-size: 0.98em;
+            line-height: 1.56;
+        }
+        .specialty-tag {
+            display: inline-block;
+            background: #e1f0fa;
+            color: #2176ae;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.9em;
+            margin: 2px;
+        }
+        /* Modal Thêm bác sĩ mới */
+        #addDoctorModalBg .modal-card {
+            max-width: 450px;
+            width: 98vw;
+            border-radius: 18px;
+            box-shadow: 0 8px 28px #2176ae2b;
+            padding: 2.2rem 2.4rem 1.5rem 2.4rem;
+            background: #fff;
+            animation: fadeInModal 0.18s;
+            position: relative;
+        }
+        #addDoctorModalBg .modal-title {
+            color: #2176ae;
+            font-size: 1.21em;
+            font-weight: 800;
+            margin-bottom: 21px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #addDoctorModalBg .modal-row {
+            margin-bottom: 14px;
+        }
+        #addDoctorModalBg label {
+            font-weight: 600;
+            color: #12213a;
+            margin-bottom: 6px;
+            display: block;
+        }
+        #addDoctorModalBg input, #addDoctorModalBg select, #addDoctorModalBg textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #2176ae44;
+            font-size: 1em;
+            background: #f7fbfd;
+            color: #183a55;
+            margin-bottom: 2px;
+            outline: none;
+            box-shadow: 0 2px 8px #2176ae13;
+            transition: border-color 0.18s;
+        }
+        #addDoctorModalBg input:focus, #addDoctorModalBg select:focus, #addDoctorModalBg textarea:focus {
+            border-color: #21ae66;
+        }
+        #addDoctorModalBg .modal-actions {
+            margin-top: 18px;
+            text-align: right;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        #addDoctorModalBg .modal-save {
+            background: var(--admin-header-active);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            padding: 12px 30px;
+            font-size: 1.05em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #21ae6610;
+            transition: background 0.15s, transform 0.13s;
+        }
+        #addDoctorModalBg .modal-save:hover {
+            background: #12213a;
+            transform: translateY(-1px) scale(1.03);
+        }
+        #addDoctorModalBg .modal-close {
+            background: #f0f8ff;
+            color: #12213a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 12px 28px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.12s, color 0.13s;
+        }
+        #addDoctorModalBg .modal-close:hover {
+            background: #2176ae;
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            #addDoctorModalBg .modal-card { padding: 1.2rem 3vw 1.2rem 3vw;}
+            #addDoctorModalBg .modal-title { font-size: 1.04em;}
+        }
+        /* Responsive */
+        @media (max-width: 700px) {
+            .main-admin-content { padding: 12px 1vw; }
+            table.doctor-table { min-width: 600px; font-size: 0.99em; }
+            .doctor-table th, .doctor-table td { padding: 10px 7px;}
+            .admin-section-title { font-size: 1.14rem; }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="admin/header :: main-header"></div>
+<div class="main-admin-content">
+    <div class="admin-section-title">
+        <i class="fa-solid fa-user-doctor"></i> Quản lý Bác sĩ
+    </div>
+    <div class="doctor-actions-row">
+        <div class="search-box">
+            <input class="search-input" id="doctorSearch" type="text" placeholder="Tìm kiếm theo tên, chuyên khoa...">
+            <select class="filter-select" id="statusFilter">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="active">Đang làm việc</option>
+                <option value="inactive">Ngừng làm việc</option>
+                <option value="busy">Đang bận</option>
+            </select>
+            <button class="add-doctor-btn" id="addDoctorBtn"><i class="fa fa-user-plus"></i> Thêm bác sĩ</button>
+        </div>
+    </div>
+
+    <div class="doctor-table-wrap">
+        <table class="doctor-table" id="doctorTable">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Họ tên</th>
+                    <th>Chuyên khoa</th>
+                    <th>Số điện thoại</th>
+                    <th>Trạng thái</th>
+                    <th>Kinh nghiệm</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dữ liệu tĩnh demo -->
+                <tr>
+                    <td>1</td>
+                    <td>BS. Nguyễn Văn An</td>
+                    <td>
+                        <span class="specialty-tag">Tâm thần</span>
+                        <span class="specialty-tag">Tâm lý học đường</span>
+                    </td>
+                    <td>0912 345 678</td>
+                    <td><span class="doctor-status active">Đang làm việc</span></td>
+                    <td>10 năm</td>
+                    <td>
+                        <button class="doctor-action-btn" onclick="openDoctorDetail('BS. Nguyễn Văn An','Tâm thần, Tâm lý học đường','0912 345 678','an.bs@example.com','Đang làm việc','10 năm','Đại học Y Hà Nội','Bệnh viện Tâm thần Trung ương 1','Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')"><i class="fa fa-eye"></i> Xem</button>
+                        <button class="doctor-action-btn" onclick="toggleDoctorStatus(this,'inactive')"><i class="fa fa-user-slash"></i> Khóa</button>
+                        <button class="doctor-action-btn delete"><i class="fa fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>BS. Trần Thị Bình</td>
+                    <td>
+                        <span class="specialty-tag">Tư vấn hôn nhân</span>
+                        <span class="specialty-tag">Trầm cảm</span>
+                    </td>
+                    <td>0987 654 321</td>
+                    <td><span class="doctor-status busy">Đang bận</span></td>
+                    <td>8 năm</td>
+                    <td>
+                        <button class="doctor-action-btn" onclick="openDoctorDetail('BS. Trần Thị Bình','Tư vấn hôn nhân, Trầm cảm','0987 654 321','binh.bs@example.com','Đang bận','8 năm','Đại học Y Dược TP.HCM','Bệnh viện Tâm thần TP.HCM','Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')"><i class="fa fa-eye"></i> Xem</button>
+                        <button class="doctor-action-btn" onclick="toggleDoctorStatus(this,'active')"><i class="fa fa-check"></i> Mở</button>
+                        <button class="doctor-action-btn delete"><i class="fa fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>BS. Lê Văn Cường</td>
+                    <td>
+                        <span class="specialty-tag">Tâm lý trẻ em</span>
+                        <span class="specialty-tag">Tự kỷ</span>
+                    </td>
+                    <td>0903 123 456</td>
+                    <td><span class="doctor-status inactive">Ngừng làm việc</span></td>
+                    <td>15 năm</td>
+                    <td>
+                        <button class="doctor-action-btn" onclick="openDoctorDetail('BS. Lê Văn Cường','Tâm lý trẻ em, Tự kỷ','0903 123 456','cuong.bs@example.com','Ngừng làm việc','15 năm','Đại học Y khoa Phạm Ngọc Thạch','Bệnh viện Nhi đồng 2','Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.')"><i class="fa fa-eye"></i> Xem</button>
+                        <button class="doctor-action-btn" onclick="toggleDoctorStatus(this,'active')"><i class="fa fa-rotate-left"></i> Mở lại</button>
+                        <button class="doctor-action-btn delete"><i class="fa fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>BS. Phạm Thị Dung</td>
+                    <td>
+                        <span class="specialty-tag">Stress</span>
+                        <span class="specialty-tag">Rối loạn lo âu</span>
+                    </td>
+                    <td>0978 901 234</td>
+                    <td><span class="doctor-status active">Đang làm việc</span></td>
+                    <td>12 năm</td>
+                    <td>
+                        <button class="doctor-action-btn" onclick="openDoctorDetail('BS. Phạm Thị Dung','Stress, Rối loạn lo âu','0978 901 234','dung.bs@example.com','Đang làm việc','12 năm','Đại học Y Dược Huế','Bệnh viện Tâm thần Huế','Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')"><i class="fa fa-eye"></i> Xem</button>
+                        <button class="doctor-action-btn" onclick="toggleDoctorStatus(this,'inactive')"><i class="fa fa-user-slash"></i> Khóa</button>
+                        <button class="doctor-action-btn delete"><i class="fa fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Modal xem chi tiết bác sĩ -->
+    <div class="modal-bg" id="doctorModalBg">
+        <div class="modal-card">
+            <div class="modal-title"><i class="fa fa-id-card"></i> Chi tiết bác sĩ</div>
+            <div id="doctorDetailBox">
+                <!-- Render bằng JS -->
+            </div>
+            <div class="modal-actions">
+                <button class="modal-close" onclick="closeDoctorModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal thêm bác sĩ mới -->
+    <div class="modal-bg" id="addDoctorModalBg">
+        <form class="modal-card" id="addDoctorForm" autocomplete="off" onsubmit="return false">
+            <div class="modal-title"><i class="fa fa-user-plus"></i> Thêm bác sĩ mới</div>
+            <div class="modal-row">
+                <label>Họ tên</label>
+                <input required name="fullname" maxlength="80" placeholder="Nhập họ tên bác sĩ...">
+            </div>
+            <div class="modal-row">
+                <label>Chuyên khoa</label>
+                <select name="specialty" required multiple id="specialtySelect">
+                    <option value="Tâm thần">Tâm thần</option>
+                    <option value="Tâm lý học đường">Tâm lý học đường</option>
+                    <option value="Tư vấn hôn nhân">Tư vấn hôn nhân</option>
+                    <option value="Trầm cảm">Trầm cảm</option>
+                    <option value="Tâm lý trẻ em">Tâm lý trẻ em</option>
+                    <option value="Tự kỷ">Tự kỷ</option>
+                    <option value="Stress">Stress</option>
+                    <option value="Rối loạn lo âu">Rối loạn lo âu</option>
+                </select>
+            </div>
+            <div class="modal-row">
+                <label>Số điện thoại</label>
+                <input type="tel" required name="phone" maxlength="15" placeholder="Nhập số điện thoại...">
+            </div>
+            <div class="modal-row">
+                <label>Email</label>
+                <input type="email" required name="email" maxlength="60" placeholder="Nhập email...">
+            </div>
+            <div class="modal-row">
+                <label>Trạng thái</label>
+                <select name="status" required>
+                    <option value="active">Đang làm việc</option>
+                    <option value="inactive">Ngừng làm việc</option>
+                    <option value="busy">Đang bận</option>
+                </select>
+            </div>
+            <div class="modal-row">
+                <label>Kinh nghiệm</label>
+                <input name="experience" placeholder="Ví dụ: 5 năm...">
+            </div>
+            <div class="modal-row">
+                <label>Trường đào tạo</label>
+                <input name="education" placeholder="Nhập trường đào tạo...">
+            </div>
+            <div class="modal-row">
+                <label>Nơi công tác</label>
+                <input name="workplace" placeholder="Nhập nơi công tác...">
+            </div>
+            <div class="modal-row">
+                <label>Giới thiệu</label>
+                <textarea name="introduction" rows="3" placeholder="Nhập giới thiệu về bác sĩ..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-save" onclick="saveNewDoctor()">Lưu</button>
+                <button class="modal-close" onclick="closeAddDoctorModal()">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Modal xem chi tiết bác sĩ
+    function openDoctorDetail(name, specialties, phone, email, status, experience, education, workplace, introduction) {
+        let specialtyList = specialties.split(',').map(s => `<span class="specialty-tag">${s.trim()}</span>`).join('');
+        
+        let detailHtml = `
+            <div class="modal-row"><span class="modal-label">Họ tên:</span> <span class="modal-value">${name}</span></div>
+            <div class="modal-row"><span class="modal-label">Chuyên khoa:</span> <span class="modal-value">${specialtyList}</span></div>
+            <div class="modal-row"><span class="modal-label">Số điện thoại:</span> <span class="modal-value">${phone}</span></div>
+            <div class="modal-row"><span class="modal-label">Email:</span> <span class="modal-value">${email}</span></div>
+            <div class="modal-row"><span class="modal-label">Trạng thái:</span> <span class="modal-value">${status}</span></div>
+            <div class="modal-row"><span class="modal-label">Kinh nghiệm:</span> <span class="modal-value">${experience}</span></div>
+            <div class="modal-row"><span class="modal-label">Trường đào tạo:</span> <span class="modal-value">${education}</span></div>
+            <div class="modal-row"><span class="modal-label">Nơi công tác:</span> <span class="modal-value">${workplace}</span></div>
+            <div class="modal-row"><span class="modal-label">Giới thiệu:</span> <span class="modal-value" style="display:block; margin-top:8px; line-height:1.5;">${introduction}</span></div>
+        `;
+        document.getElementById('doctorDetailBox').innerHTML = detailHtml;
+        document.getElementById('doctorModalBg').classList.add('active');
+    }
+    
+    function closeDoctorModal() {
+        document.getElementById('doctorModalBg').classList.remove('active');
+    }
+    
+    // Tìm kiếm & lọc trạng thái
+    document.getElementById('doctorSearch').addEventListener('keyup', function() {
+        filterDoctors();
+    });
+    
+    document.getElementById('statusFilter').addEventListener('change', function() {
+        filterDoctors();
+    });
+    
+    function filterDoctors() {
+        let search = document.getElementById('doctorSearch').value.toLowerCase();
+        let status = document.getElementById('statusFilter').value;
+        
+        document.querySelectorAll('#doctorTable tbody tr').forEach(row => {
+            let name = row.children[1].textContent.toLowerCase();
+            let specialties = row.children[2].textContent.toLowerCase();
+            let state = row.children[4].textContent.trim();
+            
+            let matchSearch = name.includes(search) || specialties.includes(search);
+            let matchStatus = (status === 'all') ||
+                (status === 'active' && state === 'Đang làm việc') ||
+                (status === 'inactive' && state === 'Ngừng làm việc') ||
+                (status === 'busy' && state === 'Đang bận');
+            
+            row.style.display = matchSearch && matchStatus ? '' : 'none';
+        });
+    }
+    
+    // Chuyển trạng thái bác sĩ (giả lập)
+    function toggleDoctorStatus(btn, toStatus) {
+        let row = btn.closest('tr');
+        let statusSpan = row.querySelector('.doctor-status');
+        
+        if (toStatus === 'inactive') {
+            statusSpan.textContent = 'Ngừng làm việc';
+            statusSpan.className = 'doctor-status inactive';
+            btn.innerHTML = '<i class="fa fa-rotate-left"></i> Mở lại';
+            btn.setAttribute('onclick', "toggleDoctorStatus(this,'active')");
+        } else if (toStatus === 'active') {
+            statusSpan.textContent = 'Đang làm việc';
+            statusSpan.className = 'doctor-status active';
+            btn.innerHTML = '<i class="fa fa-user-slash"></i> Khóa';
+            btn.setAttribute('onclick', "toggleDoctorStatus(this,'inactive')");
+        } else if (toStatus === 'busy') {
+            statusSpan.textContent = 'Đang bận';
+            statusSpan.className = 'doctor-status busy';
+            btn.innerHTML = '<i class="fa fa-check"></i> Mở';
+            btn.setAttribute('onclick', "toggleDoctorStatus(this,'active')");
+        }
+    }
+    
+    // Ẩn modal khi bấm ngoài vùng modal
+    document.getElementById('doctorModalBg').addEventListener('click', function(e){
+        if(e.target === this) closeDoctorModal();
+    });
+    
+    // Thêm bác sĩ
+    document.getElementById('addDoctorBtn').addEventListener('click', function(){
+        document.getElementById('addDoctorModalBg').classList.add('active');
+    });
+    
+    function closeAddDoctorModal() {
+        document.getElementById('addDoctorModalBg').classList.remove('active');
+        document.getElementById('addDoctorForm').reset();
+    }
+    
+    function saveNewDoctor() {
+        alert("Demo: Đã gửi yêu cầu thêm bác sĩ (bạn cần tích hợp backend để lưu).");
+        closeAddDoctorModal();
+    }
+    
+    // Đóng modal thêm bác sĩ khi click nền
+    document.getElementById('addDoctorModalBg').addEventListener('click', function(e){
+        if(e.target === this) closeAddDoctorModal();
+    });
+    
+    // Cho phép chọn nhiều chuyên khoa
+    document.getElementById('specialtySelect').addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        
+        var option = e.target;
+        if (option.tagName === 'OPTION') {
+            option.selected = !option.selected;
+        }
+    });
+</script>
+</body>
+</html>

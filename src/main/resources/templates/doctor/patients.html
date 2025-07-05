@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bệnh nhân | Doctor Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2176ae;
+            --primary-light: #e1f0fa;
+            --secondary: #57b8ff;
+            --success: #21ae66;
+            --soft: #f8fbfe;
+            --white: #fff;
+            --gray: #f0f4f8;
+            --danger: #e74c3c;
+            --text-primary: #183a55;
+            --text-secondary: #5a7a94;
+            --shadow-sm: 0 2px 8px rgba(33, 118, 174, 0.08);
+            --shadow-md: 0 4px 16px rgba(33, 118, 174, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+        body {
+            background: var(--soft);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            color: var(--text-primary);
+            margin: 0;
+            min-width: 0;
+            overflow-x: hidden !important;
+        }
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .dashboard-wrap {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .doctor-greeting {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: fadeInDown 0.5s;
+        }
+        .doctor-greeting img {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: var(--shadow-sm);
+            border: 3px solid var(--white);
+            outline: 2px solid var(--secondary);
+        }
+        @keyframes fadeInDown {
+            from { opacity:0; transform: translateY(-20px);}
+            to { opacity:1; transform: translateY(0);}
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+        .search-row {
+            margin-bottom: 1.25rem;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .search-row input, .search-row select {
+            padding: 0.625rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid #d6e7f5;
+            font-size: 0.95rem;
+            background: var(--white);
+            min-width: 180px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+        .search-row input:focus, .search-row select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(87, 184, 255, 0.15);
+        }
+        .patient-table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        .patient-table-wrap {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            min-width: fit-content;
+        }
+        .patient-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .patient-table th, .patient-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray);
+            white-space: nowrap;
+        }
+        .patient-table th {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.93rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            position: sticky;
+            top: 0;
+        }
+        .patient-table tr {
+            transition: background 0.12s;
+        }
+        .patient-table tr:hover {
+            background: var(--soft);
+        }
+        .patient-status {
+            color: var(--success);
+            background: #eafcf4;
+            border-radius: 14px;
+            padding: 3px 18px;
+            font-size: 0.95em;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .appt-action-btn {
+            border: none;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: var(--radius-sm);
+            padding: 0.4rem 0.9rem;
+            margin: 0 0.18rem;
+            font-weight: 600;
+            font-size: 0.89rem;
+            transition: all 0.18s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.32rem;
+        }
+        .appt-action-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        /* Modal */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.22);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+        .modal-bg.active {
+            display: flex;
+            animation: fadeIn 0.2s;
+        }
+        .modal-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 2rem 2.4rem;
+            max-width: 500px;
+            width: 90vw;
+            position: relative;
+            animation: modalIn 0.2s;
+        }
+        @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+        @keyframes modalIn {
+            from {opacity:0; transform:translateY(24px);}
+            to {opacity:1; transform:translateY(0);}
+        }
+        .modal-close {
+            position: absolute;
+            right: 1.3rem;
+            top: 1.2rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-close:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+        .modal-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.18rem;
+            margin-bottom: 1.1rem;
+        }
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+        .modal-row {
+            display: flex;
+            gap: 0.9rem;
+            margin-bottom: 2px;
+        }
+        .modal-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 7.2rem;
+        }
+        .modal-value {
+            color: var(--text-secondary);
+            flex: 1;
+        }
+        .modal-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: var(--shadow-sm);
+            border: 3px solid #e4f2ff;
+            margin-bottom: 12px;
+            margin-top: 0.1rem;
+        }
+        @media (max-width: 992px) {
+            .dashboard-wrap { padding: 1.25rem;}
+        }
+        @media (max-width: 576px) {
+            .dashboard-wrap { padding: 0.5rem;}
+            .doctor-greeting { font-size: 1.1rem;}
+            .section-title { font-size: 1rem;}
+            .patient-table th, .patient-table td { padding: 0.7rem 0.4rem; font-size: 0.82rem;}
+            .appt-action-btn { font-size: 0.77rem; padding: 0.22rem 0.5rem;}
+            .modal-card { padding: 1.1rem;}
+        }
+    </style>
+</head>
+<body>
+    <!-- Kế thừa header -->
+    <div th:replace="doctor/header :: main-header"></div>
+    <div class="main-container">
+        <div class="dashboard-wrap">
+            <div class="search-row">
+                <input type="text" id="searchName" placeholder="Tìm tên, điện thoại...">
+                <select id="filterGender">
+                    <option value="">Tất cả giới tính</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                </select>
+                <select id="filterYear">
+                    <option value="">Tất cả năm sinh</option>
+                    <option>1989</option>
+                    <option>1995</option>
+                    <option>2002</option>
+                    <option>2005</option>
+                    <option>2007</option>
+                </select>
+            </div>
+            <div class="patient-table-container">
+                <div class="patient-table-wrap">
+                    <table class="patient-table" id="patientTable">
+                        <thead>
+                            <tr>
+                                <th>Họ tên</th>
+                                <th>Giới tính</th>
+                                <th>Năm sinh</th>
+                                <th>Điện thoại</th>
+                                <th>Dịch vụ đã khám</th>
+                                <th>Ngày khám gần nhất</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dữ liệu mẫu -->
+                            <tr>
+                                <td>Nguyễn Văn Nam</td>
+                                <td>Nam</td>
+                                <td>2002</td>
+                                <td>0903123456</td>
+                                <td>Tư vấn tâm lý</td>
+                                <td>28/06/2025</td>
+                                <td><span class="patient-status">Đã khám</span></td>
+                                <td>
+                                    <button class="appt-action-btn" onclick="openPatientModal('Nguyễn Văn Nam','Nam','2002','0903123456','Tư vấn tâm lý','28/06/2025','https://randomuser.me/api/portraits/men/43.jpg','Lo âu, áp lực học tập, cải thiện tốt sau tư vấn')">
+                                        <i class="fa-solid fa-eye"></i> Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Trần Thị Thảo</td>
+                                <td>Nữ</td>
+                                <td>2005</td>
+                                <td>0938555122</td>
+                                <td>Khảo sát nguy cơ</td>
+                                <td>28/06/2025</td>
+                                <td><span class="patient-status">Đã khám</span></td>
+                                <td>
+                                    <button class="appt-action-btn" onclick="openPatientModal('Trần Thị Thảo','Nữ','2005','0938555122','Khảo sát nguy cơ','28/06/2025','https://randomuser.me/api/portraits/women/65.jpg','Cần theo dõi thêm, kết quả khảo sát cho thấy nguy cơ ở mức trung bình')">
+                                        <i class="fa-solid fa-eye"></i> Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lê Quang Hòa</td>
+                                <td>Nam</td>
+                                <td>1995</td>
+                                <td>0986233554</td>
+                                <td>Tư vấn gia đình</td>
+                                <td>27/06/2025</td>
+                                <td><span class="patient-status">Đã khám</span></td>
+                                <td>
+                                    <button class="appt-action-btn" onclick="openPatientModal('Lê Quang Hòa','Nam','1995','0986233554','Tư vấn gia đình','27/06/2025','https://randomuser.me/api/portraits/men/31.jpg','Đã giải quyết mâu thuẫn trong gia đình, tiến triển tốt')">
+                                        <i class="fa-solid fa-eye"></i> Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Phạm Thị Mai</td>
+                                <td>Nữ</td>
+                                <td>2007</td>
+                                <td>0911122212</td>
+                                <td>Theo dõi điều trị</td>
+                                <td>25/06/2025</td>
+                                <td><span class="patient-status">Đã khám</span></td>
+                                <td>
+                                    <button class="appt-action-btn" onclick="openPatientModal('Phạm Thị Mai','Nữ','2007','0911122212','Theo dõi điều trị','25/06/2025','https://randomuser.me/api/portraits/women/74.jpg','Đã hoàn thành liệu trình điều trị, sức khỏe ổn định')">
+                                        <i class="fa-solid fa-eye"></i> Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Vũ Đức Lâm</td>
+                                <td>Nam</td>
+                                <td>1989</td>
+                                <td>0939777733</td>
+                                <td>Tư vấn tâm lý</td>
+                                <td>20/06/2025</td>
+                                <td><span class="patient-status">Đã khám</span></td>
+                                <td>
+                                    <button class="appt-action-btn" onclick="openPatientModal('Vũ Đức Lâm','Nam','1989','0939777733','Tư vấn tâm lý','20/06/2025','https://randomuser.me/api/portraits/men/92.jpg','Chia sẻ về căng thẳng công việc, cải thiện tích cực')">
+                                        <i class="fa-solid fa-eye"></i> Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Thêm nhiều dòng tùy thích -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Modal chi tiết bệnh nhân -->
+            <div class="modal-bg" id="modalBg">
+                <div class="modal-card">
+                    <button class="modal-close" onclick="closeModal()">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <h3 class="modal-title">Chi tiết hồ sơ bệnh nhân</h3>
+                    <div class="modal-content" id="modalContent">
+                        <!-- Nội dung động render ở đây -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Tìm kiếm
+        document.getElementById('searchName').addEventListener('keyup', function() {
+            let val = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#patientTable tbody tr');
+            rows.forEach(row => {
+                let name = row.cells[0].textContent.toLowerCase();
+                let phone = row.cells[3].textContent.toLowerCase();
+                row.style.display = (name.includes(val) || phone.includes(val)) ? '' : 'none';
+            });
+        });
+        // Lọc giới tính
+        document.getElementById('filterGender').addEventListener('change', function() {
+            filterRows();
+        });
+        // Lọc năm sinh
+        document.getElementById('filterYear').addEventListener('change', function() {
+            filterRows();
+        });
+        function filterRows() {
+            let gender = document.getElementById('filterGender').value;
+            let year = document.getElementById('filterYear').value;
+            let rows = document.querySelectorAll('#patientTable tbody tr');
+            rows.forEach(row => {
+                let rGender = row.cells[1].textContent;
+                let rYear = row.cells[2].textContent;
+                let show = true;
+                if(gender && rGender !== gender) show = false;
+                if(year && rYear !== year) show = false;
+                row.style.display = show ? '' : 'none';
+            });
+        }
+        // Modal chi tiết
+        function openPatientModal(name, gender, year, phone, service, date, avatar, note) {
+            document.getElementById('modalBg').classList.add('active');
+            document.getElementById('modalContent').innerHTML = `
+                <div style="text-align:center;">
+                    <img class="modal-avatar" src="${avatar}" alt="${name}">
+                </div>
+                <div class="modal-row"><div class="modal-label">Họ tên:</div><div class="modal-value">${name}</div></div>
+                <div class="modal-row"><div class="modal-label">Giới tính:</div><div class="modal-value">${gender}</div></div>
+                <div class="modal-row"><div class="modal-label">Năm sinh:</div><div class="modal-value">${year}</div></div>
+                <div class="modal-row"><div class="modal-label">Điện thoại:</div><div class="modal-value">${phone}</div></div>
+                <div class="modal-row"><div class="modal-label">Dịch vụ đã khám:</div><div class="modal-value">${service}</div></div>
+                <div class="modal-row"><div class="modal-label">Ngày khám:</div><div class="modal-value">${date}</div></div>
+                <div class="modal-row"><div class="modal-label">Ghi chú:</div><div class="modal-value">${note}</div></div>
+                <div style="margin-top:20px; text-align:right;">
+                    <button onclick="closeModal()" class="appt-action-btn" style="min-width:110px;">
+                        <i class="fa fa-check"></i> Đóng
+                    </button>
+                </div>
+            `;
+        }
+        function closeModal() {
+            document.getElementById('modalBg').classList.remove('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Giới thiệu hệ thống | Drug Prevention Support System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700,900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2176ae;
+            --secondary: #57b8ff;
+            --white: #fff;
+            --bg: #f7fbfd;
+            --shadow: 0 6px 32px rgba(33,118,174,0.13);
+            --dark: #204360;
+            --soft: #eaf4fa;
+        }
+        body {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--dark);
+        }
+        .about-main-wrap {
+            width: 98vw; max-width: 1280px; margin: 0 auto; padding: 0 0 72px 0;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .about-hero {
+            width: 100%;
+            background: linear-gradient(95deg, var(--primary) 64%, var(--secondary) 100%);
+            color: #fff;
+            border-radius: 26px;
+            margin-top: 28px;
+            padding: 48px 6vw 38px 6vw;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInDown 0.9s;
+        }
+        @keyframes fadeInDown {from {opacity:0;transform:translateY(-20px);} to {opacity:1;transform:translateY(0);}}
+        .about-hero h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin: 0 0 18px 0;
+            letter-spacing: 0.03em;
+            line-height: 1.09;
+        }
+        .about-hero-desc {
+            font-size: 1.22em;
+            max-width: 840px;
+            margin: 0 auto 24px auto;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+        .about-hero-quote {
+            font-size: 1.13em;
+            font-style: italic;
+            color: #d3e9f8;
+            margin-top: 22px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            width: 100%;
+            margin: 46px 0 26px 0;
+        }
+        .timeline-title {
+            font-size: 2.05em;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 35px;
+            color: var(--primary);
+            letter-spacing: 0.04em;
+        }
+        .timeline-wrap {
+            position: relative;
+            padding-left: 30px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .timeline-bar {
+            position: absolute; left: 17px; top: 0; bottom: 0;
+            width: 7px; background: linear-gradient(180deg, #57b8ff 20%, #2176ae 95%);
+            border-radius: 7px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 42px;
+        }
+        .timeline-dot {
+            position: absolute; left: -2px; top: 0;
+            width: 18px; height: 18px;
+            background: var(--primary);
+            border-radius: 50%; border: 3px solid var(--white);
+            box-shadow: 0 2px 8px #2176ae44;
+            z-index: 2;
+        }
+        .timeline-content {
+            margin-left: 36px;
+            background: var(--white);
+            border-radius: 13px;
+            box-shadow: 0 2px 11px #2176ae17;
+            padding: 18px 26px 17px 20px;
+            min-height: 58px;
+            animation: fadeInForm 0.6s;
+        }
+        .timeline-content strong { color: var(--primary); font-weight: 800;}
+        @keyframes fadeInForm {from {opacity:0;transform:translateY(25px);} to {opacity:1;transform:translateY(0);}}
+
+        /* Giá trị/tinh thần */
+        .about-values-section {
+            width: 100%; margin: 60px 0 28px 0; text-align: center;
+        }
+        .about-values-title {
+            font-size: 1.55em; font-weight: 700; color: var(--primary); margin-bottom: 24px;
+        }
+        .values-grid {
+            display: flex; flex-wrap: wrap; gap: 26px; justify-content: center;
+        }
+        .value-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 3px 17px #2176ae11;
+            padding: 34px 22px 26px 22px;
+            width: 250px;
+            min-width: 200px;
+            display: flex; flex-direction: column; align-items: center;
+            transition: box-shadow .16s, transform .12s;
+        }
+        .value-card:hover {
+            box-shadow: 0 8px 32px #57b8ff22;
+            transform: scale(1.045);
+        }
+        .value-icon {
+            font-size: 2.1rem; color: var(--secondary); margin-bottom: 10px;
+        }
+        .value-title {
+            font-size: 1.13em; font-weight: 700; color: var(--primary); margin-bottom: 9px;
+        }
+        .value-desc {
+            font-size: 1em; color: #3b5876;
+        }
+
+        /* Tree Achievements - New Style */
+        .about-achievements-section {
+            width: 100%;
+            margin: 70px 0 28px 0;
+            text-align: center;
+            position: relative;
+        }
+        .about-achievements-title {
+            font-size: 1.45em;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+        .tree-timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            padding: 0 0 70px 0;
+        }
+        .tree-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(180deg, #57b8ff 15%, #2176ae 95%);
+            border-radius: 6px;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+        .tree-achievement {
+            position: relative;
+            width: 48%;
+            min-width: 250px;
+            margin-bottom: 54px;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 2px 15px #2176ae16;
+            padding: 30px 28px 22px 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            animation: fadeInForm 0.75s;
+            border-left: 7px solid var(--primary);
+        }
+        .tree-achievement.right {
+            margin-left: 52%;
+            border-left: none;
+            border-right: 7px solid var(--secondary);
+            flex-direction: row-reverse;
+        }
+        .tree-icon {
+            font-size: 2.3em;
+            color: var(--secondary);
+            background: #eaf4fa;
+            border-radius: 50%;
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px #2176ae11;
+        }
+        .tree-achievement-content {
+            flex: 1;
+            text-align: left;
+        }
+        .tree-title {
+            font-size: 1.12em;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .tree-desc {
+            font-size: 1em;
+            color: #2a496e;
+            font-weight: 500;
+        }
+        .tree-dot {
+            position: absolute;
+            top: 34px;
+            left: 100%;
+            transform: translate(-50%, -50%);
+            width: 23px;
+            height: 23px;
+            background: var(--secondary);
+            border-radius: 50%;
+            border: 5px solid #fff;
+            box-shadow: 0 2px 12px #57b8ff44;
+            z-index: 3;
+        }
+        .tree-achievement.right .tree-dot {
+            left: -5%;
+            right: auto;
+        }
+        /* Sóng lan tỏa phía dưới cây */
+        .tree-wave {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100px;
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Products */
+        .about-products-section {
+            width: 100%; margin: 46px 0 20px 0;
+        }
+        .about-products-title {
+            font-size: 1.45em; font-weight: 800; color: var(--primary); margin-bottom: 24px; text-align:center;
+        }
+        .products-grid {
+            display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;
+        }
+        .product-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 26px 22px 23px 22px;
+            width: 265px;
+            min-width: 190px;
+            display: flex; flex-direction: column; align-items: center;
+            transition: box-shadow .17s, transform .12s;
+        }
+        .product-card:hover {
+            box-shadow: 0 8px 32px #2176ae19;
+            transform: translateY(-4px) scale(1.025);
+        }
+        .product-icon {
+            font-size: 2rem; color: var(--primary); margin-bottom: 9px;
+        }
+        .product-title {
+            font-size: 1.13em; font-weight: 700; margin-bottom: 7px; color: #2176ae;
+        }
+        .product-desc {
+            font-size: 1em; color: #325581;
+            text-align: center;
+        }
+        @media (max-width:1000px){
+            .tree-achievement, .tree-achievement.right {
+                width: 96vw; max-width: 440px; margin-left: 0 !important; border-radius: 12px;
+                border-left: 7px solid var(--primary);
+                border-right: none;
+                flex-direction: row;
+            }
+            .tree-achievement.right { border-right: none; border-left: 7px solid var(--secondary);}
+            .tree-dot, .tree-achievement.right .tree-dot {left: 100%; right:auto;}
+        }
+        @media (max-width:700px){
+            .about-main-wrap{ padding:0;}
+            .tree-timeline {padding-bottom: 25px;}
+            .tree-achievement, .tree-achievement.right { padding: 16px 6vw;}
+        }
+        @media (max-width:500px) {
+            .about-hero h1 { font-size: 1.17rem;}
+            .timeline-title, .about-values-title, .about-products-title, .about-achievements-title { font-size: 1.01rem;}
+        }
+    </style>
+</head>
+<body>
+<div th:replace="member/header :: main-header"></div>
+<div class="about-main-wrap">
+    <!-- Hero -->
+    <section class="about-hero">
+        <h1><i class="fa-solid fa-shield-heart"></i> Drug Prevention Support System</h1>
+        <div class="about-hero-desc">
+            Từ năm 2017, hệ thống tiên phong kết nối tri thức, chuyên gia và cộng đồng để bảo vệ thế hệ trẻ khỏi hiểm họa ma túy. Chúng tôi là <b>cầu nối tri thức – kỹ năng – niềm tin</b> với những giải pháp giáo dục, tư vấn và truyền thông sáng tạo, lấy con người làm trung tâm, phát triển bền vững vì một xã hội khỏe mạnh, nhân văn.
+        </div>
+        <div class="about-hero-quote">
+            “Phòng ngừa là đầu tư cho tương lai – sức mạnh lớn nhất chính là sự đồng hành và sẻ chia của cộng đồng.” <br>
+            <span style="color:#ffe066;font-weight:bold;">– Drug Prevention Team</span>
+        </div>
+    </section>
+    <!-- Timeline lịch sử -->
+    <section class="timeline-section">
+        <div class="timeline-title">Hành trình phát triển & Dấu mốc lịch sử</div>
+        <div class="timeline-wrap">
+            <div class="timeline-bar"></div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2017:</strong> Khởi động dự án truyền thông phòng chống ma túy với 10 tình nguyện viên đầu tiên.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2019:</strong> Ra mắt nền tảng khảo sát nhận thức <b>ASSIST</b> đầu tiên tại Việt Nam, hợp tác cùng UNICEF.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2021:</strong> Phát triển hệ thống học trực tuyến, đào tạo kỹ năng từ chối chất gây nghiện cho học sinh và phụ huynh.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2023:</strong> Được WHO, Red Cross trao bằng khen cho sáng kiến “Trường học an toàn không ma túy”.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <strong>2025:</strong> Hệ sinh thái Drug Prevention lan tỏa đến 31 tỉnh, có hơn 150 chuyên gia, 60.000+ thành viên, đa nền tảng số.
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Giá trị/tinh thần/tiêu chí/châm ngôn -->
+    <section class="about-values-section">
+        <div class="about-values-title"><i class="fa fa-heart"></i> Giá trị cốt lõi & Châm ngôn hành động</div>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="value-title">Cộng đồng đồng hành</div>
+                <div class="value-desc">Gắn kết – sẻ chia – hỗ trợ, cùng nhau phòng ngừa hiểm họa, vun đắp tương lai.</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="value-title">Kiến thức – Kỹ năng</div>
+                <div class="value-desc">Nền tảng mọi thay đổi đến từ nhận thức, giáo dục, kỹ năng thực tiễn.</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                <div class="value-title">Sáng tạo & Đổi mới</div>
+                <div class="value-desc">Luôn đổi mới, tận dụng công nghệ, truyền cảm hứng tích cực đến cộng đồng.</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <div class="value-title">Tận tâm & Trách nhiệm</div>
+                <div class="value-desc">Chuyên gia tận tụy, sẵn sàng hỗ trợ 24/7, luôn đặt quyền lợi người dùng lên trên hết.</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-globe"></i></div>
+                <div class="value-title">Phát triển bền vững</div>
+                <div class="value-desc">Vì một Việt Nam khỏe mạnh, hội nhập, phát triển lâu dài và nhân văn.</div>
+            </div>
+        </div>
+    </section>
+    <!-- Thành tựu/làn tỏa - Tree timeline trái phải -->
+    <section class="about-achievements-section">
+        <div class="about-achievements-title"><i class="fa-solid fa-trophy"></i> Thành tựu nổi bật & Tác động cộng đồng</div>
+        <div class="tree-timeline">
+            <div class="tree-line"></div>
+            <!-- Trái -->
+            <div class="tree-achievement">
+                <div class="tree-icon"><i class="fa-solid fa-medal"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Top 10 Sáng kiến xã hội</div>
+                    <div class="tree-desc">Được Bộ Y tế & WHO vinh danh 2023 với mô hình “Phòng chống ma túy học đường”.</div>
+                </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Phải -->
+            <div class="tree-achievement right">
+                <div class="tree-icon"><i class="fa-solid fa-award"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Lan tỏa 60.000+ thành viên</div>
+                    <div class="tree-desc">Cộng đồng Drug Prevention phủ rộng 31 tỉnh/thành, hàng trăm trường học hưởng lợi.</div>
+                </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Trái -->
+            <div class="tree-achievement">
+                <div class="tree-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Đối tác UNICEF, Red Cross</div>
+                    <div class="tree-desc">Hợp tác, hỗ trợ dự án giáo dục nhận thức, truyền thông đa phương tiện về phòng chống ma túy.</div>
+                </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Phải -->
+            <div class="tree-achievement right">
+                <div class="tree-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">150+ chuyên gia, bác sĩ</div>
+                    <div class="tree-desc">Đội ngũ chuyên gia đồng hành, tổ chức hơn 2000 buổi tư vấn online & offline trong 5 năm.</div>
+                </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Trái -->
+            <div class="tree-achievement">
+                <div class="tree-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Nền tảng học tập sáng tạo</div>
+                    <div class="tree-desc">Hệ thống khóa học đa dạng, cá nhân hóa, truyền cảm hứng phòng chống ma túy hiệu quả.</div>
+                </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Phải -->
+            <div class="tree-achievement right">
+                <div class="tree-icon"><i class="fa-solid fa-globe"></i></div>
+                <div class="tree-achievement-content">
+                    <div class="tree-title">Tác động quốc tế</div>
+                    <div class="tree-desc">Nhiều sáng kiến được chia sẻ tại diễn đàn ASEAN, Hội đồng phòng chống ma túy quốc tế.</div>
+                </div>
+                <div class="tree-dot"></div>
+            </div>
+            <!-- Sóng dưới -->
+            <div class="tree-wave">
+                <svg viewBox="0 0 1440 100" preserveAspectRatio="none" style="width:100%;height:100%;">
+                    <path d="M0,80 Q240,10 480,60 T960,50 T1440,80 L1440,100 L0,100Z" fill="#57b8ff" fill-opacity="0.22"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+    <!-- Sản phẩm/hệ sinh thái hiện có -->
+    <section class="about-products-section">
+        <div class="about-products-title"><i class="fa fa-cube"></i> Hệ sinh thái & Sản phẩm tiêu biểu</div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-book-open"></i></div>
+                <div class="product-title">Đào tạo online</div>
+                <div class="product-desc">Khóa học nhận thức, kỹ năng từ chối, phòng ngừa dành cho học sinh, phụ huynh, giáo viên.</div>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-clipboard-question"></i></div>
+                <div class="product-title">Khảo sát & Trắc nghiệm</div>
+                <div class="product-desc">ASSIST, CRAFFT… Hệ thống đánh giá nhận thức, cá nhân hóa lộ trình hỗ trợ hiệu quả.</div>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-user-doctor"></i></div>
+                <div class="product-title">Tư vấn chuyên gia</div>
+                <div class="product-desc">Chuyên gia, bác sĩ đồng hành trực tuyến hoặc trực tiếp. Đặt lịch nhanh, bảo mật tuyệt đối.</div>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-blog"></i></div>
+                <div class="product-title">Blog & Truyền thông</div>
+                <div class="product-desc">Chia sẻ kinh nghiệm thực tế, tin tức, câu chuyện truyền cảm hứng, cảnh báo xu hướng mới.</div>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fa fa-handshake"></i></div>
+                <div class="product-title">Kết nối cộng đồng</div>
+                <div class="product-desc">Tương tác, giao lưu – từ tình nguyện viên đến chuyên gia, doanh nghiệp, tổ chức quốc tế.</div>
+            </div>
+        </div>
+    </section>
+</div>
+<div th:replace="member/footer :: main-footer"></div>
+</body>
+</html>

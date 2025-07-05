@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý khóa học | Drug Use Prevention Support System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ICON -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #f6fbff;
+            color: #233044;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+        .main-header { margin-bottom: 0; }
+        .course-container {
+            width: 100vw;
+            min-height: calc(100vh - 60px);
+            padding: 0 36px 36px 36px;
+            box-sizing: border-box;
+        }
+        .page-title {
+            font-size: 1.28rem;
+            font-weight: 600;
+            margin: 32px 0 18px 0;
+            color: #2176ae;
+            letter-spacing: 0.01em;
+        }
+        .filter-bar {
+            background: #f2f8fd;
+            border-radius: 12px;
+            padding: 18px 18px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-sizing: border-box;
+        }
+        .filter-group {
+            display: flex;
+            gap: 17px;
+            flex-wrap: wrap;
+        }
+        .filter-item label {
+            font-size: 0.98em;
+            color: #336699;
+            margin-bottom: 3px;
+            display: block;
+        }
+        .filter-item input,
+        .filter-item select {
+            padding: 7px 11px;
+            border: 1px solid #e3eaf2;
+            border-radius: 7px;
+            font-size: 1em;
+            min-width: 130px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            padding: 9px 19px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: 0.17s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #2176ae;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #57b8ff;
+        }
+        .btn-outline {
+            background: #fff;
+            color: #2176ae;
+            border: 1.5px solid #2176ae;
+        }
+        .btn-outline:hover {
+            background: #f6fbff;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+        }
+        .course-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 1px 7px #d0e8fd33;
+            overflow: hidden;
+        }
+        .course-table th, .course-table td {
+            padding: 11px 16px;
+            font-size: 1em;
+        }
+        .course-table th {
+            background: #eaf3fa;
+            text-align: left;
+            color: #255c88;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-bottom: 2px solid #e3eaf2;
+        }
+        .course-table td {
+            border-bottom: 1px solid #f3f3f3;
+            color: #232e33;
+        }
+        .course-table tr:hover td {
+            background: #f8fcfe;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 13px;
+            border-radius: 7px;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+        .badge-active {
+            background: #eafaf1;
+            color: #21ae66;
+        }
+        .badge-inactive {
+            background: #f8dddd;
+            color: #e74c3c;
+        }
+        .badge-age {
+            background: #e9f7fe;
+            color: #2176ae;
+        }
+        .badge-topic {
+            background: #fffbe2;
+            color: #fbc02d;
+        }
+        .action-cell {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            width: 31px;
+            height: 31px;
+            border: none;
+            background: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.08em;
+            transition: 0.17s;
+        }
+        .action-btn:hover {
+            background: #eaf2fb;
+        }
+        .action-btn.edit { color: #2176ae; }
+        .action-btn.delete { color: #e74c3c; }
+        .action-btn.view { color: #21ae66; }
+        @media (max-width: 900px) {
+            .course-container { padding-left: 2vw; padding-right: 2vw; }
+        }
+        @media (max-width: 700px) {
+            .course-container { padding: 0 1vw 30px 1vw;}
+            .filter-bar { flex-direction: column; gap: 12px;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div th:replace="staff/header :: main-header"></div>
+
+<div class="course-container">
+
+    <div class="page-title">Quản lý khóa học đào tạo</div>
+
+    <!-- FILTER BAR -->
+    <form class="filter-bar" method="get" th:action="@{/staff/courses}">
+        <div class="filter-group">
+            <div class="filter-item">
+                <label for="search">Tìm kiếm</label>
+                <input type="text" id="search" name="q"
+                       th:value="${q}" placeholder="Tên, chủ đề...">
+            </div>
+            <div class="filter-item">
+                <label for="status">Trạng thái</label>
+                <select id="status" name="status">
+                    <option value="">Tất cả</option>
+                    <option value="active" th:selected="${status=='active'}">Đang mở</option>
+                    <option value="inactive" th:selected="${status=='inactive'}">Ngừng mở</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label for="ageGroup">Nhóm tuổi</label>
+                <select id="ageGroup" name="ageGroup">
+                    <option value="">Tất cả</option>
+                    <option value="student" th:selected="${ageGroup=='student'}">Học sinh</option>
+                    <option value="university" th:selected="${ageGroup=='university'}">Sinh viên</option>
+                    <option value="parent" th:selected="${ageGroup=='parent'}">Phụ huynh</option>
+                    <option value="teacher" th:selected="${ageGroup=='teacher'}">Giáo viên</option>
+                </select>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="btn btn-outline" type="submit">
+                <i class="fa fa-filter"></i> Lọc
+            </button>
+            <button class="btn btn-primary" type="button" id="openAddCourse">
+                <i class="fa fa-plus"></i> Thêm khóa học
+            </button>
+        </div>
+    </form>
+
+    <!-- TABLE KHÓA HỌC -->
+    <div class="table-responsive">
+        <table class="course-table">
+            <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Tên khóa học</th>
+                <th>Nhóm tuổi</th>
+                <th>Chủ đề</th>
+                <th>Số buổi</th>
+                <th>Trạng thái</th>
+                <th>Ngày mở</th>
+                <th>Học viên</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="course : ${courses}">
+                <td th:text="${course.code}">CRS001</td>
+                <td th:text="${course.name}">Kỹ năng phòng tránh ma túy</td>
+                <td>
+                    <span class="badge badge-age" th:text="${course.ageGroup}">Học sinh</span>
+                </td>
+                <td>
+                    <span class="badge badge-topic" th:text="${course.topic}">Nhận thức</span>
+                </td>
+                <td th:text="${course.sessions}">5</td>
+                <td>
+                    <span th:if="${course.active}" class="badge badge-active">Đang mở</span>
+                    <span th:unless="${course.active}" class="badge badge-inactive">Ngừng mở</span>
+                </td>
+                <td th:text="${#dates.format(course.openDate, 'dd/MM/yyyy')}">01/07/2024</td>
+                <td>
+                    <a href="#" th:href="@{'/staff/courses/' + ${course.id} + '/students'}" style="color:#2176ae;font-weight:500;">
+                        <i class="fa fa-users"></i>
+                        <span th:text="${course.studentCount}">23</span>
+                    </a>
+                </td>
+                <td>
+                    <div class="action-cell">
+                        <button class="action-btn view" type="button"
+                                th:attr="data-id=${course.id}" title="Xem chi tiết">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit" type="button"
+                                th:attr="data-id=${course.id}" title="Chỉnh sửa">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete" type="button"
+                                th:attr="data-id=${course.id}" title="Xóa khóa học">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(courses)}">
+                <td colspan="9" style="text-align:center;color:#bbb;padding:24px 0;">
+                    Không có khóa học phù hợp.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- MODAL THÊM KHÓA HỌC (ẩn/hiện bằng JS) -->
+    <div id="addCourseModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width:420px;">
+            <div class="modal-header">
+                <span style="font-size:1.08em;font-weight:600;">
+                    Thêm khóa học mới
+                </span>
+                <button class="modal-close" type="button"
+                        onclick="document.getElementById('addCourseModal').style.display='none'">
+                    &times;
+                </button>
+            </div>
+            <form th:action="@{/staff/courses}" method="post" th:object="${newCourse}">
+                <div class="form-group" style="margin-bottom:13px;">
+                    <label for="add-name">Tên khóa học</label>
+                    <input id="add-name" name="name" type="text" required style="width:100%;">
+                </div>
+                <div class="form-group" style="margin-bottom:13px;">
+                    <label for="add-ageGroup">Nhóm tuổi</label>
+                    <select id="add-ageGroup" name="ageGroup" required style="width:100%;">
+                        <option value="student">Học sinh</option>
+                        <option value="university">Sinh viên</option>
+                        <option value="parent">Phụ huynh</option>
+                        <option value="teacher">Giáo viên</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:13px;">
+                    <label for="add-topic">Chủ đề</label>
+                    <input id="add-topic" name="topic" type="text" required style="width:100%;">
+                </div>
+                <div class="form-group" style="margin-bottom:13px;">
+                    <label for="add-sessions">Số buổi</label>
+                    <input id="add-sessions" name="sessions" type="number" min="1" required style="width:100%;">
+                </div>
+                <div class="form-group" style="margin-bottom:13px;">
+                    <label for="add-date">Ngày mở</label>
+                    <input id="add-date" name="openDate" type="date" required style="width:100%;">
+                </div>
+                <div class="form-group" style="margin-bottom:13px;">
+                    <label for="add-active">Trạng thái</label>
+                    <select id="add-active" name="active" required style="width:100%;">
+                        <option value="true">Đang mở</option>
+                        <option value="false">Ngừng mở</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline"
+                            onclick="document.getElementById('addCourseModal').style.display='none'">
+                        Hủy bỏ
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Lưu khóa học
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- SCRIPT modal -->
+<script>
+    document.getElementById('openAddCourse').onclick = function() {
+        document.getElementById('addCourseModal').style.display = 'flex';
+    };
+    // Close modal bằng phím ESC
+    window.addEventListener('keydown', function(e){
+        if (e.key === "Escape") {
+            document.getElementById('addCourseModal').style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>

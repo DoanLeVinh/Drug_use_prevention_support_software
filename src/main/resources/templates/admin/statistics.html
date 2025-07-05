@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thống kê | Hệ thống Phòng ngừa Ma túy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --purple-color: #9b59b6;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #dfe6e9;
+        }
+        
+        body {
+            background: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            color: var(--text-color);
+        }
+        
+        /* Layout chung */
+        .main-admin-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* Filter section */
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            min-width: 150px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        /* Dashboard grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            grid-column: span 3;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-card .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .stat-card .icon.users {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .stat-card .icon.courses {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success-color);
+        }
+        
+        .stat-card .icon.appointments {
+            background: rgba(155, 89, 182, 0.1);
+            color: var(--purple-color);
+        }
+        
+        .stat-card .icon.tests {
+            background: rgba(241, 196, 15, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .label {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+        
+        .stat-card .change {
+            margin-top: auto;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .change.positive {
+            color: var(--success-color);
+        }
+        
+        .change.negative {
+            color: var(--danger-color);
+        }
+        
+        /* Chart cards */
+        .chart-card {
+            grid-column: span 6;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .chart-card.full-width {
+            grid-column: span 12;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        /* Data table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .data-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(52, 152, 219, 0.03);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #e8f7ef;
+            color: var(--success-color);
+        }
+        
+        .badge-warning {
+            background: #fffbe5;
+            color: var(--warning-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stat-card {
+                grid-column: span 6;
+            }
+            
+            .chart-card {
+                grid-column: span 12;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-admin-content {
+                padding: 20px 15px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card {
+                grid-column: span 12;
+            }
+            
+            .filter-section {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-select {
+                width: 100%;
+            }
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-color);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+        }
+        
+        .tab:hover:not(.active) {
+            color: var(--secondary-color);
+            background: rgba(52, 152, 219, 0.05);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+<!-- Kế thừa header từ admin/header.html -->
+<div th:replace="admin/header :: main-header"></div>
+
+<div class="main-admin-content">
+    <div class="section-header">
+        <h1 class="section-title">
+            <i class="fas fa-chart-line"></i>
+            Thống kê hệ thống
+        </h1>
+        <div class="filter-group">
+            <span class="filter-label">Xem theo:</span>
+            <select class="filter-select" id="timeRange">
+                <option value="7days">7 ngày qua</option>
+                <option value="30days" selected>30 ngày qua</option>
+                <option value="90days">90 ngày qua</option>
+                <option value="month">Tháng này</option>
+                <option value="quarter">Quý này</option>
+                <option value="year">Năm nay</option>
+                <option value="custom">Tùy chọn</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Bộ lọc thời gian tùy chỉnh (ẩn ban đầu) -->
+    <div class="filter-section" id="customDateRange" style="display: none;">
+        <div class="filter-group">
+            <span class="filter-label">Từ ngày:</span>
+            <input type="date" class="filter-select" id="startDate">
+        </div>
+        <div class="filter-group">
+            <span class="filter-label">Đến ngày:</span>
+            <input type="date" class="filter-select" id="endDate">
+        </div>
+        <button class="btn btn-primary">
+            <i class="fas fa-filter"></i> Áp dụng
+        </button>
+    </div>
+    
+    <!-- Thống kê tổng quan -->
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="icon users">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="value">1,248</div>
+            <div class="label">Người dùng mới</div>
+            <div class="change positive">
+                <i class="fas fa-arrow-up"></i> 12.5% so với tháng trước
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="icon courses">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="value">24</div>
+            <div class="label">Khóa học mới</div>
+            <div class="change positive">
+                <i class="fas fa-arrow-up"></i> 8.3% so với tháng trước
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="icon appointments">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="value">186</div>
+            <div class="label">Cuộc tư vấn</div>
+            <div class="change negative">
+                <i class="fas fa-arrow-down"></i> 5.2% so với tháng trước
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="icon tests">
+                <i class="fas fa-clipboard-check"></i>
+            </div>
+            <div class="value">543</div>
+            <div class="label">Bài kiểm tra</div>
+            <div class="change positive">
+                <i class="fas fa-arrow-up"></i> 22.1% so với tháng trước
+            </div>
+        </div>
+    </div>
+    
+    <!-- Biểu đồ chính -->
+    <div class="dashboard-grid">
+        <div class="chart-card">
+            <div class="card-header">
+                <h3 class="card-title">Hoạt động người dùng</h3>
+                <select class="filter-select" style="width: auto;">
+                    <option value="all">Tất cả hoạt động</option>
+                    <option value="register">Đăng ký</option>
+                    <option value="course">Tham gia khóa học</option>
+                    <option value="test">Làm bài kiểm tra</option>
+                    <option value="appointment">Đặt lịch tư vấn</option>
+                </select>
+            </div>
+            <div class="chart-container">
+                <canvas id="userActivityChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <div class="card-header">
+                <h3 class="card-title">Phân bổ người dùng theo độ tuổi</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="userAgeChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Biểu đồ tham gia khóa học -->
+    <div class="dashboard-grid">
+        <div class="chart-card full-width">
+            <div class="card-header">
+                <h3 class="card-title">Tham gia khóa học theo chủ đề</h3>
+                <select class="filter-select" style="width: auto;">
+                    <option value="all">Tất cả chủ đề</option>
+                    <option value="awareness">Nhận thức ma túy</option>
+                    <option value="prevention">Kỹ năng phòng tránh</option>
+                    <option value="refusal">Kỹ năng từ chối</option>
+                    <option value="recovery">Phục hồi sau cai nghiện</option>
+                </select>
+            </div>
+            <div class="chart-container">
+                <canvas id="courseParticipationChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Kết quả bài kiểm tra -->
+    <div class="dashboard-grid">
+        <div class="chart-card">
+            <div class="card-header">
+                <h3 class="card-title">Kết quả bài kiểm tra ASSIST</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="assistTestChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <div class="card-header">
+                <h3 class="card-title">Kết quả bài kiểm tra CRAFFT</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="crafftTestChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bảng thống kê tư vấn -->
+    <div class="dashboard-grid">
+        <div class="chart-card full-width">
+            <div class="card-header">
+                <h3 class="card-title">Lịch sử tư vấn gần đây</h3>
+                <button class="btn btn-primary">
+                    <i class="fas fa-download"></i> Xuất báo cáo
+                </button>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Người dùng</th>
+                            <th>Chuyên viên</th>
+                            <th>Ngày hẹn</th>
+                            <th>Hình thức</th>
+                            <th>Trạng thái</th>
+                            <th>Đánh giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>APT-2023-0456</td>
+                            <td>Nguyễn Văn A (HS)</td>
+                            <td>BS. Trần Thị B</td>
+                            <td>15/04/2023 14:00</td>
+                            <td>Trực tuyến</td>
+                            <td><span class="badge badge-success">Hoàn thành</span></td>
+                            <td>5/5 <i class="fas fa-star" style="color: #f39c12;"></i></td>
+                        </tr>
+                        <tr>
+                            <td>APT-2023-0455</td>
+                            <td>Lê Thị C (PH)</td>
+                            <td>TS. Phạm Văn D</td>
+                            <td>14/04/2023 09:30</td>
+                            <td>Trực tiếp</td>
+                            <td><span class="badge badge-success">Hoàn thành</span></td>
+                            <td>4/5 <i class="fas fa-star" style="color: #f39c12;"></i></td>
+                        </tr>
+                        <tr>
+                            <td>APT-2023-0454</td>
+                            <td>Trần Văn E (SV)</td>
+                            <td>ThS. Hoàng Thị F</td>
+                            <td>13/04/2023 16:15</td>
+                            <td>Trực tuyến</td>
+                            <td><span class="badge badge-success">Hoàn thành</span></td>
+                            <td>5/5 <i class="fas fa-star" style="color: #f39c12;"></i></td>
+                        </tr>
+                        <tr>
+                            <td>APT-2023-0453</td>
+                            <td>Phạm Thị G (GV)</td>
+                            <td>BS. Nguyễn Văn H</td>
+                            <td>12/04/2023 11:00</td>
+                            <td>Trực tuyến</td>
+                            <td><span class="badge badge-warning">Đã hủy</span></td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>APT-2023-0452</td>
+                            <td>Vũ Văn I (HS)</td>
+                            <td>BS. Trần Thị B</td>
+                            <td>10/04/2023 15:45</td>
+                            <td>Trực tiếp</td>
+                            <td><span class="badge badge-success">Hoàn thành</span></td>
+                            <td>4/5 <i class="fas fa-star" style="color: #f39c12;"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hiển thị bộ lọc tùy chọn ngày
+    document.getElementById('timeRange').addEventListener('change', function(e) {
+        const value = e.target.value;
+        const customRange = document.getElementById('customDateRange');
+        
+        if (value === 'custom') {
+            customRange.style.display = 'flex';
+        } else {
+            customRange.style.display = 'none';
+            // Load data based on selected range
+            loadDashboardData(value);
+        }
+    });
+    
+    // Biểu đồ hoạt động người dùng
+    const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
+    const userActivityChart = new Chart(userActivityCtx, {
+        type: 'line',
+        data: {
+            labels: ['1/3', '5/3', '10/3', '15/3', '20/3', '25/3', '30/3'],
+            datasets: [
+                {
+                    label: 'Đăng ký',
+                    data: [12, 19, 15, 27, 22, 18, 24],
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Khóa học',
+                    data: [8, 12, 10, 18, 15, 20, 25],
+                    borderColor: '#2ecc71',
+                    backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Bài kiểm tra',
+                    data: [15, 20, 18, 25, 30, 28, 35],
+                    borderColor: '#f39c12',
+                    backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 10
+                    }
+                }
+            }
+        }
+    });
+    
+    // Biểu đồ phân bổ độ tuổi
+    const userAgeCtx = document.getElementById('userAgeChart').getContext('2d');
+    const userAgeChart = new Chart(userAgeCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Học sinh', 'Sinh viên', 'Phụ huynh', 'Giáo viên', 'Khác'],
+            datasets: [{
+                data: [35, 40, 15, 8, 2],
+                backgroundColor: [
+                    '#3498db',
+                    '#2ecc71',
+                    '#9b59b6',
+                    '#f39c12',
+                    '#e74c3c'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = Math.round((value / total) * 100);
+                            return `${label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // Biểu đồ tham gia khóa học
+    const coursePartCtx = document.getElementById('courseParticipationChart').getContext('2d');
+    const coursePartChart = new Chart(coursePartCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Nhận thức ma túy', 'Kỹ năng phòng tránh', 'Kỹ năng từ chối', 'Phục hồi sau cai nghiện'],
+            datasets: [{
+                label: 'Số người tham gia',
+                data: [320, 240, 180, 90],
+                backgroundColor: [
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(46, 204, 113, 0.7)',
+                    'rgba(155, 89, 182, 0.7)',
+                    'rgba(241, 196, 15, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(52, 152, 219, 1)',
+                    'rgba(46, 204, 113, 1)',
+                    'rgba(155, 89, 182, 1)',
+                    'rgba(241, 196, 15, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        afterLabel: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = Math.round((context.raw / total) * 100);
+                            return `Tỉ lệ: ${percentage}%`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 50
+                    }
+                }
+            }
+        }
+    });
+    
+    // Biểu đồ kết quả ASSIST
+    const assistTestCtx = document.getElementById('assistTestChart').getContext('2d');
+    const assistTestChart = new Chart(assistTestCtx, {
+        type: 'radar',
+        data: {
+            labels: ['Rượu', 'Thuốc lá', 'Cần sa', 'Cocain', 'Amphetamine', 'Thuốc lắc', 'Thuốc phiện', 'Khác'],
+            datasets: [
+                {
+                    label: 'Nguy cơ thấp',
+                    data: [65, 59, 70, 58, 62, 55, 60, 68],
+                    backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                    borderColor: 'rgba(46, 204, 113, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Nguy cơ trung bình',
+                    data: [28, 35, 25, 30, 28, 32, 30, 25],
+                    backgroundColor: 'rgba(241, 196, 15, 0.2)',
+                    borderColor: 'rgba(241, 196, 15, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Nguy cơ cao',
+                    data: [7, 6, 5, 12, 10, 13, 10, 7],
+                    backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                    borderColor: 'rgba(231, 76, 60, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: {
+                        display: true
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+    
+    // Biểu đồ kết quả CRAFFT
+    const crafftTestCtx = document.getElementById('crafftTestChart').getContext('2d');
+    const crafftTestChart = new Chart(crafftTestCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Âm tính', 'Dương tính nhẹ', 'Dương tính trung bình', 'Dương tính cao'],
+            datasets: [{
+                data: [65, 20, 10, 5],
+                backgroundColor: [
+                    '#2ecc71',
+                    '#f39c12',
+                    '#e67e22',
+                    '#e74c3c'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            return `${label}: ${value}%`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // Hàm tải dữ liệu dashboard (giả lập)
+    function loadDashboardData(range) {
+        console.log(`Loading data for range: ${range}`);
+        // Trong thực tế sẽ gọi API để lấy dữ liệu
+        // Sau đó cập nhật các biểu đồ với dữ liệu mới
+    }
+    
+    // Khởi tạo với dữ liệu 30 ngày
+    loadDashboardData('30days');
+</script>
+</body>
+</html>

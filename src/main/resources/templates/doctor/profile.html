@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hồ sơ bác sĩ | Drug Prevention Support System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2176ae;
+            --secondary: #57b8ff;
+            --soft: #f7fbfd;
+            --white: #fff;
+            --gray: #f0f4f8;
+            --danger: #e74c3c;
+            --success: #21ae66;
+            --shadow: 0 4px 24px 0 rgba(33,118,174,0.10);
+            --radius: 16px;
+        }
+        body {
+            background: var(--soft);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            color: #17405c;
+            min-width: 0;
+        }
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 2vw 3rem 2vw;
+        }
+        .profile-title {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 2.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+        }
+        .profile-title i {
+            font-size: 1.4em;
+            color: var(--secondary);
+        }
+        .profile-main-flex {
+            display: flex;
+            gap: 2.5rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem 2.7rem 2.3rem 2.7rem;
+            align-items: flex-start;
+            min-height: 400px;
+        }
+        .profile-left {
+            min-width: 300px;
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .avatar-frame {
+            position: relative;
+            width: 146px;
+            height: 146px;
+        }
+        .profile-avatar {
+            width: 146px; height: 146px; border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--secondary);
+            background: #eaf4fa;
+            box-shadow: 0 2px 14px #2176ae21;
+            transition: filter 0.18s;
+        }
+        .avatar-edit-btn {
+            position: absolute;
+            right: 8px; bottom: 8px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            padding: 9px 10px 8px 10px;
+            font-size: 1.15em;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 9px #2176ae22;
+            display: none;
+            transition: background 0.16s;
+        }
+        .avatar-edit-btn:hover {
+            background: var(--secondary);
+        }
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 0.8rem;
+        }
+        .profile-role {
+            color: #21ae66;
+            background: #e7fbee;
+            font-size: 1.07em;
+            font-weight: 600;
+            border-radius: 9px;
+            padding: 2px 17px;
+            text-align: center;
+        }
+        .profile-desc {
+            font-size: 1em;
+            color: #315174;
+            opacity: 0.9;
+            text-align: center;
+            margin-top: 8px;
+            max-width: 260px;
+        }
+        .profile-right {
+            flex: 1 1 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.7rem;
+        }
+        .profile-form {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem 2.1rem;
+        }
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .form-row label {
+            font-weight: 600;
+            color: #225377;
+            font-size: 1.03em;
+            margin-bottom: 2px;
+        }
+        .form-row input, .form-row textarea, .form-row select {
+            font-size: 1.09em;
+            border-radius: 8px;
+            border: 1.4px solid #d0e8f6;
+            background: #f7fbff;
+            color: #1e3254;
+            padding: 10px 13px;
+            outline: none;
+            transition: border 0.16s, box-shadow 0.16s;
+        }
+        .form-row textarea { min-height: 62px; max-height: 150px; resize: vertical;}
+        .form-row input:disabled, .form-row textarea:disabled, .form-row select:disabled {
+            background: #f5f6fa;
+            color: #8ca3bb;
+            opacity: 1;
+        }
+        .form-row.full { grid-column: span 2; }
+        .form-btn-row {
+            display: flex;
+            gap: 1.3rem;
+            justify-content: flex-end;
+            margin-top: 1.7rem;
+            grid-column: span 2;
+        }
+        .profile-btn {
+            border: none;
+            border-radius: 9px;
+            padding: 0.7em 2.1em;
+            font-size: 1.09em;
+            font-weight: 700;
+            cursor: pointer;
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px #2176ae12;
+            transition: background 0.14s, transform 0.12s;
+        }
+        .profile-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-1px) scale(1.025);
+        }
+        .profile-btn.cancel {
+            background: #f0f4f8;
+            color: #204165;
+            border: 1.4px solid #c9dbf7;
+        }
+        .profile-btn.cancel:hover {
+            background: #e7ecf4;
+            color: #e74c3c;
+        }
+        .success-msg {
+            color: var(--success);
+            text-align: center;
+            font-weight: 700;
+            margin-top: 1.4rem;
+            animation: fadeIn 0.7s;
+            grid-column: span 2;
+        }
+        .error-msg {
+            color: var(--danger);
+            text-align: center;
+            font-weight: 600;
+            margin-top: 1.2rem;
+            animation: fadeIn 0.7s;
+            grid-column: span 2;
+        }
+        @media (max-width:900px) {
+            .profile-main-flex { flex-direction: column; gap: 1.3rem; padding: 1.2rem 1vw;}
+            .profile-form { grid-template-columns: 1fr; }
+            .form-btn-row, .success-msg, .error-msg { grid-column: span 1;}
+            .profile-left { flex-direction: row; justify-content: center; gap: 1.7rem;}
+            .profile-desc { max-width: none;}
+        }
+        @media (max-width:600px) {
+            .main-container { padding: 1rem 2vw;}
+            .profile-main-flex { padding: 0.7rem 0.5vw;}
+            .avatar-frame { width: 100px; height: 100px;}
+            .profile-avatar { width: 100px; height: 100px;}
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(14px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+<div th:replace="doctor/header :: main-header"></div>
+<div class="main-container">
+    <div class="profile-title">
+        <i class="fa-solid fa-user-gear"></i> Hồ sơ bác sĩ
+    </div>
+    <div class="profile-main-flex">
+        <!-- Avatar + mô tả -->
+        <div class="profile-left">
+            <div class="avatar-frame" id="avatarFrame">
+                <img src="https://randomuser.me/api/portraits/men/83.jpg" alt="Avatar" class="profile-avatar" id="profileAvatar">
+                <button class="avatar-edit-btn" id="editAvatarBtn" title="Đổi ảnh đại diện">
+                    <i class="fa fa-camera"></i>
+                </button>
+                <input type="file" id="avatarInput" accept="image/*" style="display:none">
+            </div>
+            <div>
+                <div class="profile-name" id="profileNameShow">BS. Nguyễn Văn Hùng</div>
+                <div class="profile-role" id="profileRoleShow">Bác sĩ tâm lý & cai nghiện</div>
+                <div class="profile-desc" id="profileAboutShow">Luôn đồng hành cùng cộng đồng phòng chống ma túy, hỗ trợ tâm lý - trị liệu tận tâm, chuyên nghiệp.</div>
+            </div>
+        </div>
+        <!-- Form thông tin cá nhân -->
+        <form class="profile-form" id="profileForm" autocomplete="off">
+            <div class="form-row">
+                <label for="fullname">Họ tên</label>
+                <input type="text" id="fullname" name="fullname" value="Nguyễn Văn Hùng" disabled maxlength="70">
+            </div>
+            <div class="form-row">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="hung.drugfree@gmail.com" disabled maxlength="60">
+            </div>
+            <div class="form-row">
+                <label for="phone">Số điện thoại</label>
+                <input type="tel" id="phone" name="phone" value="0912 123 456" disabled maxlength="20">
+            </div>
+            <div class="form-row">
+                <label for="specialty">Chuyên môn</label>
+                <select id="specialty" name="specialty" disabled>
+                    <option value="tâm lý" selected>Bác sĩ tâm lý & cai nghiện</option>
+                    <option value="nhi">Tâm lý trẻ vị thành niên</option>
+                    <option value="gia đình">Gia đình & xã hội</option>
+                    <option value="học đường">Tâm lý học đường</option>
+                </select>
+            </div>
+            <div class="form-row full">
+                <label for="about">Mô tả ngắn</label>
+                <textarea id="about" name="about" disabled>Luôn đồng hành cùng cộng đồng phòng chống ma túy, hỗ trợ tâm lý - trị liệu tận tâm, chuyên nghiệp.</textarea>
+            </div>
+            <div class="form-btn-row" id="formBtnRow">
+                <button type="button" class="profile-btn" id="editBtn"><i class="fa fa-pen"></i> Chỉnh sửa</button>
+            </div>
+            <div class="success-msg" id="successMsg" style="display:none;">Cập nhật thành công!</div>
+            <div class="error-msg" id="errorMsg" style="display:none;">Có lỗi, vui lòng thử lại!</div>
+        </form>
+    </div>
+</div>
+<script>
+    let isEdit = false;
+    const editBtn = document.getElementById('editBtn');
+    const profileForm = document.getElementById('profileForm');
+    const avatarFrame = document.getElementById('avatarFrame');
+    const avatarBtn = document.getElementById('editAvatarBtn');
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarImg = document.getElementById('profileAvatar');
+    const profileNameShow = document.getElementById('profileNameShow');
+    const profileRoleShow = document.getElementById('profileRoleShow');
+    const profileAboutShow = document.getElementById('profileAboutShow');
+    const successMsg = document.getElementById('successMsg');
+    const errorMsg = document.getElementById('errorMsg');
+    const btnRow = document.getElementById('formBtnRow');
+    function setEditMode(edit) {
+        isEdit = edit;
+        profileForm.querySelectorAll('input,textarea,select').forEach(i=>i.disabled = !edit);
+        avatarBtn.style.display = edit ? 'block' : 'none';
+        if(edit) {
+            btnRow.innerHTML = `
+                <button type="button" class="profile-btn" id="saveBtn"><i class="fa fa-save"></i> Lưu</button>
+                <button type="button" class="profile-btn cancel" id="cancelBtn"><i class="fa fa-times"></i> Hủy</button>
+            `;
+            document.getElementById('saveBtn').onclick = saveProfile;
+            document.getElementById('cancelBtn').onclick = () => setEditMode(false);
+        } else {
+            btnRow.innerHTML = `
+                <button type="button" class="profile-btn" id="editBtn"><i class="fa fa-pen"></i> Chỉnh sửa</button>
+            `;
+            document.getElementById('editBtn').onclick = () => setEditMode(true);
+            // reset các trường hiển thị nhanh
+            profileNameShow.textContent = document.getElementById('fullname').value;
+            profileAboutShow.textContent = document.getElementById('about').value;
+            profileRoleShow.textContent = document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex].text;
+        }
+    }
+    editBtn.onclick = () => setEditMode(true);
+    avatarBtn.onclick = () => avatarInput.click();
+    avatarInput.onchange = e => {
+        if(e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            if(!file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                avatarImg.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    function saveProfile() {
+        // Validate nhanh
+        let name = document.getElementById('fullname').value.trim();
+        let email = document.getElementById('email').value.trim();
+        let phone = document.getElementById('phone').value.trim();
+        if(!name || !email || !phone) {
+            errorMsg.style.display = "block";
+            errorMsg.textContent = "Vui lòng điền đủ các trường bắt buộc!";
+            setTimeout(()=>errorMsg.style.display="none", 2200);
+            return;
+        }
+        // Update thông tin bên trái
+        profileNameShow.textContent = name;
+        profileAboutShow.textContent = document.getElementById('about').value;
+        profileRoleShow.textContent = document.getElementById('specialty').options[document.getElementById('specialty').selectedIndex].text;
+        successMsg.style.display = "block";
+        setTimeout(()=>successMsg.style.display="none", 1800);
+        setEditMode(false);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lịch tư vấn | Doctor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2176ae;
+            --secondary: #57b8ff;
+            --white: #fff;
+            --soft: #f5fafd;
+            --success: #21ae66;
+            --danger: #e74c3c;
+            --pending: #fbc02d;
+            --shadow: 0 4px 24px #2176ae15;
+        }
+        body {
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: var(--soft);
+            color: #1b3d56;
+            min-width: 0;
+            overflow-x: hidden !important;
+        }
+        .appt-main {
+            width: 98vw;
+            max-width: 1750px;
+            margin: 0 auto;
+            padding: 38px 2vw 40px 2vw;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .appt-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 0.03em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .appt-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 25px;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .appt-search, .appt-filter {
+            padding: 10px 16px;
+            border: 1.2px solid #b7d8f5;
+            border-radius: 9px;
+            font-size: 1.09em;
+            background: #fff;
+            min-width: 210px;
+        }
+        .appt-table-wrap {
+            background: var(--white);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            overflow-x: auto;
+        }
+        .appt-table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 900px;
+        }
+        .appt-table th, .appt-table td {
+            padding: 14px 18px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        .appt-table th {
+            background: #eaf4fa;
+            color: #2468a8;
+            font-weight: 700;
+            font-size: 1.03em;
+        }
+        .appt-table tr {
+            transition: background 0.16s;
+        }
+        .appt-table tr:hover {
+            background: #f3faff;
+        }
+        .appt-status {
+            padding: 5px 13px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.98em;
+            display: inline-block;
+        }
+        .status-pending { background: #e8f2fd; color: #2176ae;}
+        .status-done { background: #e4fce9; color: var(--success);}
+        .status-cancel { background: #fde4e4; color: var(--danger);}
+        .appt-action-btn {
+            border: none;
+            background: #eaf6fb;
+            color: #2176ae;
+            border-radius: 7px;
+            padding: 8px 14px;
+            margin: 0 2px 0 0;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.14s, color 0.13s, transform 0.13s;
+        }
+        .appt-action-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.06);
+        }
+        .appt-action-btn.edit { background: #f2ffe8; color: #21ae66;}
+        .appt-action-btn.edit:hover { background: #21ae66; color: #fff;}
+        .appt-action-btn.cancel { background: #ffeaea; color: #e74c3c;}
+        .appt-action-btn.cancel:hover { background: #e74c3c; color: #fff;}
+        /* Modal */
+        .modal-bg {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(33,118,174,0.11); z-index: 199; align-items: center; justify-content: center;
+        }
+        .modal-bg.active { display: flex;}
+        .modal-card {
+            background: #fff; border-radius: 14px; box-shadow: 0 8px 32px #2176ae24;
+            padding: 38px 34px 24px 34px; max-width: 480px; width: 98vw; position: relative;
+            animation: modalIn 0.21s;
+        }
+        @keyframes modalIn { from {opacity:0; transform:translateY(28px);} to {opacity:1; transform:translateY(0);}}
+        .modal-close {
+            position: absolute; right: 15px; top: 13px; background: none; border: none; color: #ccc; font-size: 1.25em; cursor: pointer;
+        }
+        .modal-close:hover { color: #e74c3c;}
+        .modal-card label {
+            display: block; font-weight: 600; margin-top: 12px; margin-bottom: 5px; color: #2176ae;
+        }
+        .modal-card input, .modal-card select, .modal-card textarea {
+            width: 100%; padding: 9px 11px; border-radius: 8px; border: 1.1px solid #b7d8f5;
+            background: #f4fbff; margin-bottom: 8px; font-size: 1em; color: #1b3d56;
+        }
+        .modal-card textarea { min-height: 55px; max-height: 130px;}
+        .modal-action-row { margin-top: 14px; display: flex; gap: 9px;}
+        .modal-action-btn {
+            border: none; border-radius: 7px; padding: 9px 22px;
+            font-weight: 700; font-size: 1em; cursor: pointer;
+            background: var(--primary); color: #fff;
+            transition: background 0.13s, transform 0.11s;
+        }
+        .modal-action-btn.cancel { background: #e74c3c;}
+        .modal-action-btn:active { transform: scale(0.98);}
+        /* Responsive */
+        @media (max-width: 900px) {
+            .appt-main { padding: 16px 0vw; width: 99vw;}
+            .appt-table { min-width: 400px;}
+            .appt-title { font-size: 1.23rem;}
+        }
+        @media (max-width: 600px) {
+            .appt-main { padding: 8px 0vw;}
+            .appt-title { font-size: 1.03rem;}
+            .appt-tools { flex-direction: column; gap:7px; }
+            .appt-search, .appt-filter { min-width: 120px; font-size: 0.98em;}
+            .appt-table th, .appt-table td { padding: 8px 8px; font-size: 0.98em;}
+        }
+    </style>
+</head>
+<body>
+    <!-- Kế thừa header -->
+    <div th:replace="doctor/header :: main-header"></div>
+    <div class="appt-main">
+        <div class="appt-tools">
+            <input class="appt-search" type="text" id="searchInput" placeholder="Tìm kiếm tên, số điện thoại...">
+            <select class="appt-filter" id="statusFilter">
+                <option value="">Tất cả trạng thái</option>
+                <option value="pending">Chờ xác nhận</option>
+                <option value="done">Đã xác nhận</option>
+                <option value="cancel">Đã hủy</option>
+            </select>
+        </div>
+        <div class="appt-table-wrap">
+            <table class="appt-table" id="apptTable">
+                <thead>
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Bệnh nhân</th>
+                        <th>Điện thoại</th>
+                        <th>Dịch vụ</th>
+                        <th>Hình thức</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu mẫu -->
+                    <tr data-status="pending">
+                        <td>08:00, 28/06/2025</td>
+                        <td>Nguyễn Văn Nam</td>
+                        <td>0903123456</td>
+                        <td>Tư vấn tâm lý</td>
+                        <td>Online</td>
+                        <td><span class="appt-status status-pending">Chờ xác nhận</span></td>
+                        <td>
+                            <button class="appt-action-btn" onclick="openViewModal(this)">Xem</button>
+                            <button class="appt-action-btn edit" onclick="openEditModal(this)">Cập nhật</button>
+                            <button class="appt-action-btn cancel" onclick="updateStatusRow(this, 'cancel')">Hủy</button>
+                        </td>
+                    </tr>
+                    <tr data-status="pending">
+                        <td>10:30, 28/06/2025</td>
+                        <td>Trần Thị Thảo</td>
+                        <td>0938555122</td>
+                        <td>Khảo sát nguy cơ</td>
+                        <td>Offline</td>
+                        <td><span class="appt-status status-pending">Chờ xác nhận</span></td>
+                        <td>
+                            <button class="appt-action-btn" onclick="openViewModal(this)">Xem</button>
+                            <button class="appt-action-btn edit" onclick="openEditModal(this)">Cập nhật</button>
+                            <button class="appt-action-btn cancel" onclick="updateStatusRow(this, 'cancel')">Hủy</button>
+                        </td>
+                    </tr>
+                    <tr data-status="done">
+                        <td>13:30, 27/06/2025</td>
+                        <td>Lê Quang Hòa</td>
+                        <td>0986233554</td>
+                        <td>Tư vấn gia đình</td>
+                        <td>Online</td>
+                        <td><span class="appt-status status-done">Đã xác nhận</span></td>
+                        <td>
+                            <button class="appt-action-btn" onclick="openViewModal(this)">Xem</button>
+                            <button class="appt-action-btn edit" onclick="openEditModal(this)">Cập nhật</button>
+                            <button class="appt-action-btn cancel" onclick="updateStatusRow(this, 'cancel')">Hủy</button>
+                        </td>
+                    </tr>
+                    <tr data-status="cancel">
+                        <td>15:30, 26/06/2025</td>
+                        <td>Phạm Thu Nga</td>
+                        <td>0977226689</td>
+                        <td>Khảo sát định kỳ</td>
+                        <td>Offline</td>
+                        <td><span class="appt-status status-cancel">Đã hủy</span></td>
+                        <td>
+                            <button class="appt-action-btn" onclick="openViewModal(this)">Xem</button>
+                            <button class="appt-action-btn edit" onclick="openEditModal(this)">Cập nhật</button>
+                            <button class="appt-action-btn cancel" onclick="updateStatusRow(this, 'cancel')">Hủy</button>
+                        </td>
+                    </tr>
+                    <!-- Thêm nhiều dòng tùy thích -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Modal xem chi tiết -->
+        <div class="modal-bg" id="modalView">
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeModal('modalView')"><i class="fa fa-times"></i></button>
+                <h3 style="color:#2176ae;margin-top:0">Thông tin lịch tư vấn</h3>
+                <div id="viewModalContent"></div>
+            </div>
+        </div>
+        <!-- Modal cập nhật -->
+        <div class="modal-bg" id="modalEdit">
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeModal('modalEdit')"><i class="fa fa-times"></i></button>
+                <h3 style="color:#2176ae;margin-top:0">Cập nhật lịch tư vấn</h3>
+                <form id="editForm">
+                    <label>Thời gian</label>
+                    <input type="text" name="time" required>
+                    <label>Bệnh nhân</label>
+                    <input type="text" name="name" required>
+                    <label>Điện thoại</label>
+                    <input type="text" name="phone" required>
+                    <label>Dịch vụ</label>
+                    <input type="text" name="service" required>
+                    <label>Hình thức</label>
+                    <select name="mode" required>
+                        <option>Online</option>
+                        <option>Offline</option>
+                    </select>
+                    <label>Ghi chú</label>
+                    <textarea name="note"></textarea>
+                    <div class="modal-action-row">
+                        <button type="submit" class="modal-action-btn">Lưu</button>
+                        <button type="button" class="modal-action-btn cancel" onclick="closeModal('modalEdit')">Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Toast -->
+    <div id="toast" style="display:none;position:fixed;bottom:32px;right:32px;padding:15px 28px;background:linear-gradient(90deg,#2176ae 90%,#57b8ff 100%);color:#fff;border-radius:11px;font-weight:700;font-size:1.06em;z-index:5000;box-shadow:0 2px 12px #2176ae27"></div>
+    <script>
+        // Tìm kiếm
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let val = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#apptTable tbody tr');
+            rows.forEach(row => {
+                let name = row.cells[1].textContent.toLowerCase();
+                let phone = row.cells[2].textContent.toLowerCase();
+                row.style.display = (name.includes(val) || phone.includes(val)) ? '' : 'none';
+            });
+        });
+        // Lọc trạng thái
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            let val = this.value;
+            let rows = document.querySelectorAll('#apptTable tbody tr');
+            rows.forEach(row => {
+                row.style.display = (val === '' || row.dataset.status === val) ? '' : 'none';
+            });
+        });
+        // Xem chi tiết modal
+        function openViewModal(btn) {
+            let row = btn.closest('tr');
+            let cells = row.children;
+            let content = `
+                <div><b>Thời gian:</b> ${cells[0].textContent}</div>
+                <div><b>Bệnh nhân:</b> ${cells[1].textContent}</div>
+                <div><b>Điện thoại:</b> ${cells[2].textContent}</div>
+                <div><b>Dịch vụ:</b> ${cells[3].textContent}</div>
+                <div><b>Hình thức:</b> ${cells[4].textContent}</div>
+                <div><b>Trạng thái:</b> ${cells[5].textContent}</div>
+            `;
+            document.getElementById('viewModalContent').innerHTML = content;
+            document.getElementById('modalView').classList.add('active');
+        }
+        // Đóng modal
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        // Cập nhật modal
+        let editRow;
+        function openEditModal(btn) {
+            editRow = btn.closest('tr');
+            let cells = editRow.children;
+            let form = document.getElementById('editForm');
+            form.time.value = cells[0].textContent;
+            form.name.value = cells[1].textContent;
+            form.phone.value = cells[2].textContent;
+            form.service.value = cells[3].textContent;
+            form.mode.value = cells[4].textContent;
+            form.note.value = '';
+            document.getElementById('modalEdit').classList.add('active');
+        }
+        document.getElementById('editForm').onsubmit = function(e) {
+            e.preventDefault();
+            let f = e.target;
+            editRow.cells[0].textContent = f.time.value;
+            editRow.cells[1].textContent = f.name.value;
+            editRow.cells[2].textContent = f.phone.value;
+            editRow.cells[3].textContent = f.service.value;
+            editRow.cells[4].textContent = f.mode.value;
+            showToast('Cập nhật thành công!');
+            closeModal('modalEdit');
+        }
+        // Cập nhật trạng thái
+        function updateStatusRow(btn, status) {
+            let row = btn.closest('tr');
+            let statusCell = row.cells[5];
+            if (status === 'cancel') {
+                statusCell.innerHTML = '<span class="appt-status status-cancel">Đã hủy</span>';
+                row.dataset.status = 'cancel';
+                showToast('Đã chuyển sang trạng thái Hủy');
+            }
+        }
+        // Toast
+        function showToast(msg) {
+            let t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            t.style.opacity = 1;
+            setTimeout(()=>{t.style.opacity=0;}, 1700);
+            setTimeout(()=>{t.style.display='none';}, 2200);
+        }
+    </script>
+</body>
+</html>

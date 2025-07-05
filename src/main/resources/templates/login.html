@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Đăng nhập - Hệ thống phòng ngừa ma túy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #a0d8ef;
+            --accent-color: #67d6ff;
+            --light-blue: #eaf6fb;
+            --border-color: #d1eaff;
+            --text-color: #293245;
+            --member-color: #6c757d;
+            --staff-color: #1e90ff;
+            --doctor-color: #28a745;
+            --admin-color: #dc3545;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box;}
+        body {
+            min-height: 100vh;
+            font-family: 'Poppins', 'Roboto', sans-serif;
+            background: var(--light-blue);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        .wave-bg {position: fixed;left: 0; top: 0; width: 100vw; height: 100vh;overflow: hidden;z-index: 0;pointer-events: none;}
+        .wave-layer {position: absolute;left: 0; top: 0;width: 100%; height: 100%;transition: transform 0.18s cubic-bezier(.16,.81,.68,1.01);}
+        .login-container {display: flex;justify-content: center;align-items: center;min-height: 100vh;position: relative;z-index: 1;}
+        .login-card {background: rgba(255,255,255,0.97);border-radius: 18px;box-shadow: 0 10px 38px 0 #4a90e23b, 0 1.5px 7px 0 #1e90ff21;width: 100%;max-width: 520px;overflow: hidden;margin: 58px 0 58px 0;transition: box-shadow 0.2s;}
+        .login-header {background: linear-gradient(93deg, #4a90e2 70%, #a0d8ef 100%);color: white;padding: 2.2rem 1.6rem 1.6rem 1.6rem;text-align: center;border-radius: 18px 18px 0 0;}
+        .login-header h1 {font-family: 'Poppins', sans-serif;font-weight: 700;font-size: 2rem;margin-bottom: 0.45rem;letter-spacing: 0.5px;}
+        .login-header p { font-size: 1.09rem; opacity: 0.96;}
+        .login-body {padding: 2.4rem 2rem 2rem 2rem;background: transparent;}
+        .form-group { margin-bottom: 1.6rem; position: relative;}
+        .form-group label {font-weight: 600;color: #345c85;margin-bottom: 0.5rem;}
+        .input-icon { position: relative;}
+        .input-icon i {position: absolute;left: 15px; top: 50%;transform: translateY(-50%);color: #4a90e2;}
+        .form-control {width: 100%;padding: 15px 15px 15px 50px;border: 1.5px solid var(--border-color);border-radius: 7px;font-size: 1.09rem;background: rgba(245,250,255,0.91);box-shadow: 0 0.5px 1.2px #1e90ff04;transition: border-color 0.3s, box-shadow 0.16s;}
+        .form-control:focus {outline: none;border-color: #4a90e2;box-shadow: 0 0 0 3px #4a90e233;}
+        .remember-forgot {display: flex;justify-content: space-between;align-items: center;margin-bottom: 1.28rem;font-size: 1.01rem;}
+        .remember-me { display: flex; align-items: center;}
+        .remember-me input { margin-right: 0.5rem;}
+        .forgot-password a { color: #4a90e2; text-decoration: none;}
+        .forgot-password a:hover { text-decoration: underline;}
+        .btn {display: inline-block;padding: 15px 24px;border-radius: 8px;font-size: 1.09rem;font-weight: 600;text-align: center;cursor: pointer;transition: 0.33s;border: none;width: 100%;letter-spacing: 0.12em;box-shadow: 0 0.5px 6px #1abc9c11;}
+        .btn-primary {background: linear-gradient(90deg, #4a90e2 70%, #a0d8ef 100%);color: white;border: none;}
+        .btn-primary:hover {background: linear-gradient(90deg, #276db9 30%, #76c5f6 100%);transform: translateY(-2px) scale(1.03);box-shadow: 0 2px 10px #a0d8ef88;}
+        .login-divider {display: flex;align-items: center;margin: 1.4rem 0 1.15rem 0;color: #a0aec0;font-size: 1.02rem;}
+        .login-divider::before,.login-divider::after {content: "";flex: 1;border-bottom: 1.5px solid var(--border-color);}
+        .login-divider::before { margin-right: 1.2rem;}
+        .login-divider::after { margin-left: 1.2rem;}
+        .social-login {display: flex;flex-direction: column;gap: 1rem;margin-bottom: 1.28rem;}
+        .btn-social {display: flex;align-items: center;justify-content: center;padding: 12px;border-radius: 7px;font-weight: 600;color: white;text-decoration: none;box-shadow: 0 1px 9px #adb5bd08;transition: 0.18s;font-size: 1.08em;letter-spacing: 0.07em;}
+        .btn-social i {margin-right: 13px;font-size: 1.18rem;}
+        .btn-facebook {background: linear-gradient(90deg, #3b5998 85%, #a0d8ef 100%);}
+        .btn-google {background: linear-gradient(90deg, #db4437 80%, #a0d8ef 100%);}
+        .btn-twitter {background: linear-gradient(90deg, #1da1f2 90%, #a0d8ef 100%);}
+        .btn-facebook:hover, .btn-google:hover, .btn-twitter:hover {filter: brightness(1.08) contrast(1.06);transform: translateY(-2px) scale(1.04);box-shadow: 0 2px 10px #4a90e265;}
+        .register-link {text-align: center;margin-top: 1.25rem;font-size: 1.03rem;}
+        .register-link a {color: #4a90e2;font-weight: 600;text-decoration: none;letter-spacing: 0.02em;}
+        .register-link a:hover { text-decoration: underline;}
+        @media (max-width: 900px) {.login-card {max-width: 98vw;}.login-body {padding: 1.2rem;}}
+        @media (max-width: 640px) {.login-container { padding: 0;}.login-header { padding: 1.1rem 1rem 1rem 1rem;}.login-header h1 { font-size: 1.14rem;}.login-body { padding: 1rem;}.form-group { margin-bottom: 1rem;}.btn, .btn-social { padding: 10px 9px;}}
+        .alert-danger {
+            background: #ffdddd;
+            color: #c82333;
+            padding: 0.8em 1em;
+            border-radius: 6px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 1.3em;
+            font-weight: 500;
+        }
+        .alert-success {
+            background: #e2ffd8;
+            color: #257a0c;
+            padding: 0.8em 1em;
+            border-radius: 6px;
+            border: 1px solid #b9f5c6;
+            margin-bottom: 1.3em;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sóng nền động -->
+    <div class="wave-bg">
+        <svg class="wave-layer" id="wave1" viewBox="0 0 1440 520" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path fill="url(#bluewave1)" fill-opacity="0.7"
+                  d="M0,220 Q400,320 900,200 Q1300,110 1440,210 L1440,520 L0,520Z"/>
+            <defs>
+                <linearGradient id="bluewave1" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#a0d8ef"/>
+                    <stop offset="1" stop-color="#4a90e2"/>
+                </linearGradient>
+            </defs>
+        </svg>
+        <svg class="wave-layer" id="wave2" style="top:40px;opacity:.7" viewBox="0 0 1440 420" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path fill="url(#bluewave2)" fill-opacity="0.5"
+                  d="M0,170 Q400,220 900,160 Q1300,120 1440,170 L1440,420 L0,420Z"/>
+            <defs>
+                <linearGradient id="bluewave2" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#eaf6fb"/>
+                    <stop offset="1" stop-color="#67d6ff"/>
+                </linearGradient>
+            </defs>
+        </svg>
+        <svg class="wave-layer" id="wave3" style="top:80px;opacity:.45" viewBox="0 0 1440 340" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path fill="url(#bluewave3)" fill-opacity="0.36"
+                  d="M0,100 Q400,130 900,100 Q1300,120 1440,110 L1440,340 L0,340Z"/>
+            <defs>
+                <linearGradient id="bluewave3" x1="0" x2="1440" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#eaf6fb"/>
+                    <stop offset="1" stop-color="#a0d8ef"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Đăng nhập hệ thống</h1>
+                <p>Phần mềm hỗ trợ phòng ngừa sử dụng ma túy</p>
+            </div>
+            <div class="login-body">
+                <!-- Thông báo lỗi đăng nhập -->
+                <div th:if="${param.error}" class="alert-danger">
+                    Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.
+                </div>
+                <!-- Thông báo đăng xuất thành công -->
+                <div th:if="${param.logout}" class="alert-success">
+                    Đã đăng xuất thành công.
+                </div>
+                <form th:action="@{/login}" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Nhập tên đăng nhập" required autofocus>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Nhập mật khẩu" required>
+                        </div>
+                    </div>
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember-me">
+                            <label for="remember">Ghi nhớ đăng nhập</label>
+                        </div>
+                        <div class="forgot-password" id="forgotPasswordLink">
+                            <a th:href="@{/forgot-password}">Quên mật khẩu?</a>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                </form>
+                <div class="login-divider">Hoặc đăng nhập bằng</div>
+                <div class="social-login">
+                    <a href="#" class="btn-social btn-facebook">
+                        <i class="fab fa-facebook-f"></i>
+                        Đăng nhập với Facebook
+                    </a>
+                    <a href="#" class="btn-social btn-google">
+                        <i class="fab fa-google"></i>
+                        Đăng nhập với Google
+                    </a>
+                    <a href="#" class="btn-social btn-twitter">
+                        <i class="fab fa-twitter"></i>
+                        Đăng nhập với Twitter
+                    </a>
+                </div>
+                <div class="register-link" id="registerLink">
+                    Chưa có tài khoản? <a th:href="@{/register}">Đăng ký ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // --------- Hiệu ứng Parallax sóng nền di chuyển theo chuột ----------
+        const wave1 = document.getElementById('wave1');
+        const wave2 = document.getElementById('wave2');
+        const wave3 = document.getElementById('wave3');
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth - 0.5; // [-0.5, 0.5]
+            wave1.style.transform = `translateX(${x*24}px)`;
+            wave2.style.transform = `translateX(${x*38}px)`;
+            wave3.style.transform = `translateX(${x*60}px)`;
+        });
+        document.addEventListener('mouseleave', () => {
+            wave1.style.transform = '';
+            wave2.style.transform = '';
+            wave3.style.transform = '';
+        });
+        // Tự động focus vào ô username khi load trang
+        window.onload = function() {
+            document.getElementById('username').focus();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard | Drug Prevention Support System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1d3557;
+            --secondary: #457b9d;
+            --accent: #00b894;
+            --soft: #f8fbfe;
+            --white: #fff;
+            --danger: #e74c3c;
+            --warning: #fdcb6e;
+            --success: #21ae66;
+            --shadow: 0 3px 16px rgba(33,118,174,0.11);
+            --radius: 15px;
+            --admin-header-bg: linear-gradient(120deg, #12213a 80%, #2176ae 100%);
+            --admin-header-text: #fff;
+            --admin-header-active: #21ae66;
+            --admin-header-shadow: 0 3px 18px rgba(33,118,174,0.15);
+            --admin-badge-bg: #21ae66cc;
+        }
+        
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        
+        body {
+            background: var(--soft);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            color: #25415d;
+            margin: 0;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        /* Header Styles */
+        .admin-header {
+            background: var(--admin-header-bg);
+            color: var(--admin-header-text);
+            padding: 0 2rem;
+            box-shadow: var(--admin-header-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header-logo img {
+            height: 40px;
+        }
+        
+        .header-logo h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .header-nav a {
+            color: var(--admin-header-text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            opacity: 0.8;
+        }
+        
+        .header-nav a:hover, .header-nav a.active {
+            opacity: 1;
+        }
+        
+        .header-nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--admin-header-active);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .notification-badge {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .badge-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--admin-badge-bg);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        /* Main Content Styles */
+        .admin-container {
+            max-width: 1700px;
+            margin: 0 auto;
+            padding: 30px 2vw 50px 2vw;
+        }
+        
+        .admin-greeting {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        
+        .admin-greeting i {
+            font-size: 2.4rem;
+            color: var(--accent);
+        }
+        
+        .admin-quickstats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            box-shadow: 0 7px 32px #457b9d22;
+            transform: translateY(-5px);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 1.04em;
+            color: #6c7898;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .stat-desc {
+            font-size: 0.95em;
+            color: #7b91b7;
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            color: var(--secondary);
+            opacity: 0.12;
+        }
+        
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .trend-up {
+            color: var(--success);
+        }
+        
+        .trend-down {
+            color: var(--danger);
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.28rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        
+        .section-title i {
+            color: var(--accent);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f0f4fa;
+        }
+        
+        .data-table th {
+            background: #eaf2fa;
+            color: #2d5384;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+        }
+        
+        .data-table tr:hover {
+            background: #f8fbff;
+        }
+        
+        .table-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.7rem;
+            border: 2.5px solid #d4f0ff;
+        }
+        
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-badge.active {
+            background: #e8f7ef;
+            color: var(--success);
+        }
+        
+        .status-badge.banned {
+            background: #fdecea;
+            color: var(--danger);
+        }
+        
+        .status-badge.pending {
+            background: #fff6e0;
+            color: var(--warning);
+        }
+        
+        .btn {
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3a6a8a;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        /* Notification List */
+        .notification-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f4fa;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-icon {
+            font-size: 1.1rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: #eaf2fa;
+            color: var(--primary);
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+        
+        .notification-time {
+            font-size: 0.85rem;
+            color: #849cc1;
+        }
+        
+        .notification-unread .notification-title {
+            font-weight: 700;
+        }
+        
+        .notification-unread .notification-icon {
+            background: var(--accent);
+            color: white;
+        }
+        
+        /* Footer Styles */
+        .admin-footer {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 1200px) {
+            .admin-container {
+                padding: 1.5rem;
+            }
+            
+            .admin-greeting {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 0 1rem;
+                height: 60px;
+            }
+            
+            .header-logo h1 {
+                font-size: 1.2rem;
+            }
+            
+            .header-nav {
+                gap: 1rem;
+            }
+            
+            .admin-greeting {
+                font-size: 1.8rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table th, .data-table td {
+                padding: 0.6rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .admin-header {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+            }
+            
+            .header-nav {
+                margin: 0.5rem 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .admin-quickstats {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+            border: none;
+            font-size: 1.2rem;
+        }
+        
+        /* Dark Mode Styles */
+        body.dark-mode {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --accent: #10b981;
+            --soft: #1a1a2e;
+            --white: #16213e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --shadow: 0 3px 16px rgba(0,0,0,0.3);
+            
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .dashboard-section,
+        body.dark-mode .stat-card {
+            background: var(--white);
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .section-title,
+        body.dark-mode .stat-value,
+        body.dark-mode .notification-title {
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .stat-label,
+        body.dark-mode .stat-desc,
+        body.dark-mode .notification-time {
+            color: #94a3b8;
+        }
+        
+        body.dark-mode .data-table th {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .data-table tr:hover {
+            background: #1e293b;
+        }
+        
+        body.dark-mode .notification-icon {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .btn-outline {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+        
+        body.dark-mode .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }/* Animation Variables */
+:root {
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --animation-duration: 0.3s;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* Smooth Transitions */
+.stat-card {
+    transition: 
+        transform 0.25s var(--ease-out),
+        box-shadow 0.25s var(--ease-out),
+        background-color 0.2s var(--ease-in-out);
+    will-change: transform, box-shadow;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(69, 123, 157, 0.15);
+}
+
+.btn {
+    transition: 
+        background-color 0.15s var(--ease-in-out),
+        color 0.15s var(--ease-in-out),
+        transform 0.1s var(--ease-out);
+    will-change: background-color, transform;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* Notification Animations */
+.notification-item {
+    animation: 
+        fadeIn 0.4s var(--ease-out) both,
+        slideInRight 0.35s var(--ease-out) both;
+}
+
+.notification-item:nth-child(1) { animation-delay: 0.1s; }
+.notification-item:nth-child(2) { animation-delay: 0.2s; }
+.notification-item:nth-child(3) { animation-delay: 0.3s; }
+.notification-item:nth-child(4) { animation-delay: 0.4s; }
+
+/* Table Row Hover */
+.data-table tr {
+    transition: background-color 0.2s var(--ease-in-out);
+}
+
+/* Chart Loading Animation */
+.chart-container {
+    animation: fadeInScale 0.6s var(--ease-out);
+}
+
+/* Pulse Effect for Important Items */
+.notification-unread .notification-icon {
+    animation: pulse 1.5s var(--ease-in-out) infinite;
+}
+
+/* Dark Mode Transition */
+body {
+    transition: 
+        background-color 0.3s var(--ease-in-out),
+        color 0.3s var(--ease-in-out);
+}
+
+.dashboard-section,
+.stat-card {
+    transition: 
+        background-color 0.3s var(--ease-in-out),
+        box-shadow 0.3s var(--ease-in-out),
+        transform 0.3s var(--ease-in-out);
+}
+
+/* Loading Skeleton Animation */
+@keyframes shimmer {
+    0% { background-position: -468px 0; }
+    100% { background-position: 468px 0; }
+}
+
+.skeleton {
+    animation: shimmer 1.5s linear infinite;
+    background: linear-gradient(to right, #f0f4fa 8%, #e3e9f1 18%, #f0f4fa 33%);
+    background-size: 800px 104px;
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Hover Effects */
+.header-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--admin-header-active);
+    transition: width 0.3s var(--ease-in-out);
+}
+
+.header-nav a:hover::after,
+.header-nav a.active::after {
+    width: 100%;
+}
+
+/* Focus States */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.3);
+    transition: box-shadow 0.2s var(--ease-out);
+}
+
+/* Dropdown Animation */
+@keyframes dropdownFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-menu {
+    animation: dropdownFade 0.25s var(--ease-out);
+    transform-origin: top center;
+}
+    </style>
+</head>
+<body>
+    
+<div th:replace="admin/header :: main-header"></div>
+
+    <!-- Main Content -->
+    <div class="admin-container">
+        <div class="admin-greeting">
+            <i class="fa-solid fa-user-shield"></i>
+            Xin chào, <span style="color:var(--accent)">Quản trị viên!</span>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="admin-quickstats">
+            <div class="stat-card">
+                <div class="stat-label">Tổng số người dùng</div>
+                <div class="stat-value">2,354</div>
+                <div class="stat-desc">Tăng 3% tuần này</div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> 68 mới
+                </div>
+                <div class="stat-icon"><i class="fa fa-users"></i></div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Bác sĩ hoạt động</div>
+                <div class="stat-value">35</div>
+                <div class="stat-desc">Có lịch tư vấn tuần này</div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> 5 mới
+                </div>
+                <div class="stat-icon"><i class="fa fa-user-md"></i></div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Thành viên học tập</div>
+                <div class="stat-value">1,876</div>
+                <div class="stat-desc">Đang theo dõi các khoá học</div>
+                <div class="stat-trend trend-down">
+                    <i class="fas fa-arrow-down"></i> 2% giảm
+                </div>
+                <div class="stat-icon"><i class="fa fa-graduation-cap"></i></div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">Khảo sát đã thực hiện</div>
+                <div class="stat-value">421</div>
+                <div class="stat-desc">Trong tháng này</div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> 24% tăng
+                </div>
+                <div class="stat-icon"><i class="fa fa-clipboard-check"></i></div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Analytics Chart -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-chart-line"></i> Biểu đồ tổng quan hệ thống
+                </div>
+                <div class="chart-container">
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Recent Users -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-user-plus"></i> Người dùng mới
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Vai trò</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="table-avatar">
+                                        Nguyễn Văn A
+                                    </div>
+                                </td>
+                                <td>vana@email.com</td>
+                                <td>Thành viên</td>
+                                <td><span class="status-badge active">Đang hoạt động</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Xem</button>
+                                    <button class="btn btn-sm btn-primary">Khoá</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="https://randomuser.me/api/portraits/women/25.jpg" class="table-avatar">
+                                        Phạm Thị B
+                                    </div>
+                                </td>
+                                <td>pham.b@email.com</td>
+                                <td>Bác sĩ</td>
+                                <td><span class="status-badge pending">Chờ duyệt</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Xem</button>
+                                    <button class="btn btn-sm btn-primary">Duyệt</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="https://randomuser.me/api/portraits/men/42.jpg" class="table-avatar">
+                                        Lê Văn C
+                                    </div>
+                                </td>
+                                <td>levanc@email.com</td>
+                                <td>Admin</td>
+                                <td><span class="status-badge active">Đang hoạt động</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Xem</button>
+                                    <button class="btn btn-sm btn-primary">Khoá</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="https://randomuser.me/api/portraits/women/41.jpg" class="table-avatar">
+                                        Đỗ Thị D
+                                    </div>
+                                </td>
+                                <td>dothid@email.com</td>
+                                <td>Thành viên</td>
+                                <td><span class="status-badge banned">Đã khoá</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Xem</button>
+                                    <button class="btn btn-sm btn-primary">Mở khoá</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- System Notifications -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-bell"></i> Thông báo hệ thống
+                </div>
+                <ul class="notification-list" id="notificationList">
+                    <li class="notification-item notification-unread">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Khẩn cấp: Bảo trì hệ thống 23:00 hôm nay</div>
+                            <div class="notification-time">5 phút trước</div>
+                        </div>
+                    </li>
+                    <li class="notification-item notification-unread">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-shield-virus"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Cảnh báo đăng nhập bất thường ở tài khoản admin</div>
+                            <div class="notification-time">2 giờ trước</div>
+                        </div>
+                    </li>
+                    <li class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Có 3 tài khoản chờ duyệt đăng ký mới</div>
+                            <div class="notification-time">Hôm qua</div>
+                        </div>
+                    </li>
+                    <li class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Thống kê hệ thống tháng 6 đã sẵn sàng</div>
+                            <div class="notification-time">2 ngày trước</div>
+                        </div>
+                    </li>
+                </ul>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">
+                    Xem tất cả thông báo
+                </button>
+            </div>
+            
+            <!-- Recent Activities -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Hoạt động gần đây
+                </div>
+                <ul class="notification-list">
+                    <li class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Người dùng mới đã đăng ký</div>
+                            <div class="notification-time">10 phút trước</div>
+                        </div>
+                    </li>
+                    <li class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-file-import"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Báo cáo mới đã được tải lên</div>
+                            <div class="notification-time">1 giờ trước</div>
+                        </div>
+                    </li>
+                    <li class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-comment-medical"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Bác sĩ đã trả lời tư vấn</div>
+                            <div class="notification-time">3 giờ trước</div>
+                        </div>
+                    </li>
+                    <li class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fa-solid fa-video"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Cuộc họp đã được lên lịch</div>
+                            <div class="notification-time">5 giờ trước</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Footer -->
+    <footer class="admin-footer">
+        <div class="footer-links">
+            <a href="#">Giới thiệu</a>
+            <a href="#">Hỗ trợ</a>
+            <a href="#">Điều khoản</a>
+            <a href="#">Bảo mật</a>
+        </div>
+        <div>
+            &copy; 2023 Drug Prevention Support System. All rights reserved.
+        </div>
+    </footer>
+    
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        // Initialize Analytics Chart
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        const analyticsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
+                datasets: [
+                    {
+                        label: 'Người dùng mới',
+                        data: [320, 450, 380, 510, 620, 780],
+                        borderColor: '#00b894',
+                        backgroundColor: 'rgba(0, 184, 148, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Lượt truy cập',
+                        data: [1200, 1500, 1800, 2100, 2400, 2900],
+                        borderColor: '#457b9d',
+                        backgroundColor: 'rgba(69, 123, 157, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Khảo sát',
+                        data: [80, 120, 150, 210, 350, 420],
+                        borderColor: '#fdcb6e',
+                        backgroundColor: 'rgba(253, 203, 110, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+        
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        // Check for saved user preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+        
+        // Notification Mark as Read
+        const notificationList = document.getElementById('notificationList');
+        const notificationItems = notificationList.querySelectorAll('.notification-item');
+        const badgeCount = document.querySelector('.badge-count');
+        
+        notificationItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (item.classList.contains('notification-unread')) {
+                    item.classList.remove('notification-unread');
+                    updateBadgeCount();
+                }
+            });
+        });
+        
+        function updateBadgeCount() {
+            const unreadCount = notificationList.querySelectorAll('.notification-unread').length;
+            badgeCount.textContent = unreadCount;
+            
+            if (unreadCount === 0) {
+                badgeCount.style.display = 'none';
+            } else {
+                badgeCount.style.display = 'flex';
+            }
+        }
+        
+        // Simulate real-time data updates
+        function updateStats() {
+            // Randomly increment some stats for demo purposes
+            const statValues = document.querySelectorAll('.stat-value');
+            const trends = document.querySelectorAll('.stat-trend');
+            
+            statValues.forEach((value, index) => {
+                if (index % 2 === 0) { // Update only some stats to make it realistic
+                    const current = parseInt(value.textContent.replace(/,/g, ''));
+                    const increment = Math.floor(Math.random() * 10) + 1;
+                    const newValue = current + increment;
+                    value.textContent = newValue.toLocaleString();
+                    
+                    // Update trend indicator
+                    if (index === 2) { // Make the 3rd stat show a decrease for variety
+                        trends[index].innerHTML = `<i class="fas fa-arrow-down"></i> ${increment}% giảm`;
+                        trends[index].className = 'stat-trend trend-down';
+                    } else {
+                        trends[index].innerHTML = `<i class="fas fa-arrow-up"></i> ${increment} mới`;
+                        trends[index].className = 'stat-trend trend-up';
+                    }
+                }
+            });
+        }
+        
+        // Update stats every 30 seconds
+        setInterval(updateStats, 30000);
+        
+        // Table row click handler
+        document.querySelectorAll('.data-table tbody tr').forEach(row => {
+            row.addEventListener('click', (e) => {
+                // Don't trigger if clicking on a button
+                if (!e.target.closest('button')) {
+                    const userName = row.querySelector('td').textContent.trim();
+                    alert(`Xem chi tiết người dùng: ${userName}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

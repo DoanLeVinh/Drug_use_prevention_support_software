@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kết quả khảo sát</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; }
+        .container { max-width: 800px; margin: 40px auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; text-align: center; }
+        .result-header { font-size: 2rem; font-weight: 700; color: #2c3e50; margin-bottom: 20px; }
+        .risk-level { padding: 15px; border-radius: 8px; font-size: 1.5rem; font-weight: 600; margin-bottom: 20px; }
+        .risk-low { background-color: #d4edda; color: #155724; }
+        .risk-medium { background-color: #fff3cd; color: #856404; }
+        .risk-high { background-color: #f8d7da; color: #721c24; }
+        .recommendation { background-color: #e2e3e5; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: left; }
+        .actions a { text-decoration: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; margin: 0 10px; }
+        .btn-consult { background: #e74c3c; color: white; }
+        .btn-courses { background: #3498db; color: white; }
+    </style>
+</head>
+<body>
+<div th:replace="member/header :: main-header"></div>
+<div class="container">
+    <h1 class="result-header">Kết quả khảo sát của bạn</h1>
+    <div class="risk-level"
+         th:text="${riskLevel}"
+         th:classappend="${riskLevel == 'Nguy cơ thấp' ? 'risk-low' : (riskLevel == 'Nguy cơ trung bình' ? 'risk-medium' : 'risk-high')}">
+        Mức độ nguy cơ
+    </div>
+    <div class="recommendation">
+        <h3>Đề xuất hành động:</h3>
+        <p th:text="${recommendation}"></p>
+    </div>
+    <div class="actions">
+        <a href="/courses" class="btn-courses"><i class="fas fa-book"></i> Xem khóa học</a>
+        <a href="/consultation" class="btn-consult"><i class="fas fa-calendar-check"></i> Đặt lịch tư vấn</a>
+    </div>
+</div>
+<div th:replace="member/footer :: main-footer"></div>
+</body>
+</html>

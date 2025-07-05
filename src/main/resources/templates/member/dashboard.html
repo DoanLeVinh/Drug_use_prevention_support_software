@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Trang chủ | Drug Prevention Support System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hệ thống hỗ trợ phòng ngừa sử dụng ma túy - Giáo dục, đào tạo và cộng đồng">
+
+    <!-- THƯ VIỆN CSS (đặt trong <head>) -->
+    <!-- Font Awesome cho Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- AOS - Animate on Scroll Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* === TOÀN BỘ CSS ĐÃ ĐƯỢC VIẾT LẠI === */
+
+        :root {
+            --primary: #0077b6; /* Xanh đậm hơn một chút */
+            --secondary: #00b4d8; /* Xanh ngọc */
+            --bg: #f7fbff;
+            --white: #ffffff;
+            --text-dark: #121a2c;
+            --text-light: #5a677d;
+            --border-color: #e2e8f0;
+            --shadow-soft: 0 4px 15px rgba(0, 119, 182, 0.08);
+            --shadow-medium: 0 8px 25px rgba(0, 119, 182, 0.1);
+        }
+
+        /* --- Base & Reset --- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        img { max-width: 100%; height: auto; display: block; }
+        .main-wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px 80px; }
+
+        /* --- Section Styling --- */
+        .section { padding: 60px 0; }
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* === HERO SECTION - THIẾT KẾ MỚI === */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 24px;
+            padding: 60px 40px;
+            margin-top: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-content h1 {
+            color: var(--white);
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .hero-content p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.15rem;
+            margin-bottom: 32px;
+            max-width: 500px;
+        }
+        .hero-image-wrapper { display: flex; justify-content: center; align-items: center; }
+        .hero-image-wrapper img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        .hero-bg-shape {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        .shape1 { top: -50px; left: -50px; width: 200px; }
+        .shape2 { bottom: -80px; right: -80px; width: 300px; }
+        
+        /* --- Buttons --- */
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 50px;
+            border: none;
+            background: var(--white);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.15);
+        }
+        .btn-primary { background: var(--primary); color: var(--white); }
+        .btn-primary:hover { background: #005f8d; }
+
+        /* === TRIPLE BANNER SECTION - THIẾT KẾ MỚI === */
+        .banner-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .banner-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            aspect-ratio: 4/3;
+            transition: all 0.4s ease;
+        }
+        .banner-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0, 119, 182, 0.2); }
+        .banner-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .banner-card:hover img { transform: scale(1.05); }
+        .banner-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px 20px 20px;
+            color: white;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+        }
+        .banner-overlay h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+        .banner-overlay p { font-size: 1rem; opacity: 0.9; }
+
+        /* --- CARD LAYOUTS - NÂNG CẤP --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-medium); }
+        .card .card-img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+        .card-content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+        .card-desc { color: var(--text-light); margin-bottom: 20px; flex-grow: 1; }
+        .card-content .btn { align-self: flex-start; }
+
+        /* --- TEST CARD - NÂNG CẤP --- */
+        .test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+        .test-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            transition: all 0.3s ease;
+        }
+        .test-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-medium); }
+        .test-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background-color: #e6f7ff;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+        .test-card .card-title { margin-bottom: 8px; }
+
+        /* --- SPONSOR CAROUSEL - LÀM MỚI BẰNG CSS --- */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * 7)); } /* 250px là width, 7 là số logo */
+        }
+        .sponsor-carousel-wrapper {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px 0;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            position: relative;
+        }
+        .sponsor-carousel-wrapper::before, .sponsor-carousel-wrapper::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            z-index: 2;
+        }
+        .sponsor-carousel-wrapper::before { left: 0; background: linear-gradient(to right, var(--white) 0%, rgba(255,255,255,0) 100%); }
+        .sponsor-carousel-wrapper::after { right: 0; background: linear-gradient(to left, var(--white) 0%, rgba(255,255,255,0) 100%); }
+        
+        .sponsor-track {
+            display: flex;
+            width: calc(250px * 14); /* Gấp đôi số logo */
+            animation: scroll 40s linear infinite;
+        }
+        .sponsor-track:hover { animation-play-state: paused; }
+        .sponsor-logo {
+            width: 250px;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sponsor-logo img {
+            max-width: 150px;
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        .sponsor-logo img:hover { filter: grayscale(0%); opacity: 1; }
+
+        /* --- SPIRIT SECTION - NÂNG CẤP --- */
+        .spirit-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+        .spirit-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        .spirit-card i {
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+        .spirit-card .card-title { font-size: 1.15rem; }
+
+        /* --- DOCTORS SECTION - NÂNG CẤP --- */
+        .doctor-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+        .doctor-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-medium); }
+        .doctor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--white);
+            box-shadow: 0 0 0 4px var(--secondary);
+            margin-bottom: 16px;
+        }
+        .doctor-name { font-size: 1.2rem; font-weight: 700; }
+        .doctor-role { color: var(--secondary); font-weight: 600; margin-bottom: 8px; }
+        .doctor-email { font-size: 0.95rem; color: var(--text-light); }
+        .doctor-contact { margin-top: 16px; display: flex; gap: 16px; justify-content: center; }
+        .doctor-contact a {
+            color: var(--text-light);
+            font-size: 1.3rem;
+            transition: color 0.3s ease;
+        }
+        .doctor-contact a:hover { color: var(--primary); }
+
+        /* --- CERTIFICATES SECTION - NÂNG CẤP --- */
+        .cert-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        .cert-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .cert-card img {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 16px;
+        }
+        .cert-name { font-weight: 600; font-size: 1.1rem; }
+        .cert-issuer { color: var(--text-light); }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-content p { margin: 0 auto 32px; }
+            .hero-image-wrapper { margin-top: 40px; }
+            .test-grid, .spirit-list, .cert-list { grid-template-columns: 1fr 1fr; }
+            .banner-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .section { padding: 40px 0; }
+            .card-grid, .test-grid, .spirit-list, .cert-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div th:replace="member/header :: main-header"></div>
+
+    <div class="main-wrap">
+
+        <!-- HERO MỚI -->
+        <section class="hero-section">
+            <img loading="lazy" src="https://www.toptal.com/designers/subtlepatterns/uploads/watercolor.png" alt="background shape" class="hero-bg-shape shape1">
+            <img loading="lazy" src="https://www.toptal.com/designers/subtlepatterns/uploads/watercolor.png" alt="background shape" class="hero-bg-shape shape2">
+            <div class="hero-grid">
+                <div class="hero-content" data-aos="fade-right">
+                    <h1>Cùng nhau xây dựng một tương lai không ma túy.</h1>
+                    <p>Hệ thống cung cấp kiến thức, công cụ và sự hỗ trợ từ cộng đồng để bạn và người thân luôn an toàn.</p>
+                    <a href="#courses" class="btn">Khám phá ngay</a>
+                </div>
+                <div class="hero-image-wrapper" data-aos="fade-left" data-aos-delay="200">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" alt="Bác sĩ đang tư vấn">
+                </div>
+            </div>
+        </section>
+
+        <!-- BANNER 3 ẢNH MỚI -->
+        <section class="section" id="journey">
+            <div class="banner-grid">
+                <div class="banner-card" data-aos="fade-up">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=600&q=80" alt="Giáo dục phòng ngừa">
+                    <div class="banner-overlay">
+                        <h3>Giáo Dục</h3>
+                        <p>Nâng cao nhận thức</p>
+                    </div>
+                </div>
+                <div class="banner-card" data-aos="fade-up" data-aos-delay="100">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?auto=format&fit=crop&w=600&q=80" alt="Cộng đồng chung tay">
+                    <div class="banner-overlay">
+                        <h3>Cộng Đồng</h3>
+                        <p>Chung tay hành động</p>
+                    </div>
+                </div>
+                <div class="banner-card" data-aos="fade-up" data-aos-delay="200">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80" alt="Hỗ trợ tư vấn">
+                    <div class="banner-overlay">
+                        <h3>Tư Vấn</h3>
+                        <p>Đồng hành cùng chuyên gia</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOG NỔI BẬT -->
+        <section class="section" id="blog">
+            <div class="section-title" data-aos="fade-up"><i class="fa-solid fa-blog"></i> Blog & Chia sẻ</div>
+            <div class="card-grid">
+                <!-- Card 1 -->
+                <div class="card" data-aos="fade-up">
+                    <img loading="lazy" class="card-img" src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=500&q=80" alt="Blog kỹ năng từ chối">
+                    <div class="card-content">
+                        <div class="card-title">5 kỹ năng từ chối chất gây nghiện cho học sinh</div>
+                        <div class="card-desc">Tình huống thực tế, cách xử lý và những bài học quý giá từ chuyên gia.</div>
+                        <a href="#" class="btn btn-primary">Đọc chi tiết</a>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="100">
+                    <img loading="lazy" class="card-img" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=500&q=80" alt="Blog phòng tránh">
+                    <div class="card-content">
+                        <div class="card-title">Hướng dẫn nhận biết nguy cơ và phòng tránh</div>
+                        <div class="card-desc">Nhận diện dấu hiệu sớm và tăng cường kết nối giữa gia đình và nhà trường.</div>
+                        <a href="#" class="btn btn-primary">Đọc chi tiết</a>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="200">
+                    <img loading="lazy" class="card-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="Blog phụ huynh giáo dục">
+                    <div class="card-content">
+                        <div class="card-title">Lời khuyên cho phụ huynh đồng hành cùng con</div>
+                        <div class="card-desc">Vai trò của cha mẹ, cách tạo dựng môi trường tích cực và truyền cảm hứng.</div>
+                        <a href="#" class="btn btn-primary">Đọc chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- KHÓA HỌC -->
+        <section class="section" id="courses">
+            <div class="section-title" data-aos="fade-up"><i class="fa-solid fa-graduation-cap"></i> Khóa học nổi bật</div>
+            <div class="card-grid">
+                <div class="card" data-aos="fade-up" th:each="course, stat : ${courses}" th:if="${stat.index} < 3">
+                    <img loading="lazy" class="card-img" th:if="${course.image != null and !#strings.isEmpty(course.image)}" th:src="${course.image}" th:alt="${course.name}" />
+                    <img loading="lazy" class="card-img" th:if="${course.image == null or #strings.isEmpty(course.image)}" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" th:alt="${course.name}" />
+                    <div class="card-content">
+                        <div class="card-title" th:text="${course.name}"></div>
+                        <div class="card-desc" th:text="${course.description}"></div>
+                        <button class="btn btn-primary">Xem khóa học</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÀI TEST -->
+        <section class="section" id="tests">
+            <div class="section-title" data-aos="fade-up"><i class="fa-solid fa-clipboard-question"></i> Bài khảo sát, trắc nghiệm</div>
+            <div class="test-grid" th:if="${not #lists.isEmpty(tests)}">
+                <div class="test-card" data-aos="fade-up" th:each="test : ${tests}">
+                    <img loading="lazy" src="https://cdn-icons-png.flaticon.com/512/3986/3986986.png" alt="Survey">
+                    <div class="test-info">
+                        <div class="card-title" th:text="${test.name}"></div>
+                        <div class="card-desc" th:text="${test.description}"></div>
+                        <a th:href="@{/tests/{id}/do(id=${test.id})}" class="btn btn-primary">Bắt đầu ngay</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GIÁ TRỊ HỆ THỐNG -->
+        <section class="section">
+            <div class="section-title" data-aos="fade-up"><i class="fa-solid fa-heart"></i> Giá trị cốt lõi</div>
+            <div class="spirit-list">
+                <div class="spirit-card" data-aos="zoom-in">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="card-title">Cộng đồng</div>
+                    <div class="card-desc">Xây dựng cộng đồng mạnh khỏe, không ma túy.</div>
+                </div>
+                <div class="spirit-card" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <div class="card-title">Sáng tạo</div>
+                    <div class="card-desc">Không ngừng đổi mới nội dung và công nghệ.</div>
+                </div>
+                <div class="spirit-card" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fa-solid fa-brain"></i>
+                    <div class="card-title">Giáo dục</div>
+                    <div class="card-desc">Trang bị kiến thức, kỹ năng để phòng ngừa.</div>
+                </div>
+                <div class="spirit-card" data-aos="zoom-in" data-aos-delay="300">
+                    <i class="fa-solid fa-hands-holding-child"></i>
+                    <div class="card-title">Đồng hành</div>
+                    <div class="card-desc">Chuyên gia tâm huyết luôn sát cánh cùng bạn.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ĐỘI NGŨ CHUYÊN GIA -->
+        <section class="section" id="doctors">
+            <div class="section-title" data-aos="fade-up"><i class="fa-solid fa-user-doctor"></i> Đội ngũ chuyên gia</div>
+            <div class="card-grid">
+                <div class="doctor-card" data-aos="fade-up">
+                    <img loading="lazy" class="doctor-avatar" th:src="@{/images/index-doctor1.png}" alt="BS. Nguyễn Văn Hùng">
+                    <div class="doctor-name">BS. Nguyễn Văn Hùng</div>
+                    <div class="doctor-role">Bác sĩ tâm lý & cai nghiện</div>
+                    <div class="doctor-email">hung.drugfree@gmail.com</div>
+                    <div class="doctor-contact">
+                        <a href="mailto:hung.drugfree@gmail.com"><i class="fa fa-envelope"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="doctor-card" data-aos="fade-up" data-aos-delay="100">
+                    <img loading="lazy" class="doctor-avatar" th:src="@{/images/index-doctor2.png}" alt="Chuyên gia Phạm Thị Lan">
+                    <div class="doctor-name">Phạm Thị Lan</div>
+                    <div class="doctor-role">Chuyên gia tâm lý trẻ vị thành niên</div>
+                    <div class="doctor-email">lan.counselor@gmail.com</div>
+                    <div class="doctor-contact">
+                        <a href="mailto:lan.counselor@gmail.com"><i class="fa fa-envelope"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="doctor-card" data-aos="fade-up" data-aos-delay="200">
+                    <img loading="lazy" class="doctor-avatar" th:src="@{/images/index-doctor3.png}" alt="TS. Trần Minh Quân">
+                    <div class="doctor-name">TS. Trần Minh Quân</div>
+                    <div class="doctor-role">Chuyên gia đào tạo & nghiên cứu</div>
+                    <div class="doctor-email">minhquan.training@gmail.com</div>
+                    <div class="doctor-contact">
+                        <a href="mailto:minhquan.training@gmail.com"><i class="fa fa-envelope"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- NHÀ TÀI TRỢ MỚI -->
+        <section class="section" data-aos="fade-up">
+            <div class="sponsor-carousel-wrapper">
+                <div class="sponsor-track">
+                    <!-- Lặp lại 2 lần để tạo hiệu ứng vô tận -->
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor1.png}" alt="Sponsor 1"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor2.png}" alt="Sponsor 2"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor3.png}" alt="Sponsor 3"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor4.png}" alt="Sponsor 4"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor5.png}" alt="Sponsor 5"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor1.png}" alt="Sponsor 1"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor2.png}" alt="Sponsor 2"></div>
+                    <!-- Lặp lại lần 2 -->
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor1.png}" alt="Sponsor 1"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor2.png}" alt="Sponsor 2"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor3.png}" alt="Sponsor 3"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor4.png}" alt="Sponsor 4"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor5.png}" alt="Sponsor 5"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor1.png}" alt="Sponsor 1"></div>
+                    <div class="sponsor-logo"><img loading="lazy" th:src="@{/images/sponsor2.png}" alt="Sponsor 2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHỨNG NHẬN -->
+        <section class="section">
+            <div class="section-title" data-aos="fade-up"><i class="fa-solid fa-certificate"></i> Chứng nhận & Giải thưởng</div>
+            <div class="cert-list">
+                <div class="cert-card" data-aos="fade-up">
+                    <img loading="lazy" src="https://cdn-icons-png.flaticon.com/512/3208/3208726.png" alt="Certificate">
+                    <div class="cert-name">Tổ chức Vì Sức Khỏe Cộng Đồng</div>
+                    <div class="cert-issuer">Bộ Y tế</div>
+                </div>
+                <div class="cert-card" data-aos="fade-up" data-aos-delay="100">
+                    <img loading="lazy" src="https://cdn-icons-png.flaticon.com/512/1256/1256650.png" alt="Award">
+                    <div class="cert-name">Bằng khen Cống hiến</div>
+                    <div class="cert-issuer">UNICEF Vietnam</div>
+                </div>
+                <div class="cert-card" data-aos="fade-up" data-aos-delay="200">
+                    <img loading="lazy" src="https://cdn-icons-png.flaticon.com/512/1049/1049969.png" alt="Medal">
+                    <div class="cert-name">Top 10 Sáng kiến Xã hội</div>
+                    <div class="cert-issuer">WHO Việt Nam</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div th:replace="member/footer :: main-footer"></div>
+
+    <!-- THƯ VIỆN JAVASCRIPT (đặt cuối <body>) -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Khởi tạo AOS
+        AOS.init({
+            duration: 800, // thời gian hiệu ứng
+            once: true, // chỉ chạy hiệu ứng 1 lần
+            offset: 50, // bắt đầu hiệu ứng sớm hơn 50px
+        });
+    </script>
+</body>
+</html>

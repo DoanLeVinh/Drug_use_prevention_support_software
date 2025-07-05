@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Doctor Dashboard | Drug Prevention Support System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2176ae;
+            --primary-light: #e1f0fa;
+            --secondary: #57b8ff;
+            --success: #21ae66;
+            --success-light: #e8f7ef;
+            --danger: #e74c3c;
+            --danger-light: #fdecea;
+            --warning: #f39c12;
+            --soft: #f7fbfd;
+            --white: #fff;
+            --gray: #f0f4f8;
+            --text-primary: #193c4a;
+            --text-secondary: #5a7a94;
+            --shadow-sm: 0 2px 10px rgba(33, 118, 174, 0.12);
+            --shadow-md: 0 6px 28px rgba(33, 118, 174, 0.14);
+            --shadow-lg: 0 16px 56px rgba(33, 118, 174, 0.18);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 22px;
+            --transition: all 0.22s cubic-bezier(.41,1.31,.57,.88);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--soft);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            color: var(--text-primary);
+            min-width: 0;
+            overflow-x: hidden !important;
+            transition: background 0.2s;
+        }
+
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .dashboard-wrap {
+            flex: 1;
+            padding: 2.2rem 2.2vw 2.2rem 2.2vw;
+            max-width: 1550px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .doctor-greeting {
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 2.3rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            animation: fadeInDown 0.65s;
+        }
+        .doctor-greeting img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: var(--shadow-sm);
+            border: 3px solid var(--white);
+            outline: 2px solid var(--secondary);
+        }
+        @keyframes fadeInDown {
+            from { opacity:0; transform: translateY(-30px);}
+            to { opacity:1; transform: translateY(0);}
+        }
+
+        /* Quick stats */
+        .doctor-quickstats {
+            display: flex;
+            gap: 2.2vw;
+            margin-bottom: 2.4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            padding: 1.4rem 2rem 1.1rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 220px;
+            max-width: 340px;
+            flex: 1 1 220px;
+            border-left: 6px solid var(--primary);
+            will-change: transform, box-shadow;
+        }
+        .stat-card:hover {
+            transform: translateY(-7px) scale(1.03);
+            box-shadow: var(--shadow-md);
+            border-left: 6px solid var(--secondary);
+            background: linear-gradient(96deg,#eaf4fa 84%, #d6f4ff 100%);
+        }
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.96rem;
+        }
+        .stat-value {
+            font-size: 2.15rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+        .stat-desc {
+            font-size: 1.01rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .stat-icon {
+            font-size: 2rem;
+            position: absolute;
+            right: 1.5rem;
+            top: 1.2rem;
+            color: var(--secondary);
+            opacity: 0.16;
+            pointer-events: none;
+        }
+
+        /* Section */
+        .dashboard-section {
+            margin-top: 2.5rem;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.35rem;
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+        .section-title i {
+            font-size: 1.13em;
+        }
+
+        /* Appointment Table */
+        .appt-table-container {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 6px;
+        }
+        .appt-table-wrap {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2.1rem;
+            min-width: fit-content;
+            transition: box-shadow 0.22s;
+        }
+        .appt-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .appt-table th, .appt-table td {
+            padding: 1rem 1.22rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray);
+            white-space: nowrap;
+        }
+        .appt-table th {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.97rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        .appt-table tr {
+            transition: background 0.13s;
+        }
+        .appt-table tr:hover {
+            background: #f0f6fa;
+        }
+        .appt-table td.status-cell {
+            font-weight: 700;
+            font-size: 1.01rem;
+        }
+        .appt-table .status-new {
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 0.25rem 0.8rem;
+            border-radius: 2em;
+            display: inline-block;
+            font-weight: 700;
+        }
+        .appt-table .status-done {
+            color: var(--success);
+            background: var(--success-light);
+            padding: 0.25rem 0.8rem;
+            border-radius: 2em;
+            display: inline-block;
+            font-weight: 700;
+        }
+        .appt-table .status-cancel {
+            color: var(--danger);
+            background: var(--danger-light);
+            padding: 0.25rem 0.8rem;
+            border-radius: 2em;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .appt-action-btn {
+            border: none;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: var(--radius-sm);
+            padding: 0.44rem 1.1rem;
+            margin: 0 0.18rem;
+            font-weight: 700;
+            font-size: 0.97rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 1px 7px #2176ae10;
+        }
+        .appt-action-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateY(-2px) scale(1.04);
+        }
+        .appt-action-btn.danger {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+        .appt-action-btn.danger:hover {
+            background: var(--danger);
+            color: var(--white);
+        }
+        .appt-action-btn.success {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        .appt-action-btn.success:hover {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .search-row {
+            margin-bottom: 1.3rem;
+            display: flex;
+            gap: 0.9rem;
+            justify-content: flex-end;
+        }
+        .search-row input {
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid #d6e7f5;
+            font-size: 1rem;
+            background: var(--white);
+            min-width: 260px;
+            color: var(--text-primary);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        .search-row input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(87, 184, 255, 0.14);
+        }
+
+        /* Modal overlay */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 34, 44, 0.32);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3.5px);
+            animation: fadeIn .2s;
+        }
+        .modal-bg.active {
+            display: flex;
+            animation: fadeIn .25s;
+        }
+        .modal-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 2.3rem 2.1rem 2.1rem 2.1rem;
+            max-width: 480px;
+            width: 92vw;
+            position: relative;
+            animation: modalIn .23s;
+        }
+        @keyframes fadeIn {
+            from {opacity:0;}
+            to {opacity:1;}
+        }
+        @keyframes modalIn {
+            from {
+                opacity:0;
+                transform:translateY(32px) scale(0.98);
+            }
+            to {
+                opacity:1;
+                transform:translateY(0) scale(1);
+            }
+        }
+        .modal-close {
+            position: absolute;
+            right: 1.25rem;
+            top: 1.25rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modal-close:hover {
+            color: var(--danger);
+            transform: rotate(90deg) scale(1.08);
+        }
+        .modal-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.35rem;
+            margin-bottom: 1.3rem;
+        }
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.82rem;
+        }
+        .modal-row {
+            display: flex;
+            gap: 1.1rem;
+        }
+        .modal-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 7.8rem;
+        }
+        .modal-value {
+            color: var(--text-secondary);
+            flex: 1;
+        }
+        .modal-footer {
+            margin-top: 1.8rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.7rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-wrap {
+                padding: 1.25rem 1vw 1.25rem 1vw;
+            }
+        }
+        @media (max-width: 900px) {
+            .doctor-quickstats { gap: 10px;}
+        }
+        @media (max-width: 768px) {
+            .dashboard-wrap { padding: 1rem 2vw;}
+            .doctor-greeting { font-size: 1.38rem;}
+            .doctor-greeting img { width: 38px; height: 38px;}
+            .doctor-quickstats { flex-direction: column;}
+            .stat-card { min-width: 170px; max-width: 99vw;}
+            .search-row { flex-direction: column; gap: 7px; }
+            .appt-table th, .appt-table td { padding: 0.6rem 0.4rem; font-size: 0.92rem;}
+        }
+        @media (max-width: 520px) {
+            .dashboard-wrap { padding: 0.5rem 1vw;}
+            .appt-table th, .appt-table td { font-size: 0.78rem;}
+            .stat-card { font-size: 0.97rem;}
+        }
+    </style>
+</head>
+<body>
+    <!-- Kế thừa header/sidebar -->
+    <div th:replace="doctor/header :: main-header"></div>
+    <div class="main-container">
+        <div class="dashboard-wrap">
+            <!-- Quick stats -->
+            <div class="doctor-quickstats">
+                <div class="stat-card" data-toast="Bạn có 7 lịch hẹn mới!">
+                    <span class="stat-label">Lịch hẹn hôm nay</span>
+                    <span class="stat-value">7</span>
+                    <span class="stat-desc">Cần xác nhận hoặc tư vấn</span>
+                    <span class="stat-icon"><i class="fa-solid fa-calendar-day"></i></span>
+                </div>
+                <div class="stat-card" data-toast="Có 15 bệnh nhân đang theo dõi!">
+                    <span class="stat-label">Bệnh nhân đang theo dõi</span>
+                    <span class="stat-value">15</span>
+                    <span class="stat-desc">Trong tuần này</span>
+                    <span class="stat-icon"><i class="fa-solid fa-users"></i></span>
+                </div>
+                <div class="stat-card" data-toast="Có 5 đánh giá mới!">
+                    <span class="stat-label">Đánh giá khảo sát</span>
+                    <span class="stat-value">5</span>
+                    <span class="stat-desc">Chưa xem xét</span>
+                    <span class="stat-icon"><i class="fa-solid fa-clipboard-check"></i></span>
+                </div>
+                <div class="stat-card" data-toast="2 phản hồi chờ xử lý!">
+                    <span class="stat-label">Phản hồi bệnh nhân</span>
+                    <span class="stat-value">2</span>
+                    <span class="stat-desc">Chưa phản hồi</span>
+                    <span class="stat-icon"><i class="fa-solid fa-comment-dots"></i></span>
+                </div>
+            </div>
+            <!-- Lịch hẹn gần nhất -->
+            <div class="dashboard-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-calendar-day"></i>
+                    <span>Lịch hẹn gần nhất</span>
+                </div>
+                <div class="search-row">
+                    <input type="text" id="apptSearch" placeholder="Tìm kiếm tên bệnh nhân...">
+                </div>
+                <div class="appt-table-container">
+                    <div class="appt-table-wrap">
+                        <table class="appt-table" id="apptTable">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Tên bệnh nhân</th>
+                                    <th>Dịch vụ</th>
+                                    <th>Hình thức</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dữ liệu mẫu -->
+                                <tr>
+                                    <td>08:00, 28/06/2025</td>
+                                    <td>Nguyễn Văn Nam</td>
+                                    <td>Tư vấn tâm lý</td>
+                                    <td>Online</td>
+                                    <td class="status-cell status-new">Chờ xác nhận</td>
+                                    <td>
+                                        <button class="appt-action-btn" onclick="openApptModal('Nguyễn Văn Nam', 'Tư vấn tâm lý', '08:00, 28/06/2025', 'Online', 'Bệnh nhân có biểu hiện lo âu, cần tư vấn tâm lý hỗ trợ')">
+                                            <i class="fas fa-eye"></i> Xem
+                                        </button>
+                                        <button class="appt-action-btn success" onclick="updateStatus(this, 'done')">
+                                            <i class="fas fa-check"></i> Xác nhận
+                                        </button>
+                                        <button class="appt-action-btn danger" onclick="updateStatus(this, 'cancel')">
+                                            <i class="fas fa-times"></i> Hủy
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>09:30, 28/06/2025</td>
+                                    <td>Trần Thị Thảo</td>
+                                    <td>Khảo sát nguy cơ</td>
+                                    <td>Offline</td>
+                                    <td class="status-cell status-done">Đã xác nhận</td>
+                                    <td>
+                                        <button class="appt-action-btn" onclick="openApptModal('Trần Thị Thảo', 'Khảo sát nguy cơ', '09:30, 28/06/2025', 'Offline', 'Bệnh nhân đã hoàn thành khảo sát trước đó, cần đánh giá kết quả')">
+                                            <i class="fas fa-eye"></i> Xem
+                                        </button>
+                                        <button class="appt-action-btn success" onclick="updateStatus(this, 'done')">
+                                            <i class="fas fa-check"></i> Xác nhận
+                                        </button>
+                                        <button class="appt-action-btn danger" onclick="updateStatus(this, 'cancel')">
+                                            <i class="fas fa-times"></i> Hủy
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>13:00, 28/06/2025</td>
+                                    <td>Lê Quang Hòa</td>
+                                    <td>Tư vấn gia đình</td>
+                                    <td>Online</td>
+                                    <td class="status-cell status-cancel">Đã hủy</td>
+                                    <td>
+                                        <button class="appt-action-btn" onclick="openApptModal('Lê Quang Hòa', 'Tư vấn gia đình', '13:00, 28/06/2025', 'Online', 'Bệnh nhân yêu cầu hủy do bận việc đột xuất')">
+                                            <i class="fas fa-eye"></i> Xem
+                                        </button>
+                                        <button class="appt-action-btn success" onclick="updateStatus(this, 'done')">
+                                            <i class="fas fa-check"></i> Xác nhận
+                                        </button>
+                                        <button class="appt-action-btn danger" onclick="updateStatus(this, 'cancel')">
+                                            <i class="fas fa-times"></i> Hủy
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>14:30, 28/06/2025</td>
+                                    <td>Phạm Thị Mai</td>
+                                    <td>Theo dõi điều trị</td>
+                                    <td>Offline</td>
+                                    <td class="status-cell status-new">Chờ xác nhận</td>
+                                    <td>
+                                        <button class="appt-action-btn" onclick="openApptModal('Phạm Thị Mai', 'Theo dõi điều trị', '14:30, 28/06/2025', 'Offline', 'Bệnh nhân cần kiểm tra định kỳ sau 2 tuần điều trị')">
+                                            <i class="fas fa-eye"></i> Xem
+                                        </button>
+                                        <button class="appt-action-btn success" onclick="updateStatus(this, 'done')">
+                                            <i class="fas fa-check"></i> Xác nhận
+                                        </button>
+                                        <button class="appt-action-btn danger" onclick="updateStatus(this, 'cancel')">
+                                            <i class="fas fa-times"></i> Hủy
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal xem chi tiết lịch hẹn -->
+            <div class="modal-bg" id="modalBg">
+                <div class="modal-card">
+                    <button class="modal-close" onclick="closeModal()">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <h3 class="modal-title">Chi tiết lịch hẹn</h3>
+                    <div class="modal-content" id="modalContent">
+                        <!-- Nội dung động sẽ render ở đây -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Quick stats toast
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('click', function() {
+                let msg = card.getAttribute('data-toast');
+                if(msg) showToast(msg);
+            });
+        });
+
+        // Tìm kiếm bảng lịch hẹn
+        document.getElementById('apptSearch').addEventListener('keyup', function() {
+            let val = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#apptTable tbody tr');
+            rows.forEach(r => {
+                let name = r.children[1].textContent.toLowerCase();
+                r.style.display = name.includes(val) ? '' : 'none';
+            });
+        });
+
+        // Modal xem chi tiết
+        function openApptModal(name, service, time, type, note) {
+            document.getElementById('modalBg').classList.add('active');
+            document.getElementById('modalContent').innerHTML = `
+                <div class="modal-row">
+                    <div class="modal-label">Bệnh nhân:</div>
+                    <div class="modal-value">${name}</div>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-label">Dịch vụ:</div>
+                    <div class="modal-value">${service}</div>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-label">Thời gian:</div>
+                    <div class="modal-value">${time}</div>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-label">Hình thức:</div>
+                    <div class="modal-value">${type}</div>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-label">Ghi chú:</div>
+                    <div class="modal-value">${note}</div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeModal()" class="appt-action-btn success">
+                        <i class="fas fa-check"></i> Đóng
+                    </button>
+                </div>
+            `;
+        }
+
+        function closeModal() {
+            document.getElementById('modalBg').classList.remove('active');
+        }
+
+        // Cập nhật trạng thái
+        function updateStatus(btn, status) {
+            let row = btn.closest('tr');
+            let td = row.querySelector('.status-cell');
+            if(status === 'done') {
+                td.textContent = 'Đã xác nhận';
+                td.className = 'status-cell status-done';
+                row.querySelectorAll('.appt-action-btn').forEach(btn => {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.6';
+                });
+            }
+            if(status === 'cancel') {
+                td.textContent = 'Đã hủy';
+                td.className = 'status-cell status-cancel';
+                row.querySelectorAll('.appt-action-btn').forEach(btn => {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.6';
+                });
+            }
+            showToast('Đã cập nhật trạng thái lịch hẹn!');
+        }
+
+        // Toast hiệu ứng
+        function showToast(msg) {
+            let toast = document.getElementById('doctorToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'doctorToast';
+                toast.style.position = 'fixed';
+                toast.style.bottom = '30px';
+                toast.style.right = '30px';
+                toast.style.padding = '14px 24px';
+                toast.style.background = 'var(--primary)';
+                toast.style.color = '#fff';
+                toast.style.borderRadius = 'var(--radius-sm)';
+                toast.style.boxShadow = 'var(--shadow-md)';
+                toast.style.fontWeight = '600';
+                toast.style.zIndex = '1000';
+                toast.style.opacity = '0';
+                toast.style.transition = 'all 0.3s ease';
+                toast.style.transform = 'translateY(20px)';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+            }, 2200);
+        }
+    </script>
+</body>
+</html>
