@@ -3,7 +3,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css?family=Inter:400,500&display=swap');
         .main-header {
-            background: linear-gradient(90deg, #2469e3 0%, #57b8ff 85%);
+            background: linear-gradient(90deg,rgb(129, 161, 216) 0%, #57b8ff 85%);
             color: #fff;
             min-height: 65px;
             box-shadow: 0 2px 12px 0 #2469e325;
@@ -39,7 +39,7 @@
             align-items: center;
         }
         .nav-link {
-            color: #fff;
+            color: black;
             text-decoration: none;
             font-size: 1.02em;
             padding: 8px 16px;
@@ -53,6 +53,7 @@
             color: #ffe066;
             text-decoration: none;
             opacity: 1;
+            color: black;
         }
         .avatar-dropdown {
             position: relative;
@@ -178,7 +179,6 @@
             <a href="/staff/tests" class="nav-link" th:classappend="${page=='tests'} ? 'active'">Khảo sát</a>
             <a href="/staff/appointments" class="nav-link" th:classappend="${page=='appointments'} ? 'active'">Lịch hẹn tư vấn</a>
             <a href="/staff/events" class="nav-link" th:classappend="${page=='events'} ? 'active'">Chương trình</a>
-            <a href="/staff/consultants" class="nav-link" th:classappend="${page=='consultants'} ? 'active'">Chuyên viên</a>
             <a href="/staff/user-management" class="nav-link" th:classappend="${page=='user-management'} ? 'active'">Quản lý người dùng</a>
         </nav>
         <div class="avatar-dropdown" tabindex="0">
@@ -210,9 +210,6 @@
                     <div class="dropdown-actions">
                         <a class="dropdown-action-btn" th:href="@{/profile}">
                             <i class="fa fa-user-circle"></i> Trang cá nhân
-                        </a>
-                        <a class="dropdown-action-btn" th:href="@{/history}">
-                            <i class="fa fa-history"></i> Lịch sử hoạt động
                         </a>
                         <form th:action="@{/logout}" method="post" style="margin:0;padding:0;">
                             <button class="dropdown-action-btn" type="submit">

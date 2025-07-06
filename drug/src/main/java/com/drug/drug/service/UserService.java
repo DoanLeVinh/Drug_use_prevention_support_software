@@ -5,6 +5,7 @@ import com.drug.drug.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,11 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    // Phương thức mới để lấy user theo ID
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     // Cập nhật user
     public User updateUser(User user) {
         return userRepository.save(user);
@@ -49,4 +55,29 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    // Lấy tất cả user có vai trò là "member"
+    public List<User> findUsersByRole(String role) {
+        return userRepository.findByRole(role);
+    }
+
+    // Cập nhật vai trò của người dùng
+    public User updateUserRole(Long id, String newRole) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setRole(newRole);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    // Lấy tất cả user
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUserById(Long id) {
+    return userRepository.findById(id).orElse(null);
+}
+
 }

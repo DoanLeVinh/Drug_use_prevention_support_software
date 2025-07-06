@@ -37,4 +37,9 @@ public class PastCourseService {
     public List<PastCourse> getPastCoursesByUser(Long userId) {
         return pastCourseRepository.findByUserIdOrderByAccessedAtDesc(userId);
     }
+
+    public List<PastCourse> findByUserId(Long userId) {
+    return pastCourseRepository.findByUserId(userId);
+}
+
 }

@@ -1,373 +1,177 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý người dùng | Drug Use Prevention Support System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ICON -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            background: #f6fbff;
-            color: #233044;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-        }
-        .main-header { margin-bottom: 0; }
-        .user-container {
-            width: 100vw;
-            min-height: calc(100vh - 60px);
-            padding: 0 36px 36px 36px;
-            box-sizing: border-box;
-        }
-        .page-title {
-            font-size: 1.31rem;
-            font-weight: 600;
-            margin: 32px 0 18px 0;
-            color: #2176ae;
-            letter-spacing: 0.01em;
-        }
-        .filter-bar {
-            background: #f2f8fd;
-            border-radius: 12px;
-            padding: 18px 18px;
-            margin-bottom: 28px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            box-sizing: border-box;
-        }
-        .filter-group {
-            display: flex;
-            gap: 17px;
-            flex-wrap: wrap;
-        }
-        .filter-item label {
-            font-size: 0.98em;
-            color: #336699;
-            margin-bottom: 3px;
-            display: block;
-        }
-        .filter-item input,
-        .filter-item select {
-            padding: 7px 11px;
-            border: 1px solid #e3eaf2;
-            border-radius: 7px;
-            font-size: 1em;
-            min-width: 130px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-        }
-        .btn {
-            padding: 9px 19px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: 0.17s;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            font-weight: 500;
-        }
-        .btn-primary {
-            background: #2176ae;
-            color: #fff;
-        }
-        .btn-primary:hover {
-            background: #57b8ff;
-        }
-        .btn-outline {
-            background: #fff;
-            color: #2176ae;
-            border: 1.5px solid #2176ae;
-        }
-        .btn-outline:hover {
-            background: #f6fbff;
-        }
-        .table-responsive {
-            overflow-x: auto;
-            width: 100%;
-        }
-        .user-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            border-radius: 13px;
-            box-shadow: 0 1px 7px #d0e8fd33;
-            overflow: hidden;
-        }
-        .user-table th, .user-table td {
-            padding: 11px 16px;
-            font-size: 1em;
-        }
-        .user-table th {
-            background: #eaf3fa;
-            text-align: left;
-            color: #255c88;
-            text-transform: uppercase;
-            font-weight: 600;
-            border-bottom: 2px solid #e3eaf2;
-        }
-        .user-table td {
-            border-bottom: 1px solid #f3f3f3;
-            color: #232e33;
-        }
-        .user-table tr:hover td {
-            background: #f8fcfe;
-        }
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 7px;
-            border: 1.5px solid #2176ae;
-        }
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 7px;
-            font-size: 0.95em;
-            font-weight: 500;
-        }
-        .badge-active {
-            background: #eafaf1;
-            color: #21ae66;
-        }
-        .badge-inactive {
-            background: #f8dddd;
-            color: #e74c3c;
-        }
-        .badge-staff {
-            background: #e9f7fe;
-            color: #2176ae;
-        }
-        .badge-member {
-            background: #fffbe2;
-            color: #fbc02d;
-        }
-        .badge-admin {
-            background: #efe2fa;
-            color: #9b27b0;
-        }
-        .action-cell {
-            display: flex;
-            gap: 8px;
-        }
-        .action-btn {
-            width: 31px;
-            height: 31px;
-            border: none;
-            background: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.08em;
-            transition: 0.17s;
-        }
-        .action-btn:hover {
-            background: #eaf2fb;
-        }
-        .action-btn.edit {
-            color: #2176ae;
-        }
-        .action-btn.delete {
-            color: #e74c3c;
-        }
-        .action-btn.view {
-            color: #21ae66;
-        }
-        @media (max-width: 900px) {
-            .user-container { padding-left: 2vw; padding-right: 2vw; }
-        }
-        @media (max-width: 700px) {
-            .user-container { padding: 0 1vw 30px 1vw;}
-            .filter-bar { flex-direction: column; gap: 12px;}
-        }
-    </style>
+    <title>Quản Lý Người Dùng</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 <body>
-
-<!-- HEADER -->
-<div th:replace="staff/header :: main-header"></div>
-
-<div class="user-container">
-
-    <div class="page-title">Quản lý người dùng</div>
-
-    <!-- FILTER/SORT BAR -->
-    <form class="filter-bar" method="get" th:action="@{/staff/users}">
-        <div class="filter-group">
-            <div class="filter-item">
-                <label for="search">Tìm kiếm</label>
-                <input type="text" id="search" name="q"
-                       th:value="${q}" placeholder="Tên, email, mã...">
-            </div>
-            <div class="filter-item">
-                <label for="role">Vai trò</label>
-                <select id="role" name="role">
-                    <option value="">Tất cả</option>
-                    <option value="member" th:selected="${role=='member'}">Member</option>
-                    <option value="staff" th:selected="${role=='staff'}">Staff</option>
-                    <option value="consultant" th:selected="${role=='consultant'}">Consultant</option>
-                    <option value="admin" th:selected="${role=='admin'}">Admin</option>
-                </select>
-            </div>
-            <div class="filter-item">
-                <label for="status">Trạng thái</label>
-                <select id="status" name="status">
-                    <option value="">Tất cả</option>
-                    <option value="active" th:selected="${status=='active'}">Đang hoạt động</option>
-                    <option value="inactive" th:selected="${status=='inactive'}">Ngừng hoạt động</option>
-                </select>
-            </div>
-        </div>
-        <div class="action-buttons">
-            <button class="btn btn-outline" type="submit">
-                <i class="fa fa-filter"></i> Lọc
-            </button>
-            <button class="btn btn-primary" type="button" id="openAddUser">
-                <i class="fa fa-plus"></i> Thêm người dùng
-            </button>
-        </div>
-    </form>
-
-    <!-- TABLE DANH SÁCH NGƯỜI DÙNG -->
-    <div class="table-responsive">
-        <table class="user-table">
-            <thead>
+    <div th:replace="staff/header :: main-header"></div>
+<div class="container mt-5">
+    <h1 class="mb-4">Danh Sách Người Dùng</h1>
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <p th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <th>Avatar</th>
-                <th>Mã</th>
-                <th>Tên</th>
+                <th>ID</th>
+                <th>Username</th>
                 <th>Email</th>
-                <th>Vai trò</th>
-                <th>Trạng thái</th>
-                <th>Ngày tạo</th>
-                <th>Hành động</th>
+                <th>Số ĐT</th>
+                <th>Ngày Sinh</th>
+                <th>Thao Tác</th>
             </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${users}">
+        </thead>
+        <tbody>
+            <tr th:each="user : ${members}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.sdt}"></td>
+                <td th:text="${#temporals.format(user.birthday, 'yyyy-MM-dd')}"></td>
                 <td>
-                    <img th:src="@{${user.avatarUrl}}"
-                         src="https://randomuser.me/api/portraits/men/32.jpg"
-                         class="user-avatar"
-                         th:if="${user.avatarUrl}">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg"
-                         class="user-avatar"
-                         th:unless="${user.avatarUrl}">
-                </td>
-                <td th:text="${user.code}">USR001</td>
-                <td th:text="${user.fullName}">Nguyễn Văn A</td>
-                <td th:text="${user.email}">user@email.com</td>
-                <td>
-                    <span th:switch="${user.role}" class="badge">
-                        <span th:case="'staff'" class="badge-staff">Staff</span>
-                        <span th:case="'member'" class="badge-member">Member</span>
-                        <span th:case="'admin'" class="badge-admin">Admin</span>
-                        <span th:case="'consultant'" class="badge-success">Consultant</span>
-                    </span>
-                </td>
-                <td>
-                    <span th:if="${user.active}" class="badge badge-active">Đang hoạt động</span>
-                    <span th:unless="${user.active}" class="badge badge-inactive">Ngừng hoạt động</span>
-                </td>
-                <td th:text="${#dates.format(user.createdAt, 'dd/MM/yyyy')}">15/07/2023</td>
-                <td>
-                    <div class="action-cell">
-                        <button class="action-btn view" type="button"
-                                th:attr="data-id=${user.id}" title="Xem chi tiết">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="action-btn edit" type="button"
-                                th:attr="data-id=${user.id}" title="Chỉnh sửa">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete" type="button"
-                                th:if="${user.role != 'admin'}"
-                                th:attr="data-id=${user.id}" title="Xóa/Khóa">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </div>
+                    <a th:href="@{/staff/user-management/detail/{id}(id=${user.id})}" class="btn btn-info btn-sm">Xem Chi Tiết</a>
                 </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(users)}">
-                <td colspan="8" style="text-align:center;color:#bbb;padding:24px 0;">
-                    Không có người dùng phù hợp.
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
 
-    <!-- MODAL THÊM NGƯỜI DÙNG (ẩn/hiện bằng JS, demo khung) -->
-    <div id="addUserModal" class="modal" style="display:none;">
-        <div class="modal-content" style="max-width:380px;">
-            <div class="modal-header">
-                <span style="font-size:1.08em;font-weight:600;">
-                    Thêm người dùng mới
-                </span>
-                <button class="modal-close" type="button"
-                        onclick="document.getElementById('addUserModal').style.display='none'">
-                    &times;
-                </button>
+    <!-- FORM CHI TIẾT NGƯỜI DÙNG, hiện khi chọn -->
+    <div th:if="${selectedUser != null}" class="mt-5">
+        <h3>Chi Tiết Người Dùng</h3>
+        <form>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Tên Đăng Nhập</label>
+                        <input type="text" class="form-control" th:value="${selectedUser.username}" disabled>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" th:value="${selectedUser.email}" disabled>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Số Điện Thoại</label>
+                        <input type="text" class="form-control" th:value="${selectedUser.sdt}" disabled>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Ngày Sinh</label>
+                        <input type="text" class="form-control" th:value="${#temporals.format(selectedUser.birthday, 'yyyy-MM-dd')}" disabled>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Địa Chỉ</label>
+                        <input type="text" class="form-control" th:value="${selectedUser.address}" disabled>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Giới Tính</label>
+                        <input type="text" class="form-control" th:value="${selectedUser.sex}" disabled>
+                    </div>
+                </div>
             </div>
-            <form th:action="@{/staff/users}" method="post" th:object="${newUser}">
-                <div class="form-group" style="margin-bottom:13px;">
-                    <label for="add-fullname">Tên đầy đủ</label>
-                    <input id="add-fullname" name="fullName" type="text" required style="width:100%;">
-                </div>
-                <div class="form-group" style="margin-bottom:13px;">
-                    <label for="add-email">Email</label>
-                    <input id="add-email" name="email" type="email" required style="width:100%;">
-                </div>
-                <div class="form-group" style="margin-bottom:13px;">
-                    <label for="add-role">Vai trò</label>
-                    <select id="add-role" name="role" required style="width:100%;">
-                        <option value="member">Member</option>
-                        <option value="staff">Staff</option>
-                        <option value="consultant">Consultant</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div class="form-group" style="margin-bottom:13px;">
-                    <label for="add-password">Mật khẩu</label>
-                    <input id="add-password" name="password" type="password" required style="width:100%;">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline"
-                            onclick="document.getElementById('addUserModal').style.display='none'">
-                        Hủy bỏ
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Lưu người dùng
-                    </button>
-                </div>
-            </form>
+        </form>
+        <ul class="nav nav-tabs mt-4" id="activityTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="booking-tab" data-bs-toggle="tab" data-bs-target="#bookingHistoryTab" type="button" role="tab">Lịch Sử Đặt Lịch</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="testresult-tab" data-bs-toggle="tab" data-bs-target="#testResultTab" type="button" role="tab">Lịch Sử Làm Bài Test</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="course-tab" data-bs-toggle="tab" data-bs-target="#courseHistoryTab" type="button" role="tab">Lịch Sử Học Khóa Học</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="activityTabContent">
+            <!-- Booking -->
+            <div class="tab-pane fade show active" id="bookingHistoryTab" role="tabpanel">
+                <table class="table table-striped mt-2">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Dịch Vụ</th>
+                            <th>Ngày Đặt</th>
+                            <th>Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="booking : ${bookings}">
+                            <td th:text="${booking.id}"></td>
+                            <td th:text="${booking.service}"></td>
+                            <td th:text="${booking.bookingDate}"></td>
+                            <td th:text="${booking.status}"></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(bookings)}">
+                            <td colspan="4" class="text-center">Không có lịch sử đặt lịch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Test Result -->
+            <div class="tab-pane fade" id="testResultTab" role="tabpanel">
+                <table class="table table-striped mt-2">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ID Bài Test</th>
+                            <th>Điểm</th>
+                            <th>Số câu đúng</th>
+                            <th>Số câu hỏi</th>
+                            <th>Bắt đầu</th>
+                            <th>Nộp bài</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="tr : ${testResults}">
+                            <td th:text="${tr.id}"></td>
+                            <td th:text="${tr.testId}"></td>
+                            <td th:text="${tr.score}"></td>
+                            <td th:text="${tr.correctAnswers}"></td>
+                            <td th:text="${tr.totalQuestions}"></td>
+                            <td th:text="${tr.startedAt}"></td>
+                            <td th:text="${tr.submittedAt}"></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(testResults)}">
+                            <td colspan="7" class="text-center">Không có lịch sử làm bài test</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Course History -->
+            <div class="tab-pane fade" id="courseHistoryTab" role="tabpanel">
+                <table class="table table-striped mt-2">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên Khóa Học</th>
+                            <th>Mô Tả</th>
+                            <th>Chủ Đề</th>
+                            <th>Ngày Học</th>
+                            <th>Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="pc : ${pastCourses}">
+                            <td th:text="${pc.id}"></td>
+                            <td th:text="${pc.name}"></td>
+                            <td th:text="${pc.description}"></td>
+                            <td th:text="${pc.topic}"></td>
+                            <td th:text="${pc.accessedAt}"></td>
+                            <td th:text="${pc.action}"></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(pastCourses)}">
+                            <td colspan="6" class="text-center">Không có lịch sử học khóa học</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
 </div>
-
-<!-- SCRIPT modal -->
-<script>
-    document.getElementById('openAddUser').onclick = function() {
-        document.getElementById('addUserModal').style.display = 'flex';
-    };
-    // Close modal bằng phím ESC
-    window.addEventListener('keydown', function(e){
-        if (e.key === "Escape") {
-            document.getElementById('addUserModal').style.display = 'none';
-        }
-    });
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

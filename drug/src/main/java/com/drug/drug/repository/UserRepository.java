@@ -3,9 +3,11 @@ package com.drug.drug.repository;
 import com.drug.drug.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
     // Tìm user bằng username (login bằng username)
     Optional<User> findByUsername(String username);
     boolean existsByUsername(String username);
@@ -30,4 +32,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     default User getBySdt(String sdt) {
         return findBySdt(sdt).orElse(null);
     }
+
+    // Lấy tất cả người dùng có vai trò "member"
+    List<User> findByRole(String role);
+
+    // Lấy tất cả người dùng
+    List<User> findAll();
+
+    // Lấy người dùng theo ID
+    Optional<User> findById(Long id);
+    
 }

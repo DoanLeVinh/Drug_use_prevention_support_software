@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface PastCourseRepository extends JpaRepository<PastCourse, Long> {
     List<PastCourse> findByUserIdOrderByAccessedAtDesc(Long userId);
+
+    List<PastCourse> findByUserId(Long userId);
+
 }

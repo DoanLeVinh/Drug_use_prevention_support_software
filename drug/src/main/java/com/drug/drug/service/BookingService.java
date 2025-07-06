@@ -19,17 +19,18 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
+    // Lấy tất cả các booking, bao gồm thông tin người dùng
     public List<Booking> getAllBookings() {
         return bookingRepository.findAllWithUser();
     }
 
-     public Booking saveBooking(Booking booking) {
-        // Kiểm tra xem booking đã có id chưa
+    // Lưu booking mới hoặc cập nhật booking đã có
+    public Booking saveBooking(Booking booking) {
+        // Nếu booking đã có id thì kiểm tra trong DB, nếu có thì cập nhật
         if (booking.getId() != null) {
-            // Nếu có id thì kiểm tra xem có tồn tại trong DB không
             return bookingRepository.findById(booking.getId())
                     .map(existingBooking -> {
-                        // Cập nhật thông tin
+                        // Cập nhật thông tin của booking
                         existingBooking.setBookingDate(booking.getBookingDate());
                         existingBooking.setBookingTime(booking.getBookingTime());
                         existingBooking.setConsultant(booking.getConsultant());
@@ -48,23 +49,27 @@ public class BookingService {
                         return bookingRepository.save(booking);
                     });
         }
+
         // Nếu không có id thì tạo mới
         return bookingRepository.save(booking);
     }
 
+    // Lấy tất cả bookings của một user
     public List<Booking> getBookingsByUser(User user) {
         return bookingRepository.findByUser(user);
     }
 
+    // Lấy tất cả bookings của user thông qua userId
     public List<Booking> getBookingsByUserId(Long userId) {
         return bookingRepository.findByUserId(userId);
     }
 
+    // Lấy thông tin booking theo ID
     public Booking getBookingById(Long id) {
-        Optional<Booking> bookingOptional = bookingRepository.findById(id);
-        return bookingOptional.orElse(null);
+        return bookingRepository.findById(id).orElse(null);
     }
 
+    // Cập nhật trạng thái của một booking
     public Booking updateBookingStatus(Long id, String status) {
         Optional<Booking> bookingOptional = bookingRepository.findById(id);
         if (bookingOptional.isPresent()) {
@@ -75,9 +80,13 @@ public class BookingService {
         return null;
     }
 
+    // Xóa booking theo ID
     public void deleteBooking(Long id) {
         bookingRepository.deleteById(id);
     }
 
-    
+    public List<Booking> findByUserId(Long userId) {
+    return bookingRepository.findByUserId(userId);
+}
+
 }
