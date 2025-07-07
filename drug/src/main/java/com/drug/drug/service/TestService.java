@@ -80,4 +80,39 @@ public class TestService {
     public void deleteTest(Long id) {
         testRepository.deleteById(id);
     }
+
+    // ========== CRUD CHO QUESTION ==========
+public List<Question> getQuestionsByTestId(Long testId) {
+    return questionRepository.findByTestId(testId);
+}
+
+public Question getQuestionById(Long id) {
+    return questionRepository.findById(id).orElse(null);
+}
+
+public Question saveQuestion(Question question) {
+    return questionRepository.save(question);
+}
+
+public void deleteQuestion(Long id) {
+    questionRepository.deleteById(id);
+}
+
+// ========== CRUD CHO ANSWER ==========
+public List<Answer> getAnswersByQuestionId(Long questionId) {
+    return answerRepository.findByQuestionId(questionId);
+}
+
+public Answer getAnswerById(Long id) {
+    return answerRepository.findById(id).orElse(null);
+}
+
+public Answer saveAnswer(Answer answer) {
+    return answerRepository.save(answer);
+}
+
+public void deleteAnswer(Long id) {
+    answerRepository.deleteById(id);
+}
+
 }

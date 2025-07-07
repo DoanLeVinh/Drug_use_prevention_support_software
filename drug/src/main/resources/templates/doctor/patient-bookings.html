@@ -1,0 +1,215 @@
+<!-- templates/doctor/patient-bookings.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch hẹn hoàn thành của bệnh nhân</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --primary: #2176ae;
+        --primary-light: #e1f0fa;
+        --secondary: #57b8ff;
+        --success: #21ae66;
+        --soft: #f8fbfe;
+        --white: #fff;
+        --gray: #f0f4f8;
+        --danger: #e74c3c;
+        --text-primary: #183a55;
+        --text-secondary: #5a7a94;
+        --shadow-sm: 0 2px 8px rgba(33, 118, 174, 0.08);
+        --shadow-md: 0 4px 16px rgba(33, 118, 174, 0.12);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+    }
+    body {
+  
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+
+        margin: 0;
+        min-width: 0;
+        overflow-x: hidden !important;
+    }
+    h2 {
+        font-weight: 800;
+        color: var(--primary);
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.5s;
+    }
+    @keyframes fadeInDown {
+        from { opacity:0; transform: translateY(-20px);}
+        to { opacity:1; transform: translateY(0);}
+    }
+    .main-container {
+        display: flex;
+        min-height: 100vh;
+    }
+    .dashboard-wrap {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1600px;
+        margin: 0 auto;
+        width: 100%;
+    }
+    .table-responsive {
+        border-radius: var(--radius-md);
+        background: var(--white);
+        box-shadow: var(--shadow-sm);
+        padding: 0.2rem 0.3rem;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    .table th, .table td {
+        padding: 1rem 1.25rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray);
+        white-space: nowrap;
+        font-size: 0.96rem;
+        vertical-align: middle !important;
+    }
+    .table th {
+        background: var(--primary-light);
+        color: var(--primary);
+        font-size: 0.93rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+    .table tr {
+        transition: background 0.12s;
+    }
+    .table tr:hover {
+        background: var(--soft);
+    }
+    .badge {
+        font-weight: 600;
+        padding: 3px 18px;
+        border-radius: 14px;
+        font-size: 0.97em;
+        display: inline-block;
+        letter-spacing: 0.01em;
+    }
+    .bg-success {
+        background: #eafcf4 !important;
+        color: var(--success) !important;
+    }
+    .bg-warning {
+        background: #fff7e6 !important;
+        color: #ad7202 !important;
+    }
+    .bg-info {
+        background: #e1f3fa !important;
+        color: var(--primary) !important;
+    }
+    .bg-danger {
+        background: #f7f7f7 !important;
+        color: #aaa !important;
+    }
+    .btn {
+        font-size: 0.96rem;
+        border-radius: var(--radius-sm);
+        font-weight: 500;
+    }
+    .btn-info {
+        background: var(--primary-light);
+        color: var(--primary);
+        border: none;
+    }
+    .btn-success {
+        background: var(--success);
+        color: #fff;
+        border: none;
+    }
+    .btn-secondary {
+        background: var(--gray);
+        color: var(--text-secondary);
+        border: none;
+    }
+    .btn-info:hover, .btn-success:hover, .btn-secondary:hover {
+        opacity: 0.89;
+        filter: brightness(0.97);
+    }
+    @media (max-width: 992px) {
+        .dashboard-wrap, .container.mt-4 { padding: 1.25rem;}
+        h2 { font-size: 1.12rem;}
+        .table th, .table td { padding: 0.75rem 0.5rem; font-size: 0.85rem;}
+        .btn { font-size: 0.89rem;}
+    }
+    @media (max-width: 576px) {
+        .dashboard-wrap, .container.mt-4 { padding: 0.5rem;}
+        h2 { font-size: 1rem;}
+        .table th, .table td { padding: 0.7rem 0.3rem; font-size: 0.79rem;}
+        .btn { font-size: 0.78rem; padding: 0.23rem 0.6rem;}
+    }
+</style>
+
+</head>
+<body>
+    <!-- Header nằm ngoài container, full width -->
+    <div th:replace="doctor/header :: main-header"></div>
+
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="fa-solid fa-users"></i> Danh sách lịch hẹn đã hoàn thành</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="align-middle text-center">
+                    <tr>
+                        <th>Ngày</th>
+                        <th>Giờ</th>
+                        <th>Dịch vụ</th>
+                        <th>Họ tên</th>
+                        <th>Trạng thái</th>
+                        <th>Hồ sơ</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.bookingDate}"></td>
+                    <td th:text="${booking.bookingTime}"></td>
+                    <td th:text="${booking.service}"></td>
+                    <td th:text="${booking.fullname}"></td>
+                    <td>
+                        <span class="badge bg-success" th:if="${booking.status == 'Hoàn thành'}">Hoàn thành</span>
+                        <span th:if="${booking.status != 'Hoàn thành'}" th:text="${booking.status}"></span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/doctor/medical-record/' + ${booking.id} + '/view'}" class="btn btn-info btn-sm">
+                            <i class="fa-solid fa-file-medical"></i> Xem chi tiết
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{'/doctor/medical-record/' + ${booking.id} + '/edit'}" class="btn btn-success btn-sm">
+                            <i class="fa-solid fa-pen-to-square"></i> Cập nhật
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(bookings)}">
+                    <td colspan="7" class="text-center text-muted">Không có lịch hẹn nào đã hoàn thành.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <a href="/doctor/dashboard" class="btn btn-secondary mt-3">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard
+        </a>
+    </div>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

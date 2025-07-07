@@ -81,50 +81,6 @@
             font-size: 0.78em;
             margin-left: 6px;
         }
-        .admin-header .dropdown {
-            position: relative;
-        }
-        .admin-header .dropdown-content {
-            display: none;
-            position: fixed;
-            min-width: 220px;
-            border-radius: 10px;
-            box-shadow: 0 6px 22px #12213a23;
-            z-index: 1600;
-            background: #fff;
-            animation: dropdownIn 0.16s;
-            overflow: hidden;
-            top: 74px; /* sẽ được cập nhật bằng JS */
-            left: 100px; /* sẽ được cập nhật bằng JS */
-        }
-        @keyframes dropdownIn {
-            from { opacity: 0; transform: translateY(-15px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        .admin-header .dropdown-content a {
-            display: block;
-            color: #24415d;
-            text-decoration: none;
-            padding: 13px 22px;
-            font-size: 1em;
-            border-bottom: 1px solid #f2f5fa;
-            border-radius: 0;
-            background: none;
-            transition: background 0.13s, color 0.15s;
-        }
-        .admin-header .dropdown-content a:last-child {
-            border-bottom: none;
-        }
-        .admin-header .dropdown-content a:hover,
-        .admin-header .dropdown-content a.active {
-            background: #f0f8ff;
-            color: var(--admin-header-active);
-        }
-        .admin-header .dropdown .fa-chevron-down {
-            font-size: 0.9em;
-            margin-left: 5px;
-            opacity: 0.75;
-        }
         @media (max-width: 950px) {
             .admin-header { padding: 0 14px;}
             .admin-header .admin-nav { margin: 0 7px;}
@@ -149,47 +105,13 @@
     </div>
     <nav class="admin-nav" id="adminNav">
         <a href="/admin/dashboard" class="nav-link active"><i class="fa-solid fa-gauge"></i> Tổng quan</a>
-        <div class="dropdown" id="manageDropdown">
-            <button class="nav-link" type="button" id="dropdownBtn">
-                <i class="fa-solid fa-user-cog"></i> Quản lý <i class="fa fa-chevron-down"></i>
-            </button>
-            <div class="dropdown-content" id="dropdownContent">
-                <a href="/admin/users" class="dropdown-link"><i class="fa-solid fa-users"></i> Quản lý người dùng</a>
-                <a href="/admin/doctors" class="dropdown-link"><i class="fa-solid fa-user-doctor"></i> Quản lý bác sĩ</a>
-                <a href="/admin/staffs" class="dropdown-link"><i class="fa-solid fa-user-tie"></i> Quản lý nhân viên</a>
-            </div>
-        </div>
+        <a href="/admin/users" class="nav-link"><i class="fa-solid fa-users"></i> Quản lý tài khoản</a>
         <a href="/admin/courses" class="nav-link"><i class="fa-solid fa-graduation-cap"></i> Khóa học</a>
-        <a href="/admin/assessments" class="nav-link"><i class="fa-solid fa-file-signature"></i> Khảo sát</a>
+        <a href="/admin/tests" class="nav-link"><i class="fa-solid fa-file-signature"></i> Khảo sát</a>
         <a href="/admin/statistics" class="nav-link"><i class="fa-solid fa-chart-bar"></i> Thống kê</a>
         <a href="/admin/notifications" class="nav-link"><i class="fa-solid fa-bell"></i> Thông báo <span class="badge">3</span></a>
     </nav>
     <script>
-        // Dropdown menu xử lý vị trí và ẩn/hiện
-        const dropdownBtn = document.getElementById('dropdownBtn');
-        const dropdownContent = document.getElementById('dropdownContent');
-        let dropdownVisible = false;
-        dropdownBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (!dropdownVisible) {
-                // Lấy vị trí nút "Quản lý"
-                const rect = dropdownBtn.getBoundingClientRect();
-                dropdownContent.style.left = rect.left + 'px';
-                dropdownContent.style.top = (rect.bottom + 2) + 'px';
-                dropdownContent.style.display = 'block';
-                dropdownVisible = true;
-            } else {
-                dropdownContent.style.display = 'none';
-                dropdownVisible = false;
-            }
-        });
-        // Ẩn dropdown khi click ra ngoài
-        document.addEventListener('click', function (e) {
-            if (dropdownVisible && !dropdownContent.contains(e.target) && !dropdownBtn.contains(e.target)) {
-                dropdownContent.style.display = 'none';
-                dropdownVisible = false;
-            }
-        });
         // Highlight nav-link
         document.addEventListener('DOMContentLoaded', function () {
             const navLinks = document.querySelectorAll('.admin-nav > .nav-link');
@@ -197,16 +119,6 @@
                 link.addEventListener('click', function (e) {
                     navLinks.forEach(l => l.classList.remove('active'));
                     this.classList.add('active');
-                });
-            });
-            const dropdownLinks = document.querySelectorAll('.dropdown-content a');
-            dropdownLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    dropdownLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    // Ẩn dropdown sau khi chọn
-                    dropdownContent.style.display = 'none';
-                    dropdownVisible = false;
                 });
             });
         });

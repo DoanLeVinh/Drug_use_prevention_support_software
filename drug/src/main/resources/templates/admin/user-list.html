@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý tài khoản</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f8fbfe;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #183a55;
+        }
+        .container {
+            max-width: 1200px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #2176ae11;
+            padding: 32px 28px;
+            margin-top: 35px;
+        }
+        h2 {
+            font-weight: 800;
+            color: #2176ae;
+            margin-bottom: 22px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .table th, .table td {
+            vertical-align: middle !important;
+        }
+        .table thead th {
+            background: #e1f0fa;
+            color: #2176ae;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .btn {
+            font-size: 0.96rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #2176ae;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #57b8ff;
+        }
+        .btn-warning, .btn-warning:visited {
+            background: #ffe082;
+            color: #a17907;
+            border: none;
+        }
+        .btn-warning:hover {
+            background: #ffca28;
+            color: #695200;
+        }
+        .btn-danger, .btn-danger:visited {
+            background: #ffe0e0;
+            color: #b91d1d;
+            border: none;
+        }
+        .btn-danger:hover {
+            background: #f6bebe;
+            color: #911010;
+        }
+        .btn-success {
+            background: #21ae66;
+            border: none;
+        }
+        .btn-success:hover {
+            background: #19c37d;
+        }
+        @media (max-width: 992px) {
+            .container { padding: 1rem; }
+            h2 { font-size: 1.1rem; }
+        }
+        @media (max-width: 576px) {
+            .container { padding: 0.6rem;}
+            h2 { font-size: 0.98rem;}
+            .table th, .table td { font-size: 0.84rem;}
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="admin/header :: main-header"></div>
+    <div class="container mt-4">
+        <h2><i class="fa-solid fa-users-gear"></i> Danh sách tài khoản người dùng</h2>
+        <div class="mb-3 text-end">
+            <a href="/admin/users/add" class="btn btn-success">
+                <i class="fa-solid fa-user-plus"></i> Thêm tài khoản mới
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead>
+                <tr class="text-center">
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>SDT</th>
+                    <th>Giới tính</th>
+                    <th>Địa chỉ</th>
+                    <th>Ngày sinh</th>
+                    <th>Role</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.sdt}"></td>
+                    <td th:text="${user.sex}"></td>
+                    <td th:text="${user.address}"></td>
+                    <td th:text="${user.birthday}"></td>
+                    <td>
+                        <span th:text="${user.role}" th:classappend="${user.role == 'admin'} ? 'badge bg-danger' : (${user.role == 'doctor'} ? 'badge bg-primary' : (${user.role == 'staff'} ? 'badge bg-info' : 'badge bg-secondary'))"></span>
+                    </td>
+                    <td class="text-center">
+                        <a th:href="@{'/admin/users/edit/' + ${user.id}}" class="btn btn-warning btn-sm me-1">
+                            <i class="fa-solid fa-pen-to-square"></i> Sửa
+                        </a>
+                        <a th:href="@{'/admin/users/delete/' + ${user.id}}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Bạn chắc chắn muốn xóa tài khoản này?');">
+                            <i class="fa-solid fa-trash"></i> Xóa
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(users)}">
+                    <td colspan="9" class="text-center text-muted">Chưa có tài khoản nào.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <a href="/admin/dashboard" class="btn btn-secondary mt-3">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard
+        </a>
+    </div>
+</body>
+</html>

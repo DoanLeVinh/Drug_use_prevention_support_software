@@ -1,0 +1,197 @@
+<!-- templates/doctor/medical-record-form.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật hồ sơ bệnh án</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --primary: #2176ae;
+        --primary-light: #e1f0fa;
+        --secondary: #57b8ff;
+        --success: #21ae66;
+        --soft: #f8fbfe;
+        --white: #fff;
+        --gray: #f0f4f8;
+        --danger: #e74c3c;
+        --text-primary: #183a55;
+        --text-secondary: #5a7a94;
+        --shadow-sm: 0 2px 8px rgba(33, 118, 174, 0.08);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+    }
+    body {
+        background: var(--soft);
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        color: var(--text-primary);
+        margin: 0;
+        min-width: 0;
+        overflow-x: hidden !important;
+    }
+    h2 {
+        font-weight: 800;
+        color: var(--primary);
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.5s;
+    }
+    @keyframes fadeInDown {
+        from { opacity:0; transform: translateY(-20px);}
+        to { opacity:1; transform: translateY(0);}
+    }
+    .container.mt-4 {
+        max-width: 900px;
+        margin: 30px auto 0 auto;
+        background: var(--white);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        padding: 2rem 1.5rem 2.5rem 1.5rem;
+    }
+    .form-label, label {
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 4px;
+        font-size: 1.02rem;
+    }
+    .form-control {
+        border-radius: var(--radius-sm);
+        box-shadow: none;
+        border: 1.2px solid var(--primary-light);
+        font-size: 0.98rem;
+        color: var(--text-primary);
+        transition: border-color 0.2s;
+    }
+    .form-control:focus {
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 2px #eaf3fa;
+    }
+    .row > .col-md-6, .row > .col-md-12 {
+        margin-bottom: 1.1rem;
+    }
+    .btn {
+        font-size: 0.96rem;
+        border-radius: var(--radius-sm);
+        font-weight: 500;
+        padding: 0.48rem 1.15rem;
+        margin-top: 0.3rem;
+        margin-bottom: 0.3rem;
+    }
+    .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+    }
+    .btn-primary:hover {
+        background: var(--secondary);
+        color: #fff;
+    }
+    .btn-success {
+        background: var(--success);
+        color: #fff;
+        border: none;
+    }
+    .btn-success:hover {
+        filter: brightness(0.93);
+        color: #fff;
+    }
+    .btn-secondary {
+        background: var(--gray);
+        color: var(--text-secondary);
+        border: none;
+    }
+    .btn-secondary:hover {
+        opacity: 0.89;
+        filter: brightness(0.97);
+        color: var(--primary);
+    }
+    @media (max-width: 992px) {
+        .container.mt-4 { padding: 1.25rem;}
+        h2 { font-size: 1.12rem;}
+        .btn { font-size: 0.89rem;}
+    }
+    @media (max-width: 576px) {
+        .container.mt-4 { padding: 0.5rem;}
+        h2 { font-size: 1rem;}
+        .btn { font-size: 0.77rem; padding: 0.23rem 0.7rem;}
+    }
+</style>
+
+</head>
+<body>
+    <!-- Header nằm ngoài container -->
+    <div th:replace="doctor/header :: main-header"></div>
+
+    <div class="container mt-4">
+        <h2 class="mb-4"><i class="fa-solid fa-file-medical"></i> Cập nhật hồ sơ bệnh án</h2>
+        <form th:action="@{/doctor/medical-record/save}" th:object="${medicalRecord}" method="post" autocomplete="off">
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{booking.id}"/>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Loại khám:</label>
+                    <input type="text" class="form-control" th:field="*{visitType}" required/>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Mức độ phụ thuộc:</label>
+                    <input type="text" class="form-control" th:field="*{dependencyLevel}"/>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Chẩn đoán:</label>
+                    <textarea class="form-control" th:field="*{diagnosis}" rows="2"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Kế hoạch điều trị:</label>
+                    <textarea class="form-control" th:field="*{treatmentPlan}" rows="2"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Đơn thuốc:</label>
+                    <textarea class="form-control" th:field="*{prescription}" rows="2"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Chất đã sử dụng:</label>
+                    <textarea class="form-control" th:field="*{substancesUsed}" rows="2"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Tình trạng tâm lý:</label>
+                    <textarea class="form-control" th:field="*{psychologicalStatus}" rows="2"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Triệu chứng:</label>
+                    <textarea class="form-control" th:field="*{symptoms}" rows="2"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Trạng thái tâm thần:</label>
+                    <textarea class="form-control" th:field="*{mentalStatus}" rows="2"></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Kết quả xét nghiệm:</label>
+                    <textarea class="form-control" th:field="*{testResults}" rows="2"></textarea>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label>Ghi chú bác sĩ:</label>
+                    <textarea class="form-control" th:field="*{doctorNotes}" rows="3"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary me-2">
+                <i class="fa-solid fa-floppy-disk"></i> Lưu
+            </button>
+            <a th:href="@{'/doctor/completed-appointments'}" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Hủy
+            </a>
+        </form>
+    </div>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

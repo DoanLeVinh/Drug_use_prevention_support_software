@@ -10,4 +10,5 @@ import java.util.List;
 public interface TestRepository extends JpaRepository<Test, Long> {
     // Lấy danh sách bài test theo danh sách id
     List<Test> findByIdIn(List<Long> ids);
+    List<Test> findAllByOrderByCreatedAtDesc(); 
 }

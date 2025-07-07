@@ -14,56 +14,61 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // Kiểm tra username đã tồn tại chưa
+    // --------- Kiểm tra tồn tại ----------
     public boolean isUsernameTaken(String username) {
         return userRepository.existsByUsername(username);
     }
-
-    // Kiểm tra email đã tồn tại chưa
     public boolean isEmailTaken(String email) {
         return userRepository.existsByEmail(email);
     }
 
-    // Đăng ký user mới
+    // --------- Đăng ký user mới -----------
     public User register(User user) {
-        user.setRole("member"); // Gán role mặc định là member
+        if (user.getRole() == null || user.getRole().isBlank()) {
+            user.setRole("member");
+        }
         return userRepository.save(user);
     }
 
-    // Lấy user theo username (dùng cho login, lấy user id,...)
+    // --------- Lấy user theo username/email/id -----------
     public User findByUsername(String username) {
-        // Trả về User hoặc null nếu không tìm thấy
         return userRepository.findByUsername(username).orElse(null);
     }
-
-    // Lấy user theo ID
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
-
-    // Phương thức mới để lấy user theo ID
-    public User findUserById(Long id) {
+    public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    // Cập nhật user
-    public User updateUser(User user) {
-        return userRepository.save(user);
-    }
-
-    // Xóa user theo ID
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    // Lấy tất cả user có vai trò là "member"
+    // --------- Lấy theo role (dùng cho phân trang/thống kê/hiển thị nhóm role) -----------
     public List<User> findUsersByRole(String role) {
         return userRepository.findByRole(role);
     }
 
-    // Cập nhật vai trò của người dùng
+    // --------- Lấy tất cả user -----------
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // --------- Cập nhật thông tin user (sửa user cho admin) -----------
+    public User updateUser(User user) {
+        // Chỉ update nếu tồn tại user
+        Optional<User> exist = userRepository.findById(user.getId());
+        if (exist.isPresent()) {
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    // --------- Xóa user theo id -----------
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    // --------- Update role cho user -----------
     public User updateUserRole(Long id, String newRole) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = getUserById(id);
         if (user != null) {
             user.setRole(newRole);
             return userRepository.save(user);
@@ -71,13 +76,25 @@ public class UserService {
         return null;
     }
 
-    // Lấy tất cả user
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    // --------- Update password cho user -----------
+    public User updatePassword(Long id, String newPassword) {
+        User user = getUserById(id);
+        if (user != null) {
+            user.setPassword(newPassword);
+            return userRepository.save(user);
+        }
+        return null;
     }
 
-    public User getUserById(Long id) {
-    return userRepository.findById(id).orElse(null);
-}
-
+    // --------- Update username cho user -----------
+    public User updateUsername(Long id, String newUsername) {
+        // Không cho phép trùng username
+        if (isUsernameTaken(newUsername)) return null;
+        User user = getUserById(id);
+        if (user != null) {
+            user.setUsername(newUsername);
+            return userRepository.save(user);
+        }
+        return null;
+    }
 }

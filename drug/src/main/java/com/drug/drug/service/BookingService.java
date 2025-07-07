@@ -6,6 +6,7 @@ import com.drug.drug.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +27,9 @@ public class BookingService {
 
     // Lưu booking mới hoặc cập nhật booking đã có
     public Booking saveBooking(Booking booking) {
-        // Nếu booking đã có id thì kiểm tra trong DB, nếu có thì cập nhật
         if (booking.getId() != null) {
             return bookingRepository.findById(booking.getId())
                     .map(existingBooking -> {
-                        // Cập nhật thông tin của booking
                         existingBooking.setBookingDate(booking.getBookingDate());
                         existingBooking.setBookingTime(booking.getBookingTime());
                         existingBooking.setConsultant(booking.getConsultant());
@@ -44,32 +43,63 @@ public class BookingService {
                         existingBooking.setUser(booking.getUser());
                         return bookingRepository.save(existingBooking);
                     })
-                    .orElseGet(() -> {
-                        // Nếu không tồn tại thì tạo mới
-                        return bookingRepository.save(booking);
-                    });
+                    .orElseGet(() -> bookingRepository.save(booking));
         }
-
-        // Nếu không có id thì tạo mới
         return bookingRepository.save(booking);
     }
 
-    // Lấy tất cả bookings của một user
     public List<Booking> getBookingsByUser(User user) {
         return bookingRepository.findByUser(user);
     }
 
-    // Lấy tất cả bookings của user thông qua userId
     public List<Booking> getBookingsByUserId(Long userId) {
         return bookingRepository.findByUserId(userId);
     }
 
-    // Lấy thông tin booking theo ID
+    // Lấy booking theo consultant (username doctor)
+    public List<Booking> getBookingsByConsultant(String consultant) {
+        return bookingRepository.findByConsultant(consultant);
+    }
+
+    // Lấy booking theo consultant và ngày đặt
+    public List<Booking> getBookingsByConsultantAndBookingDate(String consultant, LocalDate bookingDate) {
+        return bookingRepository.findByConsultantAndBookingDate(consultant, bookingDate);
+    }
+
+    // Lấy booking theo trạng thái
+    public List<Booking> getBookingsByStatus(String status) {
+        return bookingRepository.findByStatus(status);
+    }
+
+    // Lấy booking theo khoảng thời gian
+    public List<Booking> getBookingsByDateRange(LocalDate start, LocalDate end) {
+        return bookingRepository.findByBookingDateBetween(start, end);
+    }
+
+    // Lấy booking theo user và trạng thái
+    public List<Booking> getBookingsByUserAndStatus(User user, String status) {
+        return bookingRepository.findByUserAndStatus(user, status);
+    }
+
+    // Lấy booking theo email user
+    public List<Booking> getBookingsByUserEmail(String email) {
+        return bookingRepository.findByUserEmail(email);
+    }
+
+    // Lấy booking theo consultant và trạng thái
+    public List<Booking> getBookingsByConsultantAndStatus(String consultant, String status) {
+        return bookingRepository.findByConsultantAndStatus(consultant, status);
+    }
+
+    // Lấy booking theo trạng thái và khoảng ngày
+    public List<Booking> getBookingsByStatusAndDateRange(String status, LocalDate start, LocalDate end) {
+        return bookingRepository.findByStatusAndBookingDateBetween(status, start, end);
+    }
+
     public Booking getBookingById(Long id) {
         return bookingRepository.findById(id).orElse(null);
     }
 
-    // Cập nhật trạng thái của một booking
     public Booking updateBookingStatus(Long id, String status) {
         Optional<Booking> bookingOptional = bookingRepository.findById(id);
         if (bookingOptional.isPresent()) {
@@ -80,13 +110,17 @@ public class BookingService {
         return null;
     }
 
-    // Xóa booking theo ID
     public void deleteBooking(Long id) {
         bookingRepository.deleteById(id);
     }
 
+    // Giữ lại hàm findByUserId cũ (để không ảnh hưởng code trước)
     public List<Booking> findByUserId(Long userId) {
-    return bookingRepository.findByUserId(userId);
+        return bookingRepository.findByUserId(userId);
+    }
+
+    public List<Booking> getCompletedBookingsByConsultant(String consultantUsername) {
+    return bookingRepository.findByConsultantAndStatus(consultantUsername, "Hoàn thành");
 }
 
 }
