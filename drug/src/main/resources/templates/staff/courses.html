@@ -7,38 +7,29 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-        :root {
-    /* Bảng màu xanh dương chuyên nghiệp */
+       :root {
     --primary-100: #e6f0ff;
     --primary-200: #b3d1ff;
     --primary-300: #80b3ff;
     --primary-400: #4d94ff;
-    --primary-500: #1a75ff;  /* Màu chính */
+    --primary-500: #1a75ff;
     --primary-600: #0066e6;
     --primary-700: #0052b3;
     --primary-800: #003d80;
     --primary-900: #00294d;
-    
-    /* Màu hỗ trợ */
     --secondary: #5bc0de;
     --success: #28a745;
     --info: #17a2b8;
-    --warning: #ffc107;
-    --danger: #dc3545;
+    --warning: rgb(46, 171, 244);
+    --danger: rgb(22, 134, 246);
     --light: #f8f9fa;
     --dark: #343a40;
-    
-    /* Màu text */
     --text-primary: #212529;
     --text-secondary: #495057;
-    
-    /* Border */
     --border-color: #dee2e6;
     --border-radius: 0.375rem;
-    
-    /* Shadow */
     --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
     --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
 }
 
@@ -56,6 +47,7 @@ body {
     box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
     overflow: hidden;
+    background: #fff;
 }
 
 .card:hover {
@@ -63,98 +55,204 @@ body {
 }
 
 .card-header {
-    background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
-    color: white;
+    background: #fff;
+    color: var(--primary-700);
     padding: 1rem 1.5rem;
-    border-bottom: none;
+    border-bottom: 1px solid var(--primary-100);
+    box-shadow: 0 2px 6px 0 rgba(26,117,255,0.03);
+    font-weight: 600;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Nút Thêm mới */
+.btn-add-new {
+    background: var(--primary-500) !important;
+    color: #fff !important;
+    border: 1px solid var(--primary-500) !important;
+    font-weight: 500 !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.2s !important;
+    padding: 6px 20px !important;
+    font-size: 1rem !important;
+    border-radius: var(--border-radius) !important;
+}
+
+.btn-add-new:hover {
+    background: var(--primary-600) !important;
+    color: #fff !important;
+    border: 1px solid var(--primary-600) !important;
+    box-shadow: var(--shadow) !important;
 }
 
 /* Table */
 .table-responsive {
     border-radius: var(--border-radius);
     overflow: hidden;
+    margin-top: 1rem;
 }
 
 .table {
-    margin-bottom: 0;
+    background: #fff;
     border-collapse: separate;
     border-spacing: 0;
+    margin-bottom: 0;
+    box-shadow: 0 4px 16px 0 rgba(26,117,255,0.04);
 }
 
 .table thead {
-    background: linear-gradient(to right, var(--primary-600), var(--primary-800));
-    color: white;
+    background: var(--primary-100);
+    color: var(--primary-800);
 }
 
 .table th {
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     letter-spacing: 0.5px;
-    padding: 1rem;
+    padding: 0.85rem;
     border: none;
 }
 
 .table td {
     padding: 0.75rem 1rem;
     vertical-align: middle;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--primary-100);
+    background: transparent;
 }
 
 .table-hover tbody tr:hover {
-    background-color: var(--primary-100);
+    background-color: var(--primary-200);
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 123, 255, 0.05);
+    background-color: var(--primary-100);
 }
 
-/* Buttons */
+/* Buttons chung */
 .btn {
     font-weight: 500;
     border-radius: var(--border-radius);
-    padding: 0.5rem 1rem 0.5rem 1.25rem !important;
+    padding: 4px 8px !important;
+    font-size: 0.93rem;
     transition: all 0.3s ease;
     box-shadow: none;
     border: none;
 }
 
 .btn-primary {
-    background-color: var(--primary-500);
+    background-color: var(--primary-500) !important;
+    color: #fff !important;
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-600);
-    transform: translateY(-1px);
+    background-color: var(--primary-600) !important;
 }
 
 .btn-outline-primary {
-    color: var(--primary-500);
-    border: 1px solid var(--primary-500);
+    color: var(--primary-500) !important;
+    border: 1px solid var(--primary-500) !important;
+    background: none !important;
 }
 
 .btn-outline-primary:hover {
-    background-color: var(--primary-500);
-    color: white;
+    background-color: var(--primary-500) !important;
+    color: white !important;
 }
 
 .btn-warning {
-    background-color: var(--warning);
-    color: var(--dark);
+    background-color: var(--warning) !important;
+    color: var(--dark) !important;
+    border: none !important;
+}
+
+.btn-warning:hover {
+    background-color: var(--primary-400) !important;
+    color: #fff !important;
 }
 
 .btn-danger {
-    background-color: var(--danger);
+    background-color: var(--danger) !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.btn-danger:hover {
+    background-color: var(--primary-700) !important;
 }
 
 .btn-light {
-    background-color: var(--light);
-    color: var(--primary-500);
+    background-color: var(--light) !important;
+    color: var(--primary-500) !important;
 }
 
 .btn-light:hover {
-    background-color: #e9ecef;
-    color: var(--primary-600);
+    background-color: #e9ecef !important;
+    color: var(--primary-600) !important;
+}
+
+/* Action buttons group */
+.action-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.action-buttons .btn {
+    min-width: 70px;
+    padding: 4px 8px !important;
+    font-size: 0.93rem;
+    border-radius: var(--border-radius) !important;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+/* Description cell */
+.description-cell {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Alert */
+.alert {
+    border-radius: var(--border-radius);
+    border: none;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: rgb(65, 103, 230);
+}
+
+/* Image thumbnail */
+.img-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+/* Empty state */
+.empty-state {
+    padding: 3rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #dee2e6;
 }
 
 /* Modal */
@@ -187,76 +285,22 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(26, 117, 255, 0.25);
 }
 
-/* Alert */
-.alert {
-    border-radius: var(--border-radius);
-    border: none;
-}
-
-.alert-success {
-    background-color: rgba(40, 167, 69, 0.15);
-    color: #28a745;
-}
-
-.alert-danger {
-    background-color: rgba(220, 53, 69, 0.15);
-    color: #dc3545;
-}
-
-/* Image thumbnail */
-.img-thumbnail {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid var(--border-color);
-}
-
-/* Action buttons */
-.action-buttons .btn {
-    margin-right: 0.5rem;
-    min-width: 80px;
-}
-
-/* Description cell */
-.description-cell {
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Empty state */
-.empty-state {
-    padding: 3rem;
-    text-align: center;
-    color: #6c757d;
-}
-
-.empty-state i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: #dee2e6;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .action-buttons {
-        display: flex;
         flex-direction: column;
         gap: 0.5rem;
     }
-    
     .action-buttons .btn {
         width: 100%;
         margin-right: 0;
     }
-    
     .table-responsive {
         border: 1px solid var(--border-color);
         border-radius: var(--border-radius);
     }
 }
+
 
     </style>
 </head>
@@ -265,9 +309,9 @@ body {
 
 <div class="container-fluid mt-4">
     <div class="card shadow">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header  text-white">
             <div class="d-flex justify-content-between align-items-center">
-                <h2 class="mb-0">Quản lý khóa học</h2>
+                
                 <button class="btn btn-light" onclick="resetForm()" data-bs-toggle="modal" data-bs-target="#courseModal">
                     <i class="bi bi-plus-lg"></i> Thêm mới
                 </button>

@@ -6,7 +6,6 @@ import com.drug.drug.entity.User;
 import com.drug.drug.entity.TestResult;
 import com.drug.drug.entity.PastCourse;
 import com.drug.drug.entity.Test;
-import com.drug.drug.model.SurveyForm;
 import com.drug.drug.service.BookingService;
 import com.drug.drug.service.CourseService;
 import com.drug.drug.service.UserService;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/staff")
@@ -50,12 +48,10 @@ public class StaffController {
     }
 
     // ====== Quản lý user (member) và hiển thị chi tiết theo kiểu reload cùng trang ======
-
     @GetMapping("/user-management")
     public String userManagement(Model model) {
         List<User> members = userService.findUsersByRole("member");
         model.addAttribute("members", members);
-        // Không truyền selectedUser, bookings, pastCourses, testResults (mặc định)
         return "staff/user-management";
     }
 
@@ -66,11 +62,6 @@ public class StaffController {
         List<Booking> bookings = bookingService.findByUserId(id);
         List<PastCourse> pastCourses = pastCourseService.findByUserId(id);
         List<TestResult> testResults = testResultService.findByUserId(id);
-
-        // Nếu muốn truyền luôn các Test, bỏ comment đoạn này
-        // List<Long> testIds = testResults.stream().map(TestResult::getTestId).distinct().collect(Collectors.toList());
-        // List<Test> tests = testIds.isEmpty() ? List.of() : testService.findTestsByIds(testIds);
-        // model.addAttribute("tests", tests);
 
         model.addAttribute("members", members);
         model.addAttribute("selectedUser", selectedUser);
@@ -129,7 +120,7 @@ public class StaffController {
         return "redirect:/staff/courses";
     }
 
-    @GetMapping("/courses/delete/{id}")
+    @PostMapping("/courses/delete/{id}")
     public String deleteCourse(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             courseService.deleteCourse(id);
@@ -151,18 +142,18 @@ public class StaffController {
         return "staff/events";
     }
 
-    @GetMapping("/surveys")
-    public String surveys(Model model) {
-        model.addAttribute("newSurvey", new SurveyForm());
-        return "staff/surveys";
-    }
-
-    @PostMapping("/surveys")
-    public String createSurvey(@ModelAttribute("newSurvey") SurveyForm surveyForm) {
-        // Xử lý tạo survey ở đây
-        System.out.println(">>> Creating new survey: " + surveyForm);
-        return "redirect:/staff/surveys";
-    }
+    // ====== ĐÃ XÓA mapping /surveys để tránh xung đột ======
+    // @GetMapping("/surveys")
+    // public String surveys(Model model) {
+    //     model.addAttribute("newSurvey", new SurveyForm());
+    //     return "staff/surveys";
+    // }
+    // @PostMapping("/surveys")
+    // public String createSurvey(@ModelAttribute("newSurvey") SurveyForm surveyForm) {
+    //     // Xử lý tạo survey ở đây
+    //     System.out.println(">>> Creating new survey: " + surveyForm);
+    //     return "redirect:/staff/surveys";
+    // }
 
     @GetMapping("/consultants")
     public String consultants() {

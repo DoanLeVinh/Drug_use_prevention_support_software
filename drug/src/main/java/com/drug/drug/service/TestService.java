@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional; // Thêm dòng này
 
 @Service
 public class TestService {
@@ -62,5 +63,21 @@ public class TestService {
             question.setAnswers(answers);
         }
         return questions;
+    }
+
+    // ================== BỔ SUNG CHO CRUD TEST ===================
+    // Lưu hoặc cập nhật bài test
+    public Test saveTest(Test test) {
+        return testRepository.save(test);
+    }
+
+    // Lấy 1 bài test theo id
+    public Optional<Test> getTest(Long id) {
+        return testRepository.findById(id);
+    }
+
+    // Xóa bài test theo id
+    public void deleteTest(Long id) {
+        testRepository.deleteById(id);
     }
 }

@@ -176,7 +176,7 @@
         <nav class="nav-menu">
             <a href="/staff/dashboard" class="nav-link" th:classappend="${page=='dashboard'} ? 'active'">Dashboard</a>
             <a href="/staff/courses" class="nav-link" th:classappend="${page=='courses'} ? 'active'">Khóa học</a>
-            <a href="/staff/tests" class="nav-link" th:classappend="${page=='tests'} ? 'active'">Khảo sát</a>
+<a th:href="@{/staff/surveys}" class="nav-link" th:classappend="${page=='surveys'} ? 'active'">Khảo sát</a>
             <a href="/staff/appointments" class="nav-link" th:classappend="${page=='appointments'} ? 'active'">Lịch hẹn tư vấn</a>
             <a href="/staff/events" class="nav-link" th:classappend="${page=='events'} ? 'active'">Chương trình</a>
             <a href="/staff/user-management" class="nav-link" th:classappend="${page=='user-management'} ? 'active'">Quản lý người dùng</a>
